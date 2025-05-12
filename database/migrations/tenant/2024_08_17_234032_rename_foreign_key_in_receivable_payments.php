@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('receivable_payments', function (Blueprint $table) {
-            $table->dropForeign('debt_payments_debt_id_foreign');
+            $table->dropForeign(['receivable_id']);
             $table->foreign(['receivable_id'])->references('id')->on('receivables');
 
-            $table->dropForeign('debt_payments_payment_method_id_foreign');
+            $table->dropForeign(['payment_method_id']);
             $table->foreign(['payment_method_id'])->references('id')->on('payment_methods');
 
-            $table->dropForeign('debt_payments_user_id_foreign');
+            $table->dropForeign(['user_id']);
             $table->foreign(['user_id'])->references('id')->on('users');
         });
     }
