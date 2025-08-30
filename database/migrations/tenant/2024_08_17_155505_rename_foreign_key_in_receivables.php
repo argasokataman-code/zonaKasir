@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('receivables', function (Blueprint $table) {
-            $table->dropForeign('debts_member_id_foreign');
+            $table->dropForeign(['member_id']);
             $table->foreign(['member_id'])->references('id')->on('members')->onDelete('cascade');
 
-            $table->dropForeign('debts_selling_id_foreign');
+            $table->dropForeign(['selling_id']);
             $table->foreign(['selling_id'])->references('id')->on('sellings')->onDelete('cascade');
         });
     }
