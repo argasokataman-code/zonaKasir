@@ -162,8 +162,8 @@ trait HasProductForm
             ->suffixAction(
                 Action::make('scan')
                     ->icon('heroicon-o-camera')
-                    ->label('Escanear')
-                    ->modalHeading('Escanear código de barras')
+                    ->label('Scan')
+                    ->modalHeading('Scan a barcode')
                     ->modalContent(view('filament.components.barcode-scanner', ['modalId' => $scanModalId]))
                     ->modalWidth('lg')
                     ->closeModalByClickingAway(false)
@@ -176,11 +176,6 @@ trait HasProductForm
                                 'id' => 'close-barcode-scanner-button',
                             ])
                     )
-                // ->modalCancelAction(
-                //     fn(Action $action) => $action
-                //         ->label('Cancel')
-                //         ->id('close-barcode-scanner-button')
-                // )
             );
     }
 

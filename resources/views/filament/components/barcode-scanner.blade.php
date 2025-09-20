@@ -2,9 +2,9 @@
     x-data
     x-init="
         const initScanner = () => {
-            // Espera a que la librería cargue
+            // Wait for the library to load
             if (!window.Html5Qrcode) {
-                console.log('Esperando que Html5Qrcode cargue...');
+                console.log('Waiting for Html5Qrcode to load...');
                 setTimeout(initScanner, 100);
                 return;
             }
@@ -13,16 +13,16 @@
                 window.html5QrCode = new Html5Qrcode('reader');
             }
 
-            // Función para detener el escáner de forma segura
+            // Function to safely stop the scanner
             const stopScanner = () => {
                 if (window.html5QrCode && window.html5QrCode.isScanning) {
                     window.html5QrCode.stop().catch(err => {
-                        console.warn('El escáner ya estaba detenido o no se pudo detener limpiamente.', err);
+                        console.warn('Scanner was already stopped or could not be stopped cleanly.', err);
                     });
                 }
             };
 
-            // Busca el botón de cerrar y le asigna la función de detener
+            // Find the close button and assign the stop function to it
             const closeButton = document.getElementById('close-barcode-scanner-button');
             if (closeButton) {
                 closeButton.addEventListener('click', stopScanner);
@@ -35,7 +35,7 @@
                         cameraId,
                         {
                             fps: 10,
-                            qrbox: { width: 300, height: 200 }, // ideal para códigos de barra
+                            qrbox: { width: 300, height: 200 }, // ideal for barcodes
                             formatsToSupport: [
                                 Html5QrcodeSupportedFormats.EAN_13,
                                 Html5QrcodeSupportedFormats.CODE_128,
@@ -46,31 +46,30 @@
                             ],
                         },
                         decodedText => {
-                            console.log('Código detectado:', decodedText);
+                            console.log('Code detected:', decodedText);
 
-                            // Rellena el input del formulario
+                            // Fill the form input
                             const input = document.querySelector('input[name=barcode]');
                             if (input) {
                                 input.value = decodedText;
-                                // Esto notifica a Livewire que el valor cambió
+                                // This notifies Livewire that the value has changed
                                 input.dispatchEvent(new Event('input', { bubbles: true }));
                             }
 
                             $wire.set('data.barcode', decodedText);
 
-                            // Cierra el modal
+                            // Close the modal
                             const closeButton = document.getElementById('close-barcode-scanner-button');
                             closeButton.click();
 
-                            // Detiene el scanner
-                            // window.html5QrCode.stop().catch(() => {});
+                            // The scanner is stopped by the click event listener now
                         },
                         errorMessage => {
-                            console.warn('Error de lectura:', errorMessage);
+                            console.warn('Scan error:', errorMessage);
                         }
                     );
                 } else {
-                    console.error('No se encontraron cámaras');
+                    console.error('No cameras found');
                 }
             }).catch(err => console.error(err));
         }
