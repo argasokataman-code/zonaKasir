@@ -302,10 +302,10 @@
       {{ __('Scan Barcode with Camera') }}
     </x-slot>
 
-    {{-- Contenedor principal con el estado de Alpine.js --}}
+    {{-- Main container with Alpine.js state management --}}
     <div x-data="{ isLoading: false }" x-ref="scannerContainer">
 
-      {{-- Contenedor del Spinner (inicialmente oculto) --}}
+      {{-- Loading spinner (hidden by default) --}}
       <div x-show="isLoading" class="flex min-h-[300px] flex-col items-center justify-center text-center">
         <svg class="h-16 w-16 animate-spin text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none"
           viewBox="0 0 24 24">
@@ -316,11 +316,11 @@
           </path>
         </svg>
         <p class="mt-4 text-lg font-medium text-gray-600 dark:text-gray-300">
-          Procesando producto...
+          Processing product...
         </p>
       </div>
 
-      {{-- Contenedor del Escáner (se oculta cuando isLoading es true) --}}
+      {{-- QR Scanner container (hidden when loading) --}}
       <div x-show="!isLoading">
         <div wire:ignore id="qr-reader" class="w-full"></div>
       </div>
@@ -558,32 +558,22 @@
 
     $wire.on('open-modal', (event) => {
 
-      // --- START: LOGIC FOR HTML5-QRCODE CAMERA SCANNER ---
-
-
-      // We only want to act if the specific modal for our QR scanner is being opened.
+      // Initialize QR scanner when modal opens
       if (event.id === 'qr-scanner-modal') {
-        // [OPTIMIZATION]
-        // Implement a singleton pattern. Only create a new scanner instance the very first time.
+        // Create scanner instance only once (singleton pattern)
         if (!html5QrcodeScanner) {
           html5QrcodeScanner = new Html5QrcodeScanner(
-            "qr-reader", // The ID of the HTML `div` element.
+            "qr-reader",
             {
               fps: 10,
-              qrbox: {
-                width: 300,
-                height: 200
-              },
+              qrbox: { width: 300, height: 200 },
               rememberLastUsedCamera: true
             },
-            /* verbose= */
-            false
+            false // verbose mode disabled
           );
         }
-        // The `render()` method starts the camera feed and begins scanning.
         html5QrcodeScanner.render(onScanSuccess, onScanFailure);
       }
-      // --- END: LOGIC FOR HTML5-QRCODE CAMERA SCANNER ---
 
 
       if (event.inputId != undefined) {
@@ -624,28 +614,18 @@
       modalOpened = false;
     });
 
-    // --- START: LOGIC FOR HTML5-QRCODE CAMERA SCANNER ---
-
-    /**
-     * @type {Html5QrcodeScanner|null}
-     * A global variable to hold the scanner instance.
-     */
+    // QR Scanner global variables and functions
     let html5QrcodeScanner = null;
-
-    /**
-     * @type {boolean}
-     * A flag to control scanning frequency (throttle). Prevents duplicate scans.
-     */
     let isScanningEnabled = true;
 
     /**
-     * Success callback function with a 1-second cooldown.
-     * @param {string} decodedText - The decoded string from the QR code or barcode.
+     * Handles successful barcode/QR code scan
+     * @param {string} decodedText - The decoded string from the QR code or barcode
      */
     async function onScanSuccess(decodedText, decodedResult) {
       if (!isScanningEnabled) return;
 
-      // ✅ CORRECCIÓN: Método más robusto para encontrar el componente Alpine.
+      // Find Alpine.js component for state management
       const readerElement = document.getElementById('qr-reader');
       if (!readerElement) {
         console.error('Scanner reader element not found!');
@@ -659,59 +639,56 @@
       }
       const alpineComponent = alpineContainer._x_dataStack[0];
 
-      // 1. Deshabilitar escaneo y activar el spinner
+      // Disable scanning and show loading spinner
       isScanningEnabled = false;
       alpineComponent.isLoading = true;
 
       console.log(`Scan result: ${decodedText}`);
 
-      // 2. Procesar el producto y ESPERAR a que Livewire termine.
+      // Process product and wait for Livewire to complete
       await $wire.call('addCartUsingScanner', decodedText);
 
-      // 3. Cuando Livewire termina, desactivar el spinner.
+      // Hide loading spinner
       alpineComponent.isLoading = false;
 
-      // 4. Proporcionar feedback.
+      // Show success notification
       new FilamentNotification()
-        .title('Producto añadido')
+        .title('Product added')
         .success()
         .duration(3000)
         .send();
 
-      // 5. Re-habilitar el escaneo después del cooldown.
+      // Re-enable scanning after cooldown period
       setTimeout(() => {
         isScanningEnabled = true;
       }, 1000);
     }
 
     /**
-     * Failure callback function.
+     * Handles scan failure (empty implementation)
      */
     function onScanFailure(error) {
-      // This remains empty.
+      // Intentionally empty - failures are handled silently
     }
 
     /**
-     * Global function to safely stop the camera scanner.
+     * Safely stops the camera scanner
      */
     window.stopScanner = () => {
       if (html5QrcodeScanner && html5QrcodeScanner.getState() === Html5QrcodeScannerState.SCANNING) {
         html5QrcodeScanner.clear().then(() => {
           console.log('QR Code scanner stopped successfully.');
         }).catch(err => {
-          // Ignore errors here, as they can happen during rapid closing.
+          // Ignore errors during rapid closing
         });
       }
     };
-    // --- END: LOGIC FOR HTML5-QRCODE CAMERA SCANNER ---
+    // Physical barcode scanner support (keyboard input)
     document.addEventListener('keypress', (event) => {
-      if (modalOpened) {
+      if (modalOpened || !scannerEnabled) {
         return;
       }
 
-      if (!scannerEnabled) {
-        return;
-      }
       if (barcodeTimeout) {
         clearTimeout(barcodeTimeout);
       }
@@ -723,6 +700,7 @@
         barcodeData = '';
         scannerEnabled = false;
 
+        // Re-enable scanner after processing
         setTimeout(() => {
           scannerEnabled = true;
         }, 1000);
@@ -730,6 +708,7 @@
         barcodeData += event.key;
       }
 
+      // Clear barcode data if no input for 500ms
       barcodeTimeout = setTimeout(() => {
         barcodeData = '';
       }, 500);
