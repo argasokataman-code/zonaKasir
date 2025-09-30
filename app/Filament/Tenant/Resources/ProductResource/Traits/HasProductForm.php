@@ -20,7 +20,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Set;
 use Filament\Support\RawJs;
 use Laravel\Pennant\Feature;
-use Livewire\Attributes\On;
 
 trait HasProductForm
 {
@@ -151,20 +150,17 @@ trait HasProductForm
 
     public function generateBarcodeFormComponent(): TextInput
     {
-
-        $scanModalId = 'scan-barcode-modal';
-
         return TextInput::make('barcode')
             ->helperText(__('Point the cursor to this input first then scan the barcode'))
             ->visible(Feature::active(ProductBarcode::class))
             ->translateLabel()
-            ->id($scanModalId)
+            ->id('scan-barcode-modal')
             ->suffixAction(
                 Action::make('scan')
                     ->icon('heroicon-o-camera')
                     ->label('Scan')
                     ->modalHeading('Scan a barcode')
-                    ->modalContent(view('filament.components.barcode-scanner', ['modalId' => $scanModalId]))
+                    ->modalContent(view('filament.components.barcode-scanner', ['modalId' => 'scan-barcode-modal']))
                     ->modalWidth('lg')
                     ->closeModalByClickingAway(false)
                     ->modalCloseButton(false)
