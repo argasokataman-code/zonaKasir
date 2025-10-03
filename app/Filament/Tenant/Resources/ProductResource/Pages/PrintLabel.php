@@ -54,7 +54,7 @@ class PrintLabel extends Page implements HasForms
 
         $product = $this->record;
         $fillable = collect();
-        $barcodeString = $product->barcode ?? $product->sku;
+        $barcodeString = $product->barcodes()->primary()->active()->value('code') ?? $product->sku;
         $barcode = $generator
             ->getBarcode($barcodeString, $generator::TYPE_CODE_128, 1, 30);
         for ($i = 0; $i < $data['qty']; $i++) {

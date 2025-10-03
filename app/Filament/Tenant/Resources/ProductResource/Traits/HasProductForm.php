@@ -10,9 +10,11 @@ use App\Features\ProductStock;
 use App\Features\ProductType;
 use App\Models\Tenants\Category;
 use App\Models\Tenants\Setting;
+use App\Rules\UniqueBarcode;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Set;
@@ -146,12 +148,43 @@ trait HasProductForm
             ->required();
     }
 
-    public function generateBarcodeFormComponent(): TextInput
+    public function generateBarcodeFormComponent(): Repeater
     {
-        return TextInput::make('barcode')
-            ->helperText(__('Point the cursor to this input first then scan the barcode'))
+        return Repeater::make('barcodes')
+            ->translateLabel()
             ->visible(Feature::active(ProductBarcode::class))
-            ->translateLabel();
+            ->schema([
+                TextInput::make('code')
+                    ->label(__('Barcode'))
+                    ->required()
+                    ->rules([new UniqueBarcode()])
+                    ->helperText(__('Point the cursor to this input first then scan the barcode'))
+                    ->columnSpan(2),
+
+                Select::make('type')
+                    ->label(__('Type'))
+                    ->options([
+                        'primary' => __('Primary'),
+                        'secondary' => __('Scondary'),
+                        'internal' => __('Intern'),
+                        'supplier' => __('Suplier'),
+                        'other' => __('Other'),
+                    ])
+                    ->default('primary')
+                    ->required()
+                    ->columnSpan(1),
+
+                TextInput::make('description')
+                    ->label(__('Description'))
+                    ->placeholder(__('Optional barcode description'))
+                    ->columnSpan(3),
+            ])
+            ->columns(3)
+            ->addActionLabel(__('Add barcode'))
+            ->reorderable()
+            ->collapsible()
+            ->defaultItems(0)
+            ->itemLabel(fn (array $state): ?string => $state['code'] ?? null);
     }
 
     public function generateNonStockFormComponent(): Checkbox

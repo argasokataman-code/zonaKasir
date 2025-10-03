@@ -79,7 +79,7 @@ class ProductResource extends Resource
                     ->searchable()
                     ->toggleable()
                     ->visible(Feature::active(ProductSku::class)),
-                TextColumn::make('barcode')
+                TextColumn::make('primaryBarcode.code')
                     ->hidden()
                     ->searchable()
                     ->toggleable()
@@ -137,6 +137,7 @@ class ProductResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\Action::make('print-label')
+                    ->label(__('Print Label'))
                         ->icon('heroicon-o-printer')
                         ->url(fn (Product $record) => static::getUrl('print-label', ['record' => $record])),
                     Tables\Actions\DeleteAction::make(),
@@ -201,7 +202,8 @@ class ProductResource extends Resource
                 ->translateLabel(),
             Infolists\Components\TextEntry::make('sku')
                 ->translateLabel(),
-            Infolists\Components\TextEntry::make('barcode')
+            Infolists\Components\TextEntry::make('primaryBarcode.code')
+            ->label(__('Barcodes'))
                 ->translateLabel(),
 //            Infolists\Components\TextEntry::make('stocks_sum_stock')
 //                                    ->sum('stocks', 'stock')
