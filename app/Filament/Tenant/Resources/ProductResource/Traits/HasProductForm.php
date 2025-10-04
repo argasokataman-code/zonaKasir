@@ -157,7 +157,7 @@ trait HasProductForm
                 TextInput::make('code')
                     ->label(__('Barcode'))
                     ->required()
-                    ->rules([new UniqueBarcode()])
+                    ->rules(fn ($get) => [new UniqueBarcode($get('id'))])
                     ->helperText(__('Point the cursor to this input first then scan the barcode'))
                     ->columnSpan(2),
 

@@ -8,11 +8,11 @@ use Illuminate\Contracts\Validation\ValidationRule;
 
 class UniqueBarcode implements ValidationRule
 {
-    protected ?int $excludeId;
+    protected ?int $excludedId;
 
-    public function __construct(?int $excludeId = null)
+    public function __construct(?int $excludedId = null)
     {
-        $this->excludeId = $excludeId;
+        $this->excludedId = $excludedId;
     }
 
     /**
@@ -24,13 +24,13 @@ class UniqueBarcode implements ValidationRule
             return;
         }
 
-        $exists = Barcode::where('code', $value);
+        $query = Barcode::where('code', $value);
 
-        if ($this->excludeId) {
-            $exists->where('id', '!=', $this->excludeId);
+        if ($this->excludedId !== null) {
+            $query->where('id', '!=', $this->excludedId);
         }
 
-        if ($exists->exists()) {
+        if ($query->exists()) {
             $fail(__('Barcode already exists.'));
         }
     }

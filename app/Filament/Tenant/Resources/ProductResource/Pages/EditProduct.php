@@ -56,6 +56,7 @@ class EditProduct extends EditRecord
         // Load barcodes
         $data['barcodes'] = $this->getRecord()->barcodes()->get()->map(function ($barcode) {
             return [
+                'id' => $barcode->id,
                 'code' => $barcode->code,
                 'type' => $barcode->type,
                 'description' => $barcode->description,

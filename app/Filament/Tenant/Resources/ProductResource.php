@@ -137,7 +137,7 @@ class ProductResource extends Resource
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\Action::make('print-label')
-                    ->label(__('Print Label'))
+                        ->label(__('Print Label'))
                         ->icon('heroicon-o-printer')
                         ->url(fn (Product $record) => static::getUrl('print-label', ['record' => $record])),
                     Tables\Actions\DeleteAction::make(),
@@ -172,8 +172,9 @@ class ProductResource extends Resource
                         ]),
                 ]),
             $this->generateNameFormComponent()
-                ->columnSpan(1),
-            $this->generateBarcodeFormComponent(),
+                ->columnSpanFull(),
+            $this->generateBarcodeFormComponent()
+                ->columnSpanFull(),
             $this->generateSkuFormComponent(),
             $this->generateCategoryFormComponent(),
             $this->generateStockFormComponent(),
@@ -203,14 +204,14 @@ class ProductResource extends Resource
             Infolists\Components\TextEntry::make('sku')
                 ->translateLabel(),
             Infolists\Components\TextEntry::make('primaryBarcode.code')
-            ->label(__('Barcodes'))
+                ->label(__('Barcodes'))
                 ->translateLabel(),
-//            Infolists\Components\TextEntry::make('stocks_sum_stock')
-//                                    ->sum('stocks', 'stock')
-//                                    ->label("stocks")
-//                ->icon(fn (int $state) => $state <= Setting::get('minimum_stock_nofication', 0) ? 'heroicon-s-exclamation-triangle' : '')
-//                ->iconColor(Color::Yellow)
-//                ->translateLabel(),
+            //            Infolists\Components\TextEntry::make('stocks_sum_stock')
+            //                                    ->sum('stocks', 'stock')
+            //                                    ->label("stocks")
+            //                ->icon(fn (int $state) => $state <= Setting::get('minimum_stock_nofication', 0) ? 'heroicon-s-exclamation-triangle' : '')
+            //                ->iconColor(Color::Yellow)
+            //                ->translateLabel(),
             Infolists\Components\TextEntry::make('is_non_stock')
                 ->badge()
                 ->getStateUsing(function (Product $product) {
