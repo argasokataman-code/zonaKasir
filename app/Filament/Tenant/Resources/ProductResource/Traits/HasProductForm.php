@@ -165,7 +165,7 @@ trait HasProductForm
                     ->label(__('Type'))
                     ->options([
                         'primary' => __('Primary'),
-                        'secondary' => __('Scondary'),
+                        'secondary' => __('Secondary'),
                         'internal' => __('Intern'),
                         'supplier' => __('Suplier'),
                         'other' => __('Other'),
