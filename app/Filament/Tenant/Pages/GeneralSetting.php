@@ -108,6 +108,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
                             Select::make('currency')
                                 ->options([
                                     'IDR' => 'IDR',
+                                    'MXN' => 'MXN',
                                     'USD' => 'USD',
                                 ])
                                 ->translateLabel(),
@@ -178,8 +179,9 @@ class GeneralSetting extends Page implements HasActions, HasForms
     {
         $this->validate([
             'about.shop_name' => 'required',
+            'about.business_type' => 'required',
             'about.shop_location' => 'required',
-            'about.currency' => 'required',
+            // 'about.currency' => 'required',
             // 'data.photo' => 'required',
         ]);
 

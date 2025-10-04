@@ -11,6 +11,8 @@ use App\Features\ProductType;
 use App\Models\Tenants\Category;
 use App\Models\Tenants\Setting;
 use App\Rules\UniqueBarcode;
+use Filament\Actions\StaticAction;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
@@ -157,9 +159,29 @@ trait HasProductForm
                 TextInput::make('code')
                     ->label(__('Barcode'))
                     ->required()
-                    ->rules(fn ($get) => [new UniqueBarcode($get('id'))])
+                    ->rules(fn($get) => [new UniqueBarcode($get('id'))])
                     ->helperText(__('Point the cursor to this input first then scan the barcode'))
-                    ->columnSpan(2),
+                    ->columnSpan(2)
+                    ->translateLabel()
+                    ->id('scan-barcode-modal')
+                    ->suffixAction(
+                        Action::make('scan')
+                            ->icon('heroicon-o-camera')
+                            ->label('Scan')
+                            ->modalHeading('Scan a barcode')
+                            ->modalContent(view('filament.components.barcode-scanner', ['modalId' => 'scan-barcode-modal']))
+                            ->modalWidth('lg')
+                            ->closeModalByClickingAway(false)
+                            ->modalCloseButton(false)
+                            ->modalSubmitAction(false)
+                            ->modalCancelAction(
+                                fn(StaticAction $action) =>
+                                $action->label('Cancel')
+                                    ->extraAttributes([
+                                        'id' => 'close-barcode-scanner-button',
+                                    ])
+                            )
+                    ),
 
                 Select::make('type')
                     ->label(__('Type'))
