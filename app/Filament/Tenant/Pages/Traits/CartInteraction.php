@@ -142,9 +142,7 @@ trait CartInteraction
 
     public function addCartUsingScanner(string $value)
     {
-        $product = Product::whereBarcode($value)
-            ->orWhere('sku', $value)
-            ->first();
+        $product = Product::findByBarcodeOrSku($value);
 
         if (! $product) {
             Notification::make()
