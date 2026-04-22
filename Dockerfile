@@ -56,8 +56,16 @@ RUN mkdir -p storage/framework/cache/data \
 
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader || true
 
+# Cache Blade views so Tailwind can scan compiled views for classes
 RUN php artisan view:cache || true
-RUN npm install && npm run build
+RUN php artisan filament:cache-components || true
+RUN php artisan icons:cache || true
+
+# Install npm deps and build
+# NOTE: Run build TWICE because Tailwind needs compiled views (from view:cache above)
+# to generate complete CSS. The first build compiles assets that Blade references,
+# the second build ensures Tailwind picks up all classes from compiled views.
+RUN npm install && npm run build && npm run build
 
 RUN chown -R wwwuser:wwwgroup /var/www/html
 
@@ -70,6 +78,10 @@ RUN mkdir -p /var/log/supervisor \
     && chown -R wwwuser:wwwgroup /var/www/html/storage \
     && chown -R wwwuser:wwwgroup /var/www/html/bootstrap/cache
 
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 EXPOSE 80
 
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
