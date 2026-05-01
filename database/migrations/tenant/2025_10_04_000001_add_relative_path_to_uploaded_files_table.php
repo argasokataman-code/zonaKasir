@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('uploaded_files', function (Blueprint $table) {
             $table->string('relative_path')->nullable()->after('path');
+            $table->index('relative_path');
         });
     }
 
@@ -22,6 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('uploaded_files', function (Blueprint $table) {
+            $table->dropIndex(['relative_path']);
             $table->dropColumn('relative_path');
         });
     }

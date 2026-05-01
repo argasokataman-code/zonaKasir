@@ -55,7 +55,7 @@ class AboutService
             $uploadedFile->deleteFromPublic('profile');
         } else {
             $uploadDisk = config('filesystems.upload_disk');
-            if (Storage::disk($uploadDisk)->has($about->photo)) {
+            if (Storage::disk($uploadDisk)->exists($about->photo)) {
                 Storage::disk($uploadDisk)->delete($about->photo);
             }
         }

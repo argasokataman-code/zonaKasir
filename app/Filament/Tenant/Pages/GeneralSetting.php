@@ -297,7 +297,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
                     $tmpFile->deleteFromPublic('profile');
                 } else {
                     $uploadDisk = config('filesystems.upload_disk');
-                    if (Storage::disk($uploadDisk)->has($profile->photo)) {
+                    if (Storage::disk($uploadDisk)->exists($profile->photo)) {
                         Storage::disk($uploadDisk)->delete($profile->photo);
                     }
                 }
