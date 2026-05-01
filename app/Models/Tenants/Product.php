@@ -18,8 +18,8 @@ use Illuminate\Support\Str;
 /**
  * @mixin IdeHelperProduct
  *
- * @property string $hero_images The comma-separated relative paths stored in DB
- * @property array $heroImages The array of relative paths (accessor)
+ * @property string $hero_images The comma-separated relative paths stored in DB (raw column)
+ * @property array $heroImages The array of relative paths (via accessor; same as $hero_images)
  * @property string $heroImage The URL of the first hero image (accessor)
  * @property array $heroImagesUrl The array of full URLs (accessor)
  */

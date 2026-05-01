@@ -45,8 +45,10 @@ class EditProduct extends EditRecord
     {
         $data = $this->getRecord()->attributesToArray();
 
-        $uploadedFile = UploadedFile::whereIn('relative_path', $data['hero_images'] ?? [])
-            ->select(['name', 'original_name', 'relative_path'])
+        $heroImages = $data['hero_images'] ?? [];
+        $uploadedFile = UploadedFile::where(function ($q) use ($heroImages) {
+            $q->whereIn('relative_path', $heroImages)->orWhereIn('url', $heroImages);
+        })->select(['name', 'original_name', 'relative_path', 'url'])
             ->get();
 
         $uploadedFile->each(function ($file, $key) use (&$data) {
