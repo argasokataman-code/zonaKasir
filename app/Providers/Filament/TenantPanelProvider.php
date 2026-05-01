@@ -109,7 +109,9 @@ class TenantPanelProvider extends PanelProvider
             FilamentView::registerRenderHook(
                 PanelsRenderHook::BODY_START,
                 fn (): View => view('donation-banner', [
-                    'link' => 'https://trakteer.id/sheenazien8/tip',
+                    'link' => Arr::get([
+                        'link' => 'https://trakteer.id/sheenazien8/tip',
+                    ], 'link'),
                 ]),
             );
         }
