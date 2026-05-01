@@ -11,13 +11,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 
-use function Pest\Laravel\get;
-
 /**
  * @mixin IdeHelperProduct
+ *
+ * @property string $hero_images The comma-separated relative paths stored in DB
+ * @property array $heroImages The array of relative paths (accessor)
+ * @property string $heroImage The URL of the first hero image (accessor)
+ * @property array $heroImagesUrl The array of full URLs (accessor)
  */
 class Product extends Model
 {
@@ -68,15 +72,6 @@ class Product extends Model
     {
         return Attribute::make(
             get: function () {
-                // $usingNormalPrice = Setting::get('selling_method', env('SELLING_METHOD', 'fifo')) == 'normal';
-                // if ($usingNormalPrice) {
-                //     $lastStock = $this->stocks()->where('stock', '>', 0)
-                //         ->orderBy('date', 'asc')
-                //         ->first();
-                //     dd($lastStock);
-                //
-                //     return $lastStock ? $lastStock->stock : 0;
-                // }
                 $stock = $this
                     ->stockLatestCalculateIn()
                     ->sum('stock');
@@ -129,11 +124,28 @@ class Product extends Model
         );
     }
 
+    /**
+     * Accessor for hero_images: returns an array of relative paths.
+     * The DB column stores comma-separated relative paths.
+     */
     public function heroImages(): Attribute
     {
         return Attribute::make(
-            get: fn($value) => $value ? Str::of($value)->explode(',') : [],
+            get: fn($value) => $value ? Str::of($value)->explode(',')->toArray() : [],
             set: fn($value) => $value ? Arr::join(is_array($value) ? $value : $value->toArray(), ',') : null
+        );
+    }
+
+    /**
+     * Accessor for hero_images_url: returns an array of full URLs computed from relative paths.
+     */
+    public function heroImagesUrl(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $uploadDisk = config('filesystems.upload_disk');
+                return Arr::map($this->hero_images, fn($path) => Storage::disk($uploadDisk)->url($path));
+            }
         );
     }
 
@@ -188,11 +200,18 @@ class Product extends Model
         return $this;
     }
 
+    /**
+     * Accessor for heroImage: returns the full URL of the first hero image.
+     */
     public function heroImage(): Attribute
     {
         return Attribute::make(
             get: function () {
-                return $this->hero_images ? $this->hero_images[0] : 'https://cdn4.iconfinder.com/data/icons/picture-sharing-sites/32/No_Image-1024.png';
+                if ($this->hero_images && count($this->hero_images) > 0) {
+                    $uploadDisk = config('filesystems.upload_disk');
+                    return Storage::disk($uploadDisk)->url($this->hero_images[0]);
+                }
+                return 'https://cdn4.iconfinder.com/data/icons/picture-sharing-sites/32/No_Image-1024.png';
             }
         );
     }
