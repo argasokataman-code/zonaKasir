@@ -63,7 +63,6 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
@@ -109,9 +108,7 @@ class TenantPanelProvider extends PanelProvider
             FilamentView::registerRenderHook(
                 PanelsRenderHook::BODY_START,
                 fn (): View => view('donation-banner', [
-                    'link' => Arr::get([
-                        'link' => 'https://trakteer.id/sheenazien8/tip',
-                    ], 'link'),
+                    'link' => 'https://trakteer.id/sheenazien8/tip',
                 ]),
             );
         }
