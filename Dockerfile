@@ -51,7 +51,11 @@ RUN set -eux; \
 WORKDIR /var/www/html
 
 RUN addgroup -g ${WWWGROUP} -S wwwgroup \
-    && adduser -u ${WWWUSER} -S wwwuser -G wwwgroup
+    && adduser -u ${WWWUSER} -S wwwuser -G wwwgroup \
+    && sed -i 's/^user = .*/user = wwwuser/' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i 's/^group = .*/group = wwwgroup/' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i 's/^listen.owner = .*/listen.owner = wwwuser/' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i 's/^listen.group = .*/listen.group = wwwgroup/' /usr/local/etc/php-fpm.d/www.conf
 
 COPY . .
 
