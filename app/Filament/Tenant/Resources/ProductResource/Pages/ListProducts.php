@@ -9,6 +9,7 @@ use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ListProducts extends ListRecords
@@ -25,11 +26,14 @@ class ListProducts extends ListRecords
                 ->visible(feature(ProductImport::class))
                 ->form([
                     FileUpload::make('attachment')
+                        ->disk(config('filesystems.upload_disk'))
                         ->acceptedFileTypes(['application/vnd.ms-excel', 'text/csv']),
                 ])->action(function (array $data) {
-                    $file = public_path('storage/'.$data['attachment']);
+                    $uploadDisk = config('filesystems.upload_disk');
+                    $filePath = $data['attachment'];
+                    $fullPath = Storage::disk($uploadDisk)->path($filePath);
 
-                    Excel::import(new ImportsProductImport, $file);
+                    Excel::import(new ImportsProductImport, $fullPath);
                 }),
         ];
     }

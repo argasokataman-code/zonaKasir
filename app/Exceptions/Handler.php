@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -35,6 +36,18 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
+
+    protected function shouldReturnJson($request, Throwable $e)
+    {
+        if ($request->expectsJson()) {
+            return true;
+        }
+
+        $contentType = $request->header('Content-Type', '');
+
+        return str_contains($contentType, 'application/json');
+    }
+
 
     /**
      * Register the exception handling callbacks for the application.

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * @mixin IdeHelperCartItem
@@ -65,7 +66,11 @@ class CartItem extends Model
     {
         return Attribute::make(
             get: function () {
-                return $this->product?->hero_images ? $this->product->hero_images[0] : 'https://cdn4.iconfinder.com/data/icons/picture-sharing-sites/32/No_Image-1024.png';
+                if ($this->product?->hero_images && count($this->product->hero_images) > 0) {
+                    $uploadDisk = config('filesystems.upload_disk');
+                    return Storage::disk($uploadDisk)->url($this->product->hero_images[0]);
+                }
+                return 'https://cdn4.iconfinder.com/data/icons/picture-sharing-sites/32/No_Image-1024.png';
             }
         );
     }

@@ -25,3 +25,5 @@ tinker.php
 _ide_helper.php
 .phpunit.cache/test-results
 .herd.yml
+opencode.json
+.mcp.json
