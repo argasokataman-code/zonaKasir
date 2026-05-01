@@ -50,7 +50,7 @@ services:
         networks:
             - lakasir
         healthcheck:
-            test: ['CMD', 'mysqladmin', 'ping', '-p${DB_PASSWORD:-secret}']
+            test: ['CMD', 'mysqladmin', 'ping', '-p${DB_PASSWORD:-lakasir_secret_prod}']
             retries: 3
             timeout: 5s
             interval: 5s
