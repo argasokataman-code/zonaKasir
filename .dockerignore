@@ -11,7 +11,7 @@ docker-compose*.yml
 !.env.example
 vendor
 node_modules
-storage/framework/logs
+storage/logs
 storage/framework/sessions
 storage/framework/views
 storage/debugbar
