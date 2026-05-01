@@ -88,6 +88,8 @@ class MigrateUrlsCommand extends Command
             $query->where(function ($q) {
                 $q->whereNull('relative_path')->orWhere('relative_path', '');
             })->whereNotNull('url');
+        } else {
+            $this->warn('  --force: re-running migration for ALL uploaded_files records.');
         }
 
         $files = $query->get();
