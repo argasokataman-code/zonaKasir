@@ -52,7 +52,7 @@ use Illuminate\Http\JsonResponse;
 
 ### Naming Conventions
 - **Classes:** PascalCase (e.g., `ProductController`, `VoucherService`)
-- **Methods:** camelCase (e.g., `filterCategory()`, `applyable()`)
+- **Methods:** camelCase (e.g., `filterCategory()`, `applicable()`)
 - **Variables:** camelCase (e.g., `$product`, `$cartItems`)
 - **Database columns:** snake_case (e.g., `product_id`, `created_at`)
 - **Constants:** UPPER_CASE (e.g., `ROLE_ADMIN`)
