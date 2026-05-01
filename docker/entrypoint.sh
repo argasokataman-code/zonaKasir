@@ -1,6 +1,10 @@
 #!/bin/sh
 set -e
 
+# Ensure storage and cache directories exist with correct permissions
+chown -R wwwuser:wwwgroup /var/www/html/storage
+chown -R wwwuser:wwwgroup /var/www/html/bootstrap/cache
+
 # Cache Blade views before starting the app
 # This ensures Tailwind CSS classes from compiled views are available
 # (important after container restart when storage may be empty)

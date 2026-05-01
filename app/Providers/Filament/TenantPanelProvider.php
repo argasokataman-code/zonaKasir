@@ -179,7 +179,7 @@ class TenantPanelProvider extends PanelProvider
                 $this->generateNavigationItem(StockOpnameResource::class, StockOpname::class),
                 $this->generateNavigationItem(ProductResource::class),
                 $this->generateNavigationItem(CategoryResource::class),
-                $this->generateNavigationItem(TableResource::class)->hidden(About::first() && About::first()->business_type != 'fnb'),
+                $this->generateNavigationItem(TableResource::class)->hidden($this->isNonFnbBusiness()),
             ]),
             NavigationGroup::make(__('User'))->items([
                 $this->generateNavigationItem(UserResource::class, User::class),
@@ -230,40 +230,63 @@ class TenantPanelProvider extends PanelProvider
 
     private function initializeTenantPanel(Panel $panel, string $url): void
     {
-        $tenant = Tenant::whereHas('domains', fn ($query) => $query->where('domain', $url))->first();
+        try {
+            $tenant = Tenant::whereHas('domains', fn ($query) => $query->where('domain', $url))->first();
 
-        if ($tenant) {
-            tenancy()->initialize($tenant->id);
-            $subdomain = $tenant->domains()->where('domain', $url)->first()?->domain;
+            if ($tenant) {
+                tenancy()->initialize($tenant->id);
+                $subdomain = $tenant->domains()->where('domain', $url)->first()?->domain;
 
-            $panel->domain($subdomain);
-            config(['cache.prefix' => $subdomain.'_']);
+                $panel->domain($subdomain);
+                config(['cache.prefix' => $subdomain.'_']);
 
-            app(DatabaseTenancyBootstrapper::class)->bootstrap($tenant);
+                app(DatabaseTenancyBootstrapper::class)->bootstrap($tenant);
 
-            tenant()->run(fn () => $this->configureTenantBrand($panel));
-        } else {
-            if (in_array($url, config('tenancy.central_domains'))) {
-                return;
+                tenant()->run(fn () => $this->configureTenantBrand($panel));
+            } else {
+                if (in_array($url, config('tenancy.central_domains'))) {
+                    return;
+                }
+                abort(404);
             }
-            abort(404);
+        } catch (\Throwable) {
+            // DB not available during build/package-discovery
         }
     }
 
     private function initializeDefaultPanel(Panel $panel): void
     {
-        if (Schema::hasTable('abouts') && $about = About::first()) {
-            $panel->brandName($about->shop_name ?? 'Your Brand')
-                ->brandLogo($about->photo ?? null);
+        try {
+            if (Schema::hasTable('abouts') && $about = About::first()) {
+                $panel->brandName($about->shop_name ?? 'Your Brand')
+                    ->brandLogo($about->photo ?? null);
+            }
+        } catch (\Throwable) {
+            // DB not available during build/package-discovery
         }
     }
 
     private function configureTenantBrand(Panel $panel): void
     {
-        $about = About::first();
+        try {
+            $about = About::first();
 
-        $panel->brandName($about->shop_name ?? 'Your Brand')
-            ->brandLogo($about->photo ?? null);
+            $panel->brandName($about->shop_name ?? 'Your Brand')
+                ->brandLogo($about->photo ?? null);
+        } catch (\Throwable) {
+            // DB not available during build/package-discovery
+        }
+    }
+
+    private function isNonFnbBusiness(): bool
+    {
+        try {
+            $about = About::first();
+
+            return $about && $about->business_type !== 'fnb';
+        } catch (\Throwable) {
+            return false;
+        }
     }
 
     private function generateNavigationItem(string $resource, ?string $feature = null, ?array $activeWhen = []): NavigationItem
