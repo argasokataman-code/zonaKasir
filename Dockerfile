@@ -54,7 +54,7 @@ RUN mkdir -p storage/framework/cache/data \
     storage/logs \
     bootstrap/cache
 
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader || true
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
 # Cache Blade views so Tailwind can scan compiled views for classes
 RUN php artisan view:cache || true
