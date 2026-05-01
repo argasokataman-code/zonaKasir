@@ -40,7 +40,13 @@ RUN apk add --no-cache --virtual .phpize-deps $PHPIZE_DEPS \
     && docker-php-ext-enable redis \
     && apk del .phpize-deps
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin -- --filename=composer
+RUN set -eux; \
+    EXPECTED_SIGNATURE="$(curl -fsSL https://composer.github.io/installer.sig)"; \
+    curl -fsSL -o /tmp/composer-setup.php https://getcomposer.org/installer; \
+    ACTUAL_SIGNATURE="$(php -r "echo hash_file('sha384', '/tmp/composer-setup.php');")"; \
+    [ "$EXPECTED_SIGNATURE" = "$ACTUAL_SIGNATURE" ]; \
+    php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer; \
+    rm -f /tmp/composer-setup.php
 
 WORKDIR /var/www/html
 
