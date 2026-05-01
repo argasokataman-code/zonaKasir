@@ -2,6 +2,7 @@ FROM php:8.2-fpm-alpine
 
 ARG WWWUSER=1000
 ARG WWWGROUP=1000
+ARG SKIP_OPTIMIZE=false
 
 RUN apk add --no-cache \
     nginx \
@@ -56,10 +57,13 @@ RUN mkdir -p storage/framework/cache/data \
 
 RUN composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Cache Blade views so Tailwind can scan compiled views for classes
-RUN php artisan view:cache || true
-RUN php artisan filament:cache-components || true
-RUN php artisan icons:cache || true
+# Cache Blade views so Tailwind can scan compiled views for classes.
+# Set --build-arg SKIP_OPTIMIZE=true to skip these steps (e.g. when APP_KEY is not available at build time).
+RUN if [ "$SKIP_OPTIMIZE" = "false" ]; then \
+    php artisan view:cache && \
+    php artisan filament:cache-components && \
+    php artisan icons:cache; \
+fi
 
 # Install npm deps and build
 # NOTE: Run build TWICE because Tailwind needs compiled views (from view:cache above)
