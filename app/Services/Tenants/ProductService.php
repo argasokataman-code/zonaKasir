@@ -17,8 +17,10 @@ class ProductService
     {
         $uploadedHeroImages = [];
 
+        $items = UploadedFile::whereIn('id', $uploadedFileIds)->get()->keyBy('id');
+
         foreach ($uploadedFileIds as $id) {
-            $item = UploadedFile::find($id);
+            $item = $items->get($id);
             if ($item) {
                 $relativePath = $item->moveToPublic('product');
                 $uploadedHeroImages[] = $relativePath;

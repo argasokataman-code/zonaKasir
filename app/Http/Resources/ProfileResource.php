@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Laravel\Pennant\Feature;
 
 /** @mixin \App\Models\Tenants\User */
@@ -19,7 +20,11 @@ class ProfileResource extends JsonResource
     {
         $uploadDisk = config('filesystems.upload_disk');
         $photoPath = $this->profile?->photo;
-        $photoUrl = $photoPath ? Storage::disk($uploadDisk)->url($photoPath) : null;
+        if ($photoPath && Str::startsWith($photoPath, ['http://', 'https://'])) {
+            $photoUrl = $photoPath;
+        } else {
+            $photoUrl = $photoPath ? Storage::disk($uploadDisk)->url($photoPath) : null;
+        }
 
         return [
             'id' => $this->id,

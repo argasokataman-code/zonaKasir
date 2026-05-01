@@ -7,6 +7,7 @@ use App\Models\Tenants\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 /**
  * @mixin \App\About
@@ -22,7 +23,12 @@ class AboutResource extends JsonResource
     {
         $owner = User::owner()->first();
         $uploadDisk = config('filesystems.upload_disk');
-        $photoUrl = $this?->photo ? Storage::disk($uploadDisk)->url($this->photo) : '';
+        $photo = $this?->photo;
+        if ($photo && Str::startsWith($photo, ['http://', 'https://'])) {
+            $photoUrl = $photo;
+        } else {
+            $photoUrl = $photo ? Storage::disk($uploadDisk)->url($photo) : '';
+        }
 
         return [
             'shop_name' => $this?->shop_name ?? '',

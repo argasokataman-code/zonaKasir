@@ -24,7 +24,12 @@ class ProductImage extends Model
     {
         $value = $this->attributes['name'];
         $uploadDisk = config('filesystems.upload_disk');
+        $driver = config('filesystems.disks.' . $uploadDisk . '.driver');
 
-        return Storage::disk($uploadDisk)->path($value);
+        if ($driver === 'local' || $driver === 'public') {
+            return Storage::disk($uploadDisk)->path($value);
+        }
+
+        return Storage::disk($uploadDisk)->url($value);
     }
 }

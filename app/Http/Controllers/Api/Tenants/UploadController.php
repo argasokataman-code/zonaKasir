@@ -21,7 +21,7 @@ class UploadController extends Controller
 
             $fullUrl = Storage::disk($tmpDisk)->url($name);
 
-            UploadedFile::create([
+            $uploadedFile = UploadedFile::create([
                 'name' => $name,
                 'original_name' => $originalName = $request->file('file')->getClientOriginalName(),
                 'url' => $fullUrl,
@@ -37,7 +37,7 @@ class UploadController extends Controller
         }
 
         return $this->success([
-            'id' => UploadedFile::where('name', $name)->value('id'),
+            'id' => $uploadedFile->id,
             'name' => $name,
             'relative_path' => $name,
             'url' => $fullUrl,

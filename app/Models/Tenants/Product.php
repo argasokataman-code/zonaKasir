@@ -138,13 +138,19 @@ class Product extends Model
 
     /**
      * Accessor for hero_images_url: returns an array of full URLs computed from relative paths.
+     * Passes through absolute URLs unchanged for backward compatibility with legacy data.
      */
     public function heroImagesUrl(): Attribute
     {
         return Attribute::make(
             get: function () {
                 $uploadDisk = config('filesystems.upload_disk');
-                return Arr::map($this->hero_images, fn($path) => Storage::disk($uploadDisk)->url($path));
+                return Arr::map($this->hero_images, function ($path) use ($uploadDisk) {
+                    if (Str::startsWith($path, ['http://', 'https://'])) {
+                        return $path;
+                    }
+                    return Storage::disk($uploadDisk)->url($path);
+                });
             }
         );
     }
@@ -202,14 +208,19 @@ class Product extends Model
 
     /**
      * Accessor for heroImage: returns the full URL of the first hero image.
+     * Passes through absolute URLs unchanged for backward compatibility with legacy data.
      */
     public function heroImage(): Attribute
     {
         return Attribute::make(
             get: function () {
                 if ($this->hero_images && count($this->hero_images) > 0) {
+                    $path = $this->hero_images[0];
+                    if (Str::startsWith($path, ['http://', 'https://'])) {
+                        return $path;
+                    }
                     $uploadDisk = config('filesystems.upload_disk');
-                    return Storage::disk($uploadDisk)->url($this->hero_images[0]);
+                    return Storage::disk($uploadDisk)->url($path);
                 }
                 return 'https://cdn4.iconfinder.com/data/icons/picture-sharing-sites/32/No_Image-1024.png';
             }
