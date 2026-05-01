@@ -69,7 +69,19 @@ class SwitchDiskCommand extends Command
 
             try {
                 $stream = $fromDisk->readStream($relativePath);
-                $toDisk->writeStream($relativePath, $stream);
+                if ($stream === false) {
+                    $this->error("  Failed to open stream for {$relativePath}");
+                    $failed++;
+                    continue;
+                }
+
+                try {
+                    $toDisk->writeStream($relativePath, $stream);
+                } finally {
+                    if (is_resource($stream)) {
+                        fclose($stream);
+                    }
+                }
 
                 if (config("filesystems.disks.{$to}.driver") === 's3') {
                     $toDisk->setVisibility($relativePath, 'public');

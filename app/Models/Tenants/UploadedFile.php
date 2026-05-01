@@ -60,11 +60,18 @@ class UploadedFile extends Model
 
     /**
      * Get the computed absolute filesystem path from the relative path and disk.
+     * Only supported on local filesystem drivers; returns empty string for remote disks.
      */
     public function getPathAttribute(): string
     {
         if ($this->relative_path) {
-            return $this->resolveDisk()->path($this->relative_path);
+            $disk = $this->resolveDisk();
+            $driver = config('filesystems.disks.' . ($this->disk ?: config('filesystems.upload_disk')) . '.driver');
+            if ($driver === 'local' || $driver === 'public') {
+                return $disk->path($this->relative_path);
+            }
+
+            return '';
         }
 
         return $this->attributes['path'] ?? '';
@@ -92,7 +99,7 @@ class UploadedFile extends Model
 
         if ($existingRelativePath) {
             Storage::disk($uploadDisk)->delete($existingRelativePath);
-            static::where('name', basename($existingRelativePath))->delete();
+            static::where('relative_path', $existingRelativePath)->delete();
         }
 
         Storage::disk($tmpDisk)->delete($this->name);
@@ -164,16 +171,11 @@ class UploadedFile extends Model
     }
 
     /**
-     * Query scope: backward-compatible — finds by URL or relative_path.
+     * Query scope: backward-compatible — finds by relative_path or URL.
      * During transition, old data still has full URLs in the url column.
      */
     public function scopeInUrl($query, $urls)
     {
-        $byPath = $query->whereIn('relative_path', $urls);
-        if ($byPath->exists()) {
-            return $byPath;
-        }
-
-        return $query->whereIn('url', $urls);
+        return $query->whereIn('relative_path', $urls)->orWhereIn('url', $urls);
     }
 }

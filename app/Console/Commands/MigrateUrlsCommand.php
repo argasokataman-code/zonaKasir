@@ -60,12 +60,13 @@ class MigrateUrlsCommand extends Command
             return Str::after($url, $baseUrl . '/');
         }
 
-        if (!Str::startsWith($url, ['http://', 'https://'])) {
-            return $url;
-        }
-
+        // Handle app-relative paths like /storage/profile/foo.jpg before the HTTP guard
         if (Str::startsWith($url, '/storage/')) {
             return Str::after($url, '/storage/');
+        }
+
+        if (!Str::startsWith($url, ['http://', 'https://'])) {
+            return $url;
         }
 
         $parsed = parse_url($url);
@@ -81,11 +82,12 @@ class MigrateUrlsCommand extends Command
 
     private function migrateUploadedFiles(bool $force): void
     {
-        $query = UploadedFile::whereNull('relative_path')
-            ->orWhere('relative_path', '');
+        $query = UploadedFile::query();
 
         if (!$force) {
-            $query = $query->whereNotNull('url');
+            $query->where(function ($q) {
+                $q->whereNull('relative_path')->orWhere('relative_path', '');
+            })->whereNotNull('url');
         }
 
         $files = $query->get();

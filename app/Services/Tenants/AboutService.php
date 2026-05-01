@@ -28,7 +28,7 @@ class AboutService
             $owner->save();
         }
 
-        if (isset($data['uploaded_file_id'])) {
+        if (array_key_exists('uploaded_file_id', $data)) {
             $tmpFile = UploadedFile::find($data['uploaded_file_id']);
 
             if ($tmpFile && $tmpFile->relative_path !== $about->photo) {
@@ -41,7 +41,7 @@ class AboutService
             }
         }
 
-        if (isset($data['uploaded_file_id']) && $data['uploaded_file_id'] === null && $about->photo) {
+        if (array_key_exists('uploaded_file_id', $data) && $data['uploaded_file_id'] === null && $about->photo) {
             $this->deletePhoto($about);
         }
     }
@@ -52,7 +52,7 @@ class AboutService
             ?? UploadedFile::where('url', $about->photo)->first();
 
         if ($uploadedFile) {
-            $uploadedFile->deleteFromPublic('');
+            $uploadedFile->deleteFromPublic('profile');
         } else {
             $uploadDisk = config('filesystems.upload_disk');
             if (Storage::disk($uploadDisk)->has($about->photo)) {

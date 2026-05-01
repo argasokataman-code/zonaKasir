@@ -294,7 +294,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
                 $tmpFile = UploadedFile::where('relative_path', $profile->photo)->first()
                     ?? UploadedFile::where('url', $profile->photo)->first();
                 if ($tmpFile) {
-                    $tmpFile->deleteFromPublic('');
+                    $tmpFile->deleteFromPublic('profile');
                 } else {
                     $uploadDisk = config('filesystems.upload_disk');
                     if (Storage::disk($uploadDisk)->has($profile->photo)) {
