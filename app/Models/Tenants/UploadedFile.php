@@ -176,6 +176,8 @@ class UploadedFile extends Model
      */
     public function scopeInUrl($query, $urls)
     {
-        return $query->whereIn('relative_path', $urls)->orWhereIn('url', $urls);
+        return $query->where(function ($q) use ($urls) {
+            $q->whereIn('relative_path', $urls)->orWhereIn('url', $urls);
+        });
     }
 }
