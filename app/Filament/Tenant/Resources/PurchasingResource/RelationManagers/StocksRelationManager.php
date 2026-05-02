@@ -3,9 +3,11 @@
 namespace App\Filament\Tenant\Resources\PurchasingResource\RelationManagers;
 
 use App\Constants\PurchasingStatus;
+use App\Events\RecalculateEvent;
 use App\Filament\Tenant\Resources\PurchasingResource\Traits\HasPurchasingForm;
 use App\Filament\Tenant\Resources\Traits\RefreshThePage;
 use App\Models\Tenants\Purchasing;
+use App\Models\Tenants\Product;
 use App\Models\Tenants\Stock;
 use App\Services\Tenants\PurchasingService;
 use App\Services\Tenants\StockService;
@@ -15,6 +17,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Number;
 
 class StocksRelationManager extends RelationManager
@@ -69,6 +72,9 @@ class StocksRelationManager extends RelationManager
                             $this->ownerRecord->getKey(),
                             $this->purchasingService->getUpdatedPrice($this->ownerRecord)
                         );
+                        if ($record->is_ready) {
+                            RecalculateEvent::dispatch(collect([$record->product]), []);
+                        }
                         $this->refreshPage();
                     }),
                 TextInputColumn::make('expired')
@@ -100,11 +106,14 @@ class StocksRelationManager extends RelationManager
                     ->action(function (array $data) {
                         /** @var Purchasing $purchasing */
                         $purchasing = $this->ownerRecord;
-                        $this->stockService->create($data, $purchasing);
+                        $stock = $this->stockService->create($data, $purchasing);
                         $this->purchasingService->update(
                             $purchasing->getKey(),
                             $this->purchasingService->getUpdatedPrice($purchasing)
                         );
+                        if ($stock->is_ready) {
+                            RecalculateEvent::dispatch(collect([$stock->product]), []);
+                        }
                         $this->refreshPage();
                     }),
             ])
@@ -114,12 +123,17 @@ class StocksRelationManager extends RelationManager
                     ->icon('heroicon-s-x-mark')
                     ->visible(fn (Purchasing $purchasing) => $purchasing->status != PurchasingStatus::approved)
                     ->action(function (Stock $stock) {
+                        $wasReady = $stock->is_ready;
+                        $product = $stock->product;
                         $stock->delete();
                         $purchasing = $this->ownerRecord;
                         $this->purchasingService->update(
                             $purchasing->getKey(),
                             $this->purchasingService->getUpdatedPrice($purchasing)
                         );
+                        if ($wasReady) {
+                            RecalculateEvent::dispatch(collect([$product]), []);
+                        }
                         $this->refreshPage();
                     }),
             ]);
