@@ -170,7 +170,10 @@ trait HasProductForm
                             ->icon('heroicon-o-camera')
                             ->label('Scan')
                             ->modalHeading('Scan a barcode')
-                            ->modalContent(view('filament.components.barcode-scanner', ['modalId' => 'scan-barcode-modal']))
+                            ->modalContent(fn (Action $action) =>
+                            view('filament.components.barcode-scanner', [
+                                'statePath' => $action->getComponent()->getStatePath()
+                            ]))
                             ->modalWidth('lg')
                             ->closeModalByClickingAway(false)
                             ->modalCloseButton(false)
