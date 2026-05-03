@@ -89,7 +89,7 @@ class Product extends Model
                 $stock = $this
                     ->stockLatestCalculateIn();
                 if ($stock?->first() == null) {
-                    return $value;
+                    return $this->initial_price ?? 0;
                 }
 
                 return $stock->first()->initial_price;
@@ -105,7 +105,7 @@ class Product extends Model
                 $stock = $this
                     ->stockLatestCalculateIn();
                 if ($stock?->first() == null) {
-                    return $value;
+                    return $this->selling_price ?? 0;
                 }
 
                 return $stock->first()->selling_price;
@@ -240,6 +240,18 @@ class Product extends Model
     public function priceUnits(): HasMany
     {
         return $this->hasMany(PriceUnit::class);
+    }
+
+    public function scopeInStock(Builder $builder): Builder
+    {
+        return $builder->where(function ($query) {
+            $query->whereHas('stocks', function ($query) {
+                $query->where('is_ready', 1)
+                    ->where('type', 'in')
+                    ->where('stock', '>', 0);
+            })
+            ->orWhere('is_non_stock', true);
+        });
     }
 
     /**
