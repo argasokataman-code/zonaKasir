@@ -7,7 +7,6 @@ use App\Events\RecalculateEvent;
 use App\Filament\Tenant\Resources\PurchasingResource\Traits\HasPurchasingForm;
 use App\Filament\Tenant\Resources\Traits\RefreshThePage;
 use App\Models\Tenants\Purchasing;
-use App\Models\Tenants\Product;
 use App\Models\Tenants\Stock;
 use App\Services\Tenants\PurchasingService;
 use App\Services\Tenants\StockService;
@@ -17,7 +16,6 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Number;
 
 class StocksRelationManager extends RelationManager

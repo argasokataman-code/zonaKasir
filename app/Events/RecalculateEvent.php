@@ -4,7 +4,6 @@ namespace App\Events;
 
 use App\Models\Tenants\Product;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
@@ -14,10 +13,10 @@ class RecalculateEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * @param  Collection<Product>|Product  $products
+     * @param  Collection<int|string, Product>|Product  $products
      * @return void
      */
-    public function __construct(public Collection|Model $products, public array $data)
+    public function __construct(public Collection|Product $products, public array $data)
     {
     }
 }

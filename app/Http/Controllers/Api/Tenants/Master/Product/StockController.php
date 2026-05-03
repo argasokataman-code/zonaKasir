@@ -35,6 +35,8 @@ class StockController extends Controller
 
     public function destroy(Product $product, Stock $stock)
     {
+        abort_unless($stock->product_id === $product->id, 404);
+
         $stock->delete();
 
         RecalculateEvent::dispatch(collect([$product]), []);

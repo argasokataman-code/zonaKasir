@@ -6,7 +6,6 @@ use App\Models\Tenants\Category;
 use App\Models\Tenants\Product;
 use App\Models\Tenants\Setting;
 use App\Models\Tenants\Stock;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Tests\RefreshDatabaseWithTenant;
@@ -31,7 +30,7 @@ beforeEach(function () {
 });
 
 describe('AdjustProduct handles Collection correctly (Bug #11)', function () {
-    test('AdjustedProduct recalculates stock for a single product passed as Collection', function () {
+    test('AdjustProduct recalculates stock for a single product passed as Collection', function () {
         Stock::factory()->createQuietly([
             'product_id' => $this->product->id,
             'stock' => 15,
@@ -145,9 +144,9 @@ describe('RecalculateEvent type safety (Bug #11)', function () {
         expect($event->products)->toHaveCount(1);
     });
 
-    test('RecalculateEvent accepts Model', function () {
+    test('RecalculateEvent accepts Product', function () {
         $event = new RecalculateEvent($this->product, []);
-        expect($event->products)->toBeInstanceOf(Model::class);
+        expect($event->products)->toBeInstanceOf(Product::class);
     });
 
     test('AdjustProduct normalizes Model to Collection and recalculates correctly', function () {
