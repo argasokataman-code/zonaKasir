@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Events\RecalculateEvent;
 use App\Models\Tenants\Product;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 
 class AdjustProduct
 {
@@ -17,7 +15,7 @@ class AdjustProduct
     {
         $products = $event->products;
 
-        if ($products instanceof Model) {
+        if ($products instanceof Product) {
             $products = collect([$products]);
         }
 
