@@ -1,13 +1,25 @@
 @props(['statePath'])
 
+@php
+    $readerId = 'reader-' . trim(preg_replace('/[^a-z0-9]+/', '-', strtolower($statePath)), '-');
+@endphp
+
 <div x-data x-init="
-    const statePath = '{{ $statePath }}';
+    const statePath = @js($statePath);
+    const readerId = @js($readerId);
+
+    const findCloseButton = () => {
+        const dialog = $el.closest('[role=\'dialog\']');
+        return dialog
+            ? dialog.querySelector('[id^=\'close-barcode-scanner\']')
+            : document.getElementById('close-barcode-scanner-button');
+    };
 
     const onScanSuccess = (decodedText, decodedResult) => {
 
         $wire.set(statePath, decodedText);
 
-        document.getElementById('close-barcode-scanner-button')?.click();
+        findCloseButton()?.click();
     };
 
 
@@ -25,7 +37,7 @@
 
 
         const html5QrcodeScanner = new Html5QrcodeScanner(
-            'reader',
+            readerId,
             {
                 fps: 10,
                 qrbox: { width: 250, height: 150 },
@@ -45,7 +57,7 @@
         html5QrcodeScanner.render(onScanSuccess, onScanFailure);
 
 
-        const closeButton = document.getElementById('close-barcode-scanner-button');
+        const closeButton = findCloseButton();
         if (closeButton) {
             closeButton.addEventListener('click', () => {
 
@@ -61,13 +73,16 @@
     
     startScanner();
 ">
-    {{-- Este div es el contenedor donde la librería construirá su interfaz --}}
-    <div id="reader" style="width: 100%;"></div>
+    {{-- wire:ignore prevents Livewire from diffing library-injected DOM --}}
+    <div wire:ignore class="barcode-scanner-wrapper">
+        <div id="{{ $readerId }}" style="width: 100%;"></div>
+    </div>
 
+    @once
     <style>
         /* html5-qrcode library button & control styling */
-        #reader__dashboard_section_csr button,
-        #reader__dashboard_section_swaplink {
+        .barcode-scanner-wrapper [id$="__dashboard_section_csr"] button,
+        .barcode-scanner-wrapper [id$="__dashboard_section_swaplink"] {
             background-color: #f97316 !important;
             border: none !important;
             color: #fff !important;
@@ -81,24 +96,24 @@
             margin: 0.25rem 0 !important;
         }
 
-        #reader__dashboard_section_csr button:hover,
-        #reader__dashboard_section_swaplink:hover {
+        .barcode-scanner-wrapper [id$="__dashboard_section_csr"] button:hover,
+        .barcode-scanner-wrapper [id$="__dashboard_section_swaplink"]:hover {
             background-color: #ea580c !important;
         }
 
-        #reader__dashboard_section {
+        .barcode-scanner-wrapper [id$="__dashboard_section"] {
             padding: 0.75rem !important;
             margin-top: 0.5rem !important;
         }
 
-        #reader__dashboard_section_csr {
+        .barcode-scanner-wrapper [id$="__dashboard_section_csr"] {
             display: flex !important;
             flex-direction: column !important;
             gap: 0.5rem !important;
             align-items: stretch !important;
         }
 
-        #reader__dashboard_section_csr select {
+        .barcode-scanner-wrapper [id$="__dashboard_section_csr"] select {
             width: 100% !important;
             padding: 0.5rem 0.75rem !important;
             border-radius: 0.5rem !important;
@@ -110,62 +125,67 @@
             transition: border-color 0.2s ease !important;
         }
 
-        #reader__dashboard_section_csr select:focus {
+        .barcode-scanner-wrapper [id$="__dashboard_section_csr"] select:focus {
             border-color: #f97316 !important;
             box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.25) !important;
         }
 
-        #reader__scan_region {
+        .barcode-scanner-wrapper [id$="__scan_region"] {
             min-height: 200px !important;
             border-radius: 0.5rem !important;
             overflow: hidden !important;
         }
 
-        #reader {
+        .barcode-scanner-wrapper > div {
             border: none !important;
         }
 
-        #reader__dashboard {
+        .barcode-scanner-wrapper [id$="__dashboard"] {
             padding: 0.5rem !important;
         }
 
-        #reader__status_line {
+        .barcode-scanner-wrapper [id$="__status_line"] {
             font-size: 0.875rem !important;
             padding: 0.25rem 0.5rem !important;
         }
 
         /* Dark mode support */
-        .dark #reader__dashboard_section_csr select {
+        .dark .barcode-scanner-wrapper [id$="__dashboard_section_csr"] select {
             background-color: #111827 !important;
             color: #f3f4f6 !important;
             border-color: #374151 !important;
         }
 
-        .dark #reader__dashboard_section_csr select:focus {
+        .dark .barcode-scanner-wrapper [id$="__dashboard_section_csr"] select:focus {
             border-color: #f97316 !important;
             box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.25) !important;
         }
 
-        .dark #reader__dashboard_section {
+        .dark .barcode-scanner-wrapper [id$="__dashboard_section"] {
             background-color: #1f2937 !important;
             border-color: #374151 !important;
         }
 
-        .dark #reader__dashboard {
+        .dark .barcode-scanner-wrapper [id$="__dashboard"] {
             background-color: #111827 !important;
         }
 
-        .dark #reader__status_line {
+        .dark .barcode-scanner-wrapper [id$="__status_line"] {
             color: #d1d5db !important;
         }
 
-        .dark #reader img[alt="Info icon"] {
+        .dark .barcode-scanner-wrapper img[alt="Info icon"] {
             filter: invert(1) !important;
         }
 
-        .dark #reader__dashboard_section_swaplink {
+        /* Fix dark mode swap link: transparent background keeps text readable */
+        .dark .barcode-scanner-wrapper [id$="__dashboard_section_swaplink"] {
+            background-color: transparent !important;
             color: #f97316 !important;
             text-decoration: underline !important;
+            box-shadow: none !important;
+            padding: 0 !important;
         }
     </style>
+    @endonce
 </div>

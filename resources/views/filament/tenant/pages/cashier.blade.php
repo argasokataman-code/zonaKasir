@@ -433,9 +433,13 @@
       filter: invert(1) !important;
     }
 
+    /* Fix dark mode swap link: transparent background keeps text readable */
     .dark #qr-reader__dashboard_section_swaplink {
+      background-color: transparent !important;
       color: #f97316 !important;
       text-decoration: underline !important;
+      box-shadow: none !important;
+      padding: 0 !important;
     }
   </style>
 
