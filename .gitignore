@@ -12,6 +12,9 @@
 /packages
 /public/build/manifest.json
 public/build
+
+# Production env (never commit real .env)
+.env.production
 tags
 .env
 .env.backup
