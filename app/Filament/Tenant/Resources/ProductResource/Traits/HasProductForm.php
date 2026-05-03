@@ -28,6 +28,7 @@ trait HasProductForm
     public function generateFileUploadFormComponent(): FileUpload
     {
         return FileUpload::make('hero_images')
+            ->disk(config('filesystems.upload_disk'))
             ->image()
             ->translateLabel()
             ->imageResizeMode('cover')
