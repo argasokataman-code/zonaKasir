@@ -45,6 +45,11 @@ class Cashier extends Page implements HasForms, HasTable
 
     protected static string $view = 'filament.tenant.pages.cashier';
 
+    public static function canAccess(): bool
+    {
+        return can('create selling');
+    }
+
     public Collection $cartItems;
 
     public Collection $availableVoucher;

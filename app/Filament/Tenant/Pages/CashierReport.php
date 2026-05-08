@@ -27,6 +27,11 @@ class CashierReport extends Page implements HasActions, HasForms
 
     protected static string $view = 'filament.tenant.pages.cashier-report';
 
+    public static function canAccess(): bool
+    {
+        return can('generate cashier report');
+    }
+
     #[Url]
     public ?array $data = [
         'start_date' => null,
