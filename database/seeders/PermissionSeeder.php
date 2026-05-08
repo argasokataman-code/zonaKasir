@@ -249,7 +249,25 @@ class PermissionSeeder extends Seeder
                             'can'
                         ],
                         'guard' => ['web', 'sanctum']
-                    ]
+                    ],
+                    'general setting' => [
+                        'permission' => [
+                            'access',
+                        ],
+                        'guard' => ['web'],
+                    ],
+                    'printer' => [
+                        'permission' => [
+                            'access',
+                        ],
+                        'guard' => ['web'],
+                    ],
+                    'report' => [
+                        'permission' => [
+                            'access',
+                        ],
+                        'guard' => ['web'],
+                    ],
                 ],
             ],
         ];
