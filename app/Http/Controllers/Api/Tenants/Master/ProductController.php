@@ -16,6 +16,8 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        $perPage = $this->resolvePerPage($request);
+
         $products = QueryBuilder::for(Product::class)
             ->allowedFilters([
                 'name',
@@ -31,11 +33,26 @@ class ProductController extends Controller
             ])
             ->allowedIncludes(['category', 'images'])
             ->orderByDesc('created_at')
-            ->simplePaginate($request->get('per_page', 10));
+            ->simplePaginate($perPage);
 
         return $this->buildResponse()
             ->setData(ProductCollection::collection($products))
             ->present();
+    }
+
+    private function resolvePerPage(Request $request): ?int
+    {
+        if (! $request->has('per_page')) {
+            return null;
+        }
+
+        $perPage = filter_var($request->query('per_page'), FILTER_VALIDATE_INT);
+
+        if ($perPage === false) {
+            return null;
+        }
+
+        return max(1, min($perPage, 100));
     }
 
     public function store(ProductRequest $request)
