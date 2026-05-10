@@ -29,7 +29,7 @@ beforeEach(function () {
 });
 
 describe('StockController index pagination', function () {
-    test('per_page query controls stock pagination size', function () {
+    test('can control stock pagination size with per_page query', function () {
         $user = User::first();
         Stock::factory()->count(20)->createQuietly([
             'product_id' => $this->product->id,
@@ -45,7 +45,7 @@ describe('StockController index pagination', function () {
             ->assertJsonCount(5, 'data.data');
     });
 
-    test('invalid per_page falls back to default model pagination size', function () {
+    test('can fall back to default pagination when per_page is invalid', function () {
         $user = User::first();
         Stock::factory()->count(20)->createQuietly([
             'product_id' => $this->product->id,
