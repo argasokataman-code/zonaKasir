@@ -33,7 +33,7 @@ class ProductController extends Controller
             ])
             ->allowedIncludes(['category', 'images'])
             ->orderByDesc('created_at')
-            ->simplePaginate($perPage);
+            ->simplePaginate($perPage ?? (new Product())->getPerPage());
 
         return $this->buildResponse()
             ->setData(ProductCollection::collection($products))

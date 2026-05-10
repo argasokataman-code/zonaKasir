@@ -18,7 +18,7 @@ class StockController extends Controller
 
         $stocks = $product->stocks()
             ->orderByDesc('created_at')
-            ->simplePaginate($perPage);
+            ->simplePaginate($perPage ?? (new Stock())->getPerPage());
 
         return $this->buildResponse()
             ->setData(StockCollection::collection($stocks))
