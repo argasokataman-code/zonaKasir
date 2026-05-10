@@ -42,6 +42,11 @@ class GeneralSetting extends Page implements HasActions, HasForms
 
     protected static string $view = 'filament.tenant.pages.general-setting';
 
+    public static function canAccess(): bool
+    {
+        return can('access general setting');
+    }
+
     public $about = [
         'shop_location' => '',
         'photo' => '',
