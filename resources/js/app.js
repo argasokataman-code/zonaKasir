@@ -77,6 +77,7 @@ function padText(text, length, alignRight = false, center = false, textSize = 'n
 
 function moneyFormat(number, currency = null) {
   const activeCurrency = currency || window.lakasirCurrency || 'IDR';
+  const activeLocale = window.lakasirLocale || 'en';
 
   const options = {
     style: 'currency',
@@ -89,7 +90,14 @@ function moneyFormat(number, currency = null) {
     options.minimumFractionDigits = 0;
   }
 
-  const formatter = new Intl.NumberFormat(undefined, options);
+  const formatter = new Intl.NumberFormat(activeLocale, options);
+
+  return formatter.format(number);
+}
+
+function numberFormat(number) {
+  const activeLocale = window.lakasirLocale || 'en';
+  const formatter = new Intl.NumberFormat(activeLocale);
 
   return formatter.format(number);
 }
