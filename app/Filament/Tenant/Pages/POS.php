@@ -19,6 +19,11 @@ class POS extends Page
 
     protected static string $view = 'filament.tenant.pages.pos.index';
 
+    public static function canAccess(): bool
+    {
+        return can('create selling');
+    }
+
     protected static string $layout = 'filament-panels::components.layout.base';
 
     public $menuItems = [];

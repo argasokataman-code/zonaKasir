@@ -15,6 +15,11 @@ class Update extends Page
 
     protected static string $view = 'filament.tenant.pages.update';
 
+    public static function canAccess(): bool
+    {
+        return can('can update app');
+    }
+
     protected static ?string $title = '';
 
     public ?string $currentVersion;
