@@ -8,12 +8,13 @@ use App\Http\Filters\SearchFields;
 use App\Http\Requests\Tenants\Master\ProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Models\Tenants\Product;
+use Illuminate\Http\Request;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $products = QueryBuilder::for(Product::class)
             ->allowedFilters([
@@ -30,7 +31,7 @@ class ProductController extends Controller
             ])
             ->allowedIncludes(['category', 'images'])
             ->orderByDesc('created_at')
-            ->simplePaginate();
+            ->simplePaginate($request->get('per_page', 10));
 
         return $this->buildResponse()
             ->setData(ProductCollection::collection($products))
