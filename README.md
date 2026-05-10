@@ -8,7 +8,7 @@
 </div>
 
 ## Requirements
-* php 8.1
+* php 8.4
 * mysql 5.7 or higher
 * php-ext.* base on laravel extenstion requirement
 
