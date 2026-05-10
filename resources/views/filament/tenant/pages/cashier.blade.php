@@ -450,6 +450,7 @@
 
 @script()
   <script>
+    window.lakasirCurrency = @js($currency);
     let selling = null;
     $wire.on('selling-created', (event) => {
       selling = event.selling;
@@ -607,11 +608,21 @@
           this.changes();
         },
         changes() {
-          let num = parseFloat(this.$refs.payedMoney.value.replace(/,/g, ''));
+          let val = this.$refs.payedMoney.value || '';
+          // Remove everything except digits to handle various locale formatting (thousands separators, currency symbols)
+          let numericValue = val.replace(/\D/g, '');
+          let num = parseInt(numericValue, 10);
           num = isNaN(num) ? 0 : num;
+
+          // Sync back the raw numeric value to displayValue so subsequent button presses work correctly
+          this.displayValue = num > 0 ? num.toString() : '';
+
           $wire.cartDetail['money_changes'] = num - (this.subtotal);
           $wire.cartDetail['payed_money'] = num;
-          this.$refs.moneyChanges.textContent = moneyFormat($wire.cartDetail['money_changes']);
+
+          if (this.$refs.moneyChanges) {
+            this.$refs.moneyChanges.textContent = moneyFormat($wire.cartDetail['money_changes']);
+          }
         }
       }
     });

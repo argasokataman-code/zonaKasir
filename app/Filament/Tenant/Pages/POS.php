@@ -8,6 +8,7 @@ use App\Models\Tenants\Category;
 use App\Models\Tenants\Product;
 use App\Traits\HasTranslatableResource;
 use Filament\Pages\Page;
+use App\Models\Tenants\Setting;
 
 class POS extends Page
 {
@@ -31,9 +32,11 @@ class POS extends Page
     public $categories = [];
 
     public $cartItems = [];
+    public $currency;
 
     public function mount()
     {
+        $this->currency = Setting::get('currency', 'IDR');
         $this->allCategory();
 
         $this->categories = array_merge([

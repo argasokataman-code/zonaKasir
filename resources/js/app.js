@@ -76,10 +76,20 @@ function padText(text, length, alignRight = false, center = false, textSize = 'n
 }
 
 function moneyFormat(number, currency = null) {
-  const formatter = new Intl.NumberFormat({
+  const activeCurrency = currency || window.lakasirCurrency || 'IDR';
+
+  const options = {
     style: 'currency',
-    currency: currency,
-  });
+    currency: activeCurrency,
+  };
+
+  // For IDR, we typically want to hide decimals in a POS context for a cleaner look.
+  // For other currencies (like USD), Intl.NumberFormat will naturally use 2 decimals.
+  if (activeCurrency === 'IDR') {
+    options.minimumFractionDigits = 0;
+  }
+
+  const formatter = new Intl.NumberFormat(undefined, options);
 
   return formatter.format(number);
 }
