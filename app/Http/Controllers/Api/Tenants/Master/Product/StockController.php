@@ -14,13 +14,30 @@ class StockController extends Controller
 {
     public function index(Product $product, Request $request)
     {
+        $perPage = $this->resolvePerPage($request);
+
         $stocks = $product->stocks()
             ->orderByDesc('created_at')
-            ->simplePaginate($request->get('per_page', 10));
+            ->simplePaginate($perPage);
 
         return $this->buildResponse()
             ->setData(StockCollection::collection($stocks))
             ->present();
+    }
+
+    private function resolvePerPage(Request $request): ?int
+    {
+        if (! $request->has('per_page')) {
+            return null;
+        }
+
+        $perPage = filter_var($request->query('per_page'), FILTER_VALIDATE_INT);
+
+        if ($perPage === false) {
+            return null;
+        }
+
+        return max(1, min($perPage, 100));
     }
 
     public function store(StockRequest $request, Product $product)
