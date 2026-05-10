@@ -28,6 +28,40 @@ beforeEach(function () {
     ]);
 });
 
+describe('StockController index pagination', function () {
+    test('per_page query controls stock pagination size', function () {
+        $user = User::first();
+        Stock::factory()->count(20)->createQuietly([
+            'product_id' => $this->product->id,
+            'is_ready' => true,
+            'type' => 'in',
+            'date' => now()->format('Y-m-d'),
+        ]);
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson("/api/master/product/{$this->product->id}/stock?per_page=5")
+            ->assertOk()
+            ->assertJsonPath('data.meta.per_page', 5)
+            ->assertJsonCount(5, 'data.data');
+    });
+
+    test('invalid per_page falls back to default model pagination size', function () {
+        $user = User::first();
+        Stock::factory()->count(20)->createQuietly([
+            'product_id' => $this->product->id,
+            'is_ready' => true,
+            'type' => 'in',
+            'date' => now()->format('Y-m-d'),
+        ]);
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson("/api/master/product/{$this->product->id}/stock?per_page=invalid")
+            ->assertOk()
+            ->assertJsonPath('data.meta.per_page', Stock::query()->getModel()->getPerPage())
+            ->assertJsonCount(Stock::query()->getModel()->getPerPage(), 'data.data');
+    });
+});
+
 describe('StockController store dispatches RecalculateEvent (Bug #13)', function () {
     test('creating stock via API dispatches RecalculateEvent and updates product stock', function () {
         $user = User::first();
