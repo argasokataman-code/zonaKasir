@@ -16,7 +16,7 @@ test("can'\t create product", function () {
         ->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
 });
 
-test('per_page query controls pagination size', function () {
+test('can control pagination size with per_page query', function () {
     $user = User::first();
     $category = Category::factory()->create();
     Product::factory()->count(20)->create([
@@ -30,7 +30,7 @@ test('per_page query controls pagination size', function () {
         ->assertJsonCount(5, 'data.data');
 });
 
-test('invalid per_page falls back to default model pagination size', function () {
+test('can fall back to default pagination when per_page is invalid', function () {
     $user = User::first();
     $category = Category::factory()->create();
     Product::factory()->count(20)->create([
@@ -44,7 +44,7 @@ test('invalid per_page falls back to default model pagination size', function ()
         ->assertJsonCount(Product::query()->getModel()->getPerPage(), 'data.data');
 });
 
-test('per_page is clamped to a safe maximum', function () {
+test('can clamp per_page to maximum of 100', function () {
     $user = User::first();
     $category = Category::factory()->create();
     Product::factory()->count(20)->create([
