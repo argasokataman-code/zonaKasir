@@ -8,14 +8,17 @@ use App\Http\Requests\Tenants\Master\StockRequest;
 use App\Http\Resources\StockCollection;
 use App\Models\Tenants\Product;
 use App\Models\Tenants\Stock;
+use Illuminate\Http\Request;
 
 class StockController extends Controller
 {
-    public function index(Product $product)
+    public function index(Product $product, Request $request)
     {
+        $perPage = $this->resolvePerPage($request);
+
         $stocks = $product->stocks()
             ->orderByDesc('created_at')
-            ->simplePaginate();
+            ->simplePaginate($perPage ?? (new Stock())->getPerPage());
 
         return $this->buildResponse()
             ->setData(StockCollection::collection($stocks))
