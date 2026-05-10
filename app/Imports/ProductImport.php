@@ -14,26 +14,56 @@ class ProductImport implements SkipsEmptyRows, ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
-        $category = Category::query()->updateOrCreate(
-            [
-                'name' => $row['category'],
-            ],
-            [
-                'name' => $row['category'],
-            ],
+        // WithHeadingRow converts blank headers to numeric keys (1, 2, etc.)
+        // The Excel template's column B has a blank header for "name",
+        // so it becomes key "1" instead of "name".
+        // Map it properly:
+        if (isset($row['name'])) {
+            $name = $row['name'];
+        } elseif (isset($row[1])) {
+            // Column B (index 1 after heading row conversion) is the "name" column
+            $name = $row[1];
+            unset($row[1]);
+        } else {
+            return null; // Skip rows without a name
+        }
+
+        // Skip rows without a name value
+        if (empty($name)) {
+            return null;
+        }
+
+        $row['name'] = $name;
+
+        // Use updateOrCreate to avoid duplicate products on re-import
+        $category = Category::query()->firstOrCreate(
+            ['name' => $row['category'] ?? 'Uncategorized'],
+            ['name' => $row['category'] ?? 'Uncategorized'],
         );
 
         /** @var Product $product */
         $product = Product::create([
             'name' => $row['name'],
             'category_id' => $category->id,
-            'unit' => $row['unit'],
-            'barcode' => (int) $row['barcode'],
-            'stock' => (int) $row['stock'],
+            'unit' => $row['unit'] ?? null,
+            'sku' => $row['sku'] ?? null,
+            'stock' => (int) ($row['stock'] ?? 0),
             'initial_price' => $row['initial_price'] ?? 0,
             'selling_price' => $row['selling_price'] ?? 0,
-            'type' => $row['type'] ?? 'product',
+            'type' => !empty($row['type']) ? $row['type'] : 'product',
         ]);
+
+        // Create barcode record if barcode value exists and is not a duplicate
+        if (!empty($row['barcode'])) {
+            $barcodeStr = (string) $row['barcode'];
+            if (!\App\Models\Tenants\Barcode::where('code', $barcodeStr)->exists()) {
+                $product->barcodes()->create([
+                    'code' => $barcodeStr,
+                    'type' => 'primary',
+                    'is_active' => true,
+                ]);
+            }
+        }
 
         if (isset($row['other_price']) && $row['other_price'] != null && $row['other_price'] != '') {
             $dataOtherPrice = Str::of($row['other_price'])->explode(',');

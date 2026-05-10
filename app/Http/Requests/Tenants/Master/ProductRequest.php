@@ -8,6 +8,7 @@ use App\Models\Tenants\Category;
 use App\Models\Tenants\Product;
 use App\Models\Tenants\ProductImage;
 use App\Models\Tenants\UploadedFile;
+use App\Models\Tenants\Barcode;
 use App\Services\Tenants\ProductService;
 use Exception;
 use Illuminate\Foundation\Http\FormRequest;
@@ -58,7 +59,18 @@ class ProductRequest extends FormRequest
 
         return [
             'sku' => [Rule::unique(Product::class)->ignore($this->route('product'))],
-            'barcode' => ['nullable', 'min:3', Rule::unique(Product::class)->ignore($this->route('product'))],
+            'barcode' => ['nullable', 'min:3', function ($attribute, $value, $fail) {
+                if ($value) {
+                    $query = Barcode::where('code', $value);
+                    if ($this->method() == 'PUT') {
+                        $product = Product::findorfail($this->route('product'));
+                        $query->where('product_id', '!=', $product->id);
+                    }
+                    if ($query->exists()) {
+                        $fail('The barcode has already been taken.');
+                    }
+                }
+            }],
             'name' => ['required', 'min:3'],
             'category' => ['required'],
             'stock' => ['numeric', Rule::requiredIf(! $this->is_non_stock)],
