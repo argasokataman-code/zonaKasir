@@ -451,6 +451,7 @@
 @script()
   <script>
     window.lakasirCurrency = @js($currency);
+    window.lakasirLocale = @js($locale);
     let selling = null;
     $wire.on('selling-created', (event) => {
       selling = event.selling;
@@ -668,7 +669,7 @@
 
       for (let suggestion of shortcutSuggestion) {
         const button = document.createElement('button');
-        button.textContent = moneyFormat(suggestion);
+        button.textContent = numberFormat(suggestion);
         button.setAttribute('type', 'button')
         button.setAttribute('x-on:click', `shortcut(${suggestion})`);
         button.className = 'bg-gray-300 hover:bg-gray-400 p-2 rounded-md text-lg';
