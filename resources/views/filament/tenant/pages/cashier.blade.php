@@ -450,6 +450,8 @@
 
 @script()
   <script>
+    window.lakasirCurrency = @js($currency);
+    window.lakasirLocale = @js($locale);
     let selling = null;
     $wire.on('selling-created', (event) => {
       selling = event.selling;
@@ -607,11 +609,19 @@
           this.changes();
         },
         changes() {
-          let num = parseFloat(this.$refs.payedMoney.value.replace(/,/g, ''));
+          let val = this.$refs.payedMoney.value || '';
+          let numericValue = val.replace(/\D/g, '');
+          let num = parseInt(numericValue, 10);
           num = isNaN(num) ? 0 : num;
+
+          this.displayValue = num > 0 ? num.toString() : '';
+
           $wire.cartDetail['money_changes'] = num - (this.subtotal);
           $wire.cartDetail['payed_money'] = num;
-          this.$refs.moneyChanges.textContent = moneyFormat($wire.cartDetail['money_changes']);
+
+          if (this.$refs.moneyChanges) {
+            this.$refs.moneyChanges.textContent = moneyFormat($wire.cartDetail['money_changes']);
+          }
         }
       }
     });
@@ -657,7 +667,7 @@
 
       for (let suggestion of shortcutSuggestion) {
         const button = document.createElement('button');
-        button.textContent = moneyFormat(suggestion);
+        button.textContent = numberFormat(suggestion);
         button.setAttribute('type', 'button')
         button.setAttribute('x-on:click', `shortcut(${suggestion})`);
         button.className = 'bg-gray-300 hover:bg-gray-400 p-2 rounded-md text-lg';
