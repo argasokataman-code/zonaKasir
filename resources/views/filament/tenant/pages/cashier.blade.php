@@ -608,10 +608,6 @@
           this.$refs.payedMoney.value = moneyFormat(this.displayValue);
           this.changes();
         },
-        /**
-         * Calculate changes and update payment values.
-         * Removes non-digits for locale formatting and syncs raw value to displayValue.
-         */
         changes() {
           let val = this.$refs.payedMoney.value || '';
           let numericValue = val.replace(/\D/g, '');
