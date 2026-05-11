@@ -1,5 +1,10 @@
 let selectedDevice = null;
 
+/**
+ * Retrieve printer settings from localStorage.
+ * 
+ * @returns {Object|Error} The printer settings object or an Error if not set.
+ */
 function getPrinter() {
   if (localStorage.printer == undefined) {
     console.error('printer didn\'t set');
@@ -9,6 +14,12 @@ function getPrinter() {
   return JSON.parse(localStorage.printer);
 }
 
+/**
+ * Print text to a USB ESC/POS printer.
+ * 
+ * @param {string} text - The ESC/POS command string to print.
+ * @returns {Promise<void>}
+ */
 async function printToUSBPrinter(text) {
   let receiptText = text;
   console.log(receiptText);
@@ -54,6 +65,16 @@ async function printToUSBPrinter(text) {
   }
 }
 
+/**
+ * Pad text for receipt printing.
+ * 
+ * @param {string} text - The text to pad.
+ * @param {number} length - Target length.
+ * @param {boolean} alignRight - Whether to align right.
+ * @param {boolean} center - Whether to center the text.
+ * @param {string} textSize - Text size ('normal' or 'large').
+ * @returns {string} The padded text.
+ */
 function padText(text, length, alignRight = false, center = false, textSize = 'normal') {
   const sizes = {
     'normal': '\x1D\x21\x00', // Normal text
@@ -75,6 +96,14 @@ function padText(text, length, alignRight = false, center = false, textSize = 'n
   return paddedText;
 }
 
+/**
+ * Formats a number as currency.
+ * For IDR, decimals are hidden for a cleaner POS look.
+ * 
+ * @param {number} number - The value to format.
+ * @param {string|null} currency - Currency code (e.g., 'IDR', 'USD').
+ * @returns {string} The formatted currency string.
+ */
 function moneyFormat(number, currency = null) {
   const activeCurrency = currency || window.lakasirCurrency || 'IDR';
   const activeLocale = window.lakasirLocale || 'en';
@@ -84,8 +113,6 @@ function moneyFormat(number, currency = null) {
     currency: activeCurrency,
   };
 
-  // For IDR, we typically want to hide decimals in a POS context for a cleaner look.
-  // For other currencies (like USD), Intl.NumberFormat will naturally use 2 decimals.
   if (activeCurrency === 'IDR') {
     options.minimumFractionDigits = 0;
   }
@@ -95,6 +122,12 @@ function moneyFormat(number, currency = null) {
   return formatter.format(number);
 }
 
+/**
+ * Formats a number using the active locale.
+ * 
+ * @param {number} number - The value to format.
+ * @returns {string} The formatted number string.
+ */
 function numberFormat(number) {
   const activeLocale = window.lakasirLocale || 'en';
   const formatter = new Intl.NumberFormat(activeLocale);

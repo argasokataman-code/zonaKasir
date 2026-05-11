@@ -608,14 +608,16 @@
           this.$refs.payedMoney.value = moneyFormat(this.displayValue);
           this.changes();
         },
+        /**
+         * Calculate changes and update payment values.
+         * Removes non-digits for locale formatting and syncs raw value to displayValue.
+         */
         changes() {
           let val = this.$refs.payedMoney.value || '';
-          // Remove everything except digits to handle various locale formatting (thousands separators, currency symbols)
           let numericValue = val.replace(/\D/g, '');
           let num = parseInt(numericValue, 10);
           num = isNaN(num) ? 0 : num;
 
-          // Sync back the raw numeric value to displayValue so subsequent button presses work correctly
           this.displayValue = num > 0 ? num.toString() : '';
 
           $wire.cartDetail['money_changes'] = num - (this.subtotal);
