@@ -161,6 +161,8 @@
 
 @script()
 <script>
+  window.lakasirCurrency = @js($currency);
+  window.lakasirLocale = @js($locale);
   Alpine.data('pos', () => {
     return {
       items: @json($menuItems),
