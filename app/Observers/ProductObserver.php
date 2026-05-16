@@ -31,14 +31,14 @@ class ProductObserver extends AbstractObserver implements DataAwareRule
     {
         $prefix = Str::of($product->category->name)->substr(0, 3)->upper();
 
-        return $prefix.'-'.Str::of($product->name)->substr(0, 3)->upper().'-'.Str::of($product->id)->padLeft(4, 0)->value();
+        return $prefix . '-' . Str::of($product->name)->substr(0, 3)->upper() . '-' . Str::of($product->id)->padLeft(4, 0)->value();
     }
 
     private function generateBarcode(Product $product): string
     {
         $prefix = Str::of($product->category->name)->substr(0, 3)->upper();
 
-        return $prefix.'-'.Str::of($product->name)->substr(0, 3)->upper().'-'.Str::of($product->id)->padLeft(4, 0)->value();
+        return $prefix . '-' . Str::of($product->name)->substr(0, 3)->upper() . '-' . Str::of($product->id)->padLeft(4, 0)->value();
     }
 
     public function creating(Product $product): void
@@ -62,8 +62,8 @@ class ProductObserver extends AbstractObserver implements DataAwareRule
 
 
         $hasFormBarcodes = !empty(self::$tempBarcodesData) &&
-                          is_array(self::$tempBarcodesData) &&
-                          !empty(array_filter(self::$tempBarcodesData, fn($barcode) => !empty($barcode['code'])));
+            is_array(self::$tempBarcodesData) &&
+            !empty(array_filter(self::$tempBarcodesData, fn($barcode) => !empty($barcode['code'])));
 
 
         if (! $hasFormBarcodes) {
