@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Process\Process;
 
 class VersionSyncCommand extends Command
 {
@@ -10,26 +11,43 @@ class VersionSyncCommand extends Command
 
     protected $description = 'Sync version.txt with the latest git tag';
 
-    public function handle(): void
+    public function handle(): int
     {
-        $tag = trim(shell_exec('git describe --tags --abbrev=0 2>/dev/null') ?? '');
         $hasGitMetadata = is_dir(base_path('.git'));
+
+        if (! $hasGitMetadata) {
+            $this->warn('Git metadata is unavailable; leaving existing version.txt untouched.');
+
+            return Command::SUCCESS;
+        }
+
+        $process = new Process(['git', 'describe', '--tags', '--abbrev=0']);
+        $process->setWorkingDirectory(base_path());
+        $process->run();
+
+        $tag = trim($process->getOutput());
 
         if ($tag !== '') {
             file_put_contents(base_path('version.txt'), $tag);
             $this->info("version.txt synced to: {$tag}");
 
-            return;
+            return Command::SUCCESS;
         }
 
-        if ($hasGitMetadata) {
-            $version = 'Development';
-            file_put_contents(base_path('version.txt'), $version);
-            $this->info("version.txt synced to: {$version}");
+        if (! $process->isSuccessful()) {
+            $errorOutput = strtolower(trim($process->getErrorOutput()));
 
-            return;
+            if (! str_contains($errorOutput, 'no names found')) {
+                $this->error('Failed to resolve the latest Git tag.');
+
+                return Command::FAILURE;
+            }
         }
 
-        $this->warn('Git metadata is unavailable; leaving existing version.txt untouched.');
+        $version = 'Development';
+        file_put_contents(base_path('version.txt'), $version);
+        $this->info("version.txt synced to: {$version}");
+
+        return Command::SUCCESS;
     }
 }
