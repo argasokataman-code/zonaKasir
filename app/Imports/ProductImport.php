@@ -36,7 +36,7 @@ class ProductImport implements SkipsEmptyRows, ToModel, WithHeadingRow
 
         $row['name'] = $name;
 
-        // Use updateOrCreate to avoid duplicate products on re-import
+        // Ensure import category exists before product creation.
         $category = Category::query()->firstOrCreate(
             ['name' => $row['category'] ?? 'Uncategorized'],
             ['name' => $row['category'] ?? 'Uncategorized'],

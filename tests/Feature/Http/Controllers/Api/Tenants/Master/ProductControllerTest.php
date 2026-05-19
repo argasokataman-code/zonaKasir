@@ -97,3 +97,30 @@ test('update persists changed barcode to barcode relation', function () {
     $product->refresh();
     expect($product->barcodes()->primary()->active()->value('code'))->toBe('API-BAR-UPDATED');
 });
+
+test('can filter products globally by barcode code', function () {
+    $user = User::first();
+    $category = Category::factory()->create();
+
+    $productWithBarcode = Product::factory()->create([
+        'category_id' => $category->id,
+        'name' => 'Product With Searchable Barcode',
+    ]);
+    $productWithBarcode->barcodes()->create([
+        'code' => 'FILTER-BARCODE-001',
+        'type' => 'primary',
+        'description' => 'Test barcode',
+        'is_active' => true,
+    ]);
+
+    Product::factory()->create([
+        'category_id' => $category->id,
+        'name' => 'Another Product',
+    ]);
+
+    actingAs($user, 'sanctum')
+        ->getJson('/api/master/product?filter[global]=FILTER-BARCODE-001')
+        ->assertOk()
+        ->assertJsonCount(1, 'data.data')
+        ->assertJsonPath('data.data.0.id', $productWithBarcode->id);
+});
