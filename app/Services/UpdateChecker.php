@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 
 class UpdateChecker
@@ -15,7 +16,15 @@ class UpdateChecker
 
     public function getCurrentVersion(): string
     {
-        return trim(file_get_contents(base_path('version.txt')));
+        $versionPath = base_path('version.txt');
+
+        if (! File::exists($versionPath)) {
+            return 'Development';
+        }
+
+        $version = trim((string) File::get($versionPath));
+
+        return $version !== '' ? $version : 'Development';
     }
 
     private function fetchAndCacheApiResponse(): ?array
