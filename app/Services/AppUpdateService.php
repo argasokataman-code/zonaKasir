@@ -44,7 +44,7 @@ class AppUpdateService
         $log = fn ($text) => $logger ? $logger($text) : info($text);
 
         $log('🔍 Checking for updates...');
-        $currentVersion = trim(file_get_contents(base_path('version.txt')));
+        $currentVersion = app(UpdateChecker::class)->getCurrentVersion();
 
         $response = Http::get($this->url);
 
