@@ -98,6 +98,7 @@ class ProductRequest extends FormRequest
             $product = new Product();
             $product->fill($this->merging());
             $product->save();
+            $this->syncPrimaryBarcode($product);
             $this->uploadImage($product);
             DB::commit();
         } catch (Exception $e) {
@@ -113,6 +114,7 @@ class ProductRequest extends FormRequest
             $product = Product::findorfail($this->route('product'));
             $product->fill($this->merging());
             $product->update();
+            $this->syncPrimaryBarcode($product);
             $this->uploadImage($product);
             DB::commit();
         } catch (Exception $e) {
@@ -125,7 +127,38 @@ class ProductRequest extends FormRequest
     {
         return $this->merge([
             'category_id' => Category::findorfail($this->category)->id,
-        ])->except('category', 'images');
+        ])->except('category', 'images', 'barcode');
+    }
+
+    private function syncPrimaryBarcode(Product $product): void
+    {
+        if (! $this->filled('barcode')) {
+            return;
+        }
+
+        $barcodeCode = $this->barcode;
+        $product->barcodes()
+            ->primary()
+            ->active()
+            ->where('code', '!=', $barcodeCode)
+            ->update(['is_active' => false]);
+
+        $barcode = $product->barcodes()->where('code', $barcodeCode)->first();
+        if ($barcode) {
+            $barcode->update([
+                'type' => 'primary',
+                'is_active' => true,
+            ]);
+
+            return;
+        }
+
+        $product->barcodes()->create([
+            'code' => $barcodeCode,
+            'type' => 'primary',
+            'description' => 'API barcode',
+            'is_active' => true,
+        ]);
     }
 
     private function images(): ?array

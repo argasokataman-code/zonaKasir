@@ -57,3 +57,43 @@ test('can clamp per_page to maximum of 100', function () {
         ->assertJsonPath('data.meta.per_page', 100)
         ->assertJsonCount(20, 'data.data');
 });
+
+test('store persists barcode to barcode relation', function () {
+    $user = User::first();
+    $category = Category::factory()->create();
+
+    actingAs($user, 'sanctum')
+        ->postJson('/api/master/product', [
+            'name' => 'Barcode API Product',
+            'sku' => 'SKU-BARCODE-001',
+            'barcode' => 'API-BAR-001',
+            'category' => $category->id,
+            'stock' => 10,
+            'initial_price' => 10000,
+            'selling_price' => 15000,
+            'type' => 'product',
+            'is_non_stock' => false,
+            'expired' => now()->addDay()->toDateString(),
+        ])
+        ->assertOk();
+
+    $product = Product::query()->where('name', 'Barcode API Product')->firstOrFail();
+    expect($product->barcodes()->primary()->active()->value('code'))->toBe('API-BAR-001');
+});
+
+test('update persists changed barcode to barcode relation', function () {
+    $user = User::first();
+    $category = Category::factory()->create();
+    $product = Product::factory()->create([
+        'category_id' => $category->id,
+    ]);
+
+    actingAs($user, 'sanctum')
+        ->putJson("/api/master/product/{$product->id}", [
+            'barcode' => 'API-BAR-UPDATED',
+        ])
+        ->assertOk();
+
+    $product->refresh();
+    expect($product->barcodes()->primary()->active()->value('code'))->toBe('API-BAR-UPDATED');
+});
