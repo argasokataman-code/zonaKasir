@@ -56,4 +56,4 @@ jobs:
         run: php artisan app:migrate-testing-database
 
       - name: Setup database and Run Unit Test
-        run: php -d error_reporting=8191 -d memory_limit=512M artisan test -vvv
+        run: bash test.sh
