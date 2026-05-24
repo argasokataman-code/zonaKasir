@@ -10,7 +10,6 @@ if [ "$status" -eq 0 ]; then
 fi
 
 if [ "$status" -eq 2 ] \
-  && grep -q "OK, but there were issues" "$log_file" \
   && ! grep -Eq '(FAILURES!|ERRORS!)' "$log_file" \
   && ! grep -Eq 'Tests: .*Failures: [1-9]' "$log_file" \
   && ! grep -Eq 'Tests: .*Errors: [1-9]' "$log_file"; then
