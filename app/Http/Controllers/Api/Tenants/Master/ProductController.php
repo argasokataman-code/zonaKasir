@@ -29,7 +29,7 @@ class ProductController extends Controller
                 'unit',
                 'show',
                 ...ComparisonFilter::setFilters('stock', ['gt', 'ge', 'lt', 'le', 'eq', 'ne']),
-                AllowedFilter::custom('global', new SearchFields, 'name,sku,barcode'),
+                AllowedFilter::custom('global', new SearchFields, 'name,sku,barcodes.code'),
             ])
             ->allowedIncludes(['category', 'images'])
             ->orderByDesc('created_at')
