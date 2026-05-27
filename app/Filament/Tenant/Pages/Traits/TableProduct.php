@@ -41,9 +41,9 @@ trait TableProduct
                     })
                     ->where('show', true)
                     // ->orWhere('type', 'service')
-                    ->limit(12)
             )
-            ->paginated(false)
+            ->defaultPaginationPageOption(12)
+            ->paginationPageOptions([12])
             ->columns([
                 Stack::make([
                     ImageColumn::make('hero_image')
@@ -62,7 +62,14 @@ trait TableProduct
                         ->columnStart(0),
                     TextColumn::make('name')
                         ->size('lg')
-                        ->searchable(['sku', 'name', 'barcode'])
+                        ->searchable(query: function ($query, string $search): void {
+                            $query->where('sku', 'like', "%{$search}%")
+                                ->orWhere('name', 'like', "%{$search}%")
+                                ->orWhereHas('barcodes', function ($query) use ($search) {
+                                    $query->where('code', 'like', "%{$search}%")
+                                        ->where('is_active', true);
+                                });
+                        })
                         ->extraAttributes([
                             'class' => 'font-bold',
                         ]),
