@@ -51,7 +51,14 @@ class ProductController extends Controller
 
     public function show($product)
     {
-        $model = Product::find($product) ?? Product::findByBarcodeOrSku($product);
+        $modelById = Product::find($product);
+        $modelByCode = Product::findByBarcodeOrSku($product);
+
+        if ($modelById && $modelByCode && $modelById->getKey() !== $modelByCode->getKey()) {
+            abort(409, 'Ambiguous product identifier');
+        }
+
+        $model = $modelById ?? $modelByCode;
         if (! $model) {
             abort(404, 'Product not found');
         }
