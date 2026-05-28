@@ -124,3 +124,76 @@ test('can filter products globally by barcode code', function () {
         ->assertJsonCount(1, 'data.data')
         ->assertJsonPath('data.data.0.id', $productWithBarcode->id);
 });
+
+test('can show product by numeric id', function () {
+    $user = User::first();
+    $category = Category::factory()->create();
+    $product = Product::factory()->create([
+        'category_id' => $category->id,
+        'name' => 'Product By ID',
+    ]);
+
+    actingAs($user, 'sanctum')
+        ->getJson("/api/master/product/{$product->id}")
+        ->assertOk()
+        ->assertJsonPath('data.name', 'Product By ID');
+});
+
+test('can show product by barcode', function () {
+    $user = User::first();
+    $category = Category::factory()->create();
+    $product = Product::factory()->create([
+        'category_id' => $category->id,
+        'name' => 'Product By Barcode',
+    ]);
+    $product->barcodes()->create([
+        'code' => '8991234567890',
+        'type' => 'primary',
+        'description' => 'Test barcode',
+        'is_active' => true,
+    ]);
+
+    actingAs($user, 'sanctum')
+        ->getJson('/api/master/product/8991234567890')
+        ->assertOk()
+        ->assertJsonPath('data.name', 'Product By Barcode');
+});
+
+test('can show product by sku', function () {
+    $user = User::first();
+    $category = Category::factory()->create();
+    Product::factory()->create([
+        'category_id' => $category->id,
+        'name' => 'Product By SKU',
+        'sku' => 'SKU-MY-PRODUCT-001',
+    ]);
+
+    actingAs($user, 'sanctum')
+        ->getJson('/api/master/product/SKU-MY-PRODUCT-001')
+        ->assertOk()
+        ->assertJsonPath('data.name', 'Product By SKU');
+});
+
+test('returns 404 for non-existent numeric id', function () {
+    $user = User::first();
+
+    actingAs($user, 'sanctum')
+        ->getJson('/api/master/product/99999')
+        ->assertNotFound();
+});
+
+test('returns 404 for non-existent barcode', function () {
+    $user = User::first();
+
+    actingAs($user, 'sanctum')
+        ->getJson('/api/master/product/NONEXISTENT-BARCODE')
+        ->assertNotFound();
+});
+
+test('returns 404 for non-existent sku', function () {
+    $user = User::first();
+
+    actingAs($user, 'sanctum')
+        ->getJson('/api/master/product/NONEXISTENT-SKU')
+        ->assertNotFound();
+});
