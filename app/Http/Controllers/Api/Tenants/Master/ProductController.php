@@ -49,13 +49,18 @@ class ProductController extends Controller
             ->present();
     }
 
-    public function show(Product $product)
+    public function show($product)
     {
-        $product->load(['category', 'stocks']);
-        $product = new ProductCollection($product);
+        $model = Product::find($product) ?? Product::findByBarcodeOrSku($product);
+        if (! $model) {
+            abort(404, 'Product not found');
+        }
+
+        $model->load(['category', 'stocks']);
+        $model = new ProductCollection($model);
 
         return $this->buildResponse()
-            ->setData($product)
+            ->setData($model)
             ->present();
     }
 
