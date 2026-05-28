@@ -49,13 +49,25 @@ class ProductController extends Controller
             ->present();
     }
 
-    public function show(Product $product)
+    public function show($product)
     {
-        $product->load(['category', 'stocks']);
-        $product = new ProductCollection($product);
+        $modelById = Product::find($product);
+        $modelByCode = Product::findByBarcodeOrSku($product);
+
+        if ($modelById && $modelByCode && $modelById->getKey() !== $modelByCode->getKey()) {
+            abort(409, 'Ambiguous product identifier');
+        }
+
+        $model = $modelById ?? $modelByCode;
+        if (! $model) {
+            abort(404, 'Product not found');
+        }
+
+        $model->load(['category', 'stocks']);
+        $model = new ProductCollection($model);
 
         return $this->buildResponse()
-            ->setData($product)
+            ->setData($model)
             ->present();
     }
 
