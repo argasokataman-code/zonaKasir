@@ -7,18 +7,21 @@ use App\Http\Resources\AboutResource;
 use App\Models\Tenants\About;
 use App\Models\Tenants\Setting;
 use App\Services\Tenants\AboutService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AboutController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         return $this->buildResponse()
             ->setData(new AboutResource(About::first()))
             ->present();
     }
 
-    public function update(Request $request, AboutService $aboutService)
+    public function update(Request $request, AboutService $aboutService): JsonResponse
     {
         $this->validate($request, [
             'shop_name' => ['nullable', 'string'],
@@ -29,12 +32,23 @@ class AboutController extends Controller
             'uploaded_file_id' => ['nullable', 'integer', 'exists:uploaded_files,id'],
         ]);
 
-        $aboutService->createOrUpdate($request->all());
+        try {
+            DB::beginTransaction();
+            
+            $aboutService->createOrUpdate($request->all());
+            Setting::set('currency', $request->currency ?? 'IDR');
+            
+            DB::commit();
 
-        Setting::set('currency', $request->currency ?? 'IDR');
-
-        return $this->buildResponse()
-            ->setMessage('About updated successfully')
-            ->present();
+            return $this->buildResponse()
+                ->setMessage('About updated successfully')
+                ->present();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Failed to update about: ' . $e->getMessage())
+                ->present();
+        }
     }
 }
