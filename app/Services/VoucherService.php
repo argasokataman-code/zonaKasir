@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class VoucherService
 {
-    public Voucher $voucher;
+    public ?Voucher $voucher = null;
 
     private float $price;
 
@@ -68,6 +68,7 @@ class VoucherService
         $this->voucher->update([
             'kuota' => $this->voucher->kuota - 1,
         ]);
-        Log::info("Voucher used: {$this->voucher->code}, remaining quota: {$this->voucher->kuota - 1}");
+        $remaining = $this->voucher->kuota - 1;
+        Log::info("Voucher used: {$this->voucher->code}, remaining quota: {$remaining}");
     }
 }
