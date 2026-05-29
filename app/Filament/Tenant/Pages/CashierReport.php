@@ -88,16 +88,16 @@ class CashierReport extends Page implements HasActions, HasForms
         ];
     }
 
-    publtry {
+    public function generate(CashierReportService $cashierReportService)
+    {
+        try {
             $this->validate([
                 'data.start_date' => 'required',
                 'data.end_date' => 'required',
             ]);
         } catch (\Exception $e) {
             return;
-        } 'data.start_date' => 'required',
-            'data.end_date' => 'required',
-        ]);
+        }
 
         $this->reports = $cashierReportService->generate($this->data);
     }
