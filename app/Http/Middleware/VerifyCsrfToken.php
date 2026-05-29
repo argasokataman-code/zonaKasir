@@ -14,5 +14,9 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         // 'localhost:3000/*',
         'livewire/*',
+        'member/login',
+        'api/auth/login',
+        'api/auth/forgot-password',
+        'api/auth/logout',
     ];
 }
