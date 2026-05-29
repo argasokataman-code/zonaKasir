@@ -40,7 +40,9 @@ class PurchasingReport extends Page
 
     public function mount()
     {
-        $this->generate(new PurchasingReportService());
+        if ($this->data['start_date'] && $this->data['end_date']) {
+            $this->generate(new PurchasingReportService());
+        }
     }
 
     public function form(Form $form): Form
@@ -86,10 +88,14 @@ class PurchasingReport extends Page
 
     public function generate(PurchasingReportService $service)
     {
-        $this->validate([
-            'data.start_date' => 'required',
-            'data.end_date' => 'required',
-        ]);
+        try {
+            $this->validate([
+                'data.start_date' => 'required',
+                'data.end_date' => 'required',
+            ]);
+        } catch (\Exception $e) {
+            return;
+        }
 
         $this->reports = $service->generate($this->data);
     }

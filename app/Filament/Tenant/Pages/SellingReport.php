@@ -42,7 +42,9 @@ class SellingReport extends Page implements HasActions, HasForms
 
     public function mount()
     {
-        $this->generate(new SellingReportService);
+        if ($this->data['start_date'] && $this->data['end_date']) {
+            $this->generate(new SellingReportService);
+        }
     }
 
     public function form(Form $form): Form
@@ -51,7 +53,6 @@ class SellingReport extends Page implements HasActions, HasForms
             DatePicker::make('start_date')
                 ->translateLabel()
                 ->date()
-                ->translateLabel()
                 ->required()
                 ->closeOnDateSelection()
                 ->default(now())
@@ -59,9 +60,8 @@ class SellingReport extends Page implements HasActions, HasForms
             DatePicker::make('end_date')
                 ->translateLabel()
                 ->date()
-                ->translateLabel()
-                ->closeOnDateSelection()
                 ->required()
+                ->closeOnDateSelection()
                 ->default(now())
                 ->native(false),
         ])
@@ -88,10 +88,14 @@ class SellingReport extends Page implements HasActions, HasForms
         ];
     }
 
-    public function generate(SellingReportService $sellingReportService)
-    {
-        $this->validate([
-            'data.start_date' => 'required',
+    publtry {
+            $this->validate([
+                'data.start_date' => 'required',
+                'data.end_date' => 'required',
+            ]);
+        } catch (\Exception $e) {
+            return;
+        } 'data.start_date' => 'required',
             'data.end_date' => 'required',
         ]);
 

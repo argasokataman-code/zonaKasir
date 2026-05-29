@@ -42,7 +42,9 @@ class ProductReport extends Page implements HasActions, HasForms
 
     public function mount()
     {
-        $this->generate(new ProductReportService);
+        if ($this->data['start_date'] && $this->data['end_date']) {
+            $this->generate(new ProductReportService);
+        }
     }
 
     public function form(Form $form): Form
@@ -88,10 +90,14 @@ class ProductReport extends Page implements HasActions, HasForms
 
     public function generate(ProductReportService $productReportService)
     {
-        $this->validate([
-            'data.start_date' => 'required',
-            'data.end_date' => 'required',
-        ]);
+        try {
+            $this->validate([
+                'data.start_date' => 'required',
+                'data.end_date' => 'required',
+            ]);
+        } catch (\Exception $e) {
+            return;
+        }
 
         $this->reports = $productReportService->generate($this->data);
     }
