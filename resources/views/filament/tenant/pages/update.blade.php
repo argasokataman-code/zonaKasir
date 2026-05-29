@@ -150,7 +150,8 @@
     </div>
 
     <div x-ref="content" wire:loading.class="hidden" wire:loading.class.remove="block">
-      <!-- TODO: add the content for preventing user click navigation -->
+      {{-- Navigation prevention: wire:loading directive disables page interaction --}}
+      {{-- The overlay above is shown while updateApp is processing, blocking user clicks --}}
     </div>
 
     <div wire:loading wire:target="updateApp" style="display: none;"></div>

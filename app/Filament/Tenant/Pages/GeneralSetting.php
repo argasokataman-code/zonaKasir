@@ -265,7 +265,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
         $user = auth()->user();
         $profile = $user->profile;
 
-        if (feature('edit-profile')) {
+        if (hasFeatureAndPermission('edit-profile', 'edit profile')) {
             if (isset($this->profile['photo']) && $this->profile['photo'] != null && array_values($this->profile['photo'])[0] instanceof TemporaryUploadedFile) {
                 /** @var TemporaryUploadedFile $image */
                 $image = array_values($this->profile['photo'])[0];
@@ -281,7 +281,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
         $user->update($this->profile);
         $profile->update($this->profile);
 
-        if (feature('edit-profile')) {
+        if (hasFeatureAndPermission('edit-profile', 'edit profile')) {
             $data = $this->profile;
 
             if (isset($data['uploaded_file_id'])) {
