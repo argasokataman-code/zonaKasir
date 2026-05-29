@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 /**
  * @mixin IdeHelperCategory
@@ -22,7 +23,8 @@ class Category extends Model
         return $this->hasMany(Product::class, 'category_id');
     }
 
-    public function getActivitylogOptions(): \Spatie\Activitylog\Contracts\Activity
+    public function getActivitylogOptions(): LogOptions
     {
-        return \Spatie\Activitylog\ActivityLogger::withProperties(['user_id' => auth()->id()])->useLog('default');
+        return LogOptions::defaults();
     }
+}

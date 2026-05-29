@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 /**
  * @mixin IdeHelperSelling
@@ -69,7 +70,8 @@ class Selling extends Model
         return $this->belongsTo(Table::class);
     }
 
-    public function getActivitylogOptions(): \Spatie\Activitylog\Contracts\Activity
+    public function getActivitylogOptions(): LogOptions
     {
-        return \Spatie\Activitylog\ActivityLogger::withProperties(['user_id' => auth()->id()])->useLog('default');
+        return LogOptions::defaults();
     }
+}
