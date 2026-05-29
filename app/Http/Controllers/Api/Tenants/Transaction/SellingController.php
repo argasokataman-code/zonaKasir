@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenants\Sellings\TransactionSellingStoreRequest;
 use App\Http\Resources\SellingCollection;
 use App\Models\Tenants\Selling;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class SellingController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $sellings = QueryBuilder::for(Selling::class)
             ->allowedFilters([
@@ -38,18 +41,30 @@ class SellingController extends Controller
             ->present();
     }
 
-    public function store(TransactionSellingStoreRequest $request)
+    public function store(TransactionSellingStoreRequest $request): JsonResponse
     {
-        $selling = $request->store();
-        $selling->load(['member', 'paymentMethod', 'sellingDetails.product', 'user']);
+        try {
+            DB::beginTransaction();
+            
+            $selling = $request->store();
+            $selling->load(['member', 'paymentMethod', 'sellingDetails.product', 'user']);
+            
+            DB::commit();
 
-        return $this->buildResponse()
-            ->setMessage('success create selling')
-            ->setData(new SellingCollection($selling))
-            ->present();
+            return $this->buildResponse()
+                ->setMessage('success create selling')
+                ->setData(new SellingCollection($selling))
+                ->present();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Failed to create selling: ' . $e->getMessage())
+                ->present();
+        }
     }
 
-    public function show(Selling $selling)
+    public function show(Selling $selling): JsonResponse
     {
         $selling->load(['member', 'paymentMethod', 'sellingDetails', 'user']);
 
