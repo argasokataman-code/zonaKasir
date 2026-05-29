@@ -24,13 +24,10 @@
 <script>
   document.getElementById('print-btn').addEventListener('click', () => {
     const printContents = document.getElementById("printable-element").innerHTML;
-    const originalContents = document.body.innerHTML;
-
-    document.body.innerHTML = printContents;
-
-    window.print();
-
-    window.location.reload();
+    const printWindow = window.open('', '', 'height=400,width=800');
+    printWindow.document.write(printContents);
+    printWindow.document.close();
+    printWindow.print();
   });
 </script>
 @endscript
