@@ -10,6 +10,11 @@ class EditMember extends EditRecord
 {
     protected static string $resource = MemberResource::class;
 
+    public static function canAccess(array $parameters = []): bool
+    {
+        return can('update member');
+    }
+
     protected function getHeaderActions(): array
     {
         return [
