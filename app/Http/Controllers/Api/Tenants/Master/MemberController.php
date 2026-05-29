@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Api\Tenants\Master;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tenants\Member;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class MemberController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         $members = QueryBuilder::for(Member::class)
             ->allowedFilters(['name', 'email'])
@@ -20,7 +21,7 @@ class MemberController extends Controller
         return $this->success($members);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $this->validate($request, $this->rules(new Member));
         $member = new Member();
@@ -30,12 +31,12 @@ class MemberController extends Controller
         return $this->success([], "success creating items");
     }
 
-    public function show(Member $member)
+    public function show(Member $member): JsonResponse
     {
         return $this->success($member);
     }
 
-    public function update(Request $request, Member $member)
+    public function update(Request $request, Member $member): JsonResponse
     {
         $this->validate($request, $this->rules($member));
         $member->fill($request->all());
@@ -44,7 +45,7 @@ class MemberController extends Controller
         return $this->success([], "success updating items");
     }
 
-    public function destroy(Member $member)
+    public function destroy(Member $member): JsonResponse
     {
         $member->delete();
 
