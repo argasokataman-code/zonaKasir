@@ -8,15 +8,17 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @mixin IdeHelperSelling
  */
 class Selling extends Model
 {
-    use HasFactory, UseTimezoneAwareQuery;
+    use HasFactory, UseTimezoneAwareQuery, LogsActivity;
 
     protected $guarded = ['friend_price'];
+    protected static $recordEvents = ['created', 'updated', 'deleted'];
 
     protected $appends = [
         'grand_total_price',

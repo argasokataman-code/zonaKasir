@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 
@@ -31,7 +32,7 @@ class ApiResponseService
         return $this;
     }
 
-    public function present()
+    public function present(): JsonResponse
     {
         if ($this->data instanceof Paginator || isset($this->data->resource) && $this->data?->resource instanceof Paginator) {
             $this->setPaginator($this->data);
