@@ -68,4 +68,8 @@ class Selling extends Model
     {
         return $this->belongsTo(Table::class);
     }
-}
+
+    public function getActivitylogOptions(): \Spatie\Activitylog\Contracts\Activity
+    {
+        return \Spatie\Activitylog\ActivityLogger::withProperties(['user_id' => auth()->id()])->useLog('default');
+    }

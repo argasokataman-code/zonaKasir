@@ -21,4 +21,8 @@ class Category extends Model
     {
         return $this->hasMany(Product::class, 'category_id');
     }
-}
+
+    public function getActivitylogOptions(): \Spatie\Activitylog\Contracts\Activity
+    {
+        return \Spatie\Activitylog\ActivityLogger::withProperties(['user_id' => auth()->id()])->useLog('default');
+    }
