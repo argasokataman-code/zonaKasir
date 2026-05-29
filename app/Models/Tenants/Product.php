@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 /**
  * @mixin IdeHelperProduct
@@ -296,8 +297,8 @@ class Product extends Model
         return static::where('sku', $code)->first();
     }
 
-    public function getActivitylogOptions(): \Spatie\Activitylog\Contracts\Activity
+    public function getActivitylogOptions(): LogOptions
     {
-        return \Spatie\Activitylog\ActivityLogger::withProperties(['user_id' => auth()->id()])->useLog('default');
+        return LogOptions::defaults();
     }
 }
