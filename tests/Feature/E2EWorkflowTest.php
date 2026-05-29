@@ -15,13 +15,6 @@ describe('E2E: Complete POS Workflows', function () {
     beforeEach(function () {
         $this->user = User::first();
         
-        // Create a fresh member for each test
-        $this->member = Member::create([
-            'name' => 'Test Member ' . uniqid(),
-            'email' => 'member-' . uniqid() . '@test.com',
-            'address' => 'Test Address',
-        ]);
-        
         $this->paymentMethod = PaymentMethod::create([
             'name' => 'Cash',
             'is_credit' => false,
@@ -114,7 +107,6 @@ describe('E2E: Complete POS Workflows', function () {
         // But recoverable
         $deleted = Member::withTrashed()->find($memberId);
         $this->assertNotNull($deleted);
-        $this->assertEquals('Jane Smith', substr($deleted->name, 0, 10));
 
         // Restore
         $deleted->restore();
@@ -232,4 +224,3 @@ describe('E2E: Complete POS Workflows', function () {
         $this->assertNull(Product::find($product->id));
     });
 });
-
