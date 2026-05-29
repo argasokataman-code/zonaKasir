@@ -25,6 +25,7 @@ class TableResource extends Resource
         return $form
             ->schema([
                 TextInput::make('number')
+                    ->required()
                     ->translateLabel(),
             ]);
     }
