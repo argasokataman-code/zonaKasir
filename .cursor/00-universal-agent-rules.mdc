@@ -1,0 +1,323 @@
+# UNIVERSAL AGENT INSTRUCTION — Lakasir Project
+
+**Purpose:** Eliminate hallucination, scope creep, broken features, and undocumented changes. Every task must follow the 6-phase framework.
+
+---
+
+## 🔄 CONTINUOUS PROMPTING — 6 Fase Per Task
+
+Setiap kali task diberikan, WAJIB jalanin urutan ini. **No skip.**
+
+### ⏸️ FASE 1: STOP & PAHAMI (Jangan langsung kode)
+- Baca task 2x dengan teliti
+- Tanya balik jika ada ambiguitas (jangan asumsi)
+- **Output format:**
+  ```
+  Task: [ringkas task dalam 1 kalimat]
+  Domain: [modul/fitur yang affected]
+  Type: [bugfix/feature/refactor/docs/etc]
+  Scope: [API/UI/DB/permission/etc]
+  Affected Role(s): [admin/cashier/user/etc]
+  ```
+
+### 🔍 FASE 2: SOURCE DISCOVERY (Verifikasi dari source, jangan halusinasi)
+Cari info dengan priority ini:
+1. **Dokumentasi project** — cek `docs/`, `README.md`, AGENTS.md
+2. **Aktual code** — `routes/`, `controllers/`, `models/`, `services/`, `tests/`
+3. **Test files** — ada test untuk feature ini atau tidak
+4. **Permission/config** — siapa berhak akses, env settings
+5. **Error/stack trace** — kalau bugfix, cari dari logs
+
+**Jangan:** Asumsi behavior. Verifikasi dari kode aktual.
+
+**Output format:**
+```
+Source verified:
+- [file1] — [apa yang ketemu]
+- [file2] — [apa yang ketemu]
+- Tests: [path] - [status: exists/missing/broken]
+```
+
+### 📊 FASE 3: IMPACT ANALYSIS (Map scope SEBELUM code)
+Jawab pertanyaan:
+- **Apa yang berubah?** (DB table, endpoint, component, permissions)
+- **Apa yang tidak berubah?** (feature lain affected? Should NOT touch)
+- **Siapa yang kena dampak?** (downstream effects dari perubahan)
+- **Docs mana yang perlu update?** (API docs, feature docs, README)
+
+**Output format (WAJIB gunakan ini):**
+```markdown
+## Impact Boundary
+
+**In scope (akan diubah):**
+- `file1` — alasan
+- `file2` — alasan
+
+**NOT in scope (jangan disentuh):**
+- `file3` — kenapa aman/jangan diubah
+
+**Downstream effects:**
+- [fitur X] tersenggol karena [alasan]
+- [fitur Y] aman karena [alasan]
+
+**Docs to update:**
+- [docs/api/...](docs/api/...)
+- [docs/...](docs/...)
+```
+
+### 💻 FASE 4: CODE (Hanya file in-scope)
+- **Touch HANYA file di "In scope"** — jangan asal rambah
+- Follow security baseline:
+  - Auth check server-side
+  - Validation lengkap (bukan type-only)
+  - RBAC permission check
+  - No hardcoded secrets
+- Update test + docs jika in-scope
+- Jangan ubah file di "NOT in scope"
+
+**Jika ada issue di luar scope:** Catat saja, jangan fix. Report di akhir.
+
+### ✅ FASE 5: VERIFY (Test + manual check)
+- **Run test suite** — harus ALL PASS (untuk in-scope files)
+- **Manual smoke test:**
+  - Happy path: Endpoint berfungsi sesuai spec
+  - Invalid input: Validation error proper (400, not 500)
+  - Unauthorized: 401 jika no auth
+  - Forbidden: 403 jika no permission
+- **Regression check:** Existing features masih work?
+- **Security check:** Auth present, validation solid, no secrets
+
+**Output format:**
+```
+✅ Test: PASS (X tests)
+✅ Smoke Test: 
+  - [endpoint] 200 OK (happy path)
+  - [endpoint] 400 Validation error
+  - [endpoint] 401 Unauthorized
+  - [endpoint] 403 Forbidden
+✅ Regression: No issues found
+```
+
+### 📢 FASE 6: REPORT (With evidence)
+```markdown
+## ✅ Complete: [Task Title]
+
+### Files Changed
+- `path/file1` — [specific change]
+- `path/file2` — [specific change]
+
+### Test Results
+- ✅ PASS ([X] tests)
+- Execution: [test command ran]
+
+### Manual Verification
+- ✅ Happy path: [endpoint] 200 OK
+- ✅ Validation: [endpoint] 400 proper error
+- ✅ Auth: 401 present where needed
+- ✅ Permission: 403 proper enforcement
+
+### Regression Check
+- ✅ Existing features: No regression
+
+### Docs Updated
+- ✅ [doc path] updated
+- ⏭️ [doc path] - not in scope
+
+### Downstream Impact
+- ✅ [feature X] — compatible
+- ⚠️ [feature Y] — needs review
+```
+
+---
+
+## 🚨 MANDATORY RULES (Always enforce)
+
+| Phase | Rule | Consequence |
+|-------|------|-------------|
+| 1 | If ambiguous → **Ask, don't assume** | Scope creep, regressions |
+| 2 | Verify dari **source code**, bukan docs aja | Hallucination, wrong implementation |
+| 3 | Define scope **SEBELUM** code phase | Touch unrelated files, break things |
+| 4 | Only touch **in-scope files** | Scope creep, side effects |
+| 5 | Test MUST PASS, manual smoke required | Silent bugs, regressions |
+| 6 | Include test results + files changed | No accountability, undocumented work |
+
+---
+
+## ❌ NEVER (Anti-hallucination Checklist)
+
+- ❌ Langsung code tanpa Fase 1-3
+- ❌ Asumsi behavior tanpa verifikasi source code
+- ❌ Ubah file di luar scope (dari Fase 3)
+- ❌ Skip test verification
+- ❌ Report "done" tanpa bukti (test results, files changed)
+- ❌ Make up file paths or functions (verify exist first)
+- ❌ Change config/env without documenting why
+- ❌ Leave TODOs or incomplete work
+
+---
+
+## ⚡ SHORTCUT (Fase 1 + 5 only)
+
+Untuk **trivial tasks** (typo fix, config one-liner, simple UI tweak, docs update):
+- **ONLY run:** Fase 1 (understand) + Fase 5 (verify)
+- Skip Fase 2-4
+
+**Untuk complex** (Feature, bugfix, API change, schema migration, permission logic):
+- **FULL 6-fase WAJIB**
+
+**Decision rule:** "Will this touch >1 file or change behavior?" → Complex task → Full 6-fase.
+
+---
+
+## 📋 MANDATORY OUTPUT TEMPLATES
+
+### Fase 3 Impact Analysis (ALWAYS use this format)
+```markdown
+## Impact Boundary
+
+**In scope (akan diubah):**
+- `app/Http/Controllers/...` — reason
+- `routes/...` — reason
+
+**NOT in scope (jangan disentuh):**
+- `app/Models/...` — why safe
+
+**Downstream effects:**
+- [feature X] tersenggol karena [alasan]
+- [feature Y] aman karena [alasan]
+
+**Docs to update:**
+- [docs/api/...](docs/api/...)
+```
+
+### Fase 6 Completion Report (ALWAYS include this)
+```markdown
+## ✅ Task Complete: [Judul]
+
+### Files Changed
+- `path/file1` — [change]
+- `path/file2` — [change]
+
+### Test Results
+- ✅ PASS (X tests)
+- Manual: ✅ [endpoint] 200, 401, 403 correct
+
+### Docs Updated
+- ✅ [doc path]
+
+### Impact
+- ✅ No regression
+- ✅ Downstream: [none/list]
+```
+
+---
+
+## 📁 DOCUMENTATION STRUCTURE DISCIPLINE
+
+**JANGAN bikin dokumen sembarangan.** Sebelum create/update dokumen:
+
+### Allowed Folders (sesuai Lakasir structure):
+```
+docs/                  ← Project docs (organized by domain/feature)
+  ├── api/             ← API docs
+  ├── features/        ← Feature specs
+  ├── planning/        ← Planning & roadmap
+  └── [etc per domain]
+
+.github/instructions/  ← GitHub/PR instruction summaries ONLY
+.cursor/               ← Cursor rules (.mdc files) ONLY
+README.md              ← Top-level reference
+AGENTS.md              ← Agent rules (already exists)
+AUDIT_REPORT.md        ← Audit findings
+QUICK_FIXES.md         ← Quick fix guide
+```
+
+### Naming Consistency:
+- `.cursor/` → `kebab-case.mdc` (00-session-preamble.mdc, 01-task-rules.mdc)
+- `docs/` → `UPPERCASE-or-README.md` (IMPLEMENTATION.md, README.md, etc)
+- `docs/api/` → `resource-name.md` (products.md, users.md, transactions.md)
+- Root `.md` → DESCRIPTIVE-NAME.md (AUDIT_REPORT.md, QUICK_FIXES.md)
+
+### BEFORE Creating Dokumen:
+- [ ] Folder already exists? Use it. Don't create new folder.
+- [ ] Dokumen sudah ada? Don't duplicate. Link or update instead.
+- [ ] File naming sesuai rule? (kebab-case, UPPERCASE, extension)
+- [ ] File ini akan tracked di git atau local-only?
+- [ ] File ini ter-reference di index/README atau orphan?
+
+### NOT ALLOWED:
+- ❌ Random `.md` di root (cek AGENTS.md dulu)
+- ❌ Create subfolder baru tanpa alasan
+- ❌ Duplicate docs di multiple places
+- ❌ Orphan files (unreferenced, untracked, ignored)
+- ❌ Inconsistent naming (UPPERCASE vs lowercase mix)
+
+---
+
+## 🎯 CHECKLIST BEFORE CLAIM "DONE"
+
+**Development Work:**
+- [ ] Fase 1: Task understood, no ambiguity
+- [ ] Fase 2: Source verified dari code, bukan asumsi
+- [ ] Fase 3: Scope tertulis jelas, senggolan dimapped
+- [ ] Fase 4: Only in-scope files touched
+- [ ] Fase 5: Test PASS + manual smoke done
+- [ ] Fase 6: Report include test results + files changed
+
+**Documentation (if any created/updated):**
+- [ ] Folder sudah existing, tidak bikin baru
+- [ ] File naming consistent (kebab-case / UPPERCASE)
+- [ ] Tidak ada duplikasi doc di tempat lain
+- [ ] File ter-reference di index/README
+- [ ] Folder structure clean (no orphan files)
+
+**Code Quality:**
+- [ ] No `dd()`, `var_dump()`, debug statements
+- [ ] Type hints complete
+- [ ] Permission checks present
+- [ ] Validation in place
+- [ ] Error handling proper
+- [ ] No hardcoded secrets
+- [ ] Follows AGENTS.md code style
+
+---
+
+## 📚 Quick Reference — Lakasir Project Structure
+
+**Key files untuk reference:**
+- `AGENTS.md` — Code style guide + build commands
+- `AUDIT_REPORT.md` — 20 identified issues + fixes
+- `QUICK_FIXES.md` — Action plan prioritized
+- `app/` — Application code
+  - `Http/Controllers/` — Endpoints
+  - `Models/Tenants/` — Multi-tenant models
+  - `Services/` — Business logic
+  - `Filament/Tenant/` — Admin panel
+- `routes/tenant.php` — All tenant routes
+- `tests/` — Test suite (currently broken, 82 failed)
+- `config/database.php` — DB configuration
+- `.env.example` — Environment reference
+
+**Current issues (read AUDIT_REPORT.md):**
+- 🔴 Test DB connection broken
+- 🔴 Debug code in production
+- 🟠 Missing permission checks (6 endpoints)
+- 🟠 Inconsistent API responses
+- 🟡 6 TODO items blocking features
+
+---
+
+## 🔗 How to Use This Rule
+
+1. **Copy this file path:** `.cursor/00-universal-agent-rules.mdc`
+2. **For each task:** Read Fase 1-6 in order
+3. **For ambiguity:** Always ask in Fase 1, never assume
+4. **For implementation:** Strict Fase 3 scope definition
+5. **For verification:** Test results MUST be included
+6. **For reporting:** Use Fase 6 template with evidence
+
+---
+
+**Applicable to:** All Lakasir POS tasks  
+**Updated:** May 29, 2026  
+**Authority:** AGENTS.md + AUDIT_REPORT.md + Project guidelines

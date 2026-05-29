@@ -54,6 +54,12 @@ Route::middleware([
         Route::get('/reset-password/{token}', ResetPassword::class)
             ->middleware('guest')
             ->name('reset-password.index');
+        // Support traditional form POST to the Filament tenant login page so non-JS
+        // form submissions don't hit a 405. API logins should continue to use
+        // `POST /api/auth/login`.
+        Route::post('/member/login', [AuthenticatedSessionController::class, 'store'])
+            ->middleware('guest')
+            ->name('filament.tenant.auth.login.post');
     });
 
 Route::middleware([
@@ -160,11 +166,13 @@ Route::middleware([
                 });
             });
 
-            // @TODO: this is should be using can permission
-            Route::get('setting/{key}', [App\Http\Controllers\Api\Tenants\SettingController::class, 'show'])
-                ->name('setting.show');
-            Route::post('setting', [App\Http\Controllers\Api\Tenants\SettingController::class, 'store'])
-                ->name('setting.store');
+            // Permission checks added for setting endpoints
+            Route::middleware('can:manage settings')->group(function () {
+                Route::get('setting/{key}', [App\Http\Controllers\Api\Tenants\SettingController::class, 'show'])
+                    ->name('setting.show');
+                Route::post('setting', [App\Http\Controllers\Api\Tenants\SettingController::class, 'store'])
+                    ->name('setting.store');
+            });
 
             Route::post('setting/secure-initial-price', [SecureInitialPriceController::class, 'store'])
                 ->name('setting.secure-initial-price.store')
