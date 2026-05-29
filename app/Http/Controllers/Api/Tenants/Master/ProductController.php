@@ -8,13 +8,16 @@ use App\Http\Filters\SearchFields;
 use App\Http\Requests\Tenants\Master\ProductRequest;
 use App\Http\Resources\ProductCollection;
 use App\Models\Tenants\Product;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $perPage = $this->resolvePerPage($request);
 
@@ -40,16 +43,26 @@ class ProductController extends Controller
             ->present();
     }
 
-    public function store(ProductRequest $request)
+    public function store(ProductRequest $request): JsonResponse
     {
-        $request->created();
+        try {
+            DB::beginTransaction();
+            $request->created();
+            DB::commit();
 
-        return $this->buildResponse()
-            ->setMessage('success creating items')
-            ->present();
+            return $this->buildResponse()
+                ->setMessage('success creating items')
+                ->present();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Failed to create product: ' . $e->getMessage())
+                ->present();
+        }
     }
 
-    public function show($product)
+    public function show($product): JsonResponse
     {
         $modelById = Product::find($product);
         $modelByCode = Product::findByBarcodeOrSku($product);
@@ -71,13 +84,23 @@ class ProductController extends Controller
             ->present();
     }
 
-    public function update(ProductRequest $request)
+    public function update(ProductRequest $request): JsonResponse
     {
-        $request->updated();
+        try {
+            DB::beginTransaction();
+            $request->updated();
+            DB::commit();
 
-        return $this->buildResponse()
-            ->setMessage('success updating items')
-            ->present();
+            return $this->buildResponse()
+                ->setMessage('success updating items')
+                ->present();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Failed to update product: ' . $e->getMessage())
+                ->present();
+        }
     }
 
     public function destroy(Product $product, ProductRequest $request)
