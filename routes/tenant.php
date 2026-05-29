@@ -77,6 +77,7 @@ Route::middleware([
         });
         Route::group(['prefix' => 'auth'], function () {
             Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+                ->middleware('throttle:5,1')
                 ->name('login');
 
             Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
@@ -157,12 +158,18 @@ Route::middleware([
                     ->name('transaction.dashboard.total-sales');
 
                 Route::get('/selling', [SellingController::class, 'index'])->can('read selling');
-                Route::post('/selling', [SellingController::class, 'store'])->can('create selling');
+                Route::post('/selling', [SellingController::class, 'store'])
+                    ->middleware('throttle:30,1')
+                    ->can('create selling');
                 Route::get('/selling/{selling}', [SellingController::class, 'show'])->can('read selling');
                 Route::group(['prefix' => 'cash-drawer'], function () {
                     Route::get('/', [CashDrawerController::class, 'show']);
-                    Route::post('/', [CashDrawerController::class, 'store'])->can('open cash drawer');
-                    Route::post('/close', [CashDrawerController::class, 'close'])->can('close cash drawer');
+                    Route::post('/', [CashDrawerController::class, 'store'])
+                        ->middleware('throttle:10,1')
+                        ->can('open cash drawer');
+                    Route::post('/close', [CashDrawerController::class, 'close'])
+                        ->middleware('throttle:10,1')
+                        ->can('close cash drawer');
                 });
             });
 

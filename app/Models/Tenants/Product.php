@@ -14,6 +14,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @mixin IdeHelperProduct
@@ -25,9 +26,10 @@ use Illuminate\Support\Str;
  */
 class Product extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $guarded = ['id', 'hero_images_url', 'expired'];
+    protected static $recordEvents = ['created', 'updated', 'deleted'];
 
     protected $appends = ['hero_image'];
 
