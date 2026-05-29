@@ -15,9 +15,6 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-        // regenerate session for web logins to prevent fixation
-        $request->session()->regenerate();
-
         /** @var \App\Models\Tenants\User $user */
         $user = $request->user();
 
@@ -35,6 +32,9 @@ class AuthenticatedSessionController extends Controller
                 ]),
             ]);
         }
+
+        // regenerate session for web logins to prevent fixation
+        $request->session()->regenerate();
 
         // For normal browser form submissions, redirect to the Filament panel.
         return redirect()->intended(Filament::getUrl());

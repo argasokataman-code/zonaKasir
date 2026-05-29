@@ -6,6 +6,7 @@ use App\Models\Tenants\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -46,21 +47,45 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::guard('web')->attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            $user = User::where('email', $this->email)->first();
-            if ($user) {
-                if (! $user->hasVerifiedEmail()) {
+        $credentials = $this->only('email', 'password');
+
+        // For web requests with session
+        if (! $this->wantsJson()) {
+            if (! Auth::guard('web')->attempt($credentials, $this->boolean('remember'))) {
+                $user = User::where('email', $this->email)->first();
+                if ($user && ! $user->hasVerifiedEmail()) {
                     throw ValidationException::withMessages([
                         'email' => 'Email is not verified, please check your email to verify your account',
                     ]);
                 }
+                RateLimiter::hit($this->throttleKey());
+                throw ValidationException::withMessages([
+                    'email' => __('auth.failed'),
+                ]);
             }
-            RateLimiter::hit($this->throttleKey());
+            RateLimiter::clear($this->throttleKey());
+            return;
+        }
 
+        // For API requests without session: manually verify credentials
+        $user = User::where('email', $this->email)->first();
+        if (! $user || ! Hash::check($this->password, $user->password)) {
+            RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);
         }
+
+        if (! $user->hasVerifiedEmail()) {
+            throw ValidationException::withMessages([
+                'email' => 'Email is not verified, please check your email to verify your account',
+            ]);
+        }
+
+        // Store user in request for API
+        $this->setUserResolver(function () use ($user) {
+            return $user;
+        });
 
         RateLimiter::clear($this->throttleKey());
     }
