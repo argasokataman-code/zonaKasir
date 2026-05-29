@@ -151,8 +151,28 @@ Global helpers in `app/helpers.php`:
 - `database/migrations/tenant/` - Tenant migrations
 - `tests/Feature/` - Feature tests
 
+## Documentation & Resources
+
+**All project documentation is organized in `docs/` folder:**
+
+- **[docs/README.md](docs/README.md)** — Documentation index and quick links
+- **[docs/reports/AUDIT.md](docs/reports/AUDIT.md)** — Comprehensive code quality audit (20 issues identified, severity levels, fixes)
+- **[docs/guides/QUICK_FIXES.md](docs/guides/QUICK_FIXES.md)** — Priority action list to production readiness (critical, high, medium priorities)
+- **[.cursor/00-universal-agent-rules.mdc](.cursor/00-universal-agent-rules.mdc)** — Mandatory 6-phase task execution framework (eliminates hallucination, enforces scope discipline)
+
+**Current Project Status:**
+- Test Suite: 🔴 82 failed, 4 passed (DB connection broken)
+- Code Quality: 🟠 High (20 issues identified in audit)
+- Production Ready: ❌ Not yet (Phase 1 stabilization required)
+
+**Immediate Actions Required (See docs/guides/QUICK_FIXES.md):**
+1. Fix test database connection (5 min)
+2. Remove debug code (1 min)
+3. Add permission checks (10 min)
+
 ## Before Committing
 1. Run `php artisan test` to ensure all tests pass
 2. Verify code follows PSR-12 formatting
 3. Use `$guarded = ['id']` for new models
 4. Add proper type hints to all methods
+5. Follow 6-phase task framework (see .cursor/00-universal-agent-rules.mdc)
