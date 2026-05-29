@@ -18,14 +18,15 @@ class NotificationController extends Controller
      */
     public function index(): JsonResponse
     {
+        $notifications = auth()->user()
+            ->unreadNotifications()
+            ->where('type', '!=', 'Filament\Notifications\DatabaseNotification')
+            ->orderByDesc('created_at')
+            ->simplePaginate(15);
+
         return $this->buildResponse()
-            ->setData(NotificationCollection::collection(
-                auth()->user()
-                    ->unreadNotifications()
-                    ->where('type', '!=', 'Filament\Notifications\DatabaseNotification')
-                    ->get()
-            ))
-            ->setMessage('success get notification')
+            ->setData(NotificationCollection::collection($notifications))
+            ->setMessage('Notifications retrieved successfully')
             ->present();
     }
 
@@ -34,6 +35,14 @@ class NotificationController extends Controller
         try {
             DB::beginTransaction();
             
+            if (!Product::find($product)) {
+                DB::rollBack();
+                return $this->buildResponse()
+                    ->setCode(404)
+                    ->setMessage('Product not found')
+                    ->present();
+            }
+
             $notification = User::find(auth()->id())
                 ->notifications()
                 ->where('id', $notification)
@@ -60,7 +69,7 @@ class NotificationController extends Controller
             DB::commit();
 
             return $this->buildResponse()
-                ->setMessage('Success delete the notification')
+                ->setMessage('Notification deleted successfully')
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();

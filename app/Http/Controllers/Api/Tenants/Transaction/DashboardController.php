@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Api\Tenants\Transaction;
 use App\Http\Controllers\Controller;
 use App\Models\Tenants\Selling;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function totalRevenue(Request $request)
+    public function totalRevenue(Request $request): JsonResponse
     {
         $filterType = $request->filter_type;
         $timezone = $request->timezone;
@@ -44,7 +45,7 @@ class DashboardController extends Controller
             ->present();
     }
 
-    public function totalGrossProfit(Request $request)
+    public function totalGrossProfit(Request $request): JsonResponse
     {
         $filterType = $request->filter_type;
         $timezone = $request->timezone;
@@ -72,7 +73,7 @@ class DashboardController extends Controller
             ->present();
     }
 
-    public function totalSales(Request $request)
+    public function totalSales(Request $request): JsonResponse
     {
         $filterType = $request->filter_type;
         $timezone = $request->timezone;

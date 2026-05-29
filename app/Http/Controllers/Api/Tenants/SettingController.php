@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Api\Tenants;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tenants\Setting;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class SettingController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $this->validate($request, [
             'key' => [
@@ -51,15 +52,15 @@ class SettingController extends Controller
         Setting::set($request->key, $request->value);
 
         return $this->buildResponse()
-            ->setMessage('success update setting')
+            ->setMessage('Setting updated successfully')
             ->present();
     }
 
-    public function show(string $key)
+    public function show(string $key): JsonResponse
     {
         if (! in_array($key, array_merge(config('setting.key'), ['all']))) {
             return $this->buildResponse()
-                ->setMessage('key not found')
+                ->setMessage('Setting key not found')
                 ->setCode(404)
                 ->present();
         }

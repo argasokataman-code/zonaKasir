@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\Tenants\PaymentMethodController;
 use App\Http\Controllers\Api\Tenants\ProfileController;
 use App\Http\Controllers\Api\Tenants\RegisterFCMTokenController;
 use App\Http\Controllers\Api\Tenants\Reports\PurchasingReportController;
+use App\Http\Controllers\Api\Tenants\Reports\ProductReportController as ApiProductReportController;
+use App\Http\Controllers\Api\Tenants\Reports\SellingReportController as ApiSellingReportController;
 use App\Http\Controllers\Api\Tenants\Settings\SecureInitialPriceController;
 use App\Http\Controllers\Api\Tenants\Transaction\CashDrawerController;
 use App\Http\Controllers\Api\Tenants\Transaction\DashboardController;
@@ -144,8 +146,10 @@ Route::middleware([
 
             Route::group(['prefix' => 'about'], function () {
                 Route::get('/', [AboutController::class, 'index'])
+                    ->can('read about')
                     ->name('about');
                 Route::put('/', [AboutController::class, 'update'])
+                    ->can('update about')
                     ->name('about.update');
             });
 
@@ -192,10 +196,10 @@ Route::middleware([
             Route::group(['prefix' => 'report'], function () {
                 Route::post('/cashier', CashierReportController::class)
                     ->can('generate cashier report');
-                // Route::post('/selling', SellingReportController::class)
-                //     ->can('generate selling report');
-                // Route::post('/product', [App\Http\Controllers\Api\Tenants\Report\ProductReportController::class, 'index'])
-                //     ->can('generate product report');
+                Route::post('/selling', ApiSellingReportController::class)
+                    ->can('generate selling report');
+                Route::post('/product', ApiProductReportController::class)
+                    ->can('generate product report');
             });
 
             Route::group(['prefix' => 'printer'], function () {

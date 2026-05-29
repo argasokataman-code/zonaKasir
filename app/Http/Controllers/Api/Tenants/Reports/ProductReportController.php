@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Tenants\Reports;
 
-use App\Services\Tenants\CashierReportService;
+use App\Http\Controllers\Controller;
+use App\Services\Tenants\ProductReportService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class CashierReportController extends Controller
+class ProductReportController extends Controller
 {
-    public function __invoke(Request $request, CashierReportService $cashierReportService): Response
+    public function __invoke(Request $request, ProductReportService $productReportService): Response
     {
         try {
             $request->validate([
@@ -18,12 +19,12 @@ class CashierReportController extends Controller
                 'end_date' => 'nullable|date',
             ]);
 
-            $reportData = $cashierReportService->generate($request->all());
+            $reportData = $productReportService->generate($request->all());
             $reports = $reportData['reports'];
             $footer = $reportData['footer'];
             $header = $reportData['header'];
 
-            $pdf = Pdf::loadView('reports.cashier', compact('reports', 'footer', 'header'))
+            $pdf = Pdf::loadView('reports.product', compact('reports', 'footer', 'header'))
                 ->setPaper('a4', 'landscape');
             $pdf->output();
             $domPdf = $pdf->getDomPDF();
@@ -31,12 +32,12 @@ class CashierReportController extends Controller
             $canvas->page_text(720, 570, 'Halaman {PAGE_NUM} dari {PAGE_COUNT}', null, 10, [0, 0, 0]);
 
             if ($request->ajax()) {
-                return $pdf->download('cashier-report.pdf');
+                return $pdf->download('product-report.pdf');
             }
 
             return $pdf->stream();
         } catch (Exception $e) {
-            abort(500, 'Failed to generate cashier report: ' . $e->getMessage());
+            abort(500, 'Failed to generate product report: ' . $e->getMessage());
         }
     }
 }

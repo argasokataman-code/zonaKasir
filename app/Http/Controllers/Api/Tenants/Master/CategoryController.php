@@ -18,7 +18,7 @@ class CategoryController extends Controller
         $categories = QueryBuilder::for(Category::class)
             ->allowedFilters(['name'])
             ->orderByDesc('created_at')
-            ->get();
+            ->simplePaginate($this->resolvePerPage(request()) ?? 15);
 
         return $this->buildResponse()
             ->setData(new CategoryCollection($categories))
@@ -41,7 +41,8 @@ class CategoryController extends Controller
             DB::commit();
             
             return $this->buildResponse()
-                ->setMessage('success creating category')
+                ->setData(new CategoryCollection($category))
+                ->setMessage('Category created successfully')
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
@@ -74,7 +75,8 @@ class CategoryController extends Controller
             DB::commit();
             
             return $this->buildResponse()
-                ->setMessage('success updating category')
+                ->setData(new CategoryCollection($category))
+                ->setMessage('Category updated successfully')
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
@@ -87,10 +89,10 @@ class CategoryController extends Controller
 
     public function destroy(Category $category): JsonResponse
     {
-        if ($category->products()->count() > 0) {
+        if ($category->products()->exists()) {
             return $this->buildResponse()
                 ->setCode(400)
-                ->setMessage('category has products')
+                ->setMessage('Category has products and cannot be deleted')
                 ->present();
         }
         
@@ -100,7 +102,7 @@ class CategoryController extends Controller
             DB::commit();
 
             return $this->buildResponse()
-                ->setMessage('success deleting category')
+                ->setMessage('Category deleted successfully')
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();

@@ -30,7 +30,7 @@ class CashDrawerController extends Controller
                     'cash' => $request->cash
                 ]);
             } else {
-                CashDrawer::create([
+                $lastOpenedCashDrawer = CashDrawer::create([
                     'cash' => $request->cash,
                     'opened_by' => auth()->id()
                 ]);
@@ -39,7 +39,8 @@ class CashDrawerController extends Controller
             DB::commit();
             
             return $this->buildResponse()
-                ->setMessage('success store money to cash drawer for today')
+                ->setData($lastOpenedCashDrawer)
+                ->setMessage('Cash drawer opened successfully')
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
@@ -59,7 +60,7 @@ class CashDrawerController extends Controller
             if (!$lastOpenedCashDrawer) {
                 DB::rollBack();
                 return $this->buildResponse()
-                    ->setMessage('cash drawer already closed or not opened yet')
+                    ->setMessage('Cash drawer already closed or not opened yet')
                     ->setCode(422)
                     ->present();
             }
@@ -71,7 +72,8 @@ class CashDrawerController extends Controller
             DB::commit();
 
             return $this->buildResponse()
-                ->setMessage('success close cash drawer for today')
+                ->setData($lastOpenedCashDrawer)
+                ->setMessage('Cash drawer closed successfully')
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
