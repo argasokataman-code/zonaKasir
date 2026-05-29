@@ -18,9 +18,11 @@ class MemberController extends Controller
         $members = QueryBuilder::for(Member::class)
             ->allowedFilters(['name', 'email'])
             ->orderByDesc('created_at')
-            ->get();
+            ->simplePaginate($this->resolvePerPage(request()) ?? 15);
 
-        return $this->success($members);
+        return $this->buildResponse()
+            ->setData($members)
+            ->present();
     }
 
     public function store(Request $request): JsonResponse
@@ -36,19 +38,24 @@ class MemberController extends Controller
             
             DB::commit();
             
-            return $this->success([], "success creating items");
+            return $this->buildResponse()
+                ->setData($member)
+                ->setMessage('Member created successfully')
+                ->present();
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to create member: ' . $e->getMessage(),
-            ], 500);
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Failed to create member: ' . $e->getMessage())
+                ->present();
         }
     }
 
     public function show(Member $member): JsonResponse
     {
-        return $this->success($member);
+        return $this->buildResponse()
+            ->setData($member)
+            ->present();
     }
 
     public function update(Request $request, Member $member): JsonResponse
@@ -63,13 +70,16 @@ class MemberController extends Controller
             
             DB::commit();
             
-            return $this->success([], "success updating items");
+            return $this->buildResponse()
+                ->setData($member)
+                ->setMessage('Member updated successfully')
+                ->present();
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to update member: ' . $e->getMessage(),
-            ], 500);
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Failed to update member: ' . $e->getMessage())
+                ->present();
         }
     }
 
@@ -80,13 +90,15 @@ class MemberController extends Controller
             $member->delete();
             DB::commit();
             
-            return $this->success([], "success deleting items");
+            return $this->buildResponse()
+                ->setMessage('Member deleted successfully')
+                ->present();
         } catch (Exception $e) {
             DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to delete member: ' . $e->getMessage(),
-            ], 500);
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Failed to delete member: ' . $e->getMessage())
+                ->present();
         }
     }
 

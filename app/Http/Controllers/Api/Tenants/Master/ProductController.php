@@ -48,10 +48,13 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
             $request->created();
+            $product = Product::latest()->first();
+            $product->load(['category', 'stocks']);
             DB::commit();
 
             return $this->buildResponse()
-                ->setMessage('success creating items')
+                ->setData(new ProductCollection($product))
+                ->setMessage('Product created successfully')
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
@@ -89,10 +92,13 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
             $request->updated();
+            $product = Product::findorfail($request->route('product'));
+            $product->load(['category', 'stocks']);
             DB::commit();
 
             return $this->buildResponse()
-                ->setMessage('success updating items')
+                ->setData(new ProductCollection($product))
+                ->setMessage('Product updated successfully')
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
@@ -103,13 +109,13 @@ class ProductController extends Controller
         }
     }
 
-    public function destroy(Product $product, ProductRequest $request)
+    public function destroy(Product $product, ProductRequest $request): JsonResponse
     {
         $request->deleteImages();
         $product->delete();
 
         return $this->buildResponse()
-            ->setMessage('success deleting items')
+            ->setMessage('Product deleted successfully')
             ->present();
     }
 }

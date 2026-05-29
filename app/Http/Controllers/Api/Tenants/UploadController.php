@@ -5,14 +5,19 @@ namespace App\Http\Controllers\Api\Tenants;
 use App\Http\Controllers\Controller;
 use App\Models\Tenants\UploadedFile;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class UploadController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(Request $request): JsonResponse
     {
+        $request->validate([
+            'file' => 'required|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx,xls,xlsx|max:5120',
+        ]);
+
         if ($request->file('file')->isValid()) {
             $name = Str::random(40) . '.' . $request->file('file')->extension();
             $tmpDisk = config('filesystems.tmp_disk');
@@ -33,15 +38,17 @@ class UploadController extends Controller
                 'disk' => $tmpDisk,
             ]);
         } else {
-            throw new Exception('File is not valid');
+            return $this->fail('File is not valid');
         }
 
-        return $this->success([
-            'id' => $uploadedFile->id,
-            'name' => $name,
-            'relative_path' => $name,
-            'url' => $fullUrl,
-            'original_name' => $originalName,
-        ]);
+        return $this->buildResponse()
+            ->setData([
+                'id' => $uploadedFile->id,
+                'name' => $name,
+                'relative_path' => $name,
+                'url' => $fullUrl,
+                'original_name' => $originalName,
+            ])
+            ->present();
     }
 }
