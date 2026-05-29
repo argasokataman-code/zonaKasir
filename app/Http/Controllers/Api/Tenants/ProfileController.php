@@ -21,10 +21,14 @@ class ProfileController extends Controller
 
     public function update(Request $request): JsonResponse
     {
+        $phoneRules = config('validation.phone');
+        $locale = app()->getLocale();
+        $phoneConfig = $phoneRules[$locale] ?? $phoneRules['default'];
+        
         $this->validate($request, [
             'name' => ['nullable', 'string'],
             'email' => ['nullable', 'email', 'unique:users,email,' . auth()->id()],
-            'phone' => ['nullable', 'string', 'digits_between:10,13'],
+            'phone' => ['nullable', 'string', "digits_between:{$phoneConfig['min']},{$phoneConfig['max']}"],
             'address' => ['nullable', 'string'],
             'uploaded_file_id' => ['nullable', 'integer', 'exists:uploaded_files,id'],
         ]);

@@ -22,10 +22,10 @@ trait TableProduct
     {
         return $table
             ->query(
-                // TODO: fix the query for product with this condition
-                // * hide the prodcut when the type is product but that has a 0 stock
-                // * show the product when the type is service but that has a 0 stock
-                // * show the product when the type is procut but that has a 0 stock and then has a is_non_stock true
+                // Product filtering logic:
+                // • Hide products when type is 'product' AND stock is 0 (unless is_non_stock = true)
+                // • Show products when type is 'service' (regardless of stock)  
+                // • Show products when type is 'product' AND stock > 0 OR is_non_stock = true
                 Product::query()
                     ->where(function ($query) {
                         $query->where('type', 'product')
