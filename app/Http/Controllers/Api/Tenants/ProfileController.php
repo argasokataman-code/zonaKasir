@@ -6,19 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProfileResource;
 use App\Models\Tenants\UploadedFile;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         return $this->buildResponse()
             ->setData(new ProfileResource(auth()->user()))
             ->present();
     }
 
-    public function update(Request $request)
+    public function update(Request $request): JsonResponse
     {
         $this->validate($request, [
             'name' => ['nullable', 'string'],

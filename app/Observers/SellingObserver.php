@@ -24,9 +24,8 @@ class SellingObserver extends AbstractObserver implements DataAwareRule
         if (! $selling->date) {
             $selling->date = now()->format('Y-m-d H:i:s');
         }
-        $sellings = Selling::all();
-        $lastCount = $sellings->count();
-        /* TODO: fixing the iteration code <10-08-22, sheenazien8> */
+        // Efficiently get last selling count for code generation
+        $lastCount = Selling::count();
         $selling->code = 'SELL'.Str::of($lastCount + 1)->padLeft(4, 0)->value();
         // $selling->money_changes = $selling->payed_money - $selling->total_price;
         if (Setting::get('cash_drawer_enabled', false)) {
