@@ -10,6 +10,11 @@ class ListMembers extends ListRecords
 {
     protected static string $resource = MemberResource::class;
 
+    public static function canAccess(array $parameters = []): bool
+    {
+        return can('read member');
+    }
+
     protected function getHeaderActions(): array
     {
         return [
