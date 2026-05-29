@@ -32,8 +32,7 @@ trait CartInteraction
             $qty = (
                 CartItem::whereProductId($product->getKey())
                     ->cashier()
-                    ->first()
-                ->qty ?? 0
+                    ->first()?->qty ?? 0
             ) + 1;
         } else {
             if (!$data['amount']) {
@@ -92,7 +91,7 @@ trait CartInteraction
 
     public function addDiscountPricePerItem(CartItem $cartItem, $value)
     {
-        if (! ($value && $value > 0) && $value > $cartItem->product->selling_price) {
+        if (!($value && $value > 0) || $value > $cartItem->product->selling_price) {
             return;
         }
         $cartItem->discount_price = (float) $value;
