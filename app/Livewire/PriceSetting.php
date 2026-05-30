@@ -5,11 +5,13 @@ namespace App\Livewire;
 use App\Filament\Tenant\Resources\Traits\RefreshThePage;
 use App\Models\Tenants\CartItem;
 use Livewire\Component;
+use Livewire\Attributes\Modelable;
 
 class PriceSetting extends Component
 {
     use RefreshThePage;
 
+    #[Modelable]
     public CartItem $cartItem;
 
     public $unit;
