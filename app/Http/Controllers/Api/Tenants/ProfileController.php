@@ -26,10 +26,12 @@ class ProfileController extends Controller
         $phoneConfig = $phoneRules[$locale] ?? $phoneRules['default'];
         
         $this->validate($request, [
-            'name' => ['nullable', 'string'],
-            'email' => ['nullable', 'email', 'unique:users,email,' . auth()->id()],
+            'name' => ['nullable', 'string', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255', 'unique:users,email,' . auth()->id()],
             'phone' => ['nullable', 'string', "digits_between:{$phoneConfig['min']},{$phoneConfig['max']}"],
-            'address' => ['nullable', 'string'],
+            'address' => ['nullable', 'string', 'max:500'],
+            'locale' => ['nullable', 'in:id,en,es'],
+            'timezone' => ['nullable', 'timezone'],
             'uploaded_file_id' => ['nullable', 'integer', 'exists:uploaded_files,id'],
         ]);
 
@@ -41,9 +43,10 @@ class ProfileController extends Controller
 
             /** @var \App\Models\Tenants\Profile $profile */
             $profile = $user->profile;
-            $profile = $user->profile()->updateOrCreate([
-                'user_id' => $user->id,
-            ], $request->only('phone', 'address', 'locale'));
+            $profile = $user->profile()->updateOrCreate(
+                ['user_id' => $user->id],
+                $request->only('phone', 'address', 'locale', 'timezone')
+            );
 
             if ($request->filled('uploaded_file_id')) {
                 $tmpFile = UploadedFile::find($request->uploaded_file_id);
@@ -57,6 +60,9 @@ class ProfileController extends Controller
             }
 
             DB::commit();
+            
+            // Reload user with fresh profile data
+            $user->refresh();
         } catch (Exception $e) {
             DB::rollBack();
 
@@ -67,6 +73,7 @@ class ProfileController extends Controller
         }
 
         return $this->buildResponse()
+            ->setData(new ProfileResource($user))
             ->setMessage('Profile updated successfully')
             ->present();
     }

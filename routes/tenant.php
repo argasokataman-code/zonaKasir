@@ -100,10 +100,12 @@ Route::middleware([
 
             Route::get('/me', [ProfileController::class, 'index'])
                 ->middleware('auth:sanctum')
+                ->can('read profile')
                 ->name('me');
 
             Route::put('/me', [ProfileController::class, 'update'])
                 ->middleware('auth:sanctum')
+                ->can('update profile')
                 ->name('profile.update');
         });
 
