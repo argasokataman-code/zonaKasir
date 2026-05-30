@@ -25,8 +25,10 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+        $category = Category::first() ?? Category::factory()->create();
+        
         return [
-            'category_id' => Category::all()->random(),
+            'category_id' => $category->id,
             'name' => $this->faker->company(),
             'stock' => $this->faker->randomDigit(),
             'initial_price' => rand(50000, 60000),
