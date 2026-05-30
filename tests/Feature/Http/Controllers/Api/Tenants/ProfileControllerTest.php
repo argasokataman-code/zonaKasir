@@ -46,15 +46,25 @@ test('user can update the profile', function () {
     ]);
 });
 
-/* test('user can update the profile with photo', function () { */
-/*     $user = User::first(); */
-/**/
-/*     $response = actingAs($user)->putJson('/api/auth/me', [ */
-/*         'name' => 'John Doe', */
-/*         'email' => 'updated@mail.com', */
-/*         // 'photo_url' => 'https://picsum.photos/200.jpg', */
-/*     ]); */
-/**/
-/*     $response->assertOk() */
-/*         ->assertJsonPath('message', 'Profile updated successfully'); */
-/* })->markTestSkipped('Need to mock the file upload'); */
+test('update profile returns updated profile data', function () {
+    $user = User::first();
+
+    $response = actingAs($user)->putJson('/api/auth/me', [
+        'name' => 'Jane Smith',
+        'email' => 'jane@mail.com',
+        'phone' => '081234567890',
+        'address' => 'Jl. Test No. 123',
+        'locale' => 'id',
+    ]);
+
+    $response->assertOk()
+        ->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+                'email',
+            ],
+        ])
+        ->assertJsonPath('data.name', 'Jane Smith')
+        ->assertJsonPath('data.email', 'jane@mail.com');
+});
