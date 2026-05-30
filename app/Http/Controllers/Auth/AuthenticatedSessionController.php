@@ -25,8 +25,8 @@ class AuthenticatedSessionController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Yay! success to login',
-                'data' => array_merge($user->toArray(), [
-                    'token' => $token->plainTextToken,
+                'token' => $token->plainTextToken,
+                'user' => array_merge($user->toArray(), [
                     'permissions' => $user->roles()->first()->permissions()->where('guard_name', 'sanctum')->pluck('name')->toArray(),
                     'features' => Feature::all(),
                 ]),
@@ -42,6 +42,17 @@ class AuthenticatedSessionController extends Controller
 
     public function destroy(Request $request)
     {
+        // Handle API (Sanctum) logout
+        if ($request->wantsJson()) {
+            // Revoke all tokens for the current user
+            $request->user()?->currentAccessToken()?->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Logout successful',
+            ]);
+        }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
