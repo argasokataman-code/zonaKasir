@@ -12,22 +12,18 @@ trait RefreshDatabaseWithTenant
     }
 
     /**
-     * We need to hook initialize tenancy _before_ we start the database
-     * transaction, otherwise it cannot find the tenant connection.
+     * We need to initialize tenancy BEFORE starting the database transaction,
+     * otherwise it cannot find the tenant connection.
+     * We use mockTenant() which handles database creation via RegisterTenant service.
      */
     public function beginDatabaseTransaction()
     {
-        $this->initializeTenant();
-
-        $this->parentBeginDatabaseTransaction();
-    }
-
-    public function initializeTenant()
-    {
+        // Initialize tenant - this creates the database via RegisterTenant::create()
         $tenant = mockTenant();
-
         tenancy()->initialize($tenant);
-
         URL::forceRootUrl("http://{$tenant->domains[0]->domain}");
+
+        // Then start the database transaction
+        $this->parentBeginDatabaseTransaction();
     }
 }
