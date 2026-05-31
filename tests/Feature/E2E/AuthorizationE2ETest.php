@@ -18,6 +18,8 @@ describe('Authorization & Permissions E2E', function () {
 
     it('denies user without permission to read profile', function () {
         $user = User::first();
+        $user->update(['is_owner' => false]);
+        $user->syncRoles([]);
         $user->revokePermissionTo('read profile');
         
         $response = $this->actingAs($user, 'sanctum')
@@ -28,6 +30,8 @@ describe('Authorization & Permissions E2E', function () {
 
     it('denies user without permission to update profile', function () {
         $user = User::first();
+        $user->update(['is_owner' => false]);
+        $user->syncRoles([]);
         $user->revokePermissionTo('update profile');
         
         $response = $this->actingAs($user, 'sanctum')
@@ -41,6 +45,8 @@ describe('Authorization & Permissions E2E', function () {
 
     it('denies user without permission to read category', function () {
         $user = User::first();
+        $user->update(['is_owner' => false]);
+        $user->syncRoles([]);
         $user->revokePermissionTo('read category');
         
         $response = $this->actingAs($user, 'sanctum')
@@ -51,6 +57,8 @@ describe('Authorization & Permissions E2E', function () {
 
     it('denies user without permission to create member', function () {
         $user = User::first();
+        $user->update(['is_owner' => false]);
+        $user->syncRoles([]);
         $user->revokePermissionTo('create member');
         
         $response = $this->actingAs($user, 'sanctum')
@@ -64,6 +72,8 @@ describe('Authorization & Permissions E2E', function () {
 
     it('denies user without permission to create selling', function () {
         $user = User::first();
+        $user->update(['is_owner' => false]);
+        $user->syncRoles([]);
         $user->revokePermissionTo('create selling');
         
         $response = $this->actingAs($user, 'sanctum')
@@ -77,6 +87,8 @@ describe('Authorization & Permissions E2E', function () {
 
     it('denies user without permission to read about', function () {
         $user = User::first();
+        $user->update(['is_owner' => false]);
+        $user->syncRoles([]);
         $user->revokePermissionTo('read about');
         
         $response = $this->actingAs($user, 'sanctum')
@@ -87,6 +99,8 @@ describe('Authorization & Permissions E2E', function () {
 
     it('denies user without permission to manage settings', function () {
         $user = User::first();
+        $user->update(['is_owner' => false]);
+        $user->syncRoles([]);
         $user->revokePermissionTo('manage settings');
         
         $response = $this->actingAs($user, 'sanctum')

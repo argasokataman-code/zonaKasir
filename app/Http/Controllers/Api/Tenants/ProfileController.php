@@ -28,7 +28,7 @@ class ProfileController extends Controller
         $this->validate($request, [
             'name' => ['nullable', 'string', 'max:255'],
             'email' => ['nullable', 'email', 'max:255', 'unique:users,email,' . auth()->id()],
-            'phone' => ['nullable', 'string', "digits_between:{$phoneConfig['min']},{$phoneConfig['max']}"],
+            'phone' => ['nullable', 'string', "regex:/^\\+?[0-9]{{$phoneConfig['min']},{$phoneConfig['max']}}$/"],
             'address' => ['nullable', 'string', 'max:500'],
             'locale' => ['nullable', 'in:id,en,es'],
             'timezone' => ['nullable', 'timezone'],

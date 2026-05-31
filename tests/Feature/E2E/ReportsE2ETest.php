@@ -28,6 +28,8 @@ describe('Reports E2E', function () {
 
         it('denies report generation without permission', function () {
             $user = User::first();
+            $user->update(['is_owner' => false]);
+            $user->syncRoles([]);
             $user->revokePermissionTo('generate selling report');
             
             $response = $this->actingAs($user, 'sanctum')
@@ -55,6 +57,8 @@ describe('Reports E2E', function () {
 
         it('denies product report without permission', function () {
             $user = User::first();
+            $user->update(['is_owner' => false]);
+            $user->syncRoles([]);
             $user->revokePermissionTo('generate product report');
             
             $response = $this->actingAs($user, 'sanctum')
@@ -82,6 +86,8 @@ describe('Reports E2E', function () {
 
         it('denies cashier report without permission', function () {
             $user = User::first();
+            $user->update(['is_owner' => false]);
+            $user->syncRoles([]);
             $user->revokePermissionTo('generate cashier report');
             
             $response = $this->actingAs($user, 'sanctum')

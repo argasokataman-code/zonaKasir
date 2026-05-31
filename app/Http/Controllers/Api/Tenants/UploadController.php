@@ -24,7 +24,7 @@ class UploadController extends Controller
 
             Storage::disk($tmpDisk)->put($name, file_get_contents($request->file('file')->getRealPath()));
 
-            $fullUrl = Storage::disk($tmpDisk)->url($name);
+            $fullUrl = UploadedFile::urlFromPath($name, $tmpDisk);
 
             $uploadedFile = UploadedFile::create([
                 'name' => $name,
@@ -41,14 +41,16 @@ class UploadController extends Controller
             return $this->fail('File is not valid');
         }
 
-        return $this->buildResponse()
-            ->setData([
+        return response()->json([
+            'id' => $uploadedFile->id,
+            'success' => true,
+            'data' => [
                 'id' => $uploadedFile->id,
                 'name' => $name,
                 'relative_path' => $name,
                 'url' => $fullUrl,
                 'original_name' => $originalName,
-            ])
-            ->present();
+            ],
+        ]);
     }
 }

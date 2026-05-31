@@ -90,7 +90,7 @@ Route::middleware([
                 ->name('verification.verify');
 
             Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-                ->middleware(['auth', 'throttle:6,1'])
+                ->middleware(['auth:sanctum', 'throttle:6,1'])
                 ->name('verification.send');
 
             Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])

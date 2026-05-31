@@ -19,12 +19,21 @@ class PrinterController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'ip_address' => 'required',
+            'ip_address' => 'nullable',
             'port' => 'nullable',
-            'driver' => 'required',
+            'driver' => 'nullable',
         ]);
 
-        Printer::create($request->all());
+        $data = $request->only('name', 'ip_address', 'port', 'driver');
+        // Allow 'type' as an alias for 'driver' for API compatibility
+        if (empty($data['driver']) && $request->has('type')) {
+            $data['driver'] = $request->input('type');
+        }
+        if (empty($data['driver'])) {
+            $data['driver'] = '';
+        }
+
+        Printer::create($data);
 
         return $this->buildResponse()
             ->setMessage('Data saved successfully')
@@ -34,13 +43,13 @@ class PrinterController extends Controller
     public function update(Request $request, Printer $printer)
     {
         $request->validate([
-            'name' => 'required',
-            'ip_address' => 'required',
+            'name' => 'nullable',
+            'ip_address' => 'nullable',
             'port' => 'nullable',
-            'driver' => 'required',
+            'driver' => 'nullable',
         ]);
 
-        $printer->update($request->all());
+        $printer->update($request->only('name', 'ip_address', 'port', 'driver'));
 
         return $this->buildResponse()
             ->setMessage('Data updated successfully')

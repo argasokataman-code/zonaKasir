@@ -12,6 +12,8 @@ class StockOpnameObserver
 
     public function creating(StockOpname $stockOpname): void
     {
-        $stockOpname->user()->associate(auth()->user());
+        if (!$stockOpname->user_id && auth()->check()) {
+            $stockOpname->user()->associate(auth()->user());
+        }
     }
 }

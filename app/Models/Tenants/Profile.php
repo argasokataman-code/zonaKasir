@@ -69,10 +69,13 @@ class Profile extends Model
                 ]),
             FileUpload::make('photo')
                 ->disk(config('filesystems.upload_disk'))
+                ->placeholder(__('Tarik dan lepas file di sini atau klik untuk mencari file'))
                 ->directory('profile')
-                ->visible(feature('edit-profile'))
                 ->imageResizeMode('cover')
                 ->imageCropAspectRatio('1:1')
+                ->imageResizeTargetWidth('1024')
+                ->imageResizeTargetHeight('1024')
+                ->imageResizeUpscale(true)
                 ->imageEditor()
                 ->image()
                 ->getUploadedFileUsing(function ($file, string|array|null $storedFileNames, $component) {
@@ -102,7 +105,6 @@ class Profile extends Model
             Actions::make([
                 Action::make('Save')
                     ->translateLabel()
-                    ->requiresConfirmation()
                     ->action('saveProfile'),
             ]),
         ];

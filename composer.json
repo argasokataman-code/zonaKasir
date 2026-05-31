@@ -37,6 +37,7 @@
         "fakerphp/faker": "^1.9.1",
         "laradumps/laradumps": "^3.0",
         "laravel-lang/common": "^6.2",
+        "laravel/dusk": "^8.6",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.0",
@@ -61,6 +62,7 @@
         }
     },
     "scripts": {
+        "dusk": "php artisan dusk",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi",

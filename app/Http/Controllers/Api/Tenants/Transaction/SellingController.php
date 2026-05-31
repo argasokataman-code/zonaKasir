@@ -45,18 +45,20 @@ class SellingController extends Controller
     {
         try {
             DB::beginTransaction();
-            
+
             $selling = $request->store();
             $selling->load(['member', 'paymentMethod', 'sellingDetails.product', 'user']);
-            
+
             DB::commit();
 
             return $this->buildResponse()
+                ->setCode(201)
                 ->setMessage('success create selling')
                 ->setData(new SellingCollection($selling))
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
+
             return $this->buildResponse()
                 ->setCode(500)
                 ->setMessage('Failed to create selling: ' . $e->getMessage())

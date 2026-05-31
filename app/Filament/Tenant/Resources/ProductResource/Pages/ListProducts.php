@@ -27,6 +27,7 @@ class ListProducts extends ListRecords
                 ->form([
                     FileUpload::make('attachment')
                         ->disk(config('filesystems.upload_disk'))
+                        ->placeholder(__('Tarik dan lepas file di sini atau klik untuk mencari file'))
                         ->acceptedFileTypes(['application/vnd.ms-excel', 'text/csv']),
                 ])->action(function (array $data) {
                     $uploadDisk = config('filesystems.upload_disk');

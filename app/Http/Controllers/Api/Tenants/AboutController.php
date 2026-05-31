@@ -26,7 +26,7 @@ class AboutController extends Controller
         $this->validate($request, [
             'shop_name' => ['nullable', 'string'],
             'shop_location' => ['nullable', 'string'],
-            'business_type' => ['required', 'in:retail,wholesale,fnb,fashion,pharmacy,other'],
+            'business_type' => ['nullable', 'in:retail,wholesale,fnb,fashion,pharmacy,other'],
             'other_business_type' => ['required_if:business_type,other'],
             'owner_name' => ['nullable', 'string'],
             'uploaded_file_id' => ['nullable', 'integer', 'exists:uploaded_files,id'],

@@ -13,9 +13,13 @@ class TenantLogin extends Login
     public function authenticate(): ?LoginResponse
     {
         $loginResponse = parent::authenticate();
-        /** @var \App\Models\Tenants\User $user */
+        /** @var \App\Models\Tenants\User|null $user */
         $user = Filament::auth()->user();
-        if (!$user->can('access web app')) {
+
+        // If authentication did not produce a user (invalid credentials),
+        // let the parent class handle the validation failure. Otherwise,
+        // ensure we don't call methods on null.
+        if (! $user || ! $user->can('access web app')) {
             throw ValidationException::withMessages([
                 'data.email' => 'You do not have permission to access the web app',
             ]);

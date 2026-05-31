@@ -40,6 +40,7 @@ use App\Filament\Tenant\Resources\UserResource;
 use App\Filament\Tenant\Resources\VoucherResource;
 use App\Http\Middleware\LocalizationMiddleware;
 use App\Models\Tenants\About;
+use App\Models\Tenants\UploadedFile;
 use App\Tenant;
 use Filament\Forms\Components\DatePicker;
 use Filament\Http\Middleware\Authenticate;
@@ -258,8 +259,10 @@ class TenantPanelProvider extends PanelProvider
     {
         try {
             if (Schema::hasTable('abouts') && $about = About::first()) {
+                $logo = $about->photo ? UploadedFile::urlFromPath($about->photo, config('filesystems.upload_disk')) : null;
+
                 $panel->brandName($about->shop_name ?? 'Your Brand')
-                    ->brandLogo($about->photo ?? null);
+                    ->brandLogo($logo);
             }
         } catch (\Throwable) {
             // DB not available during build/package-discovery
@@ -270,9 +273,10 @@ class TenantPanelProvider extends PanelProvider
     {
         try {
             $about = About::first();
+            $logo = $about?->photo ? UploadedFile::urlFromPath($about->photo, config('filesystems.upload_disk')) : null;
 
             $panel->brandName($about->shop_name ?? 'Your Brand')
-                ->brandLogo($about->photo ?? null);
+                ->brandLogo($logo);
         } catch (\Throwable) {
             // DB not available during build/package-discovery
         }

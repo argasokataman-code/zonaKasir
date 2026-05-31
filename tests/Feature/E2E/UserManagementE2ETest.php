@@ -44,12 +44,20 @@ describe('User Management E2E', function () {
     });
 
     it('validates unique email on user creation', function () {
-        $user = User::first();
+        $email = 'duplicate.member@example.com';
 
+        // Create first member to establish the email
+        $this->withToken($this->token)
+            ->postJson('/api/master/member', [
+                'name' => 'First Member',
+                'email' => $email,
+            ]);
+
+        // Attempt duplicate — should fail uniqueness validation
         $response = $this->withToken($this->token)
             ->postJson('/api/master/member', [
                 'name' => 'Duplicate',
-                'email' => $user->email,
+                'email' => $email,
                 'password' => 'Password123!',
             ]);
 

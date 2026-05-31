@@ -3,6 +3,7 @@
 namespace App\Models\Tenants;
 
 use Filament\Models\Contracts\FilamentUser;
+use App\Models\Tenants\UploadedFile;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
@@ -86,17 +87,17 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
 
     public function getFilamentName(): string
     {
-        return $this->name ?? '';
+        return $this->name ?? $this->email ?? '';
     }
 
     public function getFullNameAttribute()
     {
-        return $this->name ?? '';
+        return $this->name ?? $this->email ?? '';
     }
 
     public function getFilamentAvatarUrl(): ?string
     {
-        return $this->profile?->photo ? Storage::disk(config('filesystems.default'))->url($this->profile->photo) : null;
+        return $this->profile?->photo ? UploadedFile::urlFromPath($this->profile->photo, config('filesystems.upload_disk')) : null;
     }
 
     public function cashierName(): Attribute

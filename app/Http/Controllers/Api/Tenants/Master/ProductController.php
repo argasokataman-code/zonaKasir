@@ -54,6 +54,7 @@ class ProductController extends Controller
 
             return $this->buildResponse()
                 ->setData(new ProductCollection($product))
+                ->setCode(201)
                 ->setMessage('Product created successfully')
                 ->present();
         } catch (Exception $e) {

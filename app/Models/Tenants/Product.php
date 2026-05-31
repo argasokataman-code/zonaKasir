@@ -14,6 +14,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Number;
 use Illuminate\Support\Str;
+use App\Models\Tenants\UploadedFile;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
@@ -152,7 +153,7 @@ class Product extends Model
                     if (Str::startsWith($path, ['http://', 'https://'])) {
                         return $path;
                     }
-                    return Storage::disk($uploadDisk)->url($path);
+                    return UploadedFile::urlFromPath($path, $uploadDisk);
                 });
             }
         );
@@ -223,7 +224,7 @@ class Product extends Model
                         return $path;
                     }
                     $uploadDisk = config('filesystems.upload_disk');
-                    return Storage::disk($uploadDisk)->url($path);
+                    return UploadedFile::urlFromPath($path, $uploadDisk);
                 }
                 return 'https://cdn4.iconfinder.com/data/icons/picture-sharing-sites/32/No_Image-1024.png';
             }

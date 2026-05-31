@@ -42,6 +42,10 @@ class Handler extends ExceptionHandler
             return true;
         }
 
+        if ($request->is('api/*')) {
+            return true;
+        }
+
         $contentType = $request->header('Content-Type', '');
 
         return str_contains($contentType, 'application/json');
