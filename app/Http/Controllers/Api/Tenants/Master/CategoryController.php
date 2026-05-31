@@ -28,20 +28,21 @@ class CategoryController extends Controller
     public function store(Request $request): JsonResponse
     {
         $this->validate($request, [
-            'name' => 'required|unique:categories,name,NULL,id,tenant_id,'.tenant('id'),
+            'name' => 'required|unique:categories,name',
         ]);
         
         try {
             DB::beginTransaction();
             
             $category = new Category();
-            $category->fill($request->all());
+            $category->fill($request->only('name'));
             $category->save();
             
             DB::commit();
             
             return $this->buildResponse()
                 ->setData(new CategoryCollection($category))
+                ->setCode(201)
                 ->setMessage('Category created successfully')
                 ->present();
         } catch (Exception $e) {
@@ -63,13 +64,13 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category): JsonResponse
     {
         $this->validate($request, [
-            'name' => "required|unique:categories,name,{$category->id},id,tenant_id,".tenant('id'),
+            'name' => "required|unique:categories,name,{$category->id}",
         ]);
         
         try {
             DB::beginTransaction();
             
-            $category->fill($request->all());
+            $category->fill($request->only('name'));
             $category->save();
             
             DB::commit();

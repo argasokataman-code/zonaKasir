@@ -18,9 +18,9 @@ class MemberFactory extends Factory
     {
         return [
             'name' => $this->faker->name,
-            'code' => "CUS0001",
+            'code' => $this->faker->unique()->numerify('CUS####'),
             'address' => $this->faker->streetAddress,
-            'email' => $this->faker->email
+            'email' => $this->faker->unique()->safeEmail()
         ];
     }
 }

@@ -32,7 +32,7 @@ test('cashier can create the selling transaction', function () {
         ],
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
@@ -55,7 +55,7 @@ test('cashier can create the selling transaction with member_id null', function 
         ],
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
@@ -80,7 +80,7 @@ test('cashier can create the selling transaction with customer number', function
         ],
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
@@ -106,7 +106,7 @@ test('cashier can create the selling with tax price', function () {
         ],
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
@@ -154,7 +154,7 @@ test('cashier can create the selling transaction if the cash drawer enabled and 
         ],
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
@@ -177,7 +177,7 @@ test('cashier can create the sellings transaction with normal selling method wit
         ],
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
@@ -206,7 +206,7 @@ test('cashier can create the sellings transaction with normal selling method wit
         ],
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
@@ -235,7 +235,7 @@ test('cashier can create the sellings transaction with normal selling method wit
         ],
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
@@ -299,7 +299,7 @@ test('cashier can create the seling with manual discount', function () {
         'discount_price' => 1000,
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
@@ -326,7 +326,7 @@ test('cashier can create the seling with manual discount using payed money less 
         'discount_price' => 1000,
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
@@ -354,7 +354,7 @@ test('cashier can create the selling with discount per item', function () {
         ],
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
@@ -390,7 +390,7 @@ test('cashier can create the selling with discount per item using payed money le
         ],
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
@@ -427,7 +427,7 @@ test('cashier can create the selling with voucher flat type', function () {
         ],
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
@@ -458,7 +458,7 @@ test('cashier can create the selling with voucher percentage type', function () 
         ],
     ]);
 
-    $response->assertOk()
+    $response->assertStatus(201)
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [

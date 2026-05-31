@@ -174,8 +174,8 @@ class DashboardController extends Controller
                 $endDate = now()->endOfDay();
                 break;
         }
-        $startDate = Carbon::parse($startDate)->setTimezone($timezone)->startOfDay()->setTimezone('UTC');
-        $endDate = Carbon::parse($endDate)->setTimezone($timezone)->endOfDay()->setTimezone('UTC');
+        $startDate = Carbon::parse($startDate)->setTimezone($timezone ?? 'UTC')->startOfDay()->setTimezone('UTC');
+        $endDate = Carbon::parse($endDate)->setTimezone($timezone ?? 'UTC')->endOfDay()->setTimezone('UTC');
 
         return [
             'startDate' => $startDate,

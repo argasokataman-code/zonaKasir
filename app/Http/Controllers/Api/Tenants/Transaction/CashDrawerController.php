@@ -14,36 +14,37 @@ class CashDrawerController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'cash' => [
+            'opening_balance' => [
                 'required',
                 'numeric',
-                'min:0'
-            ]
+                'min:0',
+            ],
         ]);
-        
+
         try {
             DB::beginTransaction();
-            
+
             $lastOpenedCashDrawer = CashDrawer::lastOpened()->first();
             if ($lastOpenedCashDrawer) {
                 $lastOpenedCashDrawer->update([
-                    'cash' => $request->cash
+                    'cash' => $request->opening_balance,
                 ]);
             } else {
                 $lastOpenedCashDrawer = CashDrawer::create([
-                    'cash' => $request->cash,
-                    'opened_by' => auth()->id()
+                    'cash' => $request->opening_balance,
+                    'opened_by' => auth()->id(),
                 ]);
             }
-            
+
             DB::commit();
-            
+
             return $this->buildResponse()
                 ->setData($lastOpenedCashDrawer)
                 ->setMessage('Cash drawer opened successfully')
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
+
             return $this->buildResponse()
                 ->setCode(500)
                 ->setMessage('Failed to store cash drawer: ' . $e->getMessage())
@@ -87,12 +88,6 @@ class CashDrawerController extends Controller
     public function show(): JsonResponse
     {
         $lastOpenedCashDrawer = CashDrawer::lastOpened()->first();
-        if (!$lastOpenedCashDrawer) {
-            return $this->buildResponse()
-                ->setMessage('cash drawer already closed or not opened yet')
-                ->setCode(404)
-                ->present();
-        }
 
         return $this->buildResponse()
             ->setData($lastOpenedCashDrawer)

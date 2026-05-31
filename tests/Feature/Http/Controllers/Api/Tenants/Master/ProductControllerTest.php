@@ -26,8 +26,8 @@ test('can control pagination size with per_page query', function () {
     actingAs($user, 'sanctum')
         ->getJson('/api/master/product?per_page=5')
         ->assertOk()
-        ->assertJsonPath('data.meta.per_page', 5)
-        ->assertJsonCount(5, 'data.data');
+        ->assertJsonPath('pagination.per_page', 5)
+        ->assertJsonCount(5, 'data');
 });
 
 test('can fall back to default pagination when per_page is invalid', function () {
@@ -40,8 +40,8 @@ test('can fall back to default pagination when per_page is invalid', function ()
     actingAs($user, 'sanctum')
         ->getJson('/api/master/product?per_page=invalid')
         ->assertOk()
-        ->assertJsonPath('data.meta.per_page', Product::query()->getModel()->getPerPage())
-        ->assertJsonCount(Product::query()->getModel()->getPerPage(), 'data.data');
+        ->assertJsonPath('pagination.per_page', Product::query()->getModel()->getPerPage())
+        ->assertJsonCount(Product::query()->getModel()->getPerPage(), 'data');
 });
 
 test('can clamp per_page to maximum of 100', function () {
@@ -54,8 +54,8 @@ test('can clamp per_page to maximum of 100', function () {
     actingAs($user, 'sanctum')
         ->getJson('/api/master/product?per_page=999')
         ->assertOk()
-        ->assertJsonPath('data.meta.per_page', 100)
-        ->assertJsonCount(20, 'data.data');
+        ->assertJsonPath('pagination.per_page', 100)
+        ->assertJsonCount(20, 'data');
 });
 
 test('store persists barcode to barcode relation', function () {
@@ -75,7 +75,7 @@ test('store persists barcode to barcode relation', function () {
             'is_non_stock' => false,
             'expired' => now()->addDay()->toDateString(),
         ])
-        ->assertOk();
+        ->assertStatus(201);
 
     $product = Product::query()->where('name', 'Barcode API Product')->firstOrFail();
     expect($product->barcodes()->primary()->active()->value('code'))->toBe('API-BAR-001');
@@ -121,8 +121,8 @@ test('can filter products globally by barcode code', function () {
     actingAs($user, 'sanctum')
         ->getJson('/api/master/product?filter[global]=FILTER-BARCODE-001')
         ->assertOk()
-        ->assertJsonCount(1, 'data.data')
-        ->assertJsonPath('data.data.0.id', $productWithBarcode->id);
+        ->assertJsonCount(1, 'data')
+        ->assertJsonPath('data.0.id', $productWithBarcode->id);
 });
 
 test('can show product by numeric id', function () {

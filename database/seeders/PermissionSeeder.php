@@ -322,7 +322,7 @@ class PermissionSeeder extends Seeder
     private function getPermissions(): Collection
     {
         return collect(array_merge($this->normalizeCrudPermission(), [
-
+            ['role' => [Role::admin], 'action' => 'manage settings', 'guard' => ['web', 'sanctum']],
         ]));
     }
 

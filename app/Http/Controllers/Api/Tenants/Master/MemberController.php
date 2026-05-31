@@ -40,6 +40,7 @@ class MemberController extends Controller
             
             return $this->buildResponse()
                 ->setData($member)
+                ->setCode(201)
                 ->setMessage('Member created successfully')
                 ->present();
         } catch (Exception $e) {
@@ -87,7 +88,7 @@ class MemberController extends Controller
     {
         try {
             DB::beginTransaction();
-            $member->delete();
+            $member->forceDelete();
             DB::commit();
             
             return $this->buildResponse()

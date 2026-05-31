@@ -23,6 +23,26 @@ class ProductRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $data = [];
+        if ($this->has('category_id') && !$this->has('category')) {
+            $data['category'] = $this->category_id;
+        }
+        if ($this->has('buying_price') && !$this->has('initial_price')) {
+            $data['initial_price'] = $this->buying_price;
+        }
+        if (!$this->has('type')) {
+            $data['type'] = 'product';
+        }
+        if (!$this->has('is_non_stock')) {
+            $data['is_non_stock'] = false;
+        }
+        if (!empty($data)) {
+            $this->merge($data);
+        }
+    }
+
     public function rules(): array
     {
         if ($this->method() == 'DELETE') {

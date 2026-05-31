@@ -3,10 +3,10 @@
 namespace App\Http\Resources;
 
 use App\Models\Tenants\Setting;
+use App\Models\Tenants\UploadedFile;
 use App\Models\Tenants\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 /**
@@ -27,7 +27,7 @@ class AboutResource extends JsonResource
         if ($photo && Str::startsWith($photo, ['http://', 'https://'])) {
             $photoUrl = $photo;
         } else {
-            $photoUrl = $photo ? Storage::disk($uploadDisk)->url($photo) : '';
+            $photoUrl = $photo ? UploadedFile::urlFromPath($photo, $uploadDisk) : '';
         }
 
         return [

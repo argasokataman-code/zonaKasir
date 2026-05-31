@@ -51,6 +51,7 @@ class About extends Model
                 ->translateLabel(),
             FileUpload::make('photo')
                 ->disk(config('filesystems.upload_disk'))
+                ->placeholder(__('Tarik dan lepas file di sini atau klik untuk mencari file'))
                 ->directory('profile')
                 ->imageResizeMode('cover')
                 ->imageCropAspectRatio('1:1')

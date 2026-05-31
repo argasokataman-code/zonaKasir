@@ -41,8 +41,8 @@ describe('StockController index pagination', function () {
         $this->actingAs($user, 'sanctum')
             ->getJson("/api/master/product/{$this->product->id}/stock?per_page=5")
             ->assertOk()
-            ->assertJsonPath('data.meta.per_page', 5)
-            ->assertJsonCount(5, 'data.data');
+            ->assertJsonPath('pagination.per_page', 5)
+            ->assertJsonCount(5, 'data');
     });
 
     test('can fall back to default pagination when per_page is invalid', function () {
@@ -57,8 +57,8 @@ describe('StockController index pagination', function () {
         $this->actingAs($user, 'sanctum')
             ->getJson("/api/master/product/{$this->product->id}/stock?per_page=invalid")
             ->assertOk()
-            ->assertJsonPath('data.meta.per_page', Stock::query()->getModel()->getPerPage())
-            ->assertJsonCount(Stock::query()->getModel()->getPerPage(), 'data.data');
+            ->assertJsonPath('pagination.per_page', Stock::query()->getModel()->getPerPage())
+            ->assertJsonCount(Stock::query()->getModel()->getPerPage(), 'data');
     });
 });
 

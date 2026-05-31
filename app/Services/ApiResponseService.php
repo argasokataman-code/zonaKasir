@@ -14,6 +14,8 @@ class ApiResponseService
 
     private $code = 200;
 
+    private $pagination = null;
+
     public function setData($data): self
     {
         $this->data = $data;
@@ -46,6 +48,10 @@ class ApiResponseService
             'message' => $this->message
         ];
 
+        if ($this->pagination !== null) {
+            $response['pagination'] = $this->pagination;
+        }
+
         if ($this->code != 200) {
             $response['success'] = false;
         }
@@ -54,7 +60,7 @@ class ApiResponseService
             unset($response['message']);
         }
 
-        if (!$this->data) {
+        if (is_null($this->data)) {
             unset($response['data']);
         }
 
@@ -65,22 +71,16 @@ class ApiResponseService
     {
         $resource = isset($this->data->resource) ? $this->data->resource : $this->data;
 
-        $data = [
-            'data' => $resource->items(),
-            'links' => [
-                'first' => $resource->url(1),
-                'prev' => $resource->previousPageUrl(),
-                'next' => $resource->nextPageUrl(),
-            ],
-            'meta' => [
-                'current_page' => $resource->currentPage(),
-                'from' => $resource->firstItem(),
-                'path' => $resource->resolveCurrentPath(),
-                'per_page' => $resource->perPage(),
-                'to' => $resource->lastItem(),
-            ],
+        $this->pagination = [
+            'current_page' => $resource->currentPage(),
+            'per_page' => $resource->perPage(),
+            'prev_page_url' => $resource->previousPageUrl(),
+            'next_page_url' => $resource->nextPageUrl(),
+            'from' => $resource->firstItem(),
+            'to' => $resource->lastItem(),
+            'path' => $resource->resolveCurrentPath(),
         ];
-        $this->data = $data;
+        $this->data = $resource->items();
 
         return $this;
     }
@@ -89,25 +89,18 @@ class ApiResponseService
     {
         $resource = isset($this->data->resource) ? $this->data->resource : $this->data;
 
-        $data = [
-            'data' => $resource->items(),
-            'links' => [
-                'first' => $resource->url(1),
-                'last' => $resource->url($resource->lastPage()),
-                'prev' => $resource->previousPageUrl(),
-                'next' => $resource->nextPageUrl(),
-            ],
-            'meta' => [
-                'current_page' => $resource->currentPage(),
-                'from' => $resource->firstItem(),
-                'last_page' => $resource->lastPage(),
-                'path' => $resource->resolveCurrentPath(),
-                'per_page' => $resource->perPage(),
-                'to' => $resource->lastItem(),
-                'total' => $resource->total(),
-            ],
+        $this->pagination = [
+            'current_page' => $resource->currentPage(),
+            'per_page' => $resource->perPage(),
+            'last_page' => $resource->lastPage(),
+            'total' => $resource->total(),
+            'prev_page_url' => $resource->previousPageUrl(),
+            'next_page_url' => $resource->nextPageUrl(),
+            'from' => $resource->firstItem(),
+            'to' => $resource->lastItem(),
+            'path' => $resource->resolveCurrentPath(),
         ];
-        $this->data = $data;
+        $this->data = $resource->items();
 
         return $this;
     }

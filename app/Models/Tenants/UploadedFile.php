@@ -52,10 +52,30 @@ class UploadedFile extends Model
     public function getUrlAttribute(): string
     {
         if ($this->relative_path) {
-            return $this->resolveDisk()->url($this->relative_path);
+            return self::urlFromPath($this->relative_path, $this->disk ?: config('filesystems.upload_disk'));
+        }
+
+        if ($this->name && $this->disk) {
+            return self::urlFromPath($this->name, $this->disk);
         }
 
         return $this->attributes['url'] ?? '';
+    }
+
+    public static function urlFromPath(string $relativePath, ?string $disk = null): string
+    {
+        $diskName = $disk ?: config('filesystems.upload_disk');
+        $relativePath = ltrim($relativePath, '/');
+
+        $diskConfig = config('filesystems.disks.' . $diskName, []);
+        $driver = $diskConfig['driver'] ?? 'local';
+
+        if ($driver === 'local' && in_array($diskName, ['public', 'tmp'], true)) {
+            $prefix = $diskName === 'public' ? 'storage' : $diskName;
+            return url($prefix . '/' . $relativePath);
+        }
+
+        return Storage::disk($diskName)->url($relativePath);
     }
 
     /**
@@ -105,7 +125,7 @@ class UploadedFile extends Model
         Storage::disk($tmpDisk)->delete($this->name);
 
         $this->update([
-            'url' => Storage::disk($uploadDisk)->url($relativePath),
+            'url' => self::urlFromPath($relativePath, $uploadDisk),
             'relative_path' => $relativePath,
             'disk' => $uploadDisk,
         ]);
@@ -159,7 +179,7 @@ class UploadedFile extends Model
      */
     public function storageUrl(): string
     {
-        return $this->resolveDisk()->url($this->relative_path ?: $this->name);
+        return $this->url;
     }
 
     /**

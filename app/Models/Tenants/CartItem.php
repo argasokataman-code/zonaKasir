@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Tenants\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -73,7 +74,7 @@ class CartItem extends Model
                         return $path;
                     }
                     $uploadDisk = config('filesystems.upload_disk');
-                    return Storage::disk($uploadDisk)->url($path);
+                    return UploadedFile::urlFromPath($path, $uploadDisk);
                 }
                 return 'https://cdn4.iconfinder.com/data/icons/picture-sharing-sites/32/No_Image-1024.png';
             }

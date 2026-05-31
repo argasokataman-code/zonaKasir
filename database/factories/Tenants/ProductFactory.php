@@ -30,7 +30,7 @@ class ProductFactory extends Factory
         return [
             'category_id' => $category->id,
             'name' => $this->faker->company(),
-            'stock' => $this->faker->randomDigit(),
+            'stock' => $this->faker->numberBetween(10, 100),
             'initial_price' => rand(50000, 60000),
             'selling_price' => rand(60000, 70000),
             'unit' => 'PCS',

@@ -55,7 +55,7 @@ class ProductService
                 UploadedFile::create([
                     'name' => basename($relativePath),
                     'original_name' => $originalName,
-                    'url' => Storage::disk($uploadDisk)->url($relativePath),
+                    'url' => UploadedFile::urlFromPath($relativePath, $uploadDisk),
                     'mime_type' => Storage::disk($uploadDisk)->mimeType($relativePath),
                     'extension' => pathinfo($relativePath, PATHINFO_EXTENSION),
                     'size' => Storage::disk($uploadDisk)->size($relativePath),

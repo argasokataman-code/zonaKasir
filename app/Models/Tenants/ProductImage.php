@@ -4,6 +4,7 @@ namespace App\Models\Tenants;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Tenants\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -30,6 +31,6 @@ class ProductImage extends Model
             return Storage::disk($uploadDisk)->path($value);
         }
 
-        return Storage::disk($uploadDisk)->url($value);
+        return UploadedFile::urlFromPath($value, $uploadDisk);
     }
 }

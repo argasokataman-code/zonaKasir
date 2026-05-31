@@ -12,12 +12,12 @@ use Tests\RefreshDatabaseWithTenant;
 
 uses(RefreshDatabaseWithTenant::class);
 
-describe('Purchasing & Accounts E2E', function () {
-    beforeEach(function () {
-        $this->user = User::first();
-        $this->token = $this->user->createToken('test')->plainTextToken;
-    });
+beforeEach(function () {
+    $this->user = User::first();
+    $this->token = $this->user->createToken('test')->plainTextToken;
+});
 
+describe('Purchasing & Accounts E2E', function () {
     describe('Purchasing', function () {
         it('can list purchases', function () {
             Purchasing::factory(5)->create();

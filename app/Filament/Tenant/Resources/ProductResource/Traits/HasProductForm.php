@@ -29,6 +29,7 @@ trait HasProductForm
     {
         return FileUpload::make('hero_images')
             ->disk(config('filesystems.upload_disk'))
+            ->placeholder(__('Tarik dan lepas file di sini atau klik untuk mencari file'))
             ->image()
             ->translateLabel()
             ->imageResizeMode('cover')

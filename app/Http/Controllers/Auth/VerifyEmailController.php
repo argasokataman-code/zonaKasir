@@ -5,29 +5,33 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Tenants\User;
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 class VerifyEmailController extends Controller
 {
     /**
      * Mark the authenticated user's email address as verified.
-     *
-     * @param  \Illuminate\Foundation\Auth\EmailVerificationRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function __invoke(EmailVerificationRequest $request)
+    public function __invoke(Request $request, $id, $hash)
     {
-        $user = User::find($request->route('id'));
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['message' => 'Not Found'], 404);
+        }
+
+        if (!hash_equals((string) sha1($user->getEmailForVerification()), (string) $hash)) {
+            abort(403);
+        }
+
         if ($user->hasVerifiedEmail()) {
-            return redirect()->intended(
-                config('app.frontend_url') . "/auth/login"
-            );
+            return redirect(config('app.frontend_url', config('app.url')) . '/auth/login');
         }
 
         if ($user->markEmailAsVerified()) {
-            event(new Verified($request->user()));
+            event(new Verified($user));
         }
 
-        return redirect()->intended(config('app.frontend_url') . "/auth/login");
+        return redirect(config('app.frontend_url', config('app.url')) . '/auth/login');
     }
 }
