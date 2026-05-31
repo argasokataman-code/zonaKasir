@@ -21,7 +21,10 @@ trait RefreshDatabaseWithTenant
         // Initialize tenant - this creates the database via RegisterTenant::create()
         $tenant = mockTenant();
         tenancy()->initialize($tenant);
-        URL::forceRootUrl("http://{$tenant->domains[0]->domain}");
+        // Ensure domain exists and access it safely
+        $domainModel = $tenant->domains()->first();
+        $domain = $domainModel ? $domainModel->domain : ($tenant->id . '.' . config('tenancy.central_domains')[0]);
+        URL::forceRootUrl("http://{$domain}");
 
         // Then start the database transaction
         $this->parentBeginDatabaseTransaction();

@@ -16,8 +16,14 @@ class DisableDebugbar
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->path() == 'offline') {
-            Debugbar::disable();
+        // Disable Debugbar globally when app debug is false or when explicitly disabled
+        try {
+            // Disable Debugbar in local environment or when app debug is false
+            if (app()->environment('local') || ! config('app.debug')) {
+                Debugbar::disable();
+            }
+        } catch (\Throwable $e) {
+            // ignore if Debugbar not available
         }
 
         return $next($request);

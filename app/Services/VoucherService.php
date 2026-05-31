@@ -14,7 +14,7 @@ class VoucherService
 
     public function applyable(string $code, float $price): ?VoucherService
     {
-        $today = today();
+        $now = now();
         /** @var Voucher $voucher */
         $voucher = Voucher::whereCode($code)
             ->first();
@@ -22,7 +22,7 @@ class VoucherService
             Log::warning("Voucher not found: {$code}");
             return null;
         }
-        if ($voucher?->minimal_buying <= $price && $today->gte($voucher->start_date) && $today->lte($voucher->expired) && $voucher->kuota > 0) {
+        if ($voucher?->minimal_buying <= $price && $now->gte($voucher->start_date) && $now->lte($voucher->expired) && $voucher->kuota > 0) {
             $this->price = $price;
             $this->voucher = $voucher;
             Log::info("Voucher applied: {$code} for price {$price}");
