@@ -150,11 +150,13 @@ class TenancyServiceProvider extends ServiceProvider
     private function livewireBoot()
     {
         Livewire::setUpdateRoute(function ($handle) {
+            // Avoid initializing tenancy inside the Livewire update route to prevent
+            // request aborts originating from the tenancy resolver during AJAX calls.
+            // Keep 'web' and 'universal' middleware so session and localization still apply.
             return Route::post('/livewire/update', $handle)
                 ->middleware(
                     'web',
-                    'universal',
-                    InitializeTenancyByDomain::class, // or whatever tenancy middleware you use
+                    'universal'
                 );
         });
     }
