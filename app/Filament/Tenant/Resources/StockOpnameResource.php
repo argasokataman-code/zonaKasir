@@ -36,14 +36,14 @@ class StockOpnameResource extends Resource
     {
         return $form
             ->schema([
-                Placeholder::make('pic_display')
+                TextInput::make('pic_display')
                     ->label(__('PIC'))
-                    ->content(fn () => e(auth()->user()?->name ?? auth()->user()?->username ?? auth()->user()?->email ?? '')),
-                Hidden::make('pic')
+                    ->disabled()
                     ->default(fn () => auth()->user()?->name ?? auth()->user()?->username ?? auth()->user()?->email ?? '')
-                    ->afterStateHydrated(function (\Filament\Forms\Components\Hidden $component, $state): void {
-                        $component->state(auth()->user()?->name ?? auth()->user()?->username ?? auth()->user()?->email ?? '');
-                    }),
+                    ->dehydrated(false),
+                TextInput::make('pic')
+                    ->default(fn () => auth()->user()?->name ?? auth()->user()?->username ?? auth()->user()?->email ?? '')
+                    ->hidden(),
                 DatePicker::make('date')
                     ->required()
                     ->default(now())

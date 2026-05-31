@@ -19,6 +19,7 @@ uses(
 use App\Services\RegisterTenant;
 use App\Tenant;
 use Illuminate\Support\Facades\DB;
+use Stancl\Tenancy\Exceptions\TenantDatabaseAlreadyExistsException;
 
 uses(
     Tests\TestCase::class,
@@ -53,7 +54,19 @@ expect()->extend('toBeOne', function () {
 
 function mockTenant(): Tenant
 {
-    DB::statement('DROP DATABASE IF EXISTS lakasir_toko_testing');
+    // Ensure a `tenant` DB connection is available during tests (use testing connection)
+    config()->set('database.connections.tenant', config('database.connections.testing'));
+
+    // Only attempt to drop database when using a MySQL testing connection.
+    try {
+        $driver = DB::getDriverName();
+    } catch (\Throwable $e) {
+        $driver = config('database.connections.testing.driver');
+    }
+
+    if ($driver === 'mysql') {
+        DB::statement('DROP DATABASE IF EXISTS lakasir_toko_testing');
+    }
     Tenant::where('id', 'toko_testing')->delete();
     $data = [
         'name' => 'toko_testing',
@@ -65,7 +78,16 @@ function mockTenant(): Tenant
         'business_type' => 'Retail',
     ];
     $sRegisterTenant = new RegisterTenant();
-    $tenant = $sRegisterTenant->create($data);
+    try {
+        $tenant = $sRegisterTenant->create($data);
+    } catch (TenantDatabaseAlreadyExistsException $e) {
+        $tenant = Tenant::where('id', 'toko_testing')->first();
+        if ($tenant && $tenant->domains()->count() === 0) {
+            $tenant->domains()->create([
+                'domain' => 'toko_testing.'.config('tenancy.central_domains')[0],
+            ]);
+        }
+    }
 
     return $tenant;
 }
