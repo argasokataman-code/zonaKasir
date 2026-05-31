@@ -19,6 +19,10 @@ class CreateStockOpname extends CreateRecord
 
     private string $prefix;
 
+    // expose form state so Livewire updates to `data` and `date` succeed
+    public ?array $data = null;
+    public ?string $date = null;
+
     public function __construct()
     {
         $this->stockOpnameService = new StockOpnameService();
@@ -35,5 +39,16 @@ class CreateStockOpname extends CreateRecord
     public function getTitle(): string|Htmlable
     {
         return '#'.$this->stockOpnameService->generateNumber($this->prefix);
+    }
+
+    public function mount(): void
+    {
+        parent::mount();
+
+        $this->form->fill([
+            'data' => [
+                'pic' => auth()->user()?->name ?? auth()->user()?->username ?? '',
+            ],
+        ]);
     }
 }

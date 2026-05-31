@@ -15,8 +15,9 @@ class ShouldSameWithSellingDetail implements ValidationRule
      *
      * @return void
      */
-    public function __construct(private $equals, private array $products)
+    public function __construct(private $equals, private ?array $products = null)
     {
+        $this->products = $this->products ?? [];
     }
 
     public function validate(string $attribute, mixed $value, Closure $fail): void

@@ -85,6 +85,39 @@ class GeneralSetting extends Page implements HasActions, HasForms
         $user = auth()->user();
         $profile = $user->profile ?? $user->profile()->create();
 
+        // Prepare profile data and normalize photo to the FileUpload expected structure
+        $photoState = null;
+        if ($profile?->photo) {
+            // Prefer UploadedFile record when available (contains metadata)
+            $uploaded = UploadedFile::where('relative_path', $profile->photo)
+                ->orWhere('url', $profile->photo)
+                ->first();
+
+            if ($uploaded) {
+                $photoState = [[
+                    'name' => $uploaded->relative_path ?: $uploaded->name,
+                    'size' => $uploaded->size ?? 0,
+                    'type' => $uploaded->mime_type ?? null,
+                    'url' => $uploaded->url,
+                ]];
+            } else {
+                // Fallback to disk lookup for legacy relative-path-only values
+                $uploadDisk = config('filesystems.upload_disk');
+                try {
+                    if (Storage::disk($uploadDisk)->exists($profile->photo)) {
+                        $photoState = [[
+                            'name' => ltrim($profile->photo, '/'),
+                            'size' => Storage::disk($uploadDisk)->size($profile->photo),
+                            'type' => Storage::disk($uploadDisk)->mimeType($profile->photo),
+                            'url' => UploadedFile::urlFromPath($profile->photo, $uploadDisk),
+                        ]];
+                    }
+                } catch (\Exception $e) {
+                    $photoState = null;
+                }
+            }
+        }
+
         $this->profile = [
             'name' => $user->name,
             'email' => $user->email,
@@ -92,7 +125,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
             'address' => $profile?->address,
             'locale' => $profile?->locale,
             'timezone' => $profile?->timezone,
-            'photo' => $profile?->photo ? [$profile->photo] : null,
+            'photo' => $photoState,
         ];
     }
 
@@ -265,51 +298,54 @@ class GeneralSetting extends Page implements HasActions, HasForms
         $user = auth()->user();
         $profile = $user->profile;
 
-        // Always store temporary uploaded photo to tmp disk and create UploadedFile record.
-        if (isset($this->profile['photo']) && $this->profile['photo'] != null && array_values($this->profile['photo'])[0] instanceof TemporaryUploadedFile) {
-            /** @var TemporaryUploadedFile $image */
-            $image = array_values($this->profile['photo'])[0];
-            $this->profile['uploaded_file_id'] = $this->storeAsUploadedFile($image);
-            $this->profile['photo'] = null;
+        // Pisahkan data User dan Profile
+        $userData = [
+            'name' => $this->profile['name'] ?? $user->name,
+            'email' => $this->profile['email'] ?? $user->email,
+        ];
+        if (!empty($this->profile['password'])) {
+            $userData['password'] = bcrypt($this->profile['password']);
         }
 
-        if (isset($this->profile['password']) && $this->profile['password'] != '') {
-            $this->profile['password'] = bcrypt($this->profile['password']);
-        }
+        $profileData = [
+            'phone' => $this->profile['phone'] ?? $profile->phone,
+            'address' => $this->profile['address'] ?? $profile->address,
+            'locale' => $this->profile['locale'] ?? $profile->locale,
+            'timezone' => $this->profile['timezone'] ?? $profile->timezone,
+        ];
 
-        $user->update($this->profile);
-        $profile->update($this->profile);
-
-        // Move uploaded tmp file to public upload disk and handle deletion of previous photo.
-        $data = $this->profile;
-
-        if (isset($data['uploaded_file_id'])) {
-            $tmpFile = UploadedFile::find($data['uploaded_file_id']);
-
-            if ($tmpFile && $tmpFile->relative_path !== $profile->photo) {
-                $relativePath = $tmpFile->moveToPublic('profile', $profile->photo ?: null);
-                $profile->update([
-                    'photo' => $relativePath,
-                ]);
-            }
-        }
-
-        if (! isset($data['uploaded_file_id']) && ! isset($data['photo']) && $profile->photo) {
-            $tmpFile = UploadedFile::where('relative_path', $profile->photo)->first()
-                ?? UploadedFile::where('url', $profile->photo)->first();
-            if ($tmpFile) {
-                $tmpFile->deleteFromPublic('profile');
-            } else {
-                $uploadDisk = config('filesystems.upload_disk');
-                if (Storage::disk($uploadDisk)->exists($profile->photo)) {
-                    Storage::disk($uploadDisk)->delete($profile->photo);
+        // Handle upload photo baru
+        if (isset($this->profile['photo']) && is_array($this->profile['photo']) && count($this->profile['photo']) > 0) {
+            $photoVal = array_values($this->profile['photo'])[0];
+            if ($photoVal instanceof TemporaryUploadedFile) {
+                $uploadedId = $this->storeAsUploadedFile($photoVal);
+                $tmpFile = UploadedFile::find($uploadedId);
+                if ($tmpFile) {
+                    $relativePath = $tmpFile->moveToPublic('profile', $profile->photo ?: null);
+                    $profileData['photo'] = $relativePath;
                 }
+            } elseif (is_string($photoVal)) {
+                $profileData['photo'] = $photoVal;
             }
-
-            $profile->update([
-                'photo' => null,
-            ]);
+        } elseif (isset($this->profile['photo']) && (empty($this->profile['photo']) || $this->profile['photo'] === null)) {
+            // Hapus foto jika dihapus di UI
+            if ($profile->photo) {
+                $tmpFile = UploadedFile::where('relative_path', $profile->photo)->first()
+                    ?? UploadedFile::where('url', $profile->photo)->first();
+                if ($tmpFile) {
+                    $tmpFile->deleteFromPublic('profile');
+                } else {
+                    $uploadDisk = config('filesystems.upload_disk');
+                    if (Storage::disk($uploadDisk)->exists($profile->photo)) {
+                        Storage::disk($uploadDisk)->delete($profile->photo);
+                    }
+                }
+                $profileData['photo'] = null;
+            }
         }
+
+        $user->update($userData);
+        $profile->update($profileData);
 
         Notification::make()
             ->title(__('Success'))

@@ -176,3 +176,7 @@ Global helpers in `app/helpers.php`:
 3. Use `$guarded = ['id']` for new models
 4. Add proper type hints to all methods
 5. Follow 6-phase task framework (see .cursor/00-universal-agent-rules.mdc)
+
+Important rule for commit+build:
+
+- When instructed to `commit` and `build`, always stage and commit ALL workspace changes (use `git add -A`), do not create partial commits that leave unrelated modified files unstaged. If there are unrelated or risky changes in the working tree, pause and ask the user for confirmation before committing. After staging, verify with `git status --porcelain` that there are no uncommitted changes before proceeding to build.
