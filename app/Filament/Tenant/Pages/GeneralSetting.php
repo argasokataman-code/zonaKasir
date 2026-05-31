@@ -83,16 +83,16 @@ class GeneralSetting extends Page implements HasActions, HasForms
         ];
 
         $user = auth()->user();
-        $profile = $user->profile;
+        $profile = $user->profile ?? $user->profile()->create();
 
         $this->profile = [
             'name' => $user->name,
             'email' => $user->email,
-            'phone' => $profile->phone,
-            'address' => $profile->address,
-            'locale' => $profile->locale,
-            'timezone' => $profile->timezone,
-            'photo' => $profile->photo ? [$profile->photo] : null,
+            'phone' => $profile?->phone,
+            'address' => $profile?->address,
+            'locale' => $profile?->locale,
+            'timezone' => $profile?->timezone,
+            'photo' => $profile?->photo ? [$profile->photo] : null,
         ];
     }
 
@@ -190,7 +190,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
 
         $image->storePubliclyAs('', $filename, $tmpDisk);
 
-        $fullUrl = Storage::disk($tmpDisk)->url($filename);
+        $fullUrl = UploadedFile::urlFromPath($filename, $tmpDisk);
 
         $uploadedFile = UploadedFile::create([
             'name' => $filename,
@@ -265,13 +265,12 @@ class GeneralSetting extends Page implements HasActions, HasForms
         $user = auth()->user();
         $profile = $user->profile;
 
-        if (hasFeatureAndPermission('edit-profile', 'edit profile')) {
-            if (isset($this->profile['photo']) && $this->profile['photo'] != null && array_values($this->profile['photo'])[0] instanceof TemporaryUploadedFile) {
-                /** @var TemporaryUploadedFile $image */
-                $image = array_values($this->profile['photo'])[0];
-                $this->profile['uploaded_file_id'] = $this->storeAsUploadedFile($image);
-                $this->profile['photo'] = null;
-            }
+        // Always store temporary uploaded photo to tmp disk and create UploadedFile record.
+        if (isset($this->profile['photo']) && $this->profile['photo'] != null && array_values($this->profile['photo'])[0] instanceof TemporaryUploadedFile) {
+            /** @var TemporaryUploadedFile $image */
+            $image = array_values($this->profile['photo'])[0];
+            $this->profile['uploaded_file_id'] = $this->storeAsUploadedFile($image);
+            $this->profile['photo'] = null;
         }
 
         if (isset($this->profile['password']) && $this->profile['password'] != '') {
@@ -281,36 +280,35 @@ class GeneralSetting extends Page implements HasActions, HasForms
         $user->update($this->profile);
         $profile->update($this->profile);
 
-        if (hasFeatureAndPermission('edit-profile', 'edit profile')) {
-            $data = $this->profile;
+        // Move uploaded tmp file to public upload disk and handle deletion of previous photo.
+        $data = $this->profile;
 
-            if (isset($data['uploaded_file_id'])) {
-                $tmpFile = UploadedFile::find($data['uploaded_file_id']);
+        if (isset($data['uploaded_file_id'])) {
+            $tmpFile = UploadedFile::find($data['uploaded_file_id']);
 
-                if ($tmpFile && $tmpFile->relative_path !== $profile->photo) {
-                    $relativePath = $tmpFile->moveToPublic('profile', $profile->photo ?: null);
-                    $profile->update([
-                        'photo' => $relativePath,
-                    ]);
-                }
-            }
-
-            if (! isset($data['uploaded_file_id']) && ! isset($data['photo']) && $profile->photo) {
-                $tmpFile = UploadedFile::where('relative_path', $profile->photo)->first()
-                    ?? UploadedFile::where('url', $profile->photo)->first();
-                if ($tmpFile) {
-                    $tmpFile->deleteFromPublic('profile');
-                } else {
-                    $uploadDisk = config('filesystems.upload_disk');
-                    if (Storage::disk($uploadDisk)->exists($profile->photo)) {
-                        Storage::disk($uploadDisk)->delete($profile->photo);
-                    }
-                }
-
+            if ($tmpFile && $tmpFile->relative_path !== $profile->photo) {
+                $relativePath = $tmpFile->moveToPublic('profile', $profile->photo ?: null);
                 $profile->update([
-                    'photo' => null,
+                    'photo' => $relativePath,
                 ]);
             }
+        }
+
+        if (! isset($data['uploaded_file_id']) && ! isset($data['photo']) && $profile->photo) {
+            $tmpFile = UploadedFile::where('relative_path', $profile->photo)->first()
+                ?? UploadedFile::where('url', $profile->photo)->first();
+            if ($tmpFile) {
+                $tmpFile->deleteFromPublic('profile');
+            } else {
+                $uploadDisk = config('filesystems.upload_disk');
+                if (Storage::disk($uploadDisk)->exists($profile->photo)) {
+                    Storage::disk($uploadDisk)->delete($profile->photo);
+                }
+            }
+
+            $profile->update([
+                'photo' => null,
+            ]);
         }
 
         Notification::make()
