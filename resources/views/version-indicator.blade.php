@@ -1,7 +1,12 @@
 @php
-  $updateChecker = app(\App\Services\UpdateChecker::class);
-  $currentVersion = $updateChecker->getCurrentVersion();
-  $isUpdateAvailable = $updateChecker->isUpdateAvailable();
+  try {
+    $updateChecker = app(\App\Services\UpdateChecker::class);
+    $currentVersion = $updateChecker->getCurrentVersion();
+    $isUpdateAvailable = $updateChecker->isUpdateAvailable();
+  } catch (\Throwable) {
+    $currentVersion = 'Development';
+    $isUpdateAvailable = false;
+  }
 @endphp
 
 <a href="{{ route('filament.tenant.pages.update') }}"

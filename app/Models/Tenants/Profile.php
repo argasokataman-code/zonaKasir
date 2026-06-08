@@ -78,6 +78,7 @@ class Profile extends Model
                 ->imageResizeUpscale(true)
                 ->imageEditor()
                 ->image()
+                ->maxSize(config('upload.livewire_max_size'))
                 ->getUploadedFileUsing(function ($file, string|array|null $storedFileNames, $component) {
                     $static = new static;
 

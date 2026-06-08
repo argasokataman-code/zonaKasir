@@ -15,12 +15,12 @@ class UploadController extends Controller
     public function __invoke(Request $request): JsonResponse
     {
         $request->validate([
-            'file' => 'required|file|mimes:jpeg,png,jpg,gif,pdf,doc,docx,xls,xlsx|max:5120',
+            'file' => config('upload.rules', ['required', 'file', 'mimes:jpeg,png,jpg,gif,pdf,doc,docx,xls,xlsx', 'max:5120']),
         ]);
 
         if ($request->file('file')->isValid()) {
             $name = Str::random(40) . '.' . $request->file('file')->extension();
-            $tmpDisk = config('filesystems.tmp_disk');
+            $tmpDisk = config('upload.tmp_disk', config('filesystems.tmp_disk'));
 
             Storage::disk($tmpDisk)->put($name, file_get_contents($request->file('file')->getRealPath()));
 

@@ -76,7 +76,8 @@ class PurchasingResource extends Resource
                     ->disk(config('filesystems.upload_disk'))
                     ->placeholder(__('Tarik dan lepas file di sini atau klik untuk mencari file'))
                     ->translateLabel()
-                    ->image(),
+                    ->image()
+                    ->maxSize(config('upload.livewire_max_size')),
             ]);
     }
 

@@ -29,6 +29,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Upload Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Disk settings remain here for compatibility, while validation rules and
+    | Livewire upload behavior are centralized in config/upload.php.
+    |
+    */
+
+    /*
+    |--------------------------------------------------------------------------
     | Temporary Disk
     |--------------------------------------------------------------------------
     |

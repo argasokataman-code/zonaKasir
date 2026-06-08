@@ -56,8 +56,7 @@ class About extends Model
                 ->imageResizeMode('cover')
                 ->imageCropAspectRatio('1:1')
                 ->imageEditor()
-                ->image()
-                ->getUploadedFileUsing(function ($file, string|array|null $storedFileNames, $component) {
+                ->image()                ->maxSize(config('upload.livewire_max_size'))                ->getUploadedFileUsing(function ($file, string|array|null $storedFileNames, $component) {
                     $static = new static;
 
                     return $static->getUploadedFileUsing($component, $file, $storedFileNames);
