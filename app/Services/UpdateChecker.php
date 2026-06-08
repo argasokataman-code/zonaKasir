@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 
@@ -29,15 +30,17 @@ class UpdateChecker
 
     private function fetchAndCacheApiResponse(): ?array
     {
-        return cache()->remember('api_response', now()->addMinutes(60 * 8), function () {
-            $response = Http::get($this->url);
+        try {
+            $response = Http::timeout(5)->get($this->url);
 
             if (! $response->ok()) {
                 return null;
             }
 
-            return $response->json();
-        });
+            return cache()->remember('api_response', now()->addMinutes(60 * 8), fn () => $response->json());
+        } catch (ConnectionException) {
+            return null;
+        }
     }
 
     public function getLatestVersion(): ?string

@@ -8,6 +8,7 @@ use App\Http\Middleware\InitializeTenancyByDomain;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Features\SupportFileUploads\FileUploadController;
 use Livewire\Livewire;
 use Stancl\JobPipeline\JobPipeline;
 use Stancl\Tenancy\Events;
@@ -159,5 +160,13 @@ class TenancyServiceProvider extends ServiceProvider
                     'universal'
                 );
         });
+
+        Route::post('/livewire/upload-file', [FileUploadController::class, 'handle'])
+            ->middleware(
+                'web',
+                'universal',
+                InitializeTenancyByDomain::class,
+            )
+            ->name('livewire.upload-file');
     }
 }

@@ -99,6 +99,9 @@ return [
     | are directed to a global endpoint for temporary storage. The config
     | items below are used for customizing the way the endpoint works.
     |
+    | Note: disk/rules values are overridden from config/upload.php in
+    | App\Providers\AppServiceProvider to keep upload spec centralized.
+    |
     */
 
     'temporary_file_upload' => [

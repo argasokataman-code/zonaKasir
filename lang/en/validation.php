@@ -123,7 +123,7 @@ return [
     'string' => 'The :attribute must be a string.',
     'timezone' => 'The :attribute must be a valid timezone.',
     'unique' => 'The :attribute has already been taken.',
-    'uploaded' => 'The :attribute failed to upload.',
+    'uploaded' => 'The :attribute failed to upload. Please make sure the file is valid and within the allowed size limit.',
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
     'attributes' => [
@@ -146,6 +146,7 @@ return [
         'cover' => 'cover',
         'created_at' => 'created at',
         'creator' => 'creator',
+        'attachment' => 'attachment',
         'currency' => 'currency',
         'current_password' => 'current password',
         'customer' => 'customer',

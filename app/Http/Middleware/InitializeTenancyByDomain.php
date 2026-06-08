@@ -43,13 +43,15 @@ class InitializeTenancyByDomain extends IdentificationMiddleware
     public function initializeTenancy($request, $next, ...$resolverArguments)
     {
         try {
-            if (! in_array($request->getHost(), config('tenancy.admin_domains'))) {
-                if (config('tenancy.central_domains')[0]) {
-                    if (! in_array($request->getHost(), config('tenancy.central_domains'))) {
-                        $this->tenancy->initialize(
-                            $this->resolver->resolve(...$resolverArguments)
-                        );
-                    }
+            $host = $request->getHost();
+            $adminDomains = array_filter((array) config('tenancy.admin_domains'));
+            $centralDomains = array_filter((array) config('tenancy.central_domains'));
+
+            if (! in_array($host, $adminDomains, true)) {
+                if (empty($centralDomains) || ! in_array($host, $centralDomains, true)) {
+                    $this->tenancy->initialize(
+                        $this->resolver->resolve(...$resolverArguments)
+                    );
                 }
             }
         } catch (TenantCouldNotBeIdentifiedException $e) {

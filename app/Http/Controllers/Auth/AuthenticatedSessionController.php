@@ -22,12 +22,18 @@ class AuthenticatedSessionController extends Controller
         if ($request->wantsJson()) {
             $token = $user->createToken($user->getRememberTokenName());
 
+            $role = $user->roles()->first();
+            $permissions = [];
+            if ($role) {
+                $permissions = $role->permissions()->where('guard_name', 'sanctum')->pluck('name')->toArray();
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Yay! success to login',
                 'token' => $token->plainTextToken,
                 'user' => array_merge($user->toArray(), [
-                    'permissions' => $user->roles()->first()->permissions()->where('guard_name', 'sanctum')->pluck('name')->toArray(),
+                    'permissions' => $permissions,
                     'features' => Feature::all(),
                 ]),
             ]);

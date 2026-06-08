@@ -91,7 +91,8 @@ trait HasStockOpnameItemForm
                 ->placeholder(__('Tarik dan lepas file di sini atau klik untuk mencari file'))
                 ->translateLabel()
                 ->maxWidth(10)
-                ->image(),
+                ->image()
+                ->maxSize(config('upload.livewire_max_size')),
         ];
     }
 }

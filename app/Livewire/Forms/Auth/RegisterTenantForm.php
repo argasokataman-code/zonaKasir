@@ -109,9 +109,12 @@ class RegisterTenantForm extends Component implements HasForms
         ]);
 
         $tenant = $registerTenant->create($data);
-        $securedDomain = 'https://'.$tenant->domains->first()->domain;
+        $domain = $tenant->domains->first()->domain;
+        $scheme = request()->getScheme();
+        $port = request()->getPort();
+        $port = in_array($port, [80, 443]) ? '' : ':'.$port;
 
-        redirect()->to($securedDomain, secure: true);
+        $this->redirect($scheme.'://'.$domain.$port);
     }
 
     public function render()

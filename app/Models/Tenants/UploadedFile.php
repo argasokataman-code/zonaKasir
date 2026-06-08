@@ -72,7 +72,7 @@ class UploadedFile extends Model
 
         if ($driver === 'local' && in_array($diskName, ['public', 'tmp'], true)) {
             $prefix = $diskName === 'public' ? 'storage' : $diskName;
-            return url($prefix . '/' . $relativePath);
+            return '/' . $prefix . '/' . $relativePath;
         }
 
         return Storage::disk($diskName)->url($relativePath);

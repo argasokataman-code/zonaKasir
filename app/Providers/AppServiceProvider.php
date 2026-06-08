@@ -32,6 +32,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Enforce runtime DB driver to be MySQL outside of automated tests.
+        if (! $this->app->runningUnitTests()) {
+            $default = config('database.default');
+            $driver = config("database.connections.{$default}.driver");
+            if ($driver !== 'mysql') {
+                throw new \RuntimeException("Runtime database driver must be MySQL; current: {$driver} (connection: {$default}).");
+            }
+        }
         Builder::macro('filter', function (Request $request) {
             /* WIP:  <07-08-22, sheenazien8> */
             $columns = $request->filters;
@@ -68,5 +76,13 @@ class AppServiceProvider extends ServiceProvider
 
         Feature::resolveScopeUsing(fn ($driver) => null);
         Feature::discover();
+
+        config([
+            'livewire.temporary_file_upload.disk' => config('upload.tmp_disk'),
+            'livewire.temporary_file_upload.rules' => config('upload.livewire_rules'),
+            'livewire.temporary_file_upload.preview_mimes' => config('upload.preview_mimes'),
+            'livewire.temporary_file_upload.max_upload_time' => config('upload.max_upload_time'),
+            'livewire.temporary_file_upload.directory' => config('upload.directory'),
+        ]);
     }
 }

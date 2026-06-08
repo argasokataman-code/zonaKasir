@@ -8,6 +8,7 @@ use App\Filament\Tenant\Resources\StockOpnameResource\Traits\HasStockOpnameItemF
 use App\Models\Tenants\Profile;
 use App\Models\Tenants\StockOpname;
 use App\Traits\HasTranslatableResource;
+use Filament\Facades\Filament;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Hidden;
@@ -36,13 +37,11 @@ class StockOpnameResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('pic_display')
+                Placeholder::make('pic_display')
                     ->label(__('PIC'))
-                    ->disabled()
-                    ->default(fn () => auth()->user()?->name ?? auth()->user()?->username ?? auth()->user()?->email ?? '')
-                    ->dehydrated(false),
+                    ->content(fn () => Filament::auth()->user()?->name ?? Filament::auth()->user()?->username ?? Filament::auth()->user()?->email ?? ''),
                 TextInput::make('pic')
-                    ->default(fn () => auth()->user()?->name ?? auth()->user()?->username ?? auth()->user()?->email ?? '')
+                    ->default(fn () => Filament::auth()->user()?->name ?? Filament::auth()->user()?->username ?? Filament::auth()->user()?->email ?? '' )
                     ->hidden(),
                 DatePicker::make('date')
                     ->required()
