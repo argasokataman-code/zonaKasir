@@ -47,6 +47,16 @@ trait TableProduct
             ->columns([
                 Stack::make([
                     ImageColumn::make('hero_image')
+                        ->getStateUsing(function (Product $record): ?string {
+                            $images = $record->hero_images;
+
+                            if (is_array($images) && count($images) > 0 && filled($images[0])) {
+                                return $images[0];
+                            }
+
+                            return null;
+                        })
+                        ->defaultImageUrl('https://cdn4.iconfinder.com/data/icons/picture-sharing-sites/32/No_Image-1024.png')
                         ->translateLabel()
                         ->alignCenter()
                         ->extraAttributes([

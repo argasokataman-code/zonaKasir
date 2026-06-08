@@ -1,16 +1,16 @@
 <?php
 
 return [
-    'name' => 'LaravelPWA',
+    'name' => env('APP_NAME', 'zonaKasir'),
     'manifest' => [
-        'name' => env('APP_NAME', 'My PWA App'),
-        'short_name' => env('APP_NAME', 'My PWA App'),
+        'name' => env('APP_NAME', 'zonaKasir POS'),
+        'short_name' => mb_substr(env('APP_NAME', 'zonaKasir'), 0, 12),
         'start_url' => '/member',
-        'background_color' => '#ffffff',
-        'theme_color' => '#000000',
+        'background_color' => '#FF6600',
+        'theme_color' => '#FF6600',
         'display' => 'standalone',
         'orientation' => 'any',
-        'status_bar' => 'black',
+        'status_bar' => '#FF6600',
         'icons' => [
             '48x48' => [
                 'path' => '/images/icons/icon-48x48.png',

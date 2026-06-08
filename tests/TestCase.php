@@ -16,11 +16,12 @@ abstract class TestCase extends BaseTestCase
         // Disable rate limiting for tests to avoid 429 responses during repeated requests
         $this->withoutMiddleware(ThrottleRequests::class);
 
-        // Ensure requests are made against the configured central domain
-        $central = config('tenancy.central_domains')[0] ?? 'localhost';
-        URL::forceRootUrl("http://{$central}");
-        // Make PHPUnit HTTP requests include the correct Host header
-        $_SERVER['HTTP_HOST'] = $central;
-        $_SERVER['SERVER_NAME'] = $central;
+        // If tenancy hasn't been initialized (by RefreshDatabaseWithTenant), default to central domain
+        if (! tenant()) {
+            $central = config('tenancy.central_domains')[0] ?? 'localhost';
+            URL::forceRootUrl("http://{$central}");
+            $_SERVER['HTTP_HOST'] = $central;
+            $_SERVER['SERVER_NAME'] = $central;
+        }
     }
 }

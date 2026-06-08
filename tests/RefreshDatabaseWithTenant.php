@@ -25,6 +25,8 @@ trait RefreshDatabaseWithTenant
         $domainModel = $tenant->domains()->first();
         $domain = $domainModel ? $domainModel->domain : ($tenant->id . '.' . config('tenancy.central_domains')[0]);
         URL::forceRootUrl("http://{$domain}");
+        $_SERVER['HTTP_HOST'] = $domain;
+        $_SERVER['SERVER_NAME'] = $domain;
 
         // Then start the database transaction
         $this->parentBeginDatabaseTransaction();

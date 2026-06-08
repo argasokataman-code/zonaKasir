@@ -11,7 +11,7 @@ class CreateUser extends Command
 {
     protected $signature = 'app:create-user';
 
-    protected $description = 'Create user for standalone lakasir';
+    protected $description = 'Create user for standalone zonaKasir';
 
     public function handle()
     {

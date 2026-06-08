@@ -5,7 +5,7 @@
   <button
     @click="openModal(item)"
     class="w-10 h-10 rounded-full text-white flex items-center justify-center flex-shrink-0"
-    :class="item.stock === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-orange-500'"
+    :class="item.stock === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-zonakasir-primary'"
     :disabled="item.stock === 0"
     >
     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -80,7 +80,7 @@
                 <div class="mt-1 flex items-center gap-2">
                   <button
                     @click="decrementQuantity"
-                    class="w-10 h-10 rounded-full border-2 border-orange-500 text-orange-500 flex items-center justify-center hover:bg-orange-50"
+                    class="w-10 h-10 rounded-full border-2 border-zonakasir-primary text-zonakasir-primary flex items-center justify-center hover:bg-orange-50"
                     :disabled="quantity <= 1"
                     :class="{ 'opacity-50 cursor-not-allowed': quantity <= 1 }"
                     >
@@ -93,14 +93,14 @@
                   type="number"
                   x-model="quantity"
                   @input="validateQuantity"
-                  class="block w-20 text-center rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm"
+                  class="block w-20 text-center rounded-md border-gray-300 shadow-sm focus:border-zonakasir-primary focus:ring-zonakasir-primary text-sm"
                   min="1"
                   :max="modalItem?.stock"
                   />
 
                   <button
                     @click="incrementQuantity"
-                    class="w-10 h-10 rounded-full border-2 border-orange-500 text-orange-500 flex items-center justify-center hover:bg-orange-50"
+                    class="w-10 h-10 rounded-full border-2 border-zonakasir-primary text-zonakasir-primary flex items-center justify-center hover:bg-orange-50"
                     :disabled="quantity >= modalItem?.stock"
                     :class="{ 'opacity-50 cursor-not-allowed': quantity >= modalItem?.stock }"
                     >
@@ -115,7 +115,7 @@
               <div class="mt-3 p-3 bg-orange-50 rounded-lg">
                 <div class="flex items-center justify-between">
                   <span class="text-sm font-medium text-gray-700">Total Price</span>
-                  <span class="text-lg font-semibold text-orange-500">
+                  <span class="text-lg font-semibold text-zonakasir-primary">
                     <span class="text-sm font-normal">Rp</span>
                     <span x-text="moneyFormat(modalItem?.selling_price * quantity)"></span>
                   </span>
@@ -128,7 +128,7 @@
                 <textarea
                   x-model="note"
                   rows="3"
-                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring-orange-500 text-sm"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-zonakasir-primary focus:ring-zonakasir-primary text-sm"
                   placeholder="Add special instructions..."
                   ></textarea>
               </div>
@@ -137,7 +137,7 @@
               <div class="mt-5 flex gap-3">
                 <button
                   type="button"
-                  class="inline-flex w-full justify-center rounded-full border border-gray-300 bg-white px-4 py-4 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                  class="inline-flex w-full justify-center rounded-full border border-gray-300 bg-white px-4 py-4 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-zonakasir-primary focus:ring-offset-2"
                   @click="open = false"
                   >
                   Cancel
@@ -145,7 +145,7 @@
                   <button
                     type="button"
                     @click="addToCart(modalItem.id, { amount: quantity, note: note }); open = false"
-                    class="inline-flex w-full justify-center rounded-full border border-transparent bg-orange-500 px-4 py-4 text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+                    class="inline-flex w-full justify-center rounded-full border border-transparent bg-zonakasir-primary px-4 py-4 text-sm font-medium text-white hover:bg-zonakasir-primary focus:outline-none focus:ring-2 focus:ring-zonakasir-primary focus:ring-offset-2"
                     >
                     + Add to Cart
                   </button>

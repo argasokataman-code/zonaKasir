@@ -1,9 +1,9 @@
 <div align="center">
 
   <img src="https://lakasir.com/assets/logo/image.png" alt="logo" width="200" height="auto" />
-  <h1>Lakasir Web App</h1>
+  <h1>zonaKasir Web App</h1>
 
-  <p> Lakasir is a Point of Sale (POS) application built using Laravel for the API, the Filament admin panel for the web application, and Flutter for the mobile application. </p>
+  <p> zonaKasir is a Point of Sale (POS) application built using Laravel for the API, the Filament admin panel for the web application, and Flutter for the mobile application. </p>
   
 </div>
 
@@ -67,7 +67,7 @@
 
 ## Contributing
 
-We welcome contributions from the community! If you'd like to contribute to Lakasir, please follow these steps:
+We welcome contributions from the community! If you'd like to contribute to zonaKasir, please follow these steps:
 
 1. keep on eye on [roadmap](https://github.com/orgs/lakasir/discussions/321)
 2. Fork the repository.
@@ -82,7 +82,7 @@ When contributing to this project, please keep an eye on our project features bo
 This project is licensed under the GPL-3.0 license - see the [LICENSE](https://github.com/lakasir/lakasir?tab=GPL-3.0-1-ov-file) file for details.
 
 ## Contact
-For any inquiries or support, please contact lakasirapp@gmail.com or you can open discussion in discussion features
+For any inquiries or support, please contact zonakasirapp@gmail.com or you can open discussion in discussion features
 
 ## Donate for live longer
 

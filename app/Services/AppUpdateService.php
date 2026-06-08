@@ -70,7 +70,7 @@ class AppUpdateService
         $zipPath = storage_path('app/update.zip');
         $options = [
             'http' => [
-                'header' => "User-Agent: LakasirAutoUpdater\r\n",
+                'header' => "User-Agent: zonaKasirAutoUpdater\r\n",
             ],
         ];
 
@@ -109,7 +109,7 @@ class AppUpdateService
         $zip = new ZipArchive;
         if ($zip->open($zipPath) === true) {
             $log('☕ Extracting downloaded files...');
-            $extractPath = storage_path('app/update/lakasir/');
+            $extractPath = storage_path('app/update/zonakasir/');
             $zip->extractTo($extractPath);
             $zip->close();
         } else {

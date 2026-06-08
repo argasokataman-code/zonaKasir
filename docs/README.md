@@ -1,6 +1,6 @@
-# Lakasir Documentation
+# zonaKasir Documentation
 
-Complete documentation for the Lakasir POS application. All resources are organized by domain and purpose.
+Complete documentation for the zonaKasir POS application. All resources are organized by domain and purpose.
 
 ---
 

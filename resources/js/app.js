@@ -105,8 +105,8 @@ function padText(text, length, alignRight = false, center = false, textSize = 'n
  * @returns {string} The formatted currency string.
  */
 function moneyFormat(number, currency = null) {
-  const activeCurrency = currency || window.lakasirCurrency || 'IDR';
-  const activeLocale = window.lakasirLocale || 'en';
+  const activeCurrency = currency || window.zonakasirCurrency || 'IDR';
+  const activeLocale = window.zonakasirLocale || 'en';
 
   const options = {
     style: 'currency',

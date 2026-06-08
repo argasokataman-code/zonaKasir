@@ -11,11 +11,11 @@
 }
 
 .fi-sidebar-item.fi-sidebar-item-active a {
-  @apply bg-lakasir-primary;
+  @apply bg-zonakasir-primary;
 }
 
 .fi-sidebar-item.fi-sidebar-item-active a:hover {
-  @apply bg-lakasir-primary;
+  @apply bg-zonakasir-primary;
 }
 
 .fi-sidebar-item.fi-sidebar-item-active svg {
@@ -31,7 +31,7 @@
     @apply text-white;
   }
 
-  @apply bg-lakasir-primary text-white;
+  @apply bg-zonakasir-primary text-white;
 }
 
 .fi-sidebar-item-active .fi-sidebar-item-label {

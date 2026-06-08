@@ -46,7 +46,7 @@ class TenantLogin extends Login
 
         if (app()->environment('demo')) {
             $this->form->fill([
-                'email' => 'demo@lakasir.com',
+                'email' => 'demo@zonakasir.com',
                 'password' => 'passwordsangatrahasia'
             ]);
         }

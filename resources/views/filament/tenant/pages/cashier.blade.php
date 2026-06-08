@@ -76,7 +76,7 @@
               <div class="grid items-center space-x-3">
                 <div class="flex justify-between">
                   <p class="font-semibold"> {{ $item->product->name }}</p>
-                  <p class="font-semibold text-lakasir-primary">{{ $item->price_format_money }}</p>
+                  <p class="font-semibold text-zonakasir-primary">{{ $item->price_format_money }}</p>
                 </div>
               </div>
               <div class="grid grid-cols-2 items-center space-y-2 py-2 text-right">
@@ -93,12 +93,12 @@
                     </div>
                   @endfeature
                   @if ($item->discount_price && $item->discount_price > 0)
-                    <p class="font-semibold text-lakasir-primary">{{ $item->final_price_format }}</p>
+                    <p class="font-semibold text-zonakasir-primary">{{ $item->final_price_format }}</p>
                   @endif
                 </div>
               </div>
               <div class="flex h-8 space-x-3">
-                <button class="rounded-lg !bg-lakasir-primary px-2 py-1"
+                <button class="rounded-lg !bg-zonakasir-primary px-2 py-1"
                   wire:click.stop="addCart( {{ $item->product_id }} )" wire:loading.attr="disabled">
                   <x-heroicon-o-plus-small class="h-4 w-4 !text-white" />
                 </button>
@@ -140,7 +140,7 @@
             @include('filament.tenant.pages.cashier.total')
           </div>
         </div>
-        <button class="w-full rounded-lg bg-lakasir-primary px-2 py-4 text-white"
+        <button class="w-full rounded-lg bg-zonakasir-primary px-2 py-4 text-white"
           x-on:mousedown="$dispatch('open-modal', {id: 'proceed-the-payment'})">{{ __('Proceed to payment') }}</button>
       </div>
     </div>
@@ -167,7 +167,7 @@
                 <div
                   x-on:click="cartDetail['payment_method_id'] = paymentMethod.id; $wire.cartDetail['payment_method_id'] = paymentMethod.id;"
                   class="flex cursor-pointer justify-center rounded-md border-none px-4 py-2 text-sm hover:scale-105 dark:text-white"
-                  :class="cartDetail['payment_method_id'] == paymentMethod.id ? 'bg-lakasir-primary text-white' :
+                  :class="cartDetail['payment_method_id'] == paymentMethod.id ? 'bg-zonakasir-primary text-white' :
                       'dark:bg-gray-900 bg-gray-300 '"
                   x-text="paymentMethod.name.substring(0, 8)">
                 </div>
@@ -225,7 +225,7 @@
               </button>
               <div class="col-span-3 flex gap-x-2">
                 <button wire:loading.attr="disabled" type="submit"
-                  class="flex w-full items-center justify-center gap-x-2 rounded-md bg-lakasir-primary p-2 text-lg text-white hover:bg-[#ff6611]">
+                  class="flex w-full items-center justify-center gap-x-2 rounded-md bg-zonakasir-primary p-2 text-lg text-white hover:brightness-110">
                   <div wire:loading>
                     <x-filament::loading-indicator class="h-5 w-5" />
                   </div>
@@ -274,8 +274,8 @@
     <div class="grid grid-cols-4 gap-4">
       @foreach ($tableOption as $table)
         <div x-on:click="$wire.cartDetail['table_id'] = {{ $table->id }};"
-          class="flex cursor-pointer justify-center rounded-md border border-lakasir-primary px-4 py-2 text-sm hover:scale-105 dark:text-white"
-          :class="$wire.cartDetail['table_id'] == {{ $table->id }} ? 'bg-lakasir-primary text-white' : 'dark:bg-gray-900 '">
+          class="flex cursor-pointer justify-center rounded-md border border-zonakasir-primary px-4 py-2 text-sm hover:scale-105 dark:text-white"
+          :class="$wire.cartDetail['table_id'] == {{ $table->id }} ? 'bg-zonakasir-primary text-white' : 'dark:bg-gray-900 '">
           {{ $table->number }}
         </div>
       @endforeach
@@ -450,8 +450,8 @@
 
 @script()
   <script>
-    window.lakasirCurrency = @js($currency);
-    window.lakasirLocale = @js($locale);
+    window.zonakasirCurrency = @js($currency);
+    window.zonakasirLocale = @js($locale);
     let selling = null;
     $wire.on('selling-created', (event) => {
       selling = event.selling;
