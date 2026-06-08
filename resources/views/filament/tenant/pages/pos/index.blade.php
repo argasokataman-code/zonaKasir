@@ -16,7 +16,7 @@
     class="relative min-h-screen bg-gray-50">
     <template x-if="isLoading">
       <div class="fixed inset-0 bg-white bg-opacity-25 flex items-center justify-center z-50">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-zonakasir-primary"></div>
       </div>
     </template>
     <div class="fixed top-0 left-0 right-0 bg-white z-10 shadow-md">
@@ -55,7 +55,7 @@
                   </svg>
                 </template>
                 <template x-if="isSearching">
-                  <div class="animate-spin h-5 w-5 border-2 border-orange-500 border-b-transparent rounded-full"></div>
+                  <div class="animate-spin h-5 w-5 border-2 border-zonakasir-primary border-b-transparent rounded-full"></div>
                 </template>
               </div>
             </div>
@@ -69,7 +69,7 @@
             <button
               @click="filterCategory(cat.id)"
               class="pb-2 whitespace-nowrap"
-              :class="selectedCategory === cat.id ? 'text-orange-500 border-b-2 border-orange-500' : 'text-gray-500'"
+              :class="selectedCategory === cat.id ? 'text-zonakasir-primary border-b-2 border-zonakasir-primary' : 'text-gray-500'"
               x-text="cat.name"
               ></button>
           </template>
@@ -99,7 +99,7 @@
                 </div>
               </template>
               <template x-if="getItemQuantity(item) > 0">
-                <div class="absolute bottom-0 left-0 bg-orange-500 text-white text-sm p-1 rounded-bl-lg rounded-br-lg w-full text-center">
+                <div class="absolute bottom-0 left-0 bg-zonakasir-primary text-white text-sm p-1 rounded-bl-lg rounded-br-lg w-full text-center">
                   <span x-text="`${getItemQuantity(item)} Selected`"></span>
                 </div>
               </template>
@@ -111,7 +111,7 @@
               <div class="mt-2">
                 <p class="text-sm text-gray-500">Total Price</p>
                 <p class="text-gray-900 font-semibold">
-                  <span class="text-lakasir-primary text-sm font-normal" x-text="`Rp. `"></span>
+                  <span class="text-zonakasir-primary text-sm font-normal" x-text="`Rp. `"></span>
                   <span x-text="moneyFormat(item.selling_price)"></span>
                 </p>
               </div>
@@ -123,7 +123,7 @@
               </div>
             </template>
             <template x-if="getItemQuantity(item) > 0">
-              <div class="text-orange-500 px-4 py-1 rounded-full border-2 border-orange-500">
+              <div class="text-zonakasir-primary px-4 py-1 rounded-full border-2 border-zonakasir-primary">
                 Added
               </div>
             </template>
@@ -135,7 +135,7 @@
     <template x-if="cartTotal > 0">
       <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t px-4 py-4"
         @click="proceedToCheckout">
-        <div class="max-w-4xl mx-auto bg-lakasir-primary rounded-full">
+        <div class="max-w-4xl mx-auto bg-zonakasir-primary rounded-full">
           <div class="flex items-center justify-between px-3 py-2.5 text-white">
             <div class="grid items-center ml-3">
               <p class="font-medium" x-text="`${cartItemCount} Items`"></p>
@@ -161,8 +161,8 @@
 
 @script()
 <script>
-  window.lakasirCurrency = @js($currency);
-  window.lakasirLocale = @js($locale);
+  window.zonakasirCurrency = @js($currency);
+  window.zonakasirLocale = @js($locale);
   Alpine.data('pos', () => {
     return {
       items: @json($menuItems),

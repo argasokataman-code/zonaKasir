@@ -1,4 +1,4 @@
-name: 🚀 Lakasir Pre-release with Versioned Zip
+name: 🚀 zonaKasir Pre-release with Versioned Zip
 
 on:
   push:
@@ -103,7 +103,7 @@ jobs:
           cp .env.example release/.env.example
 
           cd release
-          zip -r ../lakasir-${VERSION}.zip ./*
+          zip -r ../zonakasir-${VERSION}.zip ./*
         shell: bash
 
       - name: 🚀 Create GitHub Pre-release with ZIP
@@ -113,6 +113,6 @@ jobs:
           tag_name: ${{ github.ref_name }}
           body: ${{ steps.generate_notes.outputs.result }}
           prerelease: true
-          files: lakasir-${{ github.ref_name }}.zip
+          files: zonakasir-${{ github.ref_name }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

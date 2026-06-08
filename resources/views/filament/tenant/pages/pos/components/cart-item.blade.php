@@ -34,14 +34,14 @@
             <span class="text-gray-500">Total Price</span>
             </p>
             <p>
-              <span class="text-lakasir-primary text-sm font-normal">Rp. </span>
+              <span class="text-zonakasir-primary text-sm font-normal">Rp. </span>
               <span class="font-semibold" x-text="moneyFormat(cartItem.price)"></span>
             </p>
           </div>
           <div class="flex items-center space-x-3">
             <button
               @click="await $wire.decrementQuantity(cartItem.product_id)"
-              class="w-8 h-8 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center"
+              class="w-8 h-8 rounded-full bg-orange-100 text-zonakasir-primary flex items-center justify-center"
               >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
@@ -50,7 +50,7 @@
             <span class="w-8 text-center" x-text="cartItem.qty"></span>
             <button
               @click="await $wire.incrementQuantity(cartItem.product_id)"
-              class="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center"
+              class="w-8 h-8 rounded-full bg-zonakasir-primary text-white flex items-center justify-center"
               >
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -64,7 +64,7 @@
     <!-- Add More Button -->
     <button
       @click="goToMenu"
-      class="w-full mt-6 p-4 border-2 border-orange-500 text-orange-500 rounded-full font-medium flex items-center justify-center"
+      class="w-full mt-6 p-4 border-2 border-zonakasir-primary text-zonakasir-primary rounded-full font-medium flex items-center justify-center"
       >
       <span class="mr-2">+</span>
       Add More
@@ -93,13 +93,13 @@
         </div>
         <div class="flex justify-between font-medium text-lg">
           <span>Total</span>
-          <span class="text-orange-500" x-text="'Rp. ' + moneyFormat(cartTotal * 1.1)"></span>
+          <span class="text-zonakasir-primary" x-text="'Rp. ' + moneyFormat(cartTotal * 1.1)"></span>
         </div>
       </div>
 
       <button
         @click="continueToPayment"
-        class="w-full mt-6 px-4 py-6 bg-lakasir-primary text-white rounded-full font-medium"
+        class="w-full mt-6 px-4 py-6 bg-zonakasir-primary text-white rounded-full font-medium"
         >
         Continue Payment
       </button>

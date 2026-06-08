@@ -2,7 +2,7 @@
   <div class="space-y-6" wire:poll.2s="pollLogs">
     <div class="text-center">
       <h2 class="text-2xl font-bold tracking-tight">Software Update</h2>
-      <p class="text-sm text-gray-500">{{ __('Manage your version and keep Lakasir up to date.') }}</p>
+      <p class="text-sm text-gray-500">{{ __('Manage your version and keep zonaKasir up to date.') }}</p>
     </div>
 
     <div class="rounded-xl bg-white p-6 shadow dark:bg-gray-900">

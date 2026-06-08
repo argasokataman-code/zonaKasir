@@ -14,7 +14,7 @@ services:
             - '/var/www/html/vendor'
             - '/var/www/html/node_modules'
         networks:
-            - lakasir
+            - zonakasir
         depends_on:
             mysql:
                 condition: service_healthy
@@ -46,9 +46,9 @@ services:
             MYSQL_USER: ${DB_APP_USER:-${DB_USERNAME:-lakasir}}
             MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
         volumes:
-            - lakasir-mysql:/var/lib/mysql
+            - zonakasir-mysql:/var/lib/mysql
         networks:
-            - lakasir
+            - zonakasir
         healthcheck:
             test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-p${DB_PASSWORD:-secret}']
             retries: 3
@@ -61,9 +61,9 @@ services:
         ports:
             - '${FORWARD_REDIS_PORT:-6380}:6379'
         volumes:
-            - lakasir-redis:/data
+            - zonakasir-redis:/data
         networks:
-            - lakasir
+            - zonakasir
         healthcheck:
             test: ['CMD', 'redis-cli', 'ping']
             retries: 3
@@ -77,14 +77,14 @@ services:
             - '${FORWARD_MAILPIT_PORT:-1026}:1025'
             - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8026}:8025'
         networks:
-            - lakasir
+            - zonakasir
 
 networks:
-    lakasir:
+    zonakasir:
         driver: bridge
 
 volumes:
-    lakasir-mysql:
+    zonakasir-mysql:
         driver: local
-    lakasir-redis:
+    zonakasir-redis:
         driver: local

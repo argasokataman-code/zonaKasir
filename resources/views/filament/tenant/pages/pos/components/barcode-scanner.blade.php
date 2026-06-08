@@ -1,7 +1,7 @@
 <div x-data="barcode()" class="flex">
   <button
     @click="openBarcodeScanner"
-    class="px-3 py-2 bg-orange-500 text-white rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors"
+    class="px-3 py-2 bg-zonakasir-primary text-white rounded-lg flex items-center justify-center hover:bg-zonakasir-primary transition-colors"
     :disabled="isScanning">
     <template x-if="!isScanning">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,14 +58,14 @@
         <!-- Scanner Frame -->
         <div class="relative w-64 h-64">
           <!-- Corner Markers -->
-          <div class="absolute top-0 left-0 w-10 h-10 border-t-4 border-l-4 border-orange-500"></div>
-          <div class="absolute top-0 right-0 w-10 h-10 border-t-4 border-r-4 border-orange-500"></div>
-          <div class="absolute bottom-0 left-0 w-10 h-10 border-b-4 border-l-4 border-orange-500"></div>
-          <div class="absolute bottom-0 right-0 w-10 h-10 border-b-4 border-r-4 border-orange-500"></div>
+          <div class="absolute top-0 left-0 w-10 h-10 border-t-4 border-l-4 border-zonakasir-primary"></div>
+          <div class="absolute top-0 right-0 w-10 h-10 border-t-4 border-r-4 border-zonakasir-primary"></div>
+          <div class="absolute bottom-0 left-0 w-10 h-10 border-b-4 border-l-4 border-zonakasir-primary"></div>
+          <div class="absolute bottom-0 right-0 w-10 h-10 border-b-4 border-r-4 border-zonakasir-primary"></div>
 
           <!-- Scanning Line Animation -->
           <div
-            class="absolute left-0 right-0 h-0.5 bg-orange-500"
+            class="absolute left-0 right-0 h-0.5 bg-zonakasir-primary"
             style="top: 50%; animation: scan 2s linear infinite;">
           </div>
         </div>
