@@ -84,9 +84,11 @@ jobs:
             git pull origin main
 
             # Add composer to PATH (server-specific)
+            ls -la /home/jogn3455/bin/composer* 2>/dev/null || echo "No composer found in bin/"
             export PATH="/home/jogn3455/bin:${PATH}"
             export COMPOSER_ALLOW_SUPERUSER=1
-            composer install --no-dev --prefer-dist --no-interaction 2>&1
+            command -v composer || echo "composer not in PATH"
+            php /home/jogn3455/bin/composer.phar install --no-dev --prefer-dist --no-interaction
 
             # Extract build assets
             mkdir -p public/build
