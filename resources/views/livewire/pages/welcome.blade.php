@@ -172,9 +172,7 @@ state([
       <div class="absolute -top-40 -right-40 w-[500px] h-[500px] bg-zonakasir-primary/20 rounded-full blur-[120px] animate-float"></div>
       <div class="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-zonakasir-primary/10 rounded-full blur-[120px] animate-float-delayed"></div>
       <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-zonakasir-primary/5 rounded-full blur-[150px] animate-pulse-slow"></div>
-      {{-- Animated Grid --}}
       <div class="absolute inset-0 opacity-[0.03] animate-grid-move" style="background-image: linear-gradient(rgba(255,102,0,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,102,0,0.5) 1px, transparent 1px); background-size: 50px 50px;"></div>
-      {{-- Floating Particles --}}
       <div class="absolute top-1/4 left-1/4 w-1 h-1 bg-zonakasir-primary/40 rounded-full animate-float-particle"></div>
       <div class="absolute top-1/3 right-1/3 w-1.5 h-1.5 bg-zonakasir-primary/30 rounded-full animate-float-particle-delayed"></div>
       <div class="absolute bottom-1/4 left-1/3 w-1 h-1 bg-zonakasir-primary/50 rounded-full animate-float-particle"></div>
@@ -192,7 +190,6 @@ state([
              x-transition:enter-start="opacity-0 translate-y-12"
              x-transition:enter-end="opacity-100 translate-y-0">
 
-          {{-- Badge --}}
           <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/10 rounded-full px-5 py-2.5 mb-8 animate-fade-in-up" style="animation-delay: 0.1s">
             <span class="relative flex h-2.5 w-2.5">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -201,19 +198,16 @@ state([
             <span class="text-white/90 text-sm font-medium">Open Source & 100% Gratis</span>
           </div>
 
-          {{-- Heading --}}
           <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white leading-[1.1] tracking-tight">
             <span class="block animate-fade-in-up" style="animation-delay: 0.2s">Kelola Toko</span>
             <span class="block text-transparent bg-clip-text bg-gradient-to-r from-zonakasir-primary to-orange-400 animate-fade-in-up" style="animation-delay: 0.3s">Lebih Mudah</span>
             <span class="block animate-fade-in-up" style="animation-delay: 0.4s">dengan zonaKasir</span>
           </h1>
 
-          {{-- Description --}}
           <p class="mt-6 sm:mt-8 text-base sm:text-lg lg:text-xl text-gray-400 max-w-xl mx-auto lg:mx-0 leading-relaxed animate-fade-in-up" style="animation-delay: 0.5s">
             Aplikasi point of sale (POS) open-source yang membantu anda mengelola penjualan, stok, dan keuangan toko dengan mudah dan efisien.
           </p>
 
-          {{-- CTA Buttons --}}
           <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up" style="animation-delay: 0.6s">
             <a href="{{ route('auth.register') }}"
                class="group relative bg-zonakasir-primary text-white px-8 py-4 rounded-2xl font-semibold text-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/30 hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3">
@@ -232,7 +226,6 @@ state([
             </a>
           </div>
 
-          {{-- Stats --}}
           <div class="mt-12 sm:mt-16 grid grid-cols-3 gap-6 sm:gap-8 max-w-md mx-auto lg:mx-0 animate-fade-in-up" style="animation-delay: 0.7s">
             <div class="text-center lg:text-left group">
               <p class="text-2xl sm:text-3xl font-extrabold text-white group-hover:text-zonakasir-primary transition-colors duration-300">100%</p>
@@ -249,7 +242,7 @@ state([
           </div>
         </div>
 
-        {{-- Right Content - Phone Mockup --}}
+        {{-- Right Content - Laptop + Phone Mockup --}}
         <div class="relative flex justify-center lg:justify-end"
              x-data="{ shown: false }"
              x-init="setTimeout(() => shown = true, 400)"
@@ -257,58 +250,78 @@ state([
              x-transition:enter="transition ease-out duration-1000 delay-200"
              x-transition:enter-start="opacity-0 scale-95 translate-x-12"
              x-transition:enter-end="opacity-100 scale-100 translate-x-0">
-          <div class="relative w-full max-w-sm lg:max-w-none">
-            {{-- Glow Effect --}}
-            <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/30 to-orange-600/20 rounded-[3rem] blur-3xl animate-pulse-slow"></div>
+          <div class="relative w-full max-w-lg lg:max-w-xl">
+
+            {{-- Laptop Mockup --}}
+            <div class="relative animate-float-card">
+              {{-- Glow --}}
+              <div class="absolute -inset-4 bg-gradient-to-br from-zonakasir-primary/20 to-orange-600/10 rounded-[2rem] blur-2xl animate-pulse-slow"></div>
+              {{-- Laptop Body --}}
+              <div class="relative bg-gray-800 rounded-t-2xl sm:rounded-t-3xl p-2 sm:p-3 pb-0 shadow-2xl">
+                {{-- Screen --}}
+                <div class="bg-white rounded-t-lg sm:rounded-t-xl overflow-hidden aspect-[16/10]">
+                  <div class="bg-gray-100 px-2 sm:px-3 py-1.5 sm:py-2 flex items-center gap-1.5 sm:gap-2 border-b border-gray-200">
+                    <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-400"></div>
+                    <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-yellow-400"></div>
+                    <div class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-400"></div>
+                    <div class="flex-1 bg-gray-200 rounded-full h-2.5 sm:h-3 ml-2 sm:ml-4 max-w-[120px] sm:max-w-xs"></div>
+                  </div>
+                  <img src="{{ asset('assets/images/dashboard.png') }}" class="w-full h-full object-cover object-top" alt="zonaKasir Dashboard Web">
+                </div>
+              </div>
+              {{-- Laptop Base --}}
+              <div class="bg-gray-700 h-2.5 sm:h-3 rounded-b-xl sm:rounded-b-2xl mx-4 sm:mx-8 shadow-inner"></div>
+              <div class="bg-gray-600 h-1 rounded-b-lg sm:rounded-b-xl mx-12 sm:mx-20"></div>
+            </div>
+
+            {{-- Phone Mockup (overlapping laptop) --}}
+            <div class="absolute -right-2 sm:-right-4 bottom-0 sm:bottom-4 z-20 animate-float-card-delayed">
+              <div class="relative">
+                {{-- Glow --}}
+                <div class="absolute -inset-2 bg-gradient-to-br from-zonakasir-primary/20 to-orange-600/10 rounded-[2rem] blur-xl"></div>
+                {{-- Phone Body --}}
+                <div class="relative bg-gray-900 rounded-[1.5rem] sm:rounded-[2rem] p-1.5 sm:p-2 shadow-2xl w-[120px] sm:w-[160px]">
+                  {{-- Screen --}}
+                  <div class="bg-white rounded-[1rem] sm:rounded-[1.5rem] overflow-hidden aspect-[9/16]">
+                    <div class="bg-zonakasir-primary px-1.5 sm:px-2 py-1 flex items-center justify-center">
+                      <span class="text-white text-[6px] sm:text-[8px] font-bold">zonaKasir</span>
+                    </div>
+                    <img src="{{ asset('assets/images/cashier-transaction-1.png') }}" class="w-full h-full object-cover object-top" alt="zonaKasir POS Mobile">
+                  </div>
+                  {{-- Notch --}}
+                  <div class="absolute top-1 sm:top-2 left-1/2 -translate-x-1/2 w-8 sm:w-12 h-1.5 sm:h-2 bg-gray-900 rounded-full"></div>
+                </div>
+              </div>
+            </div>
 
             {{-- Floating Notification 1 --}}
-            <div class="absolute -left-6 sm:-left-16 top-16 sm:top-20 bg-white/95 backdrop-blur-sm rounded-2xl p-3 sm:p-4 shadow-2xl z-10 animate-float-card hidden sm:block border border-gray-100">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-green-400 to-green-500 rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
-                  <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="absolute -left-4 sm:-left-8 top-4 sm:top-8 bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl p-2.5 sm:p-3 shadow-2xl z-10 animate-float-card hidden sm:block border border-gray-100">
+              <div class="flex items-center gap-2 sm:gap-3">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-green-400 to-green-500 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg shadow-green-500/30">
+                  <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
                   </svg>
                 </div>
                 <div>
-                  <p class="text-xs sm:text-sm font-bold text-gray-800">Transaksi Berhasil</p>
-                  <p class="text-[10px] sm:text-xs text-green-600 font-semibold">+Rp 150.000</p>
+                  <p class="text-[10px] sm:text-xs font-bold text-gray-800">Transaksi Berhasil</p>
+                  <p class="text-[8px] sm:text-[10px] text-green-600 font-semibold">+Rp 150.000</p>
                 </div>
               </div>
             </div>
 
             {{-- Floating Notification 2 --}}
-            <div class="absolute -right-4 sm:-right-12 bottom-28 sm:bottom-32 bg-white/95 backdrop-blur-sm rounded-2xl p-3 sm:p-4 shadow-2xl z-10 animate-float-card-delayed hidden sm:block border border-gray-100">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-zonakasir-primary to-orange-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30">
-                  <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="absolute -left-4 sm:-left-10 bottom-8 sm:bottom-12 bg-white/95 backdrop-blur-sm rounded-xl sm:rounded-2xl p-2.5 sm:p-3 shadow-2xl z-10 animate-float-card-delayed hidden sm:block border border-gray-100">
+              <div class="flex items-center gap-2 sm:gap-3">
+                <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-zonakasir-primary to-orange-600 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30">
+                  <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
                   </svg>
                 </div>
                 <div>
-                  <p class="text-xs sm:text-sm font-bold text-gray-800">Penjualan Hari Ini</p>
-                  <p class="text-[10px] sm:text-xs text-zonakasir-primary font-semibold">Rp 2.500.000</p>
+                  <p class="text-[10px] sm:text-xs font-bold text-gray-800">Penjualan Hari Ini</p>
+                  <p class="text-[8px] sm:text-[10px] text-zonakasir-primary font-semibold">Rp 2.500.000</p>
                 </div>
               </div>
-            </div>
-
-            {{-- Floating Notification 3 - Mobile Only --}}
-            <div class="absolute -left-2 sm:-left-6 bottom-16 sm:bottom-20 bg-white/95 backdrop-blur-sm rounded-xl p-2.5 shadow-xl z-10 animate-float-card hidden sm:hidden border border-gray-100">
-              <div class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-gradient-to-br from-green-400 to-green-500 rounded-lg flex items-center justify-center">
-                  <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-                  </svg>
-                </div>
-                <div>
-                  <p class="text-[10px] font-bold text-gray-800">Berhasil</p>
-                  <p class="text-[8px] text-green-600 font-semibold">+Rp 150K</p>
-                </div>
-              </div>
-            </div>
-
-            {{-- Phone Image --}}
-            <div class="relative z-20">
-              <img src="{{ asset('assets/images/cashier-transaction-1.png') }}" class="relative h-[20rem] sm:h-[26rem] md:h-[30rem] lg:h-[32rem] drop-shadow-2xl hover:scale-[1.02] transition-transform duration-700" alt="zonaKasir POS">
             </div>
           </div>
         </div>
@@ -330,12 +343,12 @@ state([
   <section id="tentang" class="py-20 sm:py-24 lg:py-32 bg-white relative overflow-hidden">
     <div class="absolute top-0 right-0 w-96 h-96 bg-zonakasir-primary/5 rounded-full blur-[100px]"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-        {{-- Text --}}
-        <div x-data="{ shown: false }" x-intersect:enter="shown = true" x-show="shown"
-             x-transition:enter="transition ease-out duration-1000"
-             x-transition:enter-start="opacity-0 -translate-x-12"
-             x-transition:enter-end="opacity-100 translate-x-0">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
+           x-data="{ shown: false }" x-intersect:enter="shown = true" x-show="shown"
+           x-transition:enter="transition ease-out duration-1000"
+           x-transition:enter-start="opacity-0 translate-y-8"
+           x-transition:enter-end="opacity-100 translate-y-0">
+        <div>
           <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
             <span class="w-1.5 h-1.5 bg-zonakasir-primary rounded-full"></span>
             <span class="text-zonakasir-primary text-sm font-semibold">Tentang Kami</span>
@@ -375,11 +388,7 @@ state([
             </div>
           </div>
         </div>
-        {{-- Image --}}
-        <div class="relative" x-data="{ shown: false }" x-intersect:enter="shown = true" x-show="shown"
-             x-transition:enter="transition ease-out duration-1000 delay-200"
-             x-transition:enter-start="opacity-0 translate-x-12"
-             x-transition:enter-end="opacity-100 translate-x-0">
+        <div class="relative group">
           <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/10 to-orange-100 rounded-3xl transform rotate-3 scale-105 animate-float-slow"></div>
           <div class="absolute inset-0 bg-gradient-to-tl from-orange-500/5 to-transparent rounded-3xl transform -rotate-2 scale-[1.02]"></div>
           <img src="{{ asset('assets/images/dashboard.png') }}" class="relative rounded-3xl shadow-2xl hover:shadow-3xl transition-shadow duration-500 w-full" alt="zonaKasir Dashboard">
@@ -392,7 +401,6 @@ state([
   <section id="fitur" class="py-20 sm:py-24 lg:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
     <div class="absolute bottom-0 left-0 w-96 h-96 bg-zonakasir-primary/5 rounded-full blur-[100px]"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {{-- Header --}}
       <div class="text-center mb-16 sm:mb-20" x-data="{ shown: false }" x-intersect:enter="shown = true" x-show="shown"
            x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
         <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
@@ -403,8 +411,9 @@ state([
         <p class="mt-4 text-gray-600 max-w-2xl mx-auto text-base sm:text-lg">zonaKasir hadir dengan fitur-fitur terbaik untuk membantu bisnis anda berkembang.</p>
       </div>
 
-      {{-- Feature Cards --}}
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8"
+           x-data="{ shown: false }" x-intersect:enter="shown = true" x-show="shown"
+           x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
         @foreach($mainFeatures as $index => $feature)
         <div class="group bg-white rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100 hover:border-zonakasir-primary/20 relative overflow-hidden"
              x-data="{ shown: false }" x-intersect:enter="shown = true" x-show="shown"
@@ -412,9 +421,7 @@ state([
              x-transition:enter-start="opacity-0 translate-y-12"
              x-transition:enter-end="opacity-100 translate-y-0"
              style="transition-delay: {{ $index * 100 }}ms">
-          {{-- Hover Gradient --}}
           <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-          {{-- Icon --}}
           <div class="relative w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-zonakasir-primary/10 to-orange-50 rounded-2xl flex items-center justify-center mb-5 group-hover:from-zonakasir-primary group-hover:to-orange-500 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-sm group-hover:shadow-lg group-hover:shadow-orange-500/25">
             @if($feature['icon'] === 'free')
             <svg class="w-7 h-7 sm:w-8 sm:h-8 text-zonakasir-primary group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -435,7 +442,6 @@ state([
             </svg>
             @endif
           </div>
-          {{-- Content --}}
           <h3 class="relative text-lg sm:text-xl font-bold text-gray-900 mb-2">{{ $feature['title'] }}</h3>
           <p class="relative text-gray-600 text-sm sm:text-base leading-relaxed">{{ $feature['description'] }}</p>
         </div>
@@ -448,7 +454,6 @@ state([
   <section id="menu" class="py-20 sm:py-24 lg:py-32 bg-white relative overflow-hidden">
     <div class="absolute top-1/2 right-0 w-96 h-96 bg-zonakasir-primary/5 rounded-full blur-[100px] -translate-y-1/2"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {{-- Header --}}
       <div class="text-center mb-16 sm:mb-20" x-data="{ shown: false }" x-intersect:enter="shown = true" x-show="shown"
            x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
         <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
@@ -459,15 +464,13 @@ state([
         <p class="mt-4 text-gray-600 max-w-2xl mx-auto text-base sm:text-lg">Kelola semua aspek bisnis anda dalam satu aplikasi.</p>
       </div>
 
-      {{-- Menu Items --}}
       <div class="space-y-20 sm:space-y-24 lg:space-y-32">
         @foreach($menu as $index => $item)
         <div class="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center"
              x-data="{ shown: false }" x-intersect:enter="shown = true" x-show="shown"
              x-transition:enter="transition ease-out duration-1000"
-             x-transition:enter-start="opacity-0 {{ $index % 2 === 0 ? '-translate-x-12' : 'translate-x-12' }}"
-             x-transition:enter-end="opacity-100 translate-x-0">
-          {{-- Text --}}
+             x-transition:enter-start="opacity-0 translate-y-12"
+             x-transition:enter-end="opacity-100 translate-y-0">
           <div class="{{ $index % 2 === 1 ? 'lg:order-2 lg:text-right' : '' }} text-center lg:text-left">
             <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
               <span class="w-1.5 h-1.5 bg-zonakasir-primary rounded-full animate-pulse"></span>
@@ -476,7 +479,6 @@ state([
             <h3 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-4">{{ $item['title'] }}</h3>
             <p class="text-gray-600 text-base sm:text-lg leading-relaxed max-w-lg mx-auto lg:mx-0">{{ $item['description'] }}</p>
           </div>
-          {{-- Image --}}
           <div class="{{ $index % 2 === 1 ? 'lg:order-1' : '' }} relative group">
             <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/10 to-orange-100 rounded-3xl transform {{ $index % 2 === 0 ? '-rotate-3' : 'rotate-3' }} scale-105 group-hover:scale-110 group-hover:rotate-0 transition-all duration-700"></div>
             <div class="absolute inset-0 bg-gradient-to-tl from-orange-500/5 to-transparent rounded-3xl transform {{ $index % 2 === 0 ? 'rotate-2' : '-rotate-2' }} scale-[1.01]"></div>
@@ -491,10 +493,10 @@ state([
   {{-- Pricing Section --}}
   <section id="harga" class="py-20 sm:py-24 lg:py-32 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-zonakasir-primary/5 rounded-full blur-[150px]"></div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {{-- Header --}}
-      <div class="text-center mb-16 sm:mb-20" x-data="{ shown: false }" x-intersect:enter="shown = true" x-show="shown"
-           x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0 translate-y-8" x-transition:enter-end="opacity-100 translate-y-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+         x-data="{ shown: false }" x-intersect:enter="shown = true" x-show="shown"
+         x-transition:enter="transition ease-out duration-700" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">
+      <div class="text-center mb-16 sm:mb-20">
         <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
           <span class="w-1.5 h-1.5 bg-zonakasir-primary rounded-full"></span>
           <span class="text-zonakasir-primary text-sm font-semibold">Harga</span>
@@ -503,7 +505,6 @@ state([
         <p class="mt-4 text-gray-600 max-w-2xl mx-auto text-base sm:text-lg">Mulai gratis atau upgrade untuk fitur lebih lengkap.</p>
       </div>
 
-      {{-- Pricing Cards --}}
       <div class="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
         @foreach($prices as $index => $price)
         <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-2xl transition-all duration-500 border {{ $index === 1 ? 'border-2 border-zonakasir-primary relative ring-4 ring-zonakasir-primary/10' : 'border-gray-100 hover:border-zonakasir-primary/20' }} relative overflow-hidden group"
@@ -512,7 +513,6 @@ state([
              x-transition:enter-start="opacity-0 translate-y-12"
              x-transition:enter-end="opacity-100 translate-y-0"
              style="transition-delay: {{ $index * 150 }}ms">
-          {{-- Hover Gradient --}}
           <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
           @if($index === 1)
