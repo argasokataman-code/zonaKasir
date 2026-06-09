@@ -32,12 +32,27 @@
 
 ## Screenshots
 
-<div style="display:inline-block" align="center">
-  <img src="./readme/Screenshot/cashier-menu.png" alt="Product Detail" width="400" />
+<div align="center">
+  <img src="./public/assets/images/dashboard.png" alt="Dashboard" width="400" />
   &emsp;
-  <img src="./readme/Screenshot/product-detail.png" alt="Product Detail" width="400"/>  
+  <img src="./public/assets/images/cashier-transaction.png" alt="Cashier" width="400" />
+  <br/>
+  <img src="./public/assets/images/product-management.png" alt="Product Management" width="400" />
+  &emsp;
+  <img src="./public/assets/images/member.png" alt="Member" width="400" />
+  <br/>
+  <img src="./public/assets/images/dashboard-transaction.png" alt="Transaction" width="400" />
+  &emsp;
+  <img src="./public/assets/images/stock-management.png" alt="Stock Management" width="400" />
+  <br/>
+  <img src="./public/assets/images/supplier-management.png" alt="Supplier" width="400" />
+  &emsp;
+  <img src="./public/assets/images/payment-methods.png" alt="Payment Methods" width="400" />
+  <br/>
+  <img src="./public/assets/images/category-management.png" alt="Categories" width="400" />
+  &emsp;
+  <img src="./public/assets/images/cashier-report.png" alt="Cashier Report" width="400" />
 </div>
-<!-- ![Lakasir Screenshot](./readme/Screenshot/product-detail.png) -->
 
 ## Technologies Used
 * **Backend**: [Laravel](https://laravel.com)
