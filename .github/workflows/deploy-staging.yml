@@ -81,6 +81,13 @@ jobs:
             set -e
 
             PATH_DEPLOY="${{ secrets.DEPLOY_PATH }}"
+            echo "DEBUG: PATH_DEPLOY=[${PATH_DEPLOY}]"
+            ls -la "${PATH_DEPLOY}/deploy-artifacts.tar.gz" 2>&1 || echo "FILE NOT FOUND in PATH_DEPLOY"
+
+            # Also check from the env-based upload path
+            echo "DEBUG: checking from upload path..."
+            ls -la "${{ secrets.DEPLOY_PATH }}/deploy-artifacts.tar.gz" 2>&1 || echo "FILE NOT FOUND in upload path"
+
             cd "${PATH_DEPLOY}"
 
             # Maintenance mode
