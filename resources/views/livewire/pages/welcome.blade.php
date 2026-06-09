@@ -524,7 +524,7 @@ state([
         </div>
 
         {{-- Floating Notification Right --}}
-        <div class="hidden lg:block absolute right-0 bottom-16 z-10 animate-float-card-delayed">
+        <div class="hidden lg:block absolute right-0 bottom-16 z-30 animate-float-card-delayed">
           <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-2xl border border-gray-100">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 bg-gradient-to-br from-zonakasir-primary to-orange-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30">
