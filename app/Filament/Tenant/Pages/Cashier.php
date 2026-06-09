@@ -117,11 +117,11 @@ class Cashier extends Page implements HasForms, HasTable
 
         $this->tableOption = Table::select('id', 'number')->get();
 
-        $this->storeCartForm->fill([
+        $this->storeCartForm->fill(array_merge($this->cartDetail, [
             'payment_method_id' => 1,
             'total_price' => $this->total_price,
             'friend_price' => false,
-        ]);
+        ]));
 
         $this->fillPayemntMethod();
     }
