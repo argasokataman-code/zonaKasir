@@ -77,9 +77,10 @@ jobs:
         run: |
           PORT="${PORT:-2223}"
 
-          # Upload artifacts to /tmp (outside git working tree)
+          # Upload artifacts to /tmp
           echo "Uploading $(du -h /tmp/deploy-artifacts.tar.gz | cut -f1)"
           cat /tmp/deploy-artifacts.tar.gz | ssh -p "${PORT}" "${USER}@${HOST}" "cat > /tmp/deploy-artifacts.tar.gz && sync"
+          ssh -p "${PORT}" "${USER}@${HOST}" "ls -la /tmp/deploy-artifacts.tar.gz && df -h /home/jogn3455 | tail -1"
 
           # Deploy
           ssh -p "${PORT}" "${USER}@${HOST}" bash -s << 'DEPLOY'
