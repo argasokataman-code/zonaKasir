@@ -6,13 +6,46 @@ on:
       - main
 
 jobs:
-  deploy:
-    name: Deploy to Shared Hosting
+  build-and-deploy:
+    name: Build & Deploy to Staging
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: mbstring, bcmath, intl, pdo_mysql
+          tools: composer:v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install PHP deps
+        run: composer install --no-dev --prefer-dist --no-interaction
+
+      - name: Install JS deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Package build artifacts
+        run: |
+          tar czf /tmp/build-assets.tar.gz -C public/build .
+          echo "Build size: $(du -sh /tmp/build-assets.tar.gz | cut -f1)"
 
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
@@ -22,38 +55,62 @@ jobs:
       - name: Add host to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy via SSH
+        env:
+          HOST: ${{ secrets.SSH_HOST }}
+          USER: ${{ secrets.SSH_USERNAME }}
+          PORT: ${{ secrets.SSH_PORT }}
+          PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'DEPLOY'
-            cd ${{ secrets.DEPLOY_PATH }}
+          PORT="${PORT:-2223}"
+
+          # Upload build assets
+          scp -P "${PORT}" /tmp/build-assets.tar.gz "${USER}@${HOST}:${PATH}/build-assets.tar.gz"
+
+          # Deploy commands
+          ssh -p "${PORT}" "${USER}@${HOST}" bash -s << 'DEPLOY'
+            set -e
+
+            PATH_DEPLOY="${{ secrets.DEPLOY_PATH }}"
+            cd "${PATH_DEPLOY}"
 
             # Maintenance mode
-            php artisan down --retry=60
+            php artisan down --retry=60 2>/dev/null || true
 
             # Pull latest code
             git pull origin main
 
-            # Install PHP dependencies
+            # Install PHP deps
             export COMPOSER_ALLOW_SUPERUSER=1
             composer install --no-dev --prefer-dist --no-interaction
 
-            # Install JS dependencies & build
-            npm ci --no-audit --no-fund
-            npm run build
+            # Extract build assets
+            mkdir -p public/build
+            cd public/build
+            rm -rf assets manifest.json ._assets ._manifest.json 2>/dev/null || true
+            tar xzf "${PATH_DEPLOY}/build-assets.tar.gz"
+            rm -f "${PATH_DEPLOY}/build-assets.tar.gz"
+            cd "${PATH_DEPLOY}"
 
             # Run migrations
             php artisan migrate --path=database/migrations/tenant --force --seed
 
-            # Clear caches
+            # Clear & cache
             php artisan optimize:clear
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
-            php artisan filament:assets
-            php artisan livewire:publish --assets
+
+            # Storage link (safe to run on every deploy)
+            php artisan storage:link 2>/dev/null || true
+
+            # Filament assets
+            php artisan filament:assets 2>/dev/null || true
 
             # Bring app back up
             php artisan up
+
+            echo "Deploy complete!"
           DEPLOY

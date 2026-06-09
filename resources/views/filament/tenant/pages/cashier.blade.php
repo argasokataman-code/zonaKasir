@@ -3,15 +3,38 @@
   use App\Features\{PaymentShortcutButton, SellingTax, Discount};
 
 @endphp
-<div class="">
-  <div class="grid grid-cols-3 gap-x-4">
-    <div class="col-span-2">
+<div class="" x-data="{ cartOpen: false }">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-4">
+    <div class="col-span-1 lg:col-span-2 pb-24 lg:pb-0">
       {{ $this->table }}
     </div>
-    <div class="fixed right-0 h-screen w-1/3 overflow-y-scroll pb-10">
-      <div class="mt-4 h-screen space-y-2 px-4">
+
+    {{-- Mobile: cart toggle button --}}
+    <div class="fixed bottom-0 left-0 right-0 z-50 border-t bg-white p-3 shadow-lg dark:border-gray-800 dark:bg-gray-900 lg:hidden"
+      x-show="!cartOpen">
+      <button @click="cartOpen = true"
+        class="flex w-full items-center justify-between rounded-lg bg-zonakasir-primary px-4 py-3 text-white">
+        <span class="font-semibold">{{ __('View Cart') }}</span>
+        <span class="flex items-center gap-2">
+          <span x-text="$wire.cartItems ? $wire.cartItems.length : 0" class="rounded-full bg-white/20 px-2 py-0.5 text-sm"></span>
+          <x-heroicon-o-chevron-up class="h-5 w-5" />
+        </span>
+      </button>
+    </div>
+
+    {{-- Sidebar: always visible on desktop, bottom sheet on mobile --}}
+    <div class="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white shadow-2xl transition-transform duration-300 dark:bg-gray-900 lg:inset-auto lg:right-0 lg:top-0 lg:h-screen lg:w-1/3 lg:rounded-none lg:shadow-none lg:translate-y-0"
+      x-bind:class="cartOpen ? 'translate-y-0' : 'translate-y-full lg:!translate-y-0'"
+      x-cloak>
+      <div class="flex items-center justify-between border-b p-4 dark:border-gray-800 lg:hidden">
+        <p class="text-lg font-semibold">{{ __('Orders details') }}</p>
+        <button @click="cartOpen = false" class="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-800">
+          <x-heroicon-o-x-mark class="h-6 w-6" />
+        </button>
+      </div>
+      <div class="h-full space-y-2 px-4 pb-24 lg:pb-10">
         <div class="flex items-center justify-between" x-data="fullscreen">
-          <p class="text-xl font-semibold">{{ __('Orders details') }}</p>
+          <p class="text-xl font-semibold hidden lg:block">{{ __('Orders details') }}</p>
           <div class="flex items-center">
             <div class="hidden items-center gap-x-2 xl:flex">
               <a href="/member/sellings"
@@ -145,8 +168,9 @@
       </div>
     </div>
   </div>
-  {{-- modal --}}
-  <x-filament::modal id="edit-detail" width="2xl">
+</div>
+{{-- modal --}}
+<x-filament::modal id="edit-detail" width="2xl">
     <form wire:submit.prevent="storeCart">
       <x-slot name="heading">
         <p id="titleEditDetail">{{ __('Edit detail') }}</p>
