@@ -38,19 +38,21 @@ class UploadController extends Controller
                 'disk' => $tmpDisk,
             ]);
         } else {
-            return $this->fail('File is not valid');
+            return $this->buildResponse()
+                ->setCode(400)
+                ->setMessage('File is not valid')
+                ->present();
         }
 
-        return response()->json([
-            'id' => $uploadedFile->id,
-            'success' => true,
-            'data' => [
+        return $this->buildResponse()
+            ->setData([
                 'id' => $uploadedFile->id,
                 'name' => $name,
                 'relative_path' => $name,
                 'url' => $fullUrl,
                 'original_name' => $originalName,
-            ],
-        ]);
+            ])
+            ->setMessage('File uploaded successfully')
+            ->present();
     }
 }

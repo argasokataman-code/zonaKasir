@@ -22,11 +22,13 @@ class SellingReportController extends Controller
             $reportData = $sellingReportService->generate($request->all());
 
             if ($request->wantsJson()) {
-                return response()->json([
-                    'data' => $reportData['reports'],
-                    'header' => $reportData['header'],
-                    'footer' => $reportData['footer'],
-                ]);
+                return $this->buildResponse()
+                    ->setData([
+                        'reports' => $reportData['reports'],
+                        'header' => $reportData['header'],
+                        'footer' => $reportData['footer'],
+                    ])
+                    ->present();
             }
 
             $reports = $reportData['reports'];

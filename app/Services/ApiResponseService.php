@@ -85,7 +85,7 @@ class ApiResponseService
         return $this;
     }
 
-    private function setLengthAwarePaginator(): self
+    private function setLengthAwarePaginator($data): self
     {
         $resource = isset($this->data->resource) ? $this->data->resource : $this->data;
 
