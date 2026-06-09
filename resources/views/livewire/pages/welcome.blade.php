@@ -593,8 +593,8 @@ state([
           </div>
         </div>
         <div class="relative group">
-          <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/10 to-orange-100 rounded-3xl transform rotate-3 scale-105 animate-float-slow"></div>
-          <div class="absolute inset-0 bg-gradient-to-tl from-orange-500/5 to-transparent rounded-3xl transform -rotate-2 scale-[1.02]"></div>
+          <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/10 to-orange-100 rounded-3xl animate-gradient-breathe"></div>
+          <div class="absolute inset-0 bg-gradient-to-tl from-orange-500/5 to-transparent rounded-3xl transform -rotate-2 scale-[1.02] animate-gradient-drift"></div>
           {{-- Dashboard Mockup --}}
           <div class="relative rounded-3xl shadow-2xl hover:shadow-3xl transition-shadow duration-500 w-full bg-gray-50 overflow-hidden aspect-[4/3] border border-gray-200">
             <div class="flex h-full">
@@ -764,8 +764,8 @@ state([
             <p class="text-gray-600 text-base sm:text-lg leading-relaxed max-w-lg mx-auto lg:mx-0">{{ $item['description'] }}</p>
           </div>
           <div class="{{ $index % 2 === 1 ? 'lg:order-1' : '' }} relative group">
-            <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/10 to-orange-100 rounded-3xl transform {{ $index % 2 === 0 ? '-rotate-3' : 'rotate-3' }} scale-105 group-hover:scale-110 group-hover:rotate-0 transition-all duration-700"></div>
-            <div class="absolute inset-0 bg-gradient-to-tl from-orange-500/5 to-transparent rounded-3xl transform {{ $index % 2 === 0 ? 'rotate-2' : '-rotate-2' }} scale-[1.01]"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/10 to-orange-100 rounded-3xl animate-gradient-shimmer" style="animation-delay: {{ $index * 1.5 }}s"></div>
+            <div class="absolute inset-0 bg-gradient-to-tl from-orange-500/5 to-transparent rounded-3xl animate-gradient-float" style="animation-delay: {{ $index * 2 }}s"></div>
             {{-- CSS Mockup for each menu item --}}
             @if($index === 0)
             {{-- Analisis Penjualan: Real Dashboard Report --}}
