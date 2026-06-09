@@ -53,10 +53,12 @@ jobs:
           echo "Artifact size: $(du -sh /tmp/deploy-artifacts.tar.gz | cut -f1)"
 
       - name: Create version tag
+        id: tag
         run: |
           TAG="staging-v1.0.${GITHUB_RUN_NUMBER}"
           git tag "${TAG}"
           git push origin "${TAG}"
+          echo "tag=${TAG}" >> "${GITHUB_OUTPUT}"
 
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
@@ -74,13 +76,14 @@ jobs:
           USER: ${{ secrets.SSH_USERNAME }}
           PORT: ${{ secrets.SSH_PORT }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          VERSION_TAG: ${{ steps.tag.outputs.tag }}
         run: |
           PORT="${PORT:-2223}"
 
           # Upload artifacts to /tmp
           echo "Uploading $(du -h /tmp/deploy-artifacts.tar.gz | cut -f1)"
           cat /tmp/deploy-artifacts.tar.gz | ssh -p "${PORT}" "${USER}@${HOST}" "cat > /tmp/deploy-artifacts.tar.gz && sync"
-          ssh -p "${PORT}" "${USER}@${HOST}" "ls -la /tmp/deploy-artifacts.tar.gz && df -h /home/jogn3455 | tail -1"
+          ssh -p "${PORT}" "${USER}@${HOST}" "ls -la /tmp/deploy-artifacts.tar.gz"
 
           # Deploy
           ssh -p "${PORT}" "${USER}@${HOST}" bash -s << 'DEPLOY'
@@ -92,8 +95,6 @@ jobs:
 
             git stash push --message "deploy-stash-$(date +%s)" 2>/dev/null || true
             git pull origin main
-            git fetch --tags origin
-            php artisan app:version-sync || true
             git stash drop 2>/dev/null || true
 
             test -f .env || { echo "ERROR: .env missing!"; cp .env.example .env 2>/dev/null || true; }
@@ -109,6 +110,9 @@ jobs:
 
             php artisan storage:link 2>/dev/null || true
             php artisan filament:assets 2>/dev/null || true
+
+            # Write exact version from CI tag
+            echo "${{ steps.tag.outputs.tag }}" > version.txt
 
             php artisan up
 
