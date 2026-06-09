@@ -104,6 +104,8 @@
       </table>
     </div>
   </x-filament::section>
+
+  @include('partials.receipt-preview')
 </x-filament-panels::page>
 @script()
 <script>
@@ -119,92 +121,113 @@
 
     window.location.reload();
   });
-  document.getElementById('printButton').addEventListener('click', async () => {
+
+  async function doPrintReceiptViewSelling() {
     let selling = @js($record);
     let about = @js($about);
     const printerData = getPrinter();
-
-    try {
-      if (!printerData) {
-        new FilamentNotification()
-          .title('@lang('You should choose the printer first in printer setting')')
-          .danger()
-          .actions([
-            new FilamentNotificationAction('Setting')
-              .icon('heroicon-o-cog-6-tooth')
-              .button()
-              .url('/member/printer'),
-          ])
-          .send()
-      } else {
-        const printer = new Printer(printerData.printerId);
-        let printerAction = printer.font('a');
-        if(about != undefined || about != null) {
-          printerAction.size(1)
-            .align('center')
-            .text(about.shop_name)
-            .size(0)
-            .text(about.shop_location);
-          if(printerData.header != undefined) {
-            printerAction
-              .text(printerData.header);
-          }
-          printerAction.align('left')
-            .text('-------------------------------');
-        }
-        printerAction.table(['@lang('Cashier')', selling.user.name])
-        if(selling.table != undefined && selling.table != null) {
-          printerAction.table(['@lang('Table')', selling.table.number])
-        }
-        printerAction.table(['@lang('Payment method')', selling.payment_method.name]);
-        if(selling.member != undefined && selling.member != null) {
-          printerAction
-            .table(['Member', selling.member.name]);
-        }
-        printerAction
-          .text('-------------------------------');
-        selling.selling_details.forEach(sellingDetail => {
-          let price = sellingDetail.price;
-          let text = moneyFormat(sellingDetail.price / sellingDetail.qty) + ' x ' + sellingDetail.qty.toString();
-          printerAction.table([sellingDetail.product.name, moneyFormat(sellingDetail.price / sellingDetail.qty) + ' x ' + sellingDetail.qty.toString()])
-          if (sellingDetail.discount_price > 0) {
-            price = price - sellingDetail.discount_price;
-            printerAction
-              .align('right')
-              .text(`(${moneyFormat(sellingDetail.discount_price)})`)
-          }
-          printerAction
-            .align('right')
-            .text(moneyFormat(price))
-            .align('left')
-        });
-        printerAction
-          .text('-------------------------------');
-        if("@js(feature(SellingTax::class))" == 'true') {
-          printerAction.table(['@lang('Tax')', `${selling.tax}%`])
-            .table(['@lang('Tax price')', moneyFormat(selling.tax_price)]);
-        }
-        printerAction
-          .table(['@lang('Subtotal')', moneyFormat(selling.total_price)])
-          .table(['@lang('Discount')', `(${moneyFormat(selling.total_discount_per_item + selling.discount_price)})`])
-          .table(['@lang('Total price')', moneyFormat(selling.grand_total_price)])
-          .text('-------------------------------')
-          .table(['@lang('Payed money')', moneyFormat(selling.payed_money)])
-          .table(['@lang('Change')', moneyFormat(selling.money_changes)])
-          .align('center');
-        if(printerData.footer != undefined) {
-          printerAction
-            .text(printerData.footer);
-        }
-        printerAction.align('left')
-          .text('copy');
-
-        await printerAction
-          .cut()
-          .print();
+    if (!printerData || printerData instanceof Error) {
+      new FilamentNotification()
+        .title('@lang('You should choose the printer first in printer setting')')
+        .danger()
+        .actions([
+          new FilamentNotificationAction('Setting')
+            .icon('heroicon-o-cog-6-tooth')
+            .button()
+            .url('/member/printer'),
+        ])
+        .send()
+      return;
+    }
+    const printer = new Printer(printerData.printerId);
+    let p = printer.font('a');
+    if(about != undefined || about != null) {
+      p.size(1).align('center').text(about.shop_name).size(0).text(about.shop_location);
+      if(printerData.header != undefined) p.text(printerData.header);
+      p.align('left').text('-------------------------------');
+    }
+    p.table(['@lang('Cashier')', selling.user.name])
+    if(selling.table != undefined && selling.table != null) p.table(['@lang('Table')', selling.table.number])
+    p.table(['@lang('Payment method')', selling.payment_method.name]);
+    if(selling.member != undefined && selling.member != null) p.table(['Member', selling.member.name]);
+    p.text('-------------------------------');
+    selling.selling_details.forEach(d => {
+      p.table([d.product.name, moneyFormat(d.price / d.qty) + ' x ' + d.qty.toString()])
+      if (d.discount_price > 0) {
+        p.align('right').text(`(${moneyFormat(d.discount_price)})`)
       }
-    } catch (error) {
-      console.error(error);
+      p.align('right').text(moneyFormat(d.price)).align('left')
+    });
+    p.text('-------------------------------');
+    if("@js(feature(SellingTax::class))" == 'true') {
+      p.table(['@lang('Tax')', `${selling.tax}%`]).table(['@lang('Tax price')', moneyFormat(selling.tax_price)]);
+    }
+    p.table(['@lang('Subtotal')', moneyFormat(selling.total_price)])
+      .table(['@lang('Discount')', `(${moneyFormat(selling.total_discount_per_item + selling.discount_price)})`])
+      .table(['@lang('Total price')', moneyFormat(selling.grand_total_price)])
+      .text('-------------------------------')
+      .table(['@lang('Payed money')', moneyFormat(selling.payed_money)])
+      .table(['@lang('Change')', moneyFormat(selling.money_changes)])
+      .align('center');
+    if(printerData.footer != undefined) p.text(printerData.footer);
+    p.align('left').text('copy');
+    await p.cut().print();
+  }
+
+  function previewHtml(selling, about, printerData) {
+    const line = '─'.repeat(31);
+    let h = '';
+    const esc = (s) => s == null ? '' : String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    if (about) {
+      h += `<div style="text-align:center;font-size:14px;font-weight:700;margin-bottom:2px">${esc(about.shop_name)}</div>`;
+      if (about.shop_location) h += `<div style="text-align:center;font-size:11px;margin-bottom:2px">${esc(about.shop_location)}</div>`;
+      if (printerData?.header) h += `<div style="text-align:center;font-size:11px">${esc(printerData.header)}</div>`;
+    }
+    h += `<div style="text-align:center;letter-spacing:.2em;margin:6px 0">${line}</div>`;
+    if (selling.user?.name) h += `<div style="display:flex;justify-content:space-between"><span>Cashier</span><span>${esc(selling.user.name)}</span></div>`;
+    if (selling.table?.number) h += `<div style="display:flex;justify-content:space-between"><span>Table</span><span>${esc(selling.table.number)}</span></div>`;
+    if (selling.payment_method?.name) h += `<div style="display:flex;justify-content:space-between"><span>Payment</span><span>${esc(selling.payment_method.name)}</span></div>`;
+    if (selling.member?.name) h += `<div style="display:flex;justify-content:space-between"><span>Member</span><span>${esc(selling.member.name)}</span></div>`;
+    h += `<div style="text-align:center;letter-spacing:.2em;margin:6px 0">${line}</div>`;
+    const details = selling.selling_details || selling.details || [];
+    details.forEach(d => {
+      const qty = d.qty || 1;
+      const ppu = d.price_per_unit || (d.price ? d.price / qty : 0);
+      const nm = d.product?.name || d.name || 'Product';
+      h += `<div style="display:flex;justify-content:space-between"><span>${esc(nm)}</span><span>${moneyFormat(ppu)} x ${qty}</span></div>`;
+      if (d.discount_price > 0) h += `<div style="text-align:right">(${moneyFormat(d.discount_price)})</div>`;
+      h += `<div style="text-align:right;font-weight:600">${moneyFormat(d.price || d.total_price || 0)}</div>`;
+    });
+    h += `<div style="text-align:center;letter-spacing:.2em;margin:6px 0">${line}</div>`;
+    if (selling.tax > 0) {
+      h += `<div style="display:flex;justify-content:space-between"><span>Tax</span><span>${selling.tax}%</span></div>`;
+      h += `<div style="display:flex;justify-content:space-between"><span>Tax price</span><span>${moneyFormat(selling.tax_price)}</span></div>`;
+    }
+    h += `<div style="display:flex;justify-content:space-between"><span>Subtotal</span><span>${moneyFormat(selling.total_price)}</span></div>`;
+    const discount = (selling.total_discount_per_item || 0) + (selling.discount_price || 0);
+    if (discount > 0) h += `<div style="display:flex;justify-content:space-between"><span>Discount</span><span>(${moneyFormat(discount)})</span></div>`;
+    h += `<div style="display:flex;justify-content:space-between;font-weight:700"><span>Total price</span><span>${moneyFormat(selling.grand_total_price)}</span></div>`;
+    h += `<div style="text-align:center;letter-spacing:.2em;margin:6px 0">${line}</div>`;
+    h += `<div style="display:flex;justify-content:space-between"><span>Payed money</span><span>${moneyFormat(selling.payed_money)}</span></div>`;
+    h += `<div style="display:flex;justify-content:space-between"><span>Change</span><span>${moneyFormat(selling.money_changes)}</span></div>`;
+    if (printerData?.footer) h += `<div style="text-align:center;margin-top:4px">${esc(printerData.footer)}</div>`;
+    h += `<div style="font-size:10px;margin-top:2px">copy</div>`;
+    return h;
+  }
+
+  document.getElementById('printButton').addEventListener('click', async () => {
+    let selling = @js($record);
+    let about = @js($about);
+    const pd = getPrinter();
+    const preview = previewHtml(selling, about, pd instanceof Error ? null : pd);
+    document.getElementById('receiptPreviewContent').innerHTML = preview;
+    $wire.dispatch('open-modal', {id: 'receipt-preview-modal'});
+  });
+
+  document.addEventListener('click', async (e) => {
+    if (e.target.id === 'confirmPrintButton' || e.target.closest('#confirmPrintButton')) {
+      await doPrintReceiptViewSelling();
+      $wire.dispatch('close-modal', {id: 'receipt-preview-modal'});
     }
   });
 </script>

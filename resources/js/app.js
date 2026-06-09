@@ -2,10 +2,8 @@ let selectedDevice = null;
 
 /**
  * Retrieve printer settings from localStorage.
- * 
- * @returns {Object|Error} The printer settings object or an Error if not set.
  */
-function getPrinter() {
+window.getPrinter = function() {
   if (localStorage.printer == undefined) {
     console.error('printer didn\'t set');
     return Error('printer didn\'t set');
@@ -20,7 +18,7 @@ function getPrinter() {
  * @param {string} text - The ESC/POS command string to print.
  * @returns {Promise<void>}
  */
-async function printToUSBPrinter(text) {
+window.printToUSBPrinter = async function(text) {
   let receiptText = text;
   console.log(receiptText);
 
@@ -75,7 +73,7 @@ async function printToUSBPrinter(text) {
  * @param {string} textSize - Text size ('normal' or 'large').
  * @returns {string} The padded text.
  */
-function padText(text, length, alignRight = false, center = false, textSize = 'normal') {
+window.padText = function(text, length, alignRight = false, center = false, textSize = 'normal') {
   const sizes = {
     'normal': '\x1D\x21\x00', // Normal text
     'large': '\x1D\x21\x11', // Large text
@@ -104,7 +102,7 @@ function padText(text, length, alignRight = false, center = false, textSize = 'n
  * @param {string|null} currency - Currency code (e.g., 'IDR', 'USD').
  * @returns {string} The formatted currency string.
  */
-function moneyFormat(number, currency = null) {
+window.moneyFormat = function(number, currency = null) {
   const activeCurrency = currency || window.zonakasirCurrency || 'IDR';
   const activeLocale = window.zonakasirLocale || 'en';
 
@@ -128,10 +126,72 @@ function moneyFormat(number, currency = null) {
  * @param {number} number - The value to format.
  * @returns {string} The formatted number string.
  */
-function numberFormat(number) {
+window.numberFormat = function(number) {
   const activeLocale = window.lakasirLocale || 'en';
   const formatter = new Intl.NumberFormat(activeLocale);
 
   return formatter.format(number);
+}
+
+/**
+ * Build receipt preview HTML matching thermal printer output.
+ */
+window.buildReceiptPreviewHtml = function(selling, about, printerData) {
+  const line = '─'.repeat(32);
+  let h = '';
+
+  const esc = (s) => s == null ? '' : String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  // Header
+  if (about) {
+    h += `<div class="text-lg font-bold text-center">${esc(about.shop_name)}</div>`;
+    if (about.shop_location) h += `<div class="text-center text-sm">${esc(about.shop_location)}</div>`;
+    if (printerData?.header) h += `<div class="text-center text-sm">${esc(printerData.header)}</div>`;
+  }
+  h += `<div class="text-center tracking-[0.2em] my-1">${line}</div>`;
+
+  // Info
+  if (selling.user?.name) h += `<div class="flex justify-between text-sm"><span>Cashier</span><span>${esc(selling.user.name)}</span></div>`;
+  if (selling.table?.number) h += `<div class="flex justify-between text-sm"><span>Table</span><span>${esc(selling.table.number)}</span></div>`;
+  if (selling.payment_method?.name) h += `<div class="flex justify-between text-sm"><span>Payment</span><span>${esc(selling.payment_method.name)}</span></div>`;
+  if (selling.member?.name) h += `<div class="flex justify-between text-sm"><span>Member</span><span>${esc(selling.member.name)}</span></div>`;
+  h += `<div class="text-center tracking-[0.2em] my-1">${line}</div>`;
+
+  // Items
+  const details = selling.selling_details || selling.details || [];
+  details.forEach(d => {
+    const qty = d.qty || 1;
+    const pricePerUnit = d.price_per_unit || (d.price ? d.price / qty : 0);
+    const name = d.product?.name || d.name || 'Product';
+    h += `<div class="flex justify-between text-sm"><span>${esc(name)}</span><span>${moneyFormat(pricePerUnit)} x ${qty}</span></div>`;
+    if (d.discount_price > 0) {
+      h += `<div class="text-right text-sm">(${moneyFormat(d.discount_price)})</div>`;
+    }
+    h += `<div class="text-right text-sm font-semibold">${moneyFormat(d.price || d.total_price || 0)}</div>`;
+  });
+  h += `<div class="text-center tracking-[0.2em] my-1">${line}</div>`;
+
+  // Totals
+  if (selling.tax > 0) {
+    h += `<div class="flex justify-between text-sm"><span>Tax</span><span>${selling.tax}%</span></div>`;
+    h += `<div class="flex justify-between text-sm"><span>Tax price</span><span>${moneyFormat(selling.tax_price)}</span></div>`;
+  }
+  h += `<div class="flex justify-between text-sm"><span>Subtotal</span><span>${moneyFormat(selling.total_price)}</span></div>`;
+  const discount = (selling.total_discount_per_item || 0) + (selling.discount_price || 0);
+  if (discount > 0) {
+    h += `<div class="flex justify-between text-sm"><span>Discount</span><span>(${moneyFormat(discount)})</span></div>`;
+  }
+  h += `<div class="flex justify-between text-sm font-bold"><span>Total price</span><span>${moneyFormat(selling.grand_total_price)}</span></div>`;
+  h += `<div class="text-center tracking-[0.2em] my-1">${line}</div>`;
+  h += `<div class="flex justify-between text-sm"><span>Payed money</span><span>${moneyFormat(selling.payed_money)}</span></div>`;
+  h += `<div class="flex justify-between text-sm"><span>Change</span><span>${moneyFormat(selling.money_changes)}</span></div>`;
+
+  // Footer
+  if (printerData?.footer) {
+    h += `<div class="text-center text-sm mt-1">${esc(printerData.footer)}</div>`;
+  }
+  h += `<div class="text-left text-xs mt-1">copy</div>`;
+
+  return h;
 }
 
