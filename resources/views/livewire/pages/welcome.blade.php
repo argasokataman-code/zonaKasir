@@ -1068,10 +1068,10 @@ state([
           <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
           @if($index === 1)
-          <div class="absolute -top-px left-0 right-0 h-1 bg-gradient-to-r from-zonakasir-primary to-orange-500"></div>
-          <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-zonakasir-primary to-orange-500 text-white text-sm font-bold px-5 py-1.5 rounded-full shadow-lg shadow-orange-500/30">
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-zonakasir-primary to-orange-500 text-white text-sm font-bold px-5 py-1.5 rounded-full shadow-lg shadow-orange-500/30 z-10">
             Populer
           </div>
+          <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-zonakasir-primary to-orange-500 rounded-t-3xl"></div>
           @endif
 
           <div class="relative">
