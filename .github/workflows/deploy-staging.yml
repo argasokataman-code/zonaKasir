@@ -83,9 +83,10 @@ jobs:
             git stash push --include-untracked --message "deploy-stash-$(date +%s)" 2>/dev/null || true
             git pull origin main
 
-            # Install PHP deps
+            # Add composer to PATH (server-specific)
+            export PATH="/home/jogn3455/bin:${PATH}"
             export COMPOSER_ALLOW_SUPERUSER=1
-            composer install --no-dev --prefer-dist --no-interaction
+            composer install --no-dev --prefer-dist --no-interaction 2>&1
 
             # Extract build assets
             mkdir -p public/build
