@@ -100,7 +100,7 @@ jobs:
             rm -f "${PATH_DEPLOY}/deploy-artifacts.tar.gz"
 
             # Run migrations
-            php artisan migrate --path=database/migrations/tenant --force --seed
+            php artisan migrate --path=database/migrations/tenant --force
 
             # Clear cache only (skip config:cache / route:cache — causes issues
             # with tenancy and env() on shared hosting)
