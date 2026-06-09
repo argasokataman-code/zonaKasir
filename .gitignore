@@ -32,3 +32,6 @@ tasks/
 .mcp.json
 opencode.json
 version.txt
+
+# Deploy keys (gitignored locally, used by GitHub Actions)
+.deploy/
