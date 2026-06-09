@@ -18,16 +18,7 @@ class VersionSyncCommand extends Command
             return Command::SUCCESS;
         }
 
-        $tag = '';
-        try {
-            \exec('git describe --tags --abbrev=0 2>/dev/null', $output, $exitCode);
-            $tag = \trim($output[0] ?? '');
-            if ($exitCode !== 0) {
-                $this->warn("git describe exited with code {$exitCode}");
-            }
-        } catch (\Throwable $e) {
-            $this->warn("exec failed: {$e->getMessage()}");
-        }
+        $tag = $this->getLatestTag();
 
         if ($tag !== '') {
             file_put_contents(base_path('version.txt'), $tag);
@@ -41,5 +32,33 @@ class VersionSyncCommand extends Command
         $this->info("version.txt synced to: {$version}");
 
         return Command::SUCCESS;
+    }
+
+    private function getLatestTag(): string
+    {
+        // Try git describe via exec()
+        if (\function_exists('exec')) {
+            @\exec('git describe --tags --abbrev=0 2>/dev/null', $output, $exitCode);
+            if ($exitCode === 0 && ! empty($output[0])) {
+                return \trim($output[0]);
+            }
+        }
+
+        // Fallback: read tags from filesystem
+        $tagsDir = base_path('.git/refs/tags');
+        if (! is_dir($tagsDir)) {
+            return '';
+        }
+
+        $tags = \glob($tagsDir.'/*');
+        if (empty($tags)) {
+            return '';
+        }
+
+        \usort($tags, function ($a, $b) {
+            return \filemtime($b) - \filemtime($a);
+        });
+
+        return \pathinfo($tags[0], \PATHINFO_FILENAME);
     }
 }
