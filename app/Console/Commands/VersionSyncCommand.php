@@ -19,8 +19,8 @@ class VersionSyncCommand extends Command
         }
 
         $tag = '';
-        exec('git describe --tags --abbrev=0 2>/dev/null', $output, $exitCode);
-        $tag = trim($output[0] ?? '');
+        \exec('git describe --tags --abbrev=0 2>/dev/null', $output, $exitCode);
+        $tag = \trim($output[0] ?? '');
 
         if ($tag !== '') {
             file_put_contents(base_path('version.txt'), $tag);
