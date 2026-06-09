@@ -1059,7 +1059,7 @@ state([
 
       <div class="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
         @foreach($prices as $index => $price)
-        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-2xl transition-all duration-500 border {{ $index === 1 ? 'border-2 border-zonakasir-primary relative ring-4 ring-zonakasir-primary/10' : 'border-gray-100 hover:border-zonakasir-primary/20' }} relative overflow-hidden group"
+        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-2xl transition-all duration-500 border {{ $index === 1 ? 'border-2 border-zonakasir-primary relative ring-4 ring-zonakasir-primary/10' : 'border-gray-100 hover:border-zonakasir-primary/20' }} relative group"
              x-data="{ shown: false }" x-intersect:enter="shown = true" x-show="shown"
              x-transition:enter="transition ease-out duration-700"
              x-transition:enter-start="opacity-0 translate-y-12"
