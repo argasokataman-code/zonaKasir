@@ -79,7 +79,8 @@ jobs:
             # Maintenance mode
             php artisan down --retry=60 2>/dev/null || true
 
-            # Pull latest code
+            # Stash any local changes, then pull latest code
+            git stash push --include-untracked --message "deploy-stash-$(date +%s)" 2>/dev/null || true
             git pull origin main
 
             # Install PHP deps
