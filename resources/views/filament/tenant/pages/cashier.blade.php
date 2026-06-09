@@ -164,7 +164,7 @@
           </div>
         </div>
         <button class="w-full rounded-lg bg-zonakasir-primary px-2 py-3 text-sm font-semibold text-white"
-          x-on:mousedown="$dispatch('open-modal', {id: 'proceed-the-payment'})">{{ __('Proceed to payment') }}</button>
+          x-on:mousedown="cartOpen = false; $dispatch('open-modal', {id: 'proceed-the-payment'})">{{ __('Proceed to payment') }}</button>
       </div>
     </div>
   </div>
@@ -475,6 +475,16 @@
       text-decoration: underline !important;
       box-shadow: none !important;
       padding: 0 !important;
+    }
+  </style>
+
+  {{-- Ensure modal is above sidebar z-50 --}}
+  <style>
+    .fi-modal .fixed.inset-0.z-40 {
+      z-index: 100 !important;
+    }
+    .fi-modal .fi-modal-content {
+      z-index: 101 !important;
     }
   </style>
 </div>
