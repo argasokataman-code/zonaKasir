@@ -49,6 +49,12 @@ jobs:
             public/build
           echo "Artifact size: $(du -sh /tmp/deploy-artifacts.tar.gz | cut -f1)"
 
+      - name: Create version tag
+        run: |
+          TAG="staging-v1.0.${GITHUB_RUN_NUMBER}"
+          git tag "${TAG}"
+          git push origin "${TAG}"
+
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
         with:
@@ -82,6 +88,8 @@ jobs:
 
             git stash push --message "deploy-stash-$(date +%s)" 2>/dev/null || true
             git pull origin main
+            git fetch --tags origin
+            php artisan app:version-sync
             git stash drop 2>/dev/null || true
 
             test -f .env || { echo "ERROR: .env missing!"; cp .env.example .env 2>/dev/null || true; }
