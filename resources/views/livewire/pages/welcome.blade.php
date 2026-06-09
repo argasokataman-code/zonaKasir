@@ -348,18 +348,18 @@ state([
                     <div class="grid grid-cols-3 gap-1.5">
                       @php
                       $products = [
-                        ['name' => 'Indomie Goreng', 'price' => 'Rp 3.500', 'stock' => 48, 'color' => 'bg-yellow-100'],
-                        ['name' => 'Teh Botol Sosro', 'price' => 'Rp 4.000', 'stock' => 24, 'color' => 'bg-green-100'],
-                        ['name' => 'Rokok Sampoerna', 'price' => 'Rp 28.000', 'stock' => 12, 'color' => 'bg-red-100'],
-                        ['name' => 'Le Minerale 600ml', 'price' => 'Rp 4.500', 'stock' => 36, 'color' => 'bg-blue-100'],
-                        ['name' => 'Pocari Sweat', 'price' => 'Rp 7.000', 'stock' => 18, 'color' => 'bg-cyan-100'],
-                        ['name' => 'Chitato 68g', 'price' => 'Rp 12.500', 'stock' => 8, 'color' => 'bg-purple-100'],
+                        ['name' => 'Indomie Goreng', 'price' => 'Rp 3.500', 'stock' => 48, 'bg' => 'from-yellow-300 to-orange-300', 'emoji' => '🍜'],
+                        ['name' => 'Teh Botol Sosro', 'price' => 'Rp 4.000', 'stock' => 24, 'bg' => 'from-green-300 to-emerald-400', 'emoji' => '🍵'],
+                        ['name' => 'Rokok Sampoerna', 'price' => 'Rp 28.000', 'stock' => 12, 'bg' => 'from-red-300 to-rose-400', 'emoji' => '🚬'],
+                        ['name' => 'Le Minerale 600ml', 'price' => 'Rp 4.500', 'stock' => 36, 'bg' => 'from-blue-300 to-cyan-400', 'emoji' => '💧'],
+                        ['name' => 'Pocari Sweat', 'price' => 'Rp 7.000', 'stock' => 18, 'bg' => 'from-cyan-300 to-sky-400', 'emoji' => '🧃'],
+                        ['name' => 'Chitato 68g', 'price' => 'Rp 12.500', 'stock' => 8, 'bg' => 'from-purple-300 to-violet-400', 'emoji' => '🥔'],
                       ];
                       @endphp
                       @foreach($products as $pi => $p)
                       <div class="bg-white rounded-lg border border-gray-100 overflow-hidden shadow-sm">
-                        <div class="{{ $p['color'] }} h-8 sm:h-10 flex items-center justify-center">
-                          <div class="w-6 h-6 sm:w-8 sm:h-8 rounded bg-white/60"></div>
+                        <div class="bg-gradient-to-br {{ $p['bg'] }} h-8 sm:h-10 flex items-center justify-center relative">
+                          <span class="text-lg sm:text-xl drop-shadow-sm">{{ $p['emoji'] }}</span>
                         </div>
                         <div class="p-1 sm:p-1.5">
                           <div class="text-[7px] sm:text-[8px] font-bold text-zonakasir-primary">{{ $p['price'] }}</div>
@@ -482,17 +482,17 @@ state([
                 <div class="flex-1 bg-gray-50 overflow-hidden p-1 space-y-1">
                   @php
                   $mobileProducts = [
-                    ['name' => 'Indomie Goreng', 'desc' => 'Mie instan rasa ayam bawang', 'price' => 'Rp 3.500', 'color' => 'bg-yellow-100', 'stock' => '48'],
-                    ['name' => 'Teh Botol Sosro', 'desc' => 'Teh dalam kemasan 450ml', 'price' => 'Rp 4.000', 'color' => 'bg-green-100', 'stock' => '24'],
-                    ['name' => 'Rokok Sampoerna', 'desc' => 'Rokok mild 16 batang', 'price' => 'Rp 28.000', 'color' => 'bg-red-100', 'stock' => '12'],
-                    ['name' => 'Le Minerale', 'desc' => 'Air mineral 600ml', 'price' => 'Rp 4.500', 'color' => 'bg-blue-100', 'stock' => '36'],
-                    ['name' => 'Pocari Sweat', 'desc' => 'Minuman isotonik 350ml', 'price' => 'Rp 7.000', 'color' => 'bg-cyan-100', 'stock' => '18'],
+                    ['name' => 'Indomie Goreng', 'desc' => 'Mie instan rasa ayam bawang', 'price' => 'Rp 3.500', 'bg' => 'from-yellow-300 to-orange-300', 'emoji' => '🍜'],
+                    ['name' => 'Teh Botol Sosro', 'desc' => 'Teh dalam kemasan 450ml', 'price' => 'Rp 4.000', 'bg' => 'from-green-300 to-emerald-400', 'emoji' => '🍵'],
+                    ['name' => 'Rokok Sampoerna', 'desc' => 'Rokok mild 16 batang', 'price' => 'Rp 28.000', 'bg' => 'from-red-300 to-rose-400', 'emoji' => '🚬'],
+                    ['name' => 'Le Minerale', 'desc' => 'Air mineral 600ml', 'price' => 'Rp 4.500', 'bg' => 'from-blue-300 to-cyan-400', 'emoji' => '💧'],
+                    ['name' => 'Pocari Sweat', 'desc' => 'Minuman isotonik 350ml', 'price' => 'Rp 7.000', 'bg' => 'from-cyan-300 to-sky-400', 'emoji' => '🧃'],
                   ];
                   @endphp
                   @foreach($mobileProducts as $mp)
                   <div class="bg-white rounded-lg p-1 flex items-center gap-1.5 shadow-sm">
-                    <div class="{{ $mp['color'] }} w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex-shrink-0 flex items-center justify-center">
-                      <div class="w-4 h-4 sm:w-5 sm:h-5 rounded bg-white/60"></div>
+                    <div class="bg-gradient-to-br {{ $mp['bg'] }} w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex-shrink-0 flex items-center justify-center">
+                      <span class="text-sm sm:text-base">{{ $mp['emoji'] }}</span>
                     </div>
                     <div class="flex-1 min-w-0">
                       <div class="text-[6px] sm:text-[7px] font-semibold text-gray-900 truncate">{{ $mp['name'] }}</div>
@@ -662,10 +662,10 @@ state([
                 <div class="bg-white rounded-xl p-2 border border-gray-100 shadow-sm">
                   <span class="text-[7px] font-semibold text-gray-700">Best Selling Today</span>
                   <div class="mt-1 space-y-1">
-                    @foreach([['name' => 'Indomie Goreng', 'qty' => '48'], ['name' => 'Teh Botol Sosro', 'qty' => '32'], ['name' => 'Rokok Sampoerna', 'qty' => '24']] as $bp)
+                    @foreach([['name' => 'Indomie Goreng', 'qty' => '48', 'emoji' => '🍜', 'bg' => 'bg-yellow-100'], ['name' => 'Teh Botol Sosro', 'qty' => '32', 'emoji' => '🍵', 'bg' => 'bg-green-100'], ['name' => 'Rokok Sampoerna', 'qty' => '24', 'emoji' => '🚬', 'bg' => 'bg-red-100']] as $bp)
                     <div class="flex justify-between items-center py-0.5 border-b border-gray-50 last:border-0">
                       <div class="flex items-center gap-1">
-                        <div class="w-4 h-4 rounded bg-gray-100"></div>
+                        <div class="w-4 h-4 rounded {{ $bp['bg'] }} flex items-center justify-center text-[6px]">{{ $bp['emoji'] }}</div>
                         <span class="text-[6px] text-gray-700">{{ $bp['name'] }}</span>
                       </div>
                       <span class="text-[6px] text-zonakasir-primary font-semibold">{{ $bp['qty'] }} sold</span>
@@ -875,18 +875,18 @@ state([
                     {{-- Rows --}}
                     @php
                     $stockProducts = [
-                      ['name' => 'Indomie Goreng', 'sku' => 'IND-001', 'stock' => '48', 'price' => 'Rp 3.500', 'stockColor' => 'text-green-600'],
-                      ['name' => 'Teh Botol Sosro', 'sku' => 'TBS-002', 'stock' => '24', 'price' => 'Rp 4.000', 'stockColor' => 'text-green-600'],
-                      ['name' => 'Rokok Sampoerna', 'sku' => 'RKS-003', 'stock' => '3', 'price' => 'Rp 28.000', 'stockColor' => 'text-red-600'],
-                      ['name' => 'Le Minerale', 'sku' => 'LEM-004', 'stock' => '36', 'price' => 'Rp 4.500', 'stockColor' => 'text-green-600'],
-                      ['name' => 'Pocari Sweat', 'sku' => 'POS-005', 'stock' => '18', 'price' => 'Rp 7.000', 'stockColor' => 'text-green-600'],
-                      ['name' => 'Chitato 68g', 'sku' => 'CHI-006', 'stock' => '8', 'price' => 'Rp 12.500', 'stockColor' => 'text-yellow-600'],
+                      ['name' => 'Indomie Goreng', 'sku' => 'IND-001', 'stock' => '48', 'price' => 'Rp 3.500', 'stockColor' => 'text-green-600', 'emoji' => '🍜', 'bg' => 'bg-yellow-100'],
+                      ['name' => 'Teh Botol Sosro', 'sku' => 'TBS-002', 'stock' => '24', 'price' => 'Rp 4.000', 'stockColor' => 'text-green-600', 'emoji' => '🍵', 'bg' => 'bg-green-100'],
+                      ['name' => 'Rokok Sampoerna', 'sku' => 'RKS-003', 'stock' => '3', 'price' => 'Rp 28.000', 'stockColor' => 'text-red-600', 'emoji' => '🚬', 'bg' => 'bg-red-100'],
+                      ['name' => 'Le Minerale', 'sku' => 'LEM-004', 'stock' => '36', 'price' => 'Rp 4.500', 'stockColor' => 'text-green-600', 'emoji' => '💧', 'bg' => 'bg-blue-100'],
+                      ['name' => 'Pocari Sweat', 'sku' => 'POS-005', 'stock' => '18', 'price' => 'Rp 7.000', 'stockColor' => 'text-green-600', 'emoji' => '🧃', 'bg' => 'bg-cyan-100'],
+                      ['name' => 'Chitato 68g', 'sku' => 'CHI-006', 'stock' => '8', 'price' => 'Rp 12.500', 'stockColor' => 'text-yellow-600', 'emoji' => '🥔', 'bg' => 'bg-purple-100'],
                     ];
                     @endphp
                     @foreach($stockProducts as $sp)
                     <div class="grid grid-cols-5 gap-0.5 px-2 py-1 border-b border-gray-50 items-center">
                       <div class="flex items-center gap-1 col-span-2">
-                        <div class="w-4 h-4 rounded bg-gray-100 flex-shrink-0"></div>
+                        <div class="w-4 h-4 rounded {{ $sp['bg'] }} flex-shrink-0 flex items-center justify-center text-[6px]">{{ $sp['emoji'] }}</div>
                         <span class="text-[5px] font-medium text-gray-800 truncate">{{ $sp['name'] }}</span>
                       </div>
                       <span class="text-[5px] text-gray-500">{{ $sp['sku'] }}</span>
