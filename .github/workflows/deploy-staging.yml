@@ -135,20 +135,19 @@ jobs:
           ssh -p "${PORT}" "${USER}@${HOST}" bash -s << 'DIAG'
             PATH_DEPLOY="${{ secrets.DEPLOY_PATH }}"
             echo "=== DIAGNOSTIC ==="
-            echo "User: $(whoami)"
-            echo "PWD: $(pwd)"
-            echo "--- Project root ---"
-            ls -la "${PATH_DEPLOY}" | head -5
+            echo "PATH_DEPLOY = ${PATH_DEPLOY}"
+            echo "--- Does path exist? ---"
+            test -d "${PATH_DEPLOY}" && echo "DIR EXISTS" || echo "DIR MISSING!"
+            test -d "${PATH_DEPLOY}/.git" && echo "GIT REPO EXISTS" || echo "NO GIT REPO"
+            echo "--- Project root contents ---"
+            ls -la "${PATH_DEPLOY}" 2>/dev/null || echo "Cannot list"
             echo "--- Public dir ---"
-            ls -la "${PATH_DEPLOY}/public" | head -10
+            ls -la "${PATH_DEPLOY}/public" 2>/dev/null || echo "public/ MISSING!"
             echo "--- .env ---"
-            test -f "${PATH_DEPLOY}/.env" && echo ".env exists" || echo ".env MISSING!"
-            grep -c "APP_URL\|APP_KEY\|DB_" "${PATH_DEPLOY}/.env" 2>/dev/null && grep "APP_URL\|APP_KEY" "${PATH_DEPLOY}/.env" 2>/dev/null || echo "Cannot read .env"
+            test -f "${PATH_DEPLOY}/.env" && echo "EXISTS" || echo "MISSING!"
             echo "--- Index.php ---"
-            ls -la "${PATH_DEPLOY}/public/index.php" 2>/dev/null || echo "index.php MISSING!"
-            echo "--- Permissions ---"
-            stat -c "%a %u %g %n" "${PATH_DEPLOY}/public" 2>/dev/null; ls -ld "${PATH_DEPLOY}/public" 2>/dev/null
-            echo "--- Maintenance ---"
-            php "${PATH_DEPLOY}/artisan" down:status 2>/dev/null || echo "down:status failed"
+            test -f "${PATH_DEPLOY}/public/index.php" && echo "EXISTS" || echo "MISSING!"
+            echo "--- Document root check (/public/../index.php vs /index.php) ---"
+            test -f "${PATH_DEPLOY}/index.php" && echo "index.php in root EXISTS (wrong!)" || echo "index.php in root MISSING (good)"
             echo "=== END DIAGNOSTIC ==="
           DIAG
