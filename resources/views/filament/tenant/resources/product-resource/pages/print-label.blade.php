@@ -1,6 +1,9 @@
 <x-filament-panels::page>
   <style>
     @media print {
+      @page {
+        margin: 0.3in;
+      }
       body * {
         visibility: hidden;
       }
@@ -10,8 +13,17 @@
       #printElement {
         position: fixed;
         inset: 0;
-        padding: 0.5in;
+        padding: 0.3in;
         background: #fff;
+      }
+      #printElement .grid > div {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      #printElement {
+        overflow: visible !important;
+        max-height: none !important;
+        height: auto !important;
       }
     }
   </style>
