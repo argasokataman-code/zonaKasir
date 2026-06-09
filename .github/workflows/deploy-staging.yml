@@ -118,3 +118,25 @@ jobs:
 
             echo "Deploy complete!"
           DEPLOY
+
+          # Diagnostic
+          ssh -p "${PORT}" "${USER}@${HOST}" bash -s << 'DIAG'
+            PATH_DEPLOY="${{ secrets.DEPLOY_PATH }}"
+            echo "=== DIAGNOSTIC ==="
+            echo "User: $(whoami)"
+            echo "PWD: $(pwd)"
+            echo "--- Project root ---"
+            ls -la "${PATH_DEPLOY}" | head -5
+            echo "--- Public dir ---"
+            ls -la "${PATH_DEPLOY}/public" | head -10
+            echo "--- .env ---"
+            test -f "${PATH_DEPLOY}/.env" && echo ".env exists" || echo ".env MISSING!"
+            grep -c "APP_URL\|APP_KEY\|DB_" "${PATH_DEPLOY}/.env" 2>/dev/null && grep "APP_URL\|APP_KEY" "${PATH_DEPLOY}/.env" 2>/dev/null || echo "Cannot read .env"
+            echo "--- Index.php ---"
+            ls -la "${PATH_DEPLOY}/public/index.php" 2>/dev/null || echo "index.php MISSING!"
+            echo "--- Permissions ---"
+            stat -c "%a %u %g %n" "${PATH_DEPLOY}/public" 2>/dev/null; ls -ld "${PATH_DEPLOY}/public" 2>/dev/null
+            echo "--- Maintenance ---"
+            php "${PATH_DEPLOY}/artisan" down:status 2>/dev/null || echo "down:status failed"
+            echo "=== END DIAGNOSTIC ==="
+          DIAG
