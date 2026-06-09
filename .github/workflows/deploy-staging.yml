@@ -68,8 +68,13 @@ jobs:
         run: |
           PORT="${PORT:-2223}"
 
-          # Upload artifacts via SSH pipe (scp deprecated on modern Ubuntu)
-          cat /tmp/deploy-artifacts.tar.gz | ssh -p "${PORT}" "${USER}@${HOST}" "cat > ${DEPLOY_PATH}/deploy-artifacts.tar.gz"
+          # Upload artifacts via SSH (scp deprecated)
+          echo "Uploading $(du -h /tmp/deploy-artifacts.tar.gz | cut -f1) to ${USER}@${HOST}:${DEPLOY_PATH}/"
+          cat /tmp/deploy-artifacts.tar.gz | ssh -p "${PORT}" "${USER}@${HOST}" "cat > ${DEPLOY_PATH}/deploy-artifacts.tar.gz && echo UPLOAD_DONE && sync"
+          echo "Upload pipeline completed"
+
+          # Verify file exists on remote
+          ssh -p "${PORT}" "${USER}@${HOST}" "test -f ${DEPLOY_PATH}/deploy-artifacts.tar.gz && echo FILE_EXISTS || echo FILE_MISSING"
 
           # Deploy commands
           ssh -p "${PORT}" "${USER}@${HOST}" bash -s << 'DEPLOY'
