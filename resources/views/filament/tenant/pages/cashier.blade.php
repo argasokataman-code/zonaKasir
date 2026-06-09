@@ -182,10 +182,10 @@
   </x-filament::modal>
   <x-filament::modal id="proceed-the-payment" width="5xl">
     <form wire:submit.prevent="proceedThePayment">
-      <div class="my-2 grid gap-x-4 md:grid-cols-2">
+      <div class="my-2 grid gap-4 md:grid-cols-2">
         <div x-data="detail">
           <div class="rounded-lg">
-            <div class="mb-4 grid grid-cols-2 gap-1 md:grid-cols-4">
+            <div class="mb-4 grid grid-cols-2 gap-2 md:grid-cols-4">
               <template x-for="paymentMethod in paymentMethods">
                 <div
                   x-on:click="cartDetail['payment_method_id'] = paymentMethod.id; $wire.cartDetail['payment_method_id'] = paymentMethod.id;"
