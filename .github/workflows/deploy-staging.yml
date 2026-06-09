@@ -86,9 +86,13 @@ jobs:
             # Maintenance mode
             php artisan down --retry=60 2>/dev/null || true
 
-            # Stash any local changes, then pull latest code
-            git stash push --include-untracked --message "deploy-stash-$(date +%s)" 2>/dev/null || true
+            # Stash any local changes to tracked files, then pull latest code
+            git stash push --message "deploy-stash-$(date +%s)" 2>/dev/null || true
             git pull origin main
+            git stash drop 2>/dev/null || true
+
+            # Verify .env exists
+            test -f .env || { echo "ERROR: .env missing!"; cp .env.example .env 2>/dev/null || true; }
 
             # Remove old vendor/build, extract from /tmp
             rm -rf vendor public/build 2>/dev/null || true
@@ -98,10 +102,9 @@ jobs:
             # Run migrations
             php artisan migrate --path=database/migrations/tenant --force --seed
 
-            # Clear & cache
+            # Clear cache only (skip config:cache / route:cache — causes issues
+            # with tenancy and env() on shared hosting)
             php artisan optimize:clear
-            php artisan config:cache
-            php artisan route:cache
             php artisan view:cache
 
             # Storage link (safe to run on every deploy)
