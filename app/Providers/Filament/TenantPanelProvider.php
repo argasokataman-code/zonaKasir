@@ -137,6 +137,7 @@ class TenantPanelProvider extends PanelProvider
             ->spa(config('app.spa_mode'))
             ->authGuard('web')
             ->path('/member')
+            ->brandLogoHeight('4rem')
             ->login(TenantLogin::class)
             ->navigation(fn (NavigationBuilder $navigationBuilder) => $this->buildNavigation($navigationBuilder))
             ->discoverResources(in: app_path('Filament/Tenant/Resources'), for: 'App\\Filament\\Tenant\\Resources')
