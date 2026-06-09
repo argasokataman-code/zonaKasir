@@ -5,25 +5,26 @@
         margin: 0.3in;
       }
       body * {
-        visibility: hidden;
+        visibility: hidden !important;
       }
       #printElement, #printElement * {
-        visibility: visible;
+        visibility: visible !important;
       }
       #printElement {
-        position: fixed;
-        inset: 0;
-        padding: 0.3in;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        overflow: visible !important;
+        height: auto !important;
+        max-height: none !important;
+        width: 100% !important;
+        padding: 0 !important;
         background: #fff;
       }
       #printElement .grid > div {
         break-inside: avoid;
         page-break-inside: avoid;
-      }
-      #printElement {
-        overflow: visible !important;
-        max-height: none !important;
-        height: auto !important;
       }
     }
   </style>
