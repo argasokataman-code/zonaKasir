@@ -9,17 +9,14 @@ $menu = [
     [
         'title' => 'Analisis Penjualan',
         'description' => 'Lihat analisis penjualan toko anda secara real-time dengan grafik yang mudah dipahami.',
-        'image' => '/assets/images/dashboard.png',
     ],
     [
         'title' => 'Stok Management',
         'description' => 'Kelola stok barang di toko anda dengan mudah dan akurat.',
-        'image' => '/assets/images/stock-management.png',
     ],
     [
         'title' => 'Kalulator Pembayaran',
         'description' => 'Hitung pembayaran secara manual atau otomatis dengan kalkulator yang cerdas.',
-        'image' => '/assets/images/calculator-payment.png',
     ],
 ];
 
@@ -307,11 +304,62 @@ state([
                   <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-400"></div>
                 </div>
                 <div class="flex-1 bg-white rounded-lg h-6 sm:h-7 ml-3 flex items-center px-3 border border-gray-200">
-                  <span class="text-[10px] sm:text-xs text-gray-400">admin.localhost/member/cashier</span>
+                  <span class="text-[10px] sm:text-xs text-gray-400">admin.zonakasir.com/cashier</span>
                 </div>
               </div>
-              {{-- Dashboard Image --}}
-              <img src="{{ asset('assets/images/dashboard.png') }}" class="w-full h-full object-cover object-top" alt="zonaKasir Dashboard Web">
+              {{-- Dashboard Content --}}
+              <div class="flex h-[calc(100%-2.5rem)] sm:h-[calc(100%-2.75rem)]">
+                {{-- Sidebar --}}
+                <div class="hidden sm:flex w-1/5 bg-gray-900 flex-col gap-1.5 p-2">
+                  <div class="flex items-center gap-2 px-2 py-1.5">
+                    <div class="w-5 h-5 bg-zonakasir-primary rounded-md"></div>
+                    <span class="text-white text-[8px] font-bold">zonaKasir</span>
+                  </div>
+                  @foreach(['', '', '', '', ''] as $i)
+                  <div class="h-2.5 rounded {{ $loop->first ? 'bg-zonakasir-primary/80' : 'bg-white/10' }} mx-2"></div>
+                  @endforeach
+                  <div class="mt-auto mx-2 mb-1 h-2.5 rounded bg-white/5"></div>
+                </div>
+                {{-- Main Content --}}
+                <div class="flex-1 bg-gray-50 p-2 sm:p-3 flex flex-col gap-2">
+                  {{-- Top Stats --}}
+                  <div class="grid grid-cols-3 gap-1.5 sm:gap-2">
+                    @foreach(['bg-white', 'bg-white', 'bg-white'] as $bg)
+                    <div class="{{ $bg }} rounded-lg p-1.5 sm:p-2 shadow-sm border border-gray-100">
+                      <div class="h-1.5 w-8 bg-gray-200 rounded mb-1"></div>
+                      <div class="h-2.5 sm:h-3 w-12 bg-gray-800 rounded"></div>
+                    </div>
+                    @endforeach
+                  </div>
+                  {{-- Chart Area --}}
+                  <div class="flex-1 bg-white rounded-lg p-2 shadow-sm border border-gray-100">
+                    <div class="h-1.5 w-16 bg-gray-200 rounded mb-2"></div>
+                    <div class="flex items-end gap-1 h-[calc(100%-1rem)]">
+                      @foreach([40, 65, 45, 80, 55, 90, 70, 85, 60, 75, 95, 50] as $h)
+                      <div class="flex-1 rounded-t transition-all duration-500
+                        {{ $loop->last ? 'bg-zonakasir-primary' : 'bg-zonakasir-primary/30' }}"
+                        style="height: {{ $h }}%"></div>
+                      @endforeach
+                    </div>
+                  </div>
+                  {{-- Table --}}
+                  <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="flex gap-1 p-1.5 border-b border-gray-100">
+                      @foreach(['w-4', 'w-8', 'w-6', 'w-5'] as $w)
+                      <div class="h-1.5 {{ $w }} bg-gray-200 rounded"></div>
+                      @endforeach
+                    </div>
+                    @foreach([1, 2, 3] as $row)
+                    <div class="flex gap-1 p-1.5 border-b border-gray-50">
+                      <div class="h-1.5 w-4 bg-gray-100 rounded"></div>
+                      <div class="h-1.5 w-8 bg-gray-100 rounded"></div>
+                      <div class="h-1.5 w-6 bg-gray-100 rounded"></div>
+                      <div class="h-1.5 w-5 {{ $row === 1 ? 'bg-green-200' : 'bg-gray-100' }} rounded"></div>
+                    </div>
+                    @endforeach
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           {{-- Laptop Base --}}
@@ -332,8 +380,39 @@ state([
                 <div class="bg-zonakasir-primary px-3 py-1.5 flex items-center justify-center">
                   <span class="text-white text-[8px] sm:text-[10px] font-bold">zonaKasir</span>
                 </div>
-                {{-- App Content --}}
-                <img src="{{ asset('assets/images/cashier-transaction-1.png') }}" class="w-full h-[calc(100%-1.5rem)] object-cover object-top" alt="zonaKasir POS Mobile">
+                {{-- Mobile POS Content --}}
+                <div class="bg-gray-50 flex flex-col h-[calc(100%-1.5rem)]">
+                  {{-- Search Bar --}}
+                  <div class="p-1.5">
+                    <div class="bg-white rounded-md h-4 flex items-center px-2 border border-gray-200">
+                      <div class="w-2.5 h-2.5 text-gray-300">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-full h-full"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                      </div>
+                      <span class="text-[6px] sm:text-[7px] text-gray-300 ml-1">Cari produk...</span>
+                    </div>
+                  </div>
+                  {{-- Product Grid --}}
+                  <div class="grid grid-cols-3 gap-1 px-1.5 flex-1">
+                    @foreach([1,2,3,4,5,6] as $item)
+                    <div class="bg-white rounded-md border border-gray-100 p-0.5 flex flex-col">
+                      <div class="rounded-sm h-5 sm:h-7
+                        {{ in_array($item, [2, 5]) ? 'bg-zonakasir-primary/20' : 'bg-gray-100' }}"></div>
+                      <div class="h-1 w-4 bg-gray-200 rounded mx-auto mt-0.5"></div>
+                      <div class="h-1 w-3 bg-zonakasir-primary/60 rounded mx-auto mt-0.5"></div>
+                    </div>
+                    @endforeach
+                  </div>
+                  {{-- Cart Summary --}}
+                  <div class="bg-white border-t border-gray-200 p-1.5 flex items-center justify-between">
+                    <div>
+                      <div class="h-1 w-6 bg-gray-200 rounded"></div>
+                      <div class="h-1.5 w-8 bg-gray-800 rounded mt-0.5"></div>
+                    </div>
+                    <div class="bg-zonakasir-primary rounded-md px-2 py-0.5">
+                      <div class="h-1.5 w-6 bg-white rounded"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
               {{-- Notch --}}
               <div class="absolute top-2 sm:top-3 left-1/2 -translate-x-1/2 w-10 sm:w-14 h-2 sm:h-2.5 bg-gray-900 rounded-full"></div>
@@ -413,7 +492,40 @@ state([
         <div class="relative group">
           <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/10 to-orange-100 rounded-3xl transform rotate-3 scale-105 animate-float-slow"></div>
           <div class="absolute inset-0 bg-gradient-to-tl from-orange-500/5 to-transparent rounded-3xl transform -rotate-2 scale-[1.02]"></div>
-          <img src="{{ asset('assets/images/dashboard.png') }}" class="relative rounded-3xl shadow-2xl hover:shadow-3xl transition-shadow duration-500 w-full" alt="zonaKasir Dashboard">
+          {{-- CSS Dashboard Illustration --}}
+          <div class="relative rounded-3xl shadow-2xl hover:shadow-3xl transition-shadow duration-500 w-full bg-gray-900 overflow-hidden aspect-[4/3]">
+            <div class="flex h-full">
+              {{-- Sidebar --}}
+              <div class="w-1/4 bg-gray-950 p-3 flex flex-col gap-2">
+                <div class="flex items-center gap-2 mb-2">
+                  <div class="w-6 h-6 bg-zonakasir-primary rounded-lg"></div>
+                  <div class="h-2 w-12 bg-white/80 rounded"></div>
+                </div>
+                @foreach(range(1, 5) as $i)
+                <div class="h-2 rounded {{ $i === 1 ? 'bg-zonakasir-primary/60' : 'bg-white/10' }} w-full"></div>
+                @endforeach
+              </div>
+              {{-- Main --}}
+              <div class="flex-1 bg-gray-100 p-3 flex flex-col gap-2">
+                <div class="grid grid-cols-3 gap-2">
+                  @foreach(range(1, 3) as $i)
+                  <div class="bg-white rounded-xl p-2 shadow-sm">
+                    <div class="h-1.5 w-6 bg-gray-200 rounded mb-1"></div>
+                    <div class="h-3 w-10 bg-gray-800 rounded"></div>
+                  </div>
+                  @endforeach
+                </div>
+                <div class="flex-1 bg-white rounded-xl p-3 shadow-sm">
+                  <div class="h-1.5 w-16 bg-gray-200 rounded mb-2"></div>
+                  <div class="flex items-end gap-1.5 h-[70%]">
+                    @foreach([35, 55, 40, 70, 50, 80, 65, 75, 55, 90, 70, 45] as $h)
+                    <div class="flex-1 rounded-t {{ $loop->iteration > 9 ? 'bg-zonakasir-primary' : 'bg-zonakasir-primary/25' }}" style="height: {{ $h }}%"></div>
+                    @endforeach
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -504,7 +616,126 @@ state([
           <div class="{{ $index % 2 === 1 ? 'lg:order-1' : '' }} relative group">
             <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/10 to-orange-100 rounded-3xl transform {{ $index % 2 === 0 ? '-rotate-3' : 'rotate-3' }} scale-105 group-hover:scale-110 group-hover:rotate-0 transition-all duration-700"></div>
             <div class="absolute inset-0 bg-gradient-to-tl from-orange-500/5 to-transparent rounded-3xl transform {{ $index % 2 === 0 ? 'rotate-2' : '-rotate-2' }} scale-[1.01]"></div>
-            <img src="{{ $item['image'] }}" class="relative rounded-3xl shadow-xl group-hover:shadow-2xl transition-all duration-500 w-full" alt="{{ $item['title'] }}">
+            {{-- CSS Mockup for each menu item --}}
+            @if($index === 0)
+            {{-- Analisis Penjualan: Chart Dashboard --}}
+            <div class="relative rounded-3xl shadow-xl group-hover:shadow-2xl transition-all duration-500 w-full bg-gray-900 overflow-hidden aspect-[4/3]">
+              <div class="p-4 sm:p-6">
+                <div class="flex items-center justify-between mb-4">
+                  <div>
+                    <div class="h-2.5 w-24 bg-white/80 rounded mb-1.5"></div>
+                    <div class="h-4 w-32 bg-zonakasir-primary rounded"></div>
+                  </div>
+                  <div class="bg-zonakasir-primary/20 rounded-lg px-3 py-1.5">
+                    <div class="h-2 w-14 bg-zonakasir-primary rounded"></div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                  @foreach(['bg-zonakasir-primary/20', 'bg-blue-500/20', 'bg-green-500/20'] as $color)
+                  <div class="{{ $color }} rounded-xl p-3">
+                    <div class="h-1.5 w-8 bg-white/40 rounded mb-1"></div>
+                    <div class="h-3 w-16 bg-white rounded"></div>
+                  </div>
+                  @endforeach
+                </div>
+                <div class="bg-white/5 rounded-xl p-4">
+                  <div class="h-2 w-20 bg-white/40 rounded mb-3"></div>
+                  <div class="flex items-end gap-2 h-28">
+                    @foreach([40, 55, 35, 70, 45, 80, 60, 90, 50, 75, 65, 85] as $h)
+                    <div class="flex-1 rounded-t {{ $loop->iteration > 8 ? 'bg-gradient-to-t from-zonakasir-primary to-orange-400' : 'bg-white/15' }}" style="height: {{ $h }}%"></div>
+                    @endforeach
+                  </div>
+                  <div class="flex justify-between mt-2">
+                    @foreach(['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'] as $m)
+                    <span class="text-[6px] text-white/30">{{ $m }}</span>
+                    @endforeach
+                  </div>
+                </div>
+              </div>
+            </div>
+            @elseif($index === 1)
+            {{-- Stok Management: Inventory Grid --}}
+            <div class="relative rounded-3xl shadow-xl group-hover:shadow-2xl transition-all duration-500 w-full bg-gray-900 overflow-hidden aspect-[4/3]">
+              <div class="p-4 sm:p-6">
+                <div class="flex items-center justify-between mb-4">
+                  <div>
+                    <div class="h-2.5 w-28 bg-white/80 rounded mb-1.5"></div>
+                    <div class="h-4 w-20 bg-zonakasir-primary rounded"></div>
+                  </div>
+                  <div class="bg-green-500/20 rounded-lg px-3 py-1.5">
+                    <div class="h-2 w-16 bg-green-400 rounded"></div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 mb-3">
+                  @foreach(range(1, 6) as $item)
+                  <div class="bg-white/5 rounded-xl p-2.5 flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg {{ $loop->iteration % 3 === 0 ? 'bg-zonakasir-primary/30' : 'bg-white/10' }} flex-shrink-0"></div>
+                    <div class="flex-1">
+                      <div class="h-1.5 w-full bg-white/20 rounded mb-1"></div>
+                      <div class="h-1 w-8 bg-white/10 rounded"></div>
+                    </div>
+                    <div class="text-right">
+                      <div class="h-1.5 w-6 {{ $loop->iteration < 4 ? 'bg-green-400' : 'bg-zonakasir-primary' }} rounded mb-0.5"></div>
+                      <div class="h-1 w-4 bg-white/10 rounded"></div>
+                    </div>
+                  </div>
+                  @endforeach
+                </div>
+                <div class="bg-white/5 rounded-xl p-2.5 flex items-center gap-2">
+                  <div class="flex gap-1">
+                    <div class="w-6 h-6 bg-zonakasir-primary/20 rounded-md"></div>
+                    <div class="w-6 h-6 bg-white/10 rounded-md"></div>
+                    <div class="w-6 h-6 bg-white/10 rounded-md"></div>
+                  </div>
+                  <div class="flex-1 h-1.5 bg-white/5 rounded"></div>
+                  <div class="h-1.5 w-12 bg-zonakasir-primary/40 rounded"></div>
+                </div>
+              </div>
+            </div>
+            @else
+            {{-- Kalkulator Pembayaran: POS Terminal --}}
+            <div class="relative rounded-3xl shadow-xl group-hover:shadow-2xl transition-all duration-500 w-full bg-gray-900 overflow-hidden aspect-[4/3]">
+              <div class="p-4 sm:p-6">
+                <div class="flex items-center justify-between mb-4">
+                  <div>
+                    <div class="h-2.5 w-24 bg-white/80 rounded mb-1.5"></div>
+                    <div class="h-4 w-28 bg-zonakasir-primary rounded"></div>
+                  </div>
+                  <div class="bg-blue-500/20 rounded-lg px-3 py-1.5">
+                    <div class="h-2 w-12 bg-blue-400 rounded"></div>
+                  </div>
+                </div>
+                <div class="bg-white/5 rounded-xl p-4 mb-3">
+                  <div class="flex justify-between items-center mb-3">
+                    <div class="h-2 w-16 bg-white/40 rounded"></div>
+                    <div class="h-3 w-24 bg-white rounded"></div>
+                  </div>
+                  <div class="space-y-2">
+                    @foreach([1, 2, 3] as $row)
+                    <div class="flex justify-between items-center">
+                      <div class="h-1.5 w-20 bg-white/15 rounded"></div>
+                      <div class="h-1.5 w-12 bg-white/20 rounded"></div>
+                    </div>
+                    @endforeach
+                    <div class="border-t border-white/10 pt-2 flex justify-between items-center">
+                      <div class="h-2 w-10 bg-white/60 rounded"></div>
+                      <div class="h-3 w-16 bg-zonakasir-primary rounded"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-4 gap-1.5">
+                  @foreach(range(1, 8) as $btn)
+                  <div class="bg-white/10 rounded-lg h-7 flex items-center justify-center">
+                    <div class="h-1.5 w-2 bg-white/30 rounded"></div>
+                  </div>
+                  @endforeach
+                  <div class="col-span-2 bg-zonakasir-primary rounded-lg h-7 flex items-center justify-center">
+                    <div class="h-1.5 w-8 bg-white rounded"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            @endif
           </div>
         </div>
         @endforeach

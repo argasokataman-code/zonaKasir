@@ -29,6 +29,32 @@
   </head>
   <body>
     {{ $slot }}
+    <script>
+      document.addEventListener('alpine:init', () => {
+        Alpine.directive('intersect', (el, { expression, modifiers }, { effect, evaluateLater, cleanup }) => {
+          const hasEnter = modifiers.includes('enter');
+          const hasLeave = modifiers.includes('leave');
+          const evaluate = evaluateLater(expression);
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                if (hasEnter || (!hasEnter && !hasLeave)) {
+                  el._x_isIntersecting = true;
+                  evaluate();
+                }
+              } else {
+                if (hasLeave || (!hasEnter && !hasLeave)) {
+                  el._x_isIntersecting = false;
+                  if (!hasEnter) evaluate();
+                }
+              }
+            });
+          }, { threshold: 0.1 });
+          observer.observe(el);
+          cleanup(() => observer.disconnect());
+        });
+      });
+    </script>
     @livewireScripts
     @filamentScripts
 
