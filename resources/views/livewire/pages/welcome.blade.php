@@ -91,7 +91,6 @@ state([
                 </div>
               </div>
               </div>
-            </div>
 
   {{-- Navbar --}}
   <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
@@ -965,78 +964,68 @@ state([
             @else
             {{-- Kalkulator Pembayaran: Payment Modal --}}
             <div class="relative rounded-3xl shadow-xl group-hover:shadow-2xl transition-all duration-500 w-full overflow-hidden aspect-[4/3] border border-gray-200 bg-white">
-              {{-- Mockup header --}}
               <div class="bg-gray-50 border-b border-gray-200 px-3 py-1.5 flex items-center gap-2">
                 <div class="w-2 h-2 rounded-full bg-red-400"></div>
                 <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
                 <div class="w-2 h-2 rounded-full bg-green-400"></div>
                 <span class="text-[5px] text-gray-400 ml-1">zonaKasir - Payment</span>
               </div>
-              {{-- Modal Content --}}
               <div class="p-3">
                 <div class="bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
-                  {{-- Modal Header --}}
                   <div class="px-3 py-2 border-b border-gray-100 flex items-center justify-between bg-gray-50">
                     <span class="text-[7px] font-bold text-gray-900">Payment</span>
                     <div class="w-3 h-3 rounded-full bg-gray-200 flex items-center justify-center">
                       <span class="text-[5px] text-gray-500">×</span>
                     </div>
                   </div>
-                <div class="flex gap-2 p-2">
-                  {{-- Left: Payment Form --}}
-                  <div class="flex-1">
-                    {{-- Payment Methods --}}
-                    <div class="text-[5px] text-gray-500 mb-1">Payment Method</div>
-                    <div class="grid grid-cols-4 gap-0.5 mb-2">
-                      @foreach(['Cash', 'QRIS', 'Debit', 'Credit'] as $pm)
-                      <div class="{{ $pm === 'Cash' ? 'bg-zonakasir-primary text-white' : 'bg-gray-100 text-gray-600' }} rounded py-1 text-center text-[5px] font-medium">{{ $pm }}</div>
-                      @endforeach
-                    </div>
-                    {{-- Paid Amount --}}
-                    <div class="text-[5px] text-gray-500 mb-0.5">Paid Amount</div>
-                    <div class="bg-white border border-gray-200 rounded-md px-2 py-1 text-right text-[8px] font-bold text-gray-900 mb-1.5">
-                      Rp 55.000
-                    </div>
-                    {{-- Shortcut Buttons --}}
-                    <div class="grid grid-cols-4 gap-0.5 mb-1.5">
-                      @foreach(['50K', '100K', '200K'] as $amt)
-                      <div class="bg-gray-100 rounded py-0.5 text-center text-[5px] text-gray-600">{{ $amt }}</div>
-                      @endforeach
-                      <div class="bg-gray-100 rounded py-0.5 text-center text-[5px] text-gray-600">Pass</div>
-                    </div>
-                    {{-- Numpad --}}
-                    <div class="grid grid-cols-3 gap-0.5">
-                      @foreach(['1','2','3','4','5','6','7','8','9','.','0','⌫'] as $k)
-                      <div class="bg-gray-100 rounded py-1 text-center text-[6px] text-gray-700 hover:bg-gray-200">{{ $k }}</div>
-                      @endforeach
-                    </div>
-                    <div class="mt-1 bg-zonakasir-primary rounded py-1.5 text-center text-[7px] font-bold text-white">Bayar</div>
-                  </div>
-                  {{-- Right: Order Summary --}}
-                  <div class="w-2/5 bg-gray-50 rounded-lg p-2 hidden sm:block">
-                    <div class="text-[6px] font-bold text-gray-700 mb-1">Order Summary</div>
-                    @foreach([['Indomie x3', 'Rp 10.500'], ['Teh Botol x2', 'Rp 8.000'], ['Sampoerna x1', 'Rp 28.000']] as $oi)
-                    <div class="flex justify-between py-0.5 border-b border-gray-100">
-                      <span class="text-[5px] text-gray-600">{{ $oi[0] }}</span>
-                      <span class="text-[5px] text-zonakasir-primary font-semibold">{{ $oi[1] }}</span>
-                    </div>
-                    @endforeach
-                    <div class="border-t border-gray-200 mt-1 pt-1 space-y-0.5">
-                      <div class="flex justify-between text-[5px]">
-                        <span class="text-gray-500">Subtotal</span>
-                        <span class="text-gray-800">Rp 46.500</span>
+                  <div class="flex gap-2 p-2">
+                    <div class="flex-1">
+                      <div class="text-[5px] text-gray-500 mb-1">Payment Method</div>
+                      <div class="grid grid-cols-4 gap-0.5 mb-2">
+                        @foreach(['Cash', 'QRIS', 'Debit', 'Credit'] as $pm)
+                        <div class="{{ $pm === 'Cash' ? 'bg-zonakasir-primary text-white' : 'bg-gray-100 text-gray-600' }} rounded py-1 text-center text-[5px] font-medium">{{ $pm }}</div>
+                        @endforeach
                       </div>
-                      <div class="flex justify-between text-[5px]">
-                        <span class="text-gray-500">Tax 10%</span>
-                        <span class="text-gray-800">Rp 4.650</span>
+                      <div class="text-[5px] text-gray-500 mb-0.5">Paid Amount</div>
+                      <div class="bg-white border border-gray-200 rounded-md px-2 py-1 text-right text-[8px] font-bold text-gray-900 mb-1.5">Rp 55.000</div>
+                      <div class="grid grid-cols-4 gap-0.5 mb-1.5">
+                        @foreach(['50K', '100K', '200K'] as $amt)
+                        <div class="bg-gray-100 rounded py-0.5 text-center text-[5px] text-gray-600">{{ $amt }}</div>
+                        @endforeach
+                        <div class="bg-gray-100 rounded py-0.5 text-center text-[5px] text-gray-600">Pass</div>
                       </div>
-                      <div class="flex justify-between text-[6px] font-bold">
-                        <span class="text-gray-900">Total</span>
-                        <span class="text-zonakasir-primary">Rp 51.150</span>
+                      <div class="grid grid-cols-3 gap-0.5">
+                        @foreach(['1','2','3','4','5','6','7','8','9','.','0','⌫'] as $k)
+                        <div class="bg-gray-100 rounded py-1 text-center text-[6px] text-gray-700">{{ $k }}</div>
+                        @endforeach
                       </div>
-                      <div class="flex justify-between text-[6px] font-bold">
-                        <span class="text-gray-900">Change</span>
-                        <span class="text-green-600">Rp 3.850</span>
+                      <div class="mt-1 bg-zonakasir-primary rounded py-1.5 text-center text-[7px] font-bold text-white">Bayar</div>
+                    </div>
+                    <div class="w-2/5 bg-gray-50 rounded-lg p-2 hidden sm:block">
+                      <div class="text-[6px] font-bold text-gray-700 mb-1">Order Summary</div>
+                      @foreach([['Indomie x3', 'Rp 10.500'], ['Teh Botol x2', 'Rp 8.000'], ['Sampoerna x1', 'Rp 28.000']] as $oi)
+                      <div class="flex justify-between py-0.5 border-b border-gray-100">
+                        <span class="text-[5px] text-gray-600">{{ $oi[0] }}</span>
+                        <span class="text-[5px] text-zonakasir-primary font-semibold">{{ $oi[1] }}</span>
+                      </div>
+                      @endforeach
+                      <div class="border-t border-gray-200 mt-1 pt-1 space-y-0.5">
+                        <div class="flex justify-between text-[5px]">
+                          <span class="text-gray-500">Subtotal</span>
+                          <span class="text-gray-800">Rp 46.500</span>
+                        </div>
+                        <div class="flex justify-between text-[5px]">
+                          <span class="text-gray-500">Tax 10%</span>
+                          <span class="text-gray-800">Rp 4.650</span>
+                        </div>
+                        <div class="flex justify-between text-[6px] font-bold">
+                          <span class="text-gray-900">Total</span>
+                          <span class="text-zonakasir-primary">Rp 51.150</span>
+                        </div>
+                        <div class="flex justify-between text-[6px] font-bold">
+                          <span class="text-gray-900">Change</span>
+                          <span class="text-green-600">Rp 3.850</span>
+                        </div>
                       </div>
                     </div>
                   </div>
