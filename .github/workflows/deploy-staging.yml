@@ -80,7 +80,19 @@ jobs:
           ssh -p "${PORT}" "${USER}@${HOST}" bash -s << 'DEPLOY'
             set -e
 
+            OLD_PATH="/home/jogn3455/public_html/zonakasir"
             PATH_DEPLOY="${{ secrets.DEPLOY_PATH }}"
+
+            # Setup new deploy path if not exists (one-time migration)
+            if [ ! -d "${PATH_DEPLOY}/.git" ]; then
+              echo "Setting up new deploy path: ${PATH_DEPLOY}"
+              mkdir -p "${PATH_DEPLOY}"
+              # Copy from old path (preserve .env, storage, etc.)
+              cp -a "${OLD_PATH}/." "${PATH_DEPLOY}/" 2>/dev/null || true
+              cd "${PATH_DEPLOY}"
+              git remote set-url origin git@github.com:argasokataman-code/zonaKasir.git 2>/dev/null || true
+            fi
+
             cd "${PATH_DEPLOY}"
 
             # Maintenance mode
