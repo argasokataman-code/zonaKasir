@@ -68,86 +68,37 @@ jobs:
         run: |
           PORT="${PORT:-2223}"
 
-          # Upload artifacts to /tmp (outside git working tree to avoid git stash issues)
-          echo "Uploading $(du -h /tmp/deploy-artifacts.tar.gz | cut -f1) to ${USER}@${HOST}:/tmp/"
-          cat /tmp/deploy-artifacts.tar.gz | ssh -p "${PORT}" "${USER}@${HOST}" "cat > /tmp/deploy-artifacts.tar.gz && echo UPLOAD_DONE && sync"
-          echo "Upload pipeline completed"
+          # Upload artifacts to /tmp (outside git working tree)
+          echo "Uploading $(du -h /tmp/deploy-artifacts.tar.gz | cut -f1)"
+          cat /tmp/deploy-artifacts.tar.gz | ssh -p "${PORT}" "${USER}@${HOST}" "cat > /tmp/deploy-artifacts.tar.gz && sync"
 
-          # Verify file exists on remote
-          ssh -p "${PORT}" "${USER}@${HOST}" "test -f /tmp/deploy-artifacts.tar.gz && echo FILE_EXISTS || echo FILE_MISSING"
-
-          # Deploy commands
+          # Deploy
           ssh -p "${PORT}" "${USER}@${HOST}" bash -s << 'DEPLOY'
             set -e
 
-            OLD_PATH="/home/jogn3455/public_html/zonakasir"
-            PATH_DEPLOY="${{ secrets.DEPLOY_PATH }}"
+            cd "${{ secrets.DEPLOY_PATH }}"
 
-            # Setup new deploy path if not exists (one-time migration)
-            if [ ! -d "${PATH_DEPLOY}/.git" ]; then
-              echo "Setting up new deploy path: ${PATH_DEPLOY}"
-              mkdir -p "${PATH_DEPLOY}"
-              # Copy from old path (preserve .env, storage, etc.)
-              cp -a "${OLD_PATH}/." "${PATH_DEPLOY}/" 2>/dev/null || true
-              cd "${PATH_DEPLOY}"
-              git remote set-url origin git@github.com:argasokataman-code/zonaKasir.git 2>/dev/null || true
-            fi
-
-            cd "${PATH_DEPLOY}"
-
-            # Maintenance mode
             php artisan down --retry=60 2>/dev/null || true
 
-            # Stash any local changes to tracked files, then pull latest code
             git stash push --message "deploy-stash-$(date +%s)" 2>/dev/null || true
             git pull origin main
             git stash drop 2>/dev/null || true
 
-            # Verify .env exists
             test -f .env || { echo "ERROR: .env missing!"; cp .env.example .env 2>/dev/null || true; }
 
-            # Remove old vendor/build, extract from /tmp
             rm -rf vendor public/build 2>/dev/null || true
             tar xzf /tmp/deploy-artifacts.tar.gz
-            rm -f "${PATH_DEPLOY}/deploy-artifacts.tar.gz"
+            rm -f /tmp/deploy-artifacts.tar.gz
 
-            # Run migrations
             php artisan migrate --path=database/migrations/tenant --force
 
-            # Clear cache only (skip config:cache / route:cache — causes issues
-            # with tenancy and env() on shared hosting)
             php artisan optimize:clear
             php artisan view:cache
 
-            # Storage link (safe to run on every deploy)
             php artisan storage:link 2>/dev/null || true
-
-            # Filament assets
             php artisan filament:assets 2>/dev/null || true
 
-            # Bring app back up
             php artisan up
 
             echo "Deploy complete!"
           DEPLOY
-
-          # Diagnostic
-          ssh -p "${PORT}" "${USER}@${HOST}" bash -s << 'DIAG'
-            PATH_DEPLOY="${{ secrets.DEPLOY_PATH }}"
-            echo "=== DIAGNOSTIC ==="
-            echo "PATH_DEPLOY = ${PATH_DEPLOY}"
-            echo "--- Does path exist? ---"
-            test -d "${PATH_DEPLOY}" && echo "DIR EXISTS" || echo "DIR MISSING!"
-            test -d "${PATH_DEPLOY}/.git" && echo "GIT REPO EXISTS" || echo "NO GIT REPO"
-            echo "--- Project root contents ---"
-            ls -la "${PATH_DEPLOY}" 2>/dev/null || echo "Cannot list"
-            echo "--- Public dir ---"
-            ls -la "${PATH_DEPLOY}/public" 2>/dev/null || echo "public/ MISSING!"
-            echo "--- .env ---"
-            test -f "${PATH_DEPLOY}/.env" && echo "EXISTS" || echo "MISSING!"
-            echo "--- Index.php ---"
-            test -f "${PATH_DEPLOY}/public/index.php" && echo "EXISTS" || echo "MISSING!"
-            echo "--- Document root check (/public/../index.php vs /index.php) ---"
-            test -f "${PATH_DEPLOY}/index.php" && echo "index.php in root EXISTS (wrong!)" || echo "index.php in root MISSING (good)"
-            echo "=== END DIAGNOSTIC ==="
-          DIAG
