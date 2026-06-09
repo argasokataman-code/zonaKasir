@@ -1,5 +1,14 @@
 # AGENTS.md - Coding Agent Instructions
 
+## Critical Rules
+
+### Always use Context7 for library/API documentation
+Before generating ANY code that uses a library, framework, or API:
+1. Use Context7 (`ctx7` CLI or MCP tools) to fetch up-to-date documentation
+2. Don't rely on training data — it may be outdated
+3. Always include `use context7` or `use library /library/id` in your prompt
+4. This prevents hallucinated APIs, wrong parameters, and outdated examples
+
 ## Project Overview
 
 This is a multi-tenant Point of Sale (POS) application built with Laravel 11.x, Filament 3.x admin panel, and Livewire/Volt for reactive UI. Uses `stancl/tenancy` for multi-tenancy (database per tenant pattern).
