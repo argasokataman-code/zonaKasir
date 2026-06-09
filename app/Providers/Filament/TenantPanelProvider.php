@@ -101,6 +101,11 @@ class TenantPanelProvider extends PanelProvider
         );
 
         FilamentView::registerRenderHook(
+            PanelsRenderHook::HEAD_END,
+            fn () => view('partials.sidebar-logo-css')
+        );
+
+        FilamentView::registerRenderHook(
             PanelsRenderHook::GLOBAL_SEARCH_AFTER,
             fn () => view('version-indicator')
         );
@@ -133,8 +138,6 @@ class TenantPanelProvider extends PanelProvider
                 Js::make('indexeddb', resource_path('js/indexeddb.js')),
                 Js::make('html5-qrcode', 'https://unpkg.com/html5-qrcode'),
             ])
-            ->viteTheme('resources/css/filament/tenant/theme.css')
-            ->viteTheme('resources/css/filament/tenant/sidebar-logo.css')
             ->favicon(url('favicon.ico'))
             ->spa(config('app.spa_mode'))
             ->authGuard('web')
