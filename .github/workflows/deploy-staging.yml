@@ -42,10 +42,12 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-      - name: Package build artifacts
+      - name: Package artifacts
         run: |
-          tar czf /tmp/build-assets.tar.gz -C public/build .
-          echo "Build size: $(du -sh /tmp/build-assets.tar.gz | cut -f1)"
+          tar czf /tmp/deploy-artifacts.tar.gz \
+            vendor \
+            public/build
+          echo "Artifact size: $(du -sh /tmp/deploy-artifacts.tar.gz | cut -f1)"
 
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
@@ -66,8 +68,8 @@ jobs:
         run: |
           PORT="${PORT:-2223}"
 
-          # Upload build assets via SSH pipe (scp deprecated on modern Ubuntu)
-          cat /tmp/build-assets.tar.gz | ssh -p "${PORT}" "${USER}@${HOST}" "cat > ${DEPLOY_PATH}/build-assets.tar.gz"
+          # Upload artifacts via SSH pipe (scp deprecated on modern Ubuntu)
+          cat /tmp/deploy-artifacts.tar.gz | ssh -p "${PORT}" "${USER}@${HOST}" "cat > ${DEPLOY_PATH}/deploy-artifacts.tar.gz"
 
           # Deploy commands
           ssh -p "${PORT}" "${USER}@${HOST}" bash -s << 'DEPLOY'
@@ -83,20 +85,10 @@ jobs:
             git stash push --include-untracked --message "deploy-stash-$(date +%s)" 2>/dev/null || true
             git pull origin main
 
-            # Add composer to PATH (server-specific)
-            ls -la /home/jogn3455/bin/composer* 2>/dev/null || echo "No composer found in bin/"
-            export PATH="/home/jogn3455/bin:${PATH}"
-            export COMPOSER_ALLOW_SUPERUSER=1
-            command -v composer || echo "composer not in PATH"
-            php /home/jogn3455/bin/composer.phar install --no-dev --prefer-dist --no-interaction
-
-            # Extract build assets
-            mkdir -p public/build
-            cd public/build
-            rm -rf assets manifest.json ._assets ._manifest.json 2>/dev/null || true
-            tar xzf "${PATH_DEPLOY}/build-assets.tar.gz"
-            rm -f "${PATH_DEPLOY}/build-assets.tar.gz"
-            cd "${PATH_DEPLOY}"
+            # Extract artifacts (vendor + build), skip cached/ignored files
+            rm -rf vendor public/build 2>/dev/null || true
+            tar xzf "${PATH_DEPLOY}/deploy-artifacts.tar.gz"
+            rm -f "${PATH_DEPLOY}/deploy-artifacts.tar.gz"
 
             # Run migrations
             php artisan migrate --path=database/migrations/tenant --force --seed
