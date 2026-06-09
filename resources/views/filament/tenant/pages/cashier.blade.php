@@ -168,8 +168,7 @@
       </div>
     </div>
   </div>
-</div>
-{{-- modal --}}
+  {{-- modal --}}
 <x-filament::modal id="edit-detail" width="2xl">
     <form wire:submit.prevent="storeCart">
       <x-slot name="heading">
@@ -468,10 +467,6 @@
       padding: 0 !important;
     }
   </style>
-
-
-
-
 </div>
 
 @script()
