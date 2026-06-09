@@ -112,7 +112,7 @@ class PrintLabel extends Page implements HasForms
                             ->extraAttributes([
                                 'x-on:click' => '(e) => e.target.select()',
                             ])
-                            ->default(0)
+                            ->default(1)
                             ->helperText(__('Define how many time the product will be printed'))
                             ->translateLabel(),
                     ]),
