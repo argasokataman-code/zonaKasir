@@ -805,26 +805,89 @@ state([
                     </div>
                   </div>
                   <div class="bg-white rounded-lg p-2 border border-gray-100 mb-1.5">
-                    <div class="text-[6px] font-semibold text-gray-700 mb-1">Penjualan Bulanan</div>
-                    <div class="flex items-end gap-1 h-14">
-                      @foreach([30, 50, 40, 65, 45, 80, 55, 70, 60, 85, 75, 90] as $i => $h)
-                      <div class="flex-1 flex flex-col items-center">
-                        <div class="w-full rounded-t {{ $i === 11 ? 'bg-zonakasir-primary' : 'bg-zonakasir-primary/20' }}" style="height: {{ $h }}%"></div>
+                    <div class="flex justify-between items-center mb-1">
+                      <div class="text-[6px] font-semibold text-gray-700">Penjualan Bulanan</div>
+                      <div class="flex gap-1">
+                        <span class="text-[3px] px-1 py-0.5 bg-zonakasir-primary/10 text-zonakasir-primary rounded">Tahun ini</span>
                       </div>
-                      @endforeach
                     </div>
-                    <div class="flex justify-between mt-0.5">
-                      @foreach(['J','F','M','A','M','J','J','A','S','O','N','D'] as $m)
-                      <span class="text-[3px] text-gray-400">{{ $m }}</span>
+                    {{-- Bar Chart + Line Overlay --}}
+                    <div class="relative h-20">
+                      {{-- Y-axis labels --}}
+                      <div class="absolute left-0 top-0 bottom-3 w-3 flex flex-col justify-between">
+                        <span class="text-[3px] text-gray-300">5M</span>
+                        <span class="text-[3px] text-gray-300">3M</span>
+                        <span class="text-[3px] text-gray-300">1M</span>
+                      </div>
+                      {{-- Grid lines --}}
+                      <div class="absolute left-3 right-0 top-0 bottom-3">
+                        <div class="absolute left-0 right-0 top-0 border-t border-gray-100"></div>
+                        <div class="absolute left-0 right-0 top-1/3 border-t border-gray-100"></div>
+                        <div class="absolute left-0 right-0 top-2/3 border-t border-gray-100"></div>
+                      </div>
+                      {{-- Bars --}}
+                      <div class="absolute left-3 right-0 bottom-3 flex items-end gap-[3px] h-[85%]">
+                        @php
+                        $barData = [
+                          ['h' => 35, 'label' => 'Jan'],
+                          ['h' => 52, 'label' => 'Feb'],
+                          ['h' => 42, 'label' => 'Mar'],
+                          ['h' => 68, 'label' => 'Apr'],
+                          ['h' => 48, 'label' => 'Mei'],
+                          ['h' => 82, 'label' => 'Jun'],
+                          ['h' => 58, 'label' => 'Jul'],
+                          ['h' => 73, 'label' => 'Agu'],
+                          ['h' => 62, 'label' => 'Sep'],
+                          ['h' => 88, 'label' => 'Okt'],
+                          ['h' => 78, 'label' => 'Nov'],
+                          ['h' => 95, 'label' => 'Des'],
+                        ];
+                        @endphp
+                        @foreach($barData as $bi => $bar)
+                        <div class="flex-1 flex flex-col items-center relative">
+                          <div class="w-full rounded-t {{ $bi === 11 ? 'bg-gradient-to-t from-zonakasir-primary to-orange-400' : 'bg-gradient-to-t from-zonakasir-primary/30 to-zonakasir-primary/15' }}" style="height: {{ $bar['h'] }}%"></div>
+                        </div>
+                        @endforeach
+                      </div>
+                      {{-- Line Chart Overlay --}}
+                      <svg class="absolute left-3 right-0 bottom-3 h-[85%]" viewBox="0 0 120 100" preserveAspectRatio="none">
+                        <polyline
+                          fill="none"
+                          stroke="#FF6600"
+                          stroke-width="1.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          points="5,65 15,48 25,58 35,32 45,52 55,18 65,42 75,27 85,38 95,12 105,22 115,5"
+                        />
+                        @foreach($barData as $bi => $bar)
+                        <circle cx="{{ $bi * 10 + 5 }}" cy="{{ 100 - $bar['h'] }}" r="2" fill="#FF6600" stroke="white" stroke-width="1"/>
+                        @endforeach
+                      </svg>
+                    </div>
+                    {{-- X-axis labels --}}
+                    <div class="flex justify-between ml-3 mt-0.5">
+                      @foreach($barData as $bar)
+                      <span class="text-[3px] text-gray-400 flex-1 text-center">{{ substr($bar['label'], 0, 1) }}</span>
                       @endforeach
                     </div>
                   </div>
                   <div class="bg-white rounded-lg p-2 border border-gray-100">
-                    <div class="text-[6px] font-semibold text-gray-700 mb-1">Top Products</div>
-                    @foreach([['Indomie', '48'], ['Teh Botol', '32'], ['Sampoerna', '24']] as $bp)
-                    <div class="flex justify-between items-center py-0.5">
-                      <span class="text-[5px] text-gray-600">{{ $bp[0] }}</span>
-                      <span class="text-[5px] text-zonakasir-primary font-semibold">{{ $bp[1] }} sold</span>
+                    <div class="flex justify-between items-center mb-1">
+                      <div class="text-[6px] font-semibold text-gray-700">Top Selling Hari Ini</div>
+                      <span class="text-[3px] text-zonakasir-primary">Lihat Semua</span>
+                    </div>
+                    @foreach([['name' => 'Indomie Goreng', 'qty' => 48, 'pct' => 100, 'emoji' => '🍜', 'bg' => 'bg-yellow-100'], ['name' => 'Teh Botol Sosro', 'qty' => 32, 'pct' => 67, 'emoji' => '🍵', 'bg' => 'bg-green-100'], ['name' => 'Rokok Sampoerna', 'qty' => 24, 'pct' => 50, 'emoji' => '🚬', 'bg' => 'bg-red-100']] as $bp)
+                    <div class="flex items-center gap-1.5 py-0.5">
+                      <div class="w-3 h-3 rounded {{ $bp['bg'] }} flex items-center justify-center text-[5px] flex-shrink-0">{{ $bp['emoji'] }}</div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-center">
+                          <span class="text-[5px] text-gray-700 font-medium truncate">{{ $bp['name'] }}</span>
+                          <span class="text-[4px] text-zonakasir-primary font-semibold ml-1">{{ $bp['qty'] }}</span>
+                        </div>
+                        <div class="h-1 bg-gray-100 rounded-full mt-0.5 overflow-hidden">
+                          <div class="h-full bg-gradient-to-r from-zonakasir-primary to-orange-400 rounded-full" style="width: {{ $bp['pct'] }}%"></div>
+                        </div>
+                      </div>
                     </div>
                     @endforeach
                   </div>
