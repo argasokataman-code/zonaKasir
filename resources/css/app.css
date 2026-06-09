@@ -126,6 +126,66 @@
   animation: heartbeat 2s ease-in-out infinite;
 }
 
+/* Card Gradient Breathe */
+@keyframes gradientBreathe {
+  0%, 100% { transform: rotate(3deg) scale(1.05); opacity: 0.8; }
+  25% { transform: rotate(5deg) scale(1.08); opacity: 1; }
+  50% { transform: rotate(2deg) scale(1.06); opacity: 0.9; }
+  75% { transform: rotate(4deg) scale(1.09); opacity: 1; }
+}
+.animate-gradient-breathe {
+  animation: gradientBreathe 6s ease-in-out infinite;
+}
+
+/* Card Gradient Drift */
+@keyframes gradientDrift {
+  0%, 100% { transform: rotate(-3deg) scale(1.05) translate(0, 0); }
+  25% { transform: rotate(-1deg) scale(1.07) translate(2%, -1%); }
+  50% { transform: rotate(-4deg) scale(1.06) translate(-1%, 2%); }
+  75% { transform: rotate(-2deg) scale(1.08) translate(1%, -2%); }
+}
+.animate-gradient-drift {
+  animation: gradientDrift 8s ease-in-out infinite;
+}
+
+/* Card Gradient Shimmer */
+@keyframes gradientShimmer {
+  0%, 100% { transform: rotate(3deg) scale(1.05); filter: brightness(1); }
+  33% { transform: rotate(5deg) scale(1.08); filter: brightness(1.1); }
+  66% { transform: rotate(2deg) scale(1.06); filter: brightness(0.95); }
+}
+.animate-gradient-shimmer {
+  animation: gradientShimmer 7s ease-in-out infinite;
+}
+
+/* Card Gradient Pulse */
+@keyframes gradientPulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+.animate-gradient-pulse {
+  animation: gradientPulse 4s ease-in-out infinite;
+}
+
+/* Card Gradient Float */
+@keyframes gradientFloat {
+  0%, 100% { transform: translateY(0) scale(1.05) rotate(3deg); }
+  33% { transform: translateY(-3%) scale(1.07) rotate(4deg); }
+  66% { transform: translateY(2%) scale(1.04) rotate(2deg); }
+}
+.animate-gradient-float {
+  animation: gradientFloat 9s ease-in-out infinite;
+}
+
+/* Menu Card Accent Glow */
+@keyframes accentGlow {
+  0%, 100% { opacity: 0.15; transform: scale(1) rotate(0deg); }
+  50% { opacity: 0.3; transform: scale(1.1) rotate(5deg); }
+}
+.animate-accent-glow {
+  animation: accentGlow 5s ease-in-out infinite;
+}
+
 /* ===== Base ===== */
 
 html {
