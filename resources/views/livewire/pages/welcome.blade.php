@@ -88,9 +88,10 @@ state([
         <div class="w-2 h-2 bg-zonakasir-primary rounded-full animate-bounce" style="animation-delay: 0ms"></div>
         <div class="w-2 h-2 bg-zonakasir-primary rounded-full animate-bounce" style="animation-delay: 150ms"></div>
         <div class="w-2 h-2 bg-zonakasir-primary rounded-full animate-bounce" style="animation-delay: 300ms"></div>
-      </div>
-    </div>
-  </div>
+                </div>
+              </div>
+              </div>
+            </div>
 
   {{-- Navbar --}}
   <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
@@ -963,16 +964,24 @@ state([
             </div>
             @else
             {{-- Kalkulator Pembayaran: Payment Modal --}}
-            <div class="relative rounded-3xl shadow-xl group-hover:shadow-2xl transition-all duration-500 w-full bg-gray-800/90 overflow-hidden aspect-[4/3] flex items-center justify-center">
-              {{-- Modal --}}
-              <div class="bg-white rounded-xl w-[85%] shadow-2xl overflow-hidden">
-                {{-- Modal Header --}}
-                <div class="px-3 py-2 border-b border-gray-100 flex items-center justify-between">
-                  <span class="text-[7px] font-bold text-gray-900">Payment</span>
-                  <div class="w-3 h-3 rounded-full bg-gray-200 flex items-center justify-center">
-                    <span class="text-[5px] text-gray-500">×</span>
+            <div class="relative rounded-3xl shadow-xl group-hover:shadow-2xl transition-all duration-500 w-full overflow-hidden aspect-[4/3] border border-gray-200 bg-white">
+              {{-- Mockup header --}}
+              <div class="bg-gray-50 border-b border-gray-200 px-3 py-1.5 flex items-center gap-2">
+                <div class="w-2 h-2 rounded-full bg-red-400"></div>
+                <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                <span class="text-[5px] text-gray-400 ml-1">zonaKasir - Payment</span>
+              </div>
+              {{-- Modal Content --}}
+              <div class="p-3">
+                <div class="bg-white rounded-xl border border-gray-200 shadow-lg overflow-hidden">
+                  {{-- Modal Header --}}
+                  <div class="px-3 py-2 border-b border-gray-100 flex items-center justify-between bg-gray-50">
+                    <span class="text-[7px] font-bold text-gray-900">Payment</span>
+                    <div class="w-3 h-3 rounded-full bg-gray-200 flex items-center justify-center">
+                      <span class="text-[5px] text-gray-500">×</span>
+                    </div>
                   </div>
-                </div>
                 <div class="flex gap-2 p-2">
                   {{-- Left: Payment Form --}}
                   <div class="flex-1">
