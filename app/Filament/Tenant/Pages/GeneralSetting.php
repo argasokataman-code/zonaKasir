@@ -49,7 +49,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
 
     public $about = [
         'shop_location' => '',
-        'photo' => '',
+        'photo' => [],
     ];
 
     public $setting = [];
@@ -248,11 +248,12 @@ class GeneralSetting extends Page implements HasActions, HasForms
             'about.shop_location' => 'required',
         ]);
 
-        if (isset($this->about['photo']) && $this->about['photo'] != null && array_values($this->about['photo'])[0] instanceof TemporaryUploadedFile) {
-            /** @var TemporaryUploadedFile $image */
-            $image = array_values($this->about['photo'])[0];
-            $this->about['uploaded_file_id'] = $this->storeAsUploadedFile($image);
-            $this->about['photo'] = null;
+        if (filled($this->about['photo'] ?? null)) {
+            $photo = array_values($this->about['photo'])[0] ?? null;
+            if ($photo instanceof TemporaryUploadedFile) {
+                $this->about['uploaded_file_id'] = $this->storeAsUploadedFile($photo);
+                $this->about['photo'] = null;
+            }
         }
 
         $aboutService->createOrUpdate($this->about);

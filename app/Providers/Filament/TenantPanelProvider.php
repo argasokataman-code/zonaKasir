@@ -264,8 +264,9 @@ class TenantPanelProvider extends PanelProvider
     private function initializeDefaultPanel(Panel $panel): void
     {
         try {
-            if (Schema::hasTable('abouts') && $about = About::first()) {
-                $logo = $about->photo
+            if (Schema::hasTable('abouts')) {
+                $about = About::first();
+                $logo = $about?->photo
                     ? UploadedFile::urlFromPath($about->photo, config('filesystems.upload_disk'))
                     : asset('assets/logo/logo.svg');
 

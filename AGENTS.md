@@ -175,6 +175,97 @@ Global helpers in `app/helpers.php`:
 4. Add proper type hints to all methods
 5. Follow 6-phase task framework (see .cursor/00-universal-agent-rules.mdc)
 
-Important rule for commit+build:
+## CI/CD Workflow
 
-- When instructed to `commit` and `build`, always stage and commit ALL workspace changes (use `git add -A`), do not create partial commits that leave unrelated modified files unstaged. If there are unrelated or risky changes in the working tree, pause and ask the user for confirmation before committing. After staging, verify with `git status --porcelain` that there are no uncommitted changes before proceeding to build.
+### Deploy Pipeline (Auto — push to `main`)
+```yaml
+.github/workflows/deploy-staging.yml
+```
+
+**What happens on push to `main`:**
+1. ✅ Checkout code
+2. ✅ Install PHP + Node dependencies
+3. ✅ Build frontend (`npm run build`) — runs in CI, NOT locally or on server
+4. ✅ Package `public/build/` as tar.gz artifact
+5. ✅ Upload via SCP to staging server (port 2223)
+6. ✅ SSH into server:
+   - `git pull origin main`
+   - `composer install --no-dev`
+   - Extract build assets to `public/build/`
+   - Migrate tenant DB
+   - Config/route/view cache
+   - Storage symlink
+   - `php artisan up`
+
+### Local Dev → Staging Flow
+```bash
+# 1. Make changes locally
+# 2. Test locally
+php artisan test
+
+# 3. Commit
+git add -A
+git commit -m "type(scope): description"
+
+# 4. Push → auto-deploys to staging
+git push origin main
+```
+
+**No need to build locally anymore** — CI handles `npm run build`.
+
+---
+
+## Commit Conventions
+
+Format: `type(scope): description`
+
+| Type | When |
+|------|------|
+| `fix` | Bug fix |
+| `feat` | New feature |
+| `refactor` | Code restructure |
+| `style` | UI/CSS only |
+| `perf` | Performance |
+| `ci` | CI/CD workflow changes |
+| `docs` | Documentation |
+| `chore` | Tooling, deps, config |
+
+**Examples:**
+```
+fix(pos): mobile cart bottom sheet not closing
+feat(deploy): add CI build step for frontend assets
+ci: add SSH port config to deploy workflow
+style(cashier): responsive grid layout for mobile
+```
+
+---
+
+## Branch Naming
+
+| Branch | Purpose | Auto-deploy |
+|--------|---------|-------------|
+| `main` | Production-ready staging | ✅ Yes |
+| `develop` | Active development | ❌ No |
+| `feat/*` | Feature branches | ❌ No |
+| `fix/*` | Bug fix branches | ❌ No |
+
+Work on `main` directly (single-dev), or create `feat/*` / `fix/*` branches for parallel work.
+
+---
+
+## Important Rules
+
+### Commit + Build Rule
+When instructed to `commit` and `build`:
+- Stage ALL workspace changes (`git add -A`)
+- Do NOT create partial commits (unless user explicitly requests)
+- If there are unrelated/risky changes, pause and ask first
+- Verify with `git status --porcelain` before committing
+- After commit, push triggers auto-deploy via CI/CD
+- **Do NOT build locally** — CI handles `npm run build`
+
+### CI/CD Safety
+- Never commit `public/build/` (gitignored)
+- Never commit `.env` or secrets
+- If deploy fails, check: SSH keys, GitHub Secrets, build process
+- Staging URL: `https://zonakasir.jogjatourdrive.com`
