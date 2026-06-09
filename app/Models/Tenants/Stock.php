@@ -15,13 +15,22 @@ use Filament\Forms\Set;
 use Filament\Support\RawJs;
 use Illuminate\Support\Str;
 use Laravel\Pennant\Feature;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @mixin IdeHelperStock
  */
 class Stock extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
+
+    protected static $recordEvents = ['created', 'updated', 'deleted'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults();
+    }
 
     protected $guarded = ['id'];
 

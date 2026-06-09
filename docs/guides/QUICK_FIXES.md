@@ -232,7 +232,7 @@ class Selling extends Model {
 ## 📊 Testing Progress Tracking
 
 **Before:** 82 failed, 4 passed  
-**Current:** 0 failed, 49 passed  
+**Current:** 0 failed, 52 passed  
 **Target:** 100% passed
 
 ---
@@ -247,9 +247,9 @@ class Selling extends Model {
 - [x] Add type hints — Added to Supplier, Stock, SecureInitialPrice, PurchasingReport controllers
 - [x] Add null checks — Already present in CashDrawerController::close()
 - [x] Add transaction protection — Added to RegisterFCMToken, Setting, Supplier, Stock, SecureInitialPrice controllers
-- [ ] Write E2E tests
-- [ ] Add rate limiting
-- [ ] Add audit logging
+- [x] Write E2E tests — tests/Feature/E2E/CompleteSaleFlowTest.php (3 tests: sale flow, member ref, insufficient stock)
+- [x] Add rate limiting — throttle:5,1 on /api/domain/register
+- [x] Add audit logging — LogsActivity added to Member, Supplier, Stock, PaymentMethod, CashDrawer, Voucher
 
 ---
 
