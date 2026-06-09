@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Api\Tenants\Settings;
 use App\Http\Controllers\Controller;
 use App\Models\Tenants\SecureInitialPrice;
 use App\Models\Tenants\Setting;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class SecureInitialPriceController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         if (!Setting::get('secure_initial_price_enabled', false)) {
             return $this->buildResponse()
@@ -39,13 +42,26 @@ class SecureInitialPriceController extends Controller
                     ->present();
             }
 
-            auth()->user()->secureInitialPrice->update([
-                'password' => bcrypt($request->password),
-            ]);
+            try {
+                DB::beginTransaction();
 
-            return $this->buildResponse()
-                ->setMessage('secure initial price password has been updated')
-                ->present();
+                auth()->user()->secureInitialPrice->update([
+                    'password' => bcrypt($request->password),
+                ]);
+
+                DB::commit();
+
+                return $this->buildResponse()
+                    ->setMessage('secure initial price password has been updated')
+                    ->present();
+            } catch (Exception $e) {
+                DB::rollBack();
+
+                return $this->buildResponse()
+                    ->setCode(500)
+                    ->setMessage('Failed to update password: ' . $e->getMessage())
+                    ->present();
+            }
         }
 
         if (auth()->user()->secureInitialPrice) {
@@ -55,16 +71,29 @@ class SecureInitialPriceController extends Controller
                 ->present();
         }
 
-        auth()->user()->secureInitialPrice()->create([
-            'password' => bcrypt($request->password),
-        ]);
+        try {
+            DB::beginTransaction();
 
-        return $this->buildResponse()
-            ->setMessage('secure initial price password has been set')
-            ->present();
+            auth()->user()->secureInitialPrice()->create([
+                'password' => bcrypt($request->password),
+            ]);
+
+            DB::commit();
+
+            return $this->buildResponse()
+                ->setMessage('secure initial price password has been set')
+                ->present();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Failed to set password: ' . $e->getMessage())
+                ->present();
+        }
     }
 
-    public function verify(Request $request)
+    public function verify(Request $request): JsonResponse
     {
        if (!Setting::get('secure_initial_price_enabled', false)) {
             return $this->buildResponse()

@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Api\Tenants\Reports;
 use App\Services\Tenants\PurchasingReportService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class PurchasingReportController
 {
-    public function __invoke(Request $request, PurchasingReportService $service)
+    public function __invoke(Request $request, PurchasingReportService $service): Response
     {
         $request->validate([
             'start_date' => 'nullable|date',

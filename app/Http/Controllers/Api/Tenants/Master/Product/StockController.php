@@ -8,11 +8,14 @@ use App\Http\Requests\Tenants\Master\StockRequest;
 use App\Http\Resources\StockCollection;
 use App\Models\Tenants\Product;
 use App\Models\Tenants\Stock;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class StockController extends Controller
 {
-    public function index(Product $product, Request $request)
+    public function index(Product $product, Request $request): JsonResponse
     {
         $perPage = $this->resolvePerPage($request);
 
@@ -25,27 +28,53 @@ class StockController extends Controller
             ->present();
     }
 
-    public function store(StockRequest $request, Product $product)
+    public function store(StockRequest $request, Product $product): JsonResponse
     {
-        $request->store();
+        try {
+            DB::beginTransaction();
 
-        RecalculateEvent::dispatch(collect([$product]), []);
+            $request->store();
 
-        return $this->buildResponse()
-            ->setMessage('success creating stock for ' . $product->name)
-            ->present();
+            DB::commit();
+
+            RecalculateEvent::dispatch(collect([$product]), []);
+
+            return $this->buildResponse()
+                ->setMessage('success creating stock for ' . $product->name)
+                ->present();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Failed to create stock: ' . $e->getMessage())
+                ->present();
+        }
     }
 
-    public function destroy(Product $product, Stock $stock)
+    public function destroy(Product $product, Stock $stock): JsonResponse
     {
         abort_unless($stock->product_id === $product->id, 404);
 
-        $stock->delete();
+        try {
+            DB::beginTransaction();
 
-        RecalculateEvent::dispatch(collect([$product]), []);
+            $stock->delete();
 
-        return $this->buildResponse()
-            ->setMessage('success deleting stock for ' . $product->name)
-            ->present();
+            DB::commit();
+
+            RecalculateEvent::dispatch(collect([$product]), []);
+
+            return $this->buildResponse()
+                ->setMessage('success deleting stock for ' . $product->name)
+                ->present();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Failed to delete stock: ' . $e->getMessage())
+                ->present();
+        }
     }
 }

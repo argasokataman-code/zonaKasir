@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\Tenants;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tenants\Setting;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class SettingController extends Controller
@@ -49,11 +51,24 @@ class SettingController extends Controller
             'value' => ['required'],
         ]);
 
-        Setting::set($request->key, $request->value);
+        try {
+            DB::beginTransaction();
 
-        return $this->buildResponse()
-            ->setMessage('Setting updated successfully')
-            ->present();
+            Setting::set($request->key, $request->value);
+
+            DB::commit();
+
+            return $this->buildResponse()
+                ->setMessage('Setting updated successfully')
+                ->present();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Failed to update setting: ' . $e->getMessage())
+                ->present();
+        }
     }
 
     public function show(string $key): JsonResponse

@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Api\Tenants\Master;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tenants\Supplier;
+use App\Services\ApiResponseService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Lakasir\HasCrudAction\Abstracts\HasCrudActionAbstract;
 use Lakasir\HasCrudAction\Interfaces\WithSimplePagination;
@@ -17,7 +21,7 @@ class SupplierController extends HasCrudActionAbstract implements WithSimplePagi
 {
     public static string $model = Supplier::class;
 
-    public function index(IndexActionResolver $resolver)
+    public function index(IndexActionResolver $resolver): JsonResponse
     {
         $perPage = request()->query('per_page', 15);
         $suppliers = QueryBuilder::for(Supplier::class)
@@ -29,24 +33,52 @@ class SupplierController extends HasCrudActionAbstract implements WithSimplePagi
             ->present();
     }
 
-    public function store(StoreActionResolver $resolver, Request $request)
+    public function store(StoreActionResolver $resolver, Request $request): JsonResponse
     {
         Validator::make($request->all(), static::rules(null))->validate();
 
-        $supplier = Supplier::create($request->all());
+        try {
+            DB::beginTransaction();
 
-        return $this->buildResponse()
-            ->setCode(201)
-            ->setData($supplier)
-            ->present();
+            $supplier = Supplier::create($request->all());
+
+            DB::commit();
+
+            return $this->buildResponse()
+                ->setCode(201)
+                ->setData($supplier)
+                ->present();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Failed to create supplier: ' . $e->getMessage())
+                ->present();
+        }
     }
 
-    public function destroy(DestroyActionResolver $resolver, $id)
+    public function destroy(DestroyActionResolver $resolver, $id): JsonResponse
     {
-        $supplier = Supplier::findOrFail($id);
-        $supplier->delete();
+        try {
+            DB::beginTransaction();
 
-        return response()->noContent();
+            $supplier = Supplier::findOrFail($id);
+            $supplier->delete();
+
+            DB::commit();
+
+            return $this->buildResponse()
+                ->setMessage('Supplier deleted successfully')
+                ->present();
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Failed to delete supplier: ' . $e->getMessage())
+                ->present();
+        }
     }
 
     public function filter(): array
@@ -70,14 +102,14 @@ class SupplierController extends HasCrudActionAbstract implements WithSimplePagi
         ];
     }
 
-    public function response($record)
+    public function response($record): JsonResponse
     {
         return $this->buildResponse()
             ->setData($record)
             ->present();
     }
 
-    public function buildResponse()
+    public function buildResponse(): ApiResponseService
     {
         return (new Controller())->buildResponse();
     }
