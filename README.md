@@ -1,9 +1,8 @@
 <div align="center">
 
-  <img src="https://lakasir.com/assets/logo/image.png" alt="logo" width="200" height="auto" />
-  <h1>zonaKasir Web App</h1>
+  <h1>zonaKasir</h1>
 
-  <p> zonaKasir is a Point of Sale (POS) application built using Laravel for the API, the Filament admin panel for the web application, and Flutter for the mobile application. </p>
+  <p>zonaKasir is a Point of Sale (POS) web application built with Laravel and Filament Admin Panel.</p>
   
 </div>
 
@@ -56,12 +55,11 @@
 
 ## Technologies Used
 * **Backend**: [Laravel](https://laravel.com)
-* **Frontend** (Web): [Filament Admin Panel](https://filamentphp.com)
-* **Frontend** (Mobile): [Flutter](https://flutter.github.io)
+* **Frontend**: [Filament Admin Panel](https://filamentphp.com)
 
 ## Installation
-1. Clone the repository: git clone https://github.com/lakasir/lakasir.git
-2. Navigate to the project directory: cd lakasir
+1. Clone the repository: `git clone https://github.com/argasokataman-code/zonaKasir.git`
+2. Navigate to the project directory: `cd zonaKasir`
 3. Install dependencies:
 4. Laravel:
    * `cp .env.example .env`
@@ -84,17 +82,14 @@
 
 We welcome contributions from the community! If you'd like to contribute to zonaKasir, please follow these steps:
 
-1. keep on eye on [roadmap](https://github.com/orgs/lakasir/discussions/321)
-2. Fork the repository.
-3. Create a new branch (git checkout -b feature/new-feature). 
-4. Make your changes and commit them (git commit -am 'Add new feature').
-5. Push to the branch (git push origin feature/new-feature).
-6. Create a new Pull Request.
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/new-feature`).
+3. Make your changes and commit them (`git commit -am 'Add new feature'`).
+4. Push to the branch (`git push origin feature/new-feature`).
+5. Create a new Pull Request.
    
-When contributing to this project, please keep an eye on our project features board on GitHub to stay updated with ongoing and planned features.
-
 ## License
-This project is licensed under the GPL-3.0 license - see the [LICENSE](https://github.com/lakasir/lakasir?tab=GPL-3.0-1-ov-file) file for details.
+This project is licensed under the GPL-3.0 license.
 
 ## Contact
 For any inquiries or support, please contact zonakasirapp@gmail.com or you can open discussion in discussion features
