@@ -68,26 +68,19 @@ jobs:
         run: |
           PORT="${PORT:-2223}"
 
-          # Upload artifacts via SSH (scp deprecated)
-          echo "Uploading $(du -h /tmp/deploy-artifacts.tar.gz | cut -f1) to ${USER}@${HOST}:${DEPLOY_PATH}/"
-          cat /tmp/deploy-artifacts.tar.gz | ssh -p "${PORT}" "${USER}@${HOST}" "cat > ${DEPLOY_PATH}/deploy-artifacts.tar.gz && echo UPLOAD_DONE && sync"
+          # Upload artifacts to /tmp (outside git working tree to avoid git stash issues)
+          echo "Uploading $(du -h /tmp/deploy-artifacts.tar.gz | cut -f1) to ${USER}@${HOST}:/tmp/"
+          cat /tmp/deploy-artifacts.tar.gz | ssh -p "${PORT}" "${USER}@${HOST}" "cat > /tmp/deploy-artifacts.tar.gz && echo UPLOAD_DONE && sync"
           echo "Upload pipeline completed"
 
           # Verify file exists on remote
-          ssh -p "${PORT}" "${USER}@${HOST}" "test -f ${DEPLOY_PATH}/deploy-artifacts.tar.gz && echo FILE_EXISTS || echo FILE_MISSING"
+          ssh -p "${PORT}" "${USER}@${HOST}" "test -f /tmp/deploy-artifacts.tar.gz && echo FILE_EXISTS || echo FILE_MISSING"
 
           # Deploy commands
           ssh -p "${PORT}" "${USER}@${HOST}" bash -s << 'DEPLOY'
             set -e
 
             PATH_DEPLOY="${{ secrets.DEPLOY_PATH }}"
-            echo "DEBUG: PATH_DEPLOY=[${PATH_DEPLOY}]"
-            ls -la "${PATH_DEPLOY}/deploy-artifacts.tar.gz" 2>&1 || echo "FILE NOT FOUND in PATH_DEPLOY"
-
-            # Also check from the env-based upload path
-            echo "DEBUG: checking from upload path..."
-            ls -la "${{ secrets.DEPLOY_PATH }}/deploy-artifacts.tar.gz" 2>&1 || echo "FILE NOT FOUND in upload path"
-
             cd "${PATH_DEPLOY}"
 
             # Maintenance mode
@@ -97,9 +90,9 @@ jobs:
             git stash push --include-untracked --message "deploy-stash-$(date +%s)" 2>/dev/null || true
             git pull origin main
 
-            # Extract artifacts (vendor + build), skip cached/ignored files
+            # Remove old vendor/build, extract from /tmp
             rm -rf vendor public/build 2>/dev/null || true
-            tar xzf "${PATH_DEPLOY}/deploy-artifacts.tar.gz"
+            tar xzf /tmp/deploy-artifacts.tar.gz
             rm -f "${PATH_DEPLOY}/deploy-artifacts.tar.gz"
 
             # Run migrations
