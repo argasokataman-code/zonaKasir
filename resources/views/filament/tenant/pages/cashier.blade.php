@@ -9,17 +9,23 @@
       {{ $this->table }}
     </div>
 
-    {{-- Mobile: cart toggle button --}}
+    {{-- Mobile: cart toggle button with scan --}}
     <div class="fixed bottom-0 left-0 right-0 z-50 border-t bg-white p-3 shadow-lg dark:border-gray-800 dark:bg-gray-900 lg:hidden"
       x-show="!cartOpen">
-      <button @click="cartOpen = true"
-        class="flex w-full items-center justify-between rounded-lg bg-zonakasir-primary px-4 py-3 text-white">
-        <span class="font-semibold">{{ __('View Cart') }}</span>
-        <span class="flex items-center gap-2">
-          <span x-text="$wire.cartItems ? $wire.cartItems.length : 0" class="rounded-full bg-white/20 px-2 py-0.5 text-sm"></span>
-          <x-heroicon-o-chevron-up class="h-5 w-5" />
-        </span>
-      </button>
+      <div class="flex gap-2">
+        <button @click="cartOpen = true"
+          class="flex flex-1 items-center justify-between rounded-lg bg-zonakasir-primary px-4 py-3 text-white">
+          <span class="font-semibold">{{ __('View Cart') }}</span>
+          <span class="flex items-center gap-2">
+            <span x-text="$wire.cartItems ? $wire.cartItems.length : 0" class="rounded-full bg-white/20 px-2 py-0.5 text-sm"></span>
+            <x-heroicon-o-chevron-up class="h-5 w-5" />
+          </span>
+        </button>
+        <button x-on:click="$dispatch('open-modal', {id: 'qr-scanner-modal'})" type="button"
+          class="flex items-center justify-center rounded-lg bg-gray-100 px-3 py-3 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+          <x-heroicon-o-qr-code class="h-6 w-6" />
+        </button>
+      </div>
     </div>
 
     {{-- Sidebar: always visible on desktop, bottom sheet on mobile --}}
@@ -36,7 +42,7 @@
         <div class="flex items-center justify-between" x-data="fullscreen">
           <p class="text-lg font-semibold hidden lg:block">{{ __('Orders details') }}</p>
           <div class="flex items-center">
-            <div class="hidden items-center gap-x-2 xl:flex">
+            <div class="flex items-center gap-x-2">
               <a href="/member/sellings"
                 class="flex items-center justify-center gap-x-1 rounded-lg bg-gray-100 px-4 py-1 text-gray-500">
                 <x-heroicon-o-arrow-left class="h-4 w-4 text-gray-500" />
