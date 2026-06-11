@@ -101,8 +101,13 @@ class TenantPanelProvider extends PanelProvider
         );
 
         FilamentView::registerRenderHook(
-            PanelsRenderHook::HEAD_END,
+            PanelsRenderHook::SIDEBAR_NAV_START,
             fn () => view('partials.sidebar-logo-css')
+        );
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::BODY_START,
+            fn () => view('partials.shop-wallpaper')
         );
 
         FilamentView::registerRenderHook(
@@ -266,12 +271,9 @@ class TenantPanelProvider extends PanelProvider
         try {
             if (Schema::hasTable('abouts')) {
                 $about = About::first();
-                $logo = $about?->photo
-                    ? UploadedFile::urlFromPath($about->photo, config('filesystems.upload_disk'))
-                    : asset('assets/logo/logo.svg');
 
                 $panel->brandName($about->shop_name ?? 'Your Brand')
-                    ->brandLogo($logo);
+                    ->brandLogo(asset('assets/logo/logo.svg'));
             }
         } catch (\Throwable) {
             // DB not available during build/package-discovery
@@ -282,12 +284,9 @@ class TenantPanelProvider extends PanelProvider
     {
         try {
             $about = About::first();
-            $logo = $about?->photo
-                ? UploadedFile::urlFromPath($about->photo, config('filesystems.upload_disk'))
-                : asset('assets/logo/logo.svg');
 
             $panel->brandName($about->shop_name ?? 'Your Brand')
-                ->brandLogo($logo);
+                ->brandLogo(asset('assets/logo/logo.svg'));
         } catch (\Throwable) {
             // DB not available during build/package-discovery
         }
