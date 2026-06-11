@@ -11,15 +11,16 @@
 > **Goal:** Admin bisa lihat, kelola, suspend, login sebagai tenant.
 > **Durasi:** ~2-3 hari
 
-| # | Task | File | Priority |
-|---|------|------|----------|
-| 1 | **Tenant List** (existing) — kolom: ID, domain, name, email, registered date, status | `app/Filament/Admin/Resources/TenantResource.php` | ✅ Done |
-| 2 | **Domain management** — lihat & kelola domain tenant, suspend tenant (flag `is_active`) | Migration + TenantResource update | 🔴 High |
-| 3 | **Tenant impersonate** — klik "Login as Tenant" → redirect + auto login | `ImpersonateAction` + session | 🔴 High |
-| 4 | **Tenant detail page** — info tenant, jumlah user, total transaksi | ViewTenant + widgets | 🟠 Medium |
-| 5 | **Maintenance mode per tenant** — nonaktifin akses tenant tanpa SQL manual, tampilkan halaman "Akun dinonaktifkan" | `CheckTenantActive` middleware + tenant route | 🔴 High |
-| 6 | **Tenant data export/delete (GDPR)** — export semua data tenant (JSON) + hapus total (database+cabinet) | Export action + DeleteTenant job | 🟠 Medium |
-| 7 | **Activity log** — catat siapa yg login, impersonate, hapus tenant | `spatie/laravel-activitylog` | 🟡 Low |
+| # | Task | File | Priority | Status |
+|---|------|------|----------|--------|
+| 1 | **Tenant List** — kolom: ID, domain, name, email, registered date, status active/suspended | `app/Filament/Admin/Resources/TenantResource.php` | 🔴 High | ✅ |
+| 2 | **Suspend / Activate** — toggle suspend tenant, isi alasan, flag `is_active` | `TenantResource` + migration `add_is_active_to_tenants` | 🔴 High | ✅ |
+| 3 | **CheckTenantActive middleware** — blokir akses tenant kalo disuspend, tampilkan halaman 403 | `app/Http/Middleware/CheckTenantActive.php` + `resources/views/errors/tenant-suspended.blade.php` | 🔴 High | ✅ |
+| 4 | **Tenant impersonate** — klik "Login as Tenant" → buka tenant domain di tab baru | `ImpersonateAction` di `TenantResource` | 🔴 High | ✅ |
+| 5 | **Filter status** — filter tenant Active / Suspended | `SelectFilter` di `TenantResource` | 🟠 Medium | ✅ |
+| 6 | **Tenant detail page** — info tenant, jumlah user, total transaksi, domain | `ViewTenant` + widgets | 🟠 Medium | ❌ |
+| 7 | **Tenant data export/delete (GDPR)** — export JSON + hapus total (database+cabinet) | Export action + DeleteTenant job | 🟠 Medium | ❌ |
+| 8 | **Activity log** — catat siapa yg login, impersonate, hapus tenant | `spatie/laravel-activitylog` | 🟡 Low | ❌ |
 
 ### Migration (Phase 1)
 ```php
@@ -211,18 +212,18 @@ database/migrations/
 
 ## Commit Plan
 
-| Step | Message | Files |
-|------|---------|-------|
-| P1.1 | `feat(admin): tenant domain + suspend + maintenance mode` | Migration + TenantResource + CheckTenantActive |
-| P1.2 | `feat(admin): tenant impersonate + activity log` | Impersonate action + spatie/activitylog |
-| P1.3 | `feat(admin): tenant export/delete + detail page` | Export action + hapus tenant + widget |
-| P2.1 | `feat(admin): plan & subscription models + CRUD` | Plans + Subscriptions migrations, models, resources |
-| P2.2 | `feat(admin): subscription flow + trial + middleware` | RegisterTenant + CheckSubscription + swap |
-| P2.3 | `feat(admin): manual billing + invoices + coupons` | InvoiceResource + CouponResource + ManualPayment |
-| P2.4 | `feat(admin): billing cron + email notifications` | CheckBilling command + Notification classes |
-| P2.5 | `feat(admin): billing dashboard + reports` | BillingStats + SubscriptionResource filter |
-| P3.1 | `feat(admin): system health + log viewer` | SystemHealth + LogViewer pages |
-| P3.2 | `feat(admin): broadcast notification + tenant email + export` | Notification system + export CSV |
+| Step | Message | Files | Status |
+|------|---------|-------|--------|
+| P1.1 | `feat(admin): tenant suspend/active + impersonate + domain management` | Migration + TenantResource + CheckTenantActive + suspended view | ✅ |
+| P1.2 | `feat(admin): tenant impersonate + activity log` | Impersonate action + spatie/activitylog | 🟡 Pending |
+| P1.3 | `feat(admin): tenant export/delete + detail page` | Export action + hapus tenant + widget | ❌ |
+| P2.1 | `feat(admin): plan & subscription models + CRUD` | Plans + Subscriptions migrations, models, resources | ❌ |
+| P2.2 | `feat(admin): subscription flow + trial + middleware` | RegisterTenant + CheckSubscription + swap | ❌ |
+| P2.3 | `feat(admin): manual billing + invoices + coupons` | InvoiceResource + CouponResource + ManualPayment | ❌ |
+| P2.4 | `feat(admin): billing cron + email notifications` | CheckBilling command + Notification classes | ❌ |
+| P2.5 | `feat(admin): billing dashboard + reports` | BillingStats + SubscriptionResource filter | ❌ |
+| P3.1 | `feat(admin): system health + log viewer` | SystemHealth + LogViewer pages | ❌ |
+| P3.2 | `feat(admin): broadcast notification + tenant email + export` | Notification system + export CSV | ❌ |
 
 ---
 
