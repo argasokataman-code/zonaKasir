@@ -10,8 +10,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Artisan::call('tenants:run app:fill-is-owner-to-users');
-        // Schema::dropIfExists('tenant_users');
+        if (config('database.default') !== 'testing') {
+            Artisan::call('tenants:run app:fill-is-owner-to-users');
+        }
     }
 
     /**
