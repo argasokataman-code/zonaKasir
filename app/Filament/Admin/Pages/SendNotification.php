@@ -49,7 +49,7 @@ class SendNotification extends Page implements HasForms
 
         $count = 0;
         foreach ($tenants as $tenant) {
-            $email = $tenant->data['email'] ?? null;
+            $email = $tenant->data['tenancy_email'] ?? $tenant->data['email'] ?? null;
             if ($email) {
                 \Illuminate\Support\Facades\Notification::route('mail', $email)
                     ->notify(new BroadcastMessage($subject, $body));
