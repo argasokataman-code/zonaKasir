@@ -1,3 +1,4 @@
+@unless(request()->is('admin*'))
 @php
   $about = App\Models\Tenants\About::first();
   $uploadDisk = config('filesystems.upload_disk');
@@ -33,3 +34,4 @@
   }
 </style>
 @endif
+@endunless

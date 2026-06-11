@@ -9,6 +9,19 @@ Before generating ANY code that uses a library, framework, or API:
 3. Always include `use context7` or `use library /library/id` in your prompt
 4. This prevents hallucinated APIs, wrong parameters, and outdated examples
 
+### NEVER modify `.github/workflows/deploy-staging.yml` unless absolutely necessary
+- The deploy workflow is stable. Do NOT edit it for debugging or temporary fixes.
+- If you need to run commands on the staging server, use the SSH workflow instead:
+  ```bash
+  gh workflow run ssh-command.yml --ref main --field command="<your command here>"
+  ```
+- Commits that change the deploy YAML should only happen when adding permanent infrastructure changes.
+
+### Use SSH workflow for staging fixes instead of pushing new deploys
+- Staging server: `jogn3455@jogjatourdrive.com` port `2223`
+- To run a quick command: use `gh workflow run ssh-command.yml` as shown above
+- To view output: `gh run watch <run-id>` or check the Actions tab on GitHub
+
 ## Project Overview
 
 This is a multi-tenant Point of Sale (POS) application built with Laravel 11.x, Filament 3.x admin panel, and Livewire/Volt for reactive UI. Uses `stancl/tenancy` for multi-tenancy (database per tenant pattern).
