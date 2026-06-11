@@ -134,6 +134,7 @@ class TenantPanelProvider extends PanelProvider
             ->sidebarFullyCollapsibleOnDesktop()
             ->darkMode(config('app.dark_mode', true))
             ->databaseNotifications()
+            ->lazyLoadedDatabaseNotifications(false)
             ->id('tenant')
             ->viteTheme('resources/css/filament/tenant/theme.css')
             ->colors(['primary' => Color::hex('#FF6600')])
