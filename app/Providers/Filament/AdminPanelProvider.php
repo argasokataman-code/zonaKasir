@@ -47,6 +47,10 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->authGuard('admin')
+            ->widgets([
+                \App\Filament\Admin\Widgets\DashboardStats::class,
+                \App\Filament\Admin\Widgets\BillingStats::class,
+            ])
             ->default(\App\Filament\Admin\Widgets\DashboardStats::class);
     }
 }
