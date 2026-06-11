@@ -43,7 +43,14 @@ class TenantExportController extends Controller
     {
         $tenant = Tenant::findOrFail($id);
 
-        // Run inside tenant to clean up data
+        // Log activity BEFORE deleting (model must still exist in DB)
+        activity()
+            ->causedBy(auth('admin')->user())
+            ->performedOn($tenant)
+            ->event('deleted')
+            ->log('Tenant deleted with full data cleanup');
+
+        // Run inside tenant to clean up user data
         $tenant->run(function () {
             \App\Models\Tenants\User::query()->delete();
         });
@@ -53,12 +60,6 @@ class TenantExportController extends Controller
 
         // Delete the tenant (stancl/tenancy handles database deletion)
         $tenant->delete();
-
-        activity()
-            ->causedBy(auth('admin')->user())
-            ->performedOn($tenant)
-            ->event('deleted')
-            ->log('Tenant deleted with full data cleanup');
 
         return redirect()->back()->with('success', 'Tenant deleted completely.');
     }

@@ -107,11 +107,26 @@ class TenantResource extends Resource
                         $record->run(function () {
                             \App\Models\Tenants\User::query()->delete();
                         });
+                        $record->domains()->delete();
+                        activity()
+                            ->causedBy(auth('admin')->user())
+                            ->performedOn($record)
+                            ->event('deleted')
+                            ->log('Tenant deleted');
                         $record->delete();
                     }),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\DeleteBulkAction::make()
+                    ->before(function ($records) {
+                        foreach ($records as $record) {
+                            $record->run(function () {
+                                \App\Models\Tenants\User::query()->delete();
+                            });
+                            $record->domains()->delete();
+                            $record->delete();
+                        }
+                    }),
             ]);
     }
 
