@@ -20,7 +20,7 @@ class BroadcastMessage extends Notification
     public function toArray($notifiable): array
     {
         return [
-            'subject' => $this->subject,
+            'title' => $this->subject,
             'body' => $this->body,
         ];
     }
