@@ -15,7 +15,11 @@ class BroadcastMessage extends Notification
 
     public function via($notifiable): array
     {
-        return ['mail'];
+        $channels = ['database'];
+        if ($notifiable->email ?? false) {
+            $channels[] = 'mail';
+        }
+        return $channels;
     }
 
     public function toMail($notifiable): MailMessage
@@ -25,5 +29,13 @@ class BroadcastMessage extends Notification
             ->line($this->body)
             ->action('Open Dashboard', url('/member'))
             ->line('Thank you!');
+    }
+
+    public function toArray($notifiable): array
+    {
+        return [
+            'subject' => $this->subject,
+            'body' => $this->body,
+        ];
     }
 }
