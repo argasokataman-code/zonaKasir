@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class BroadcastMessage extends Notification
@@ -15,20 +14,7 @@ class BroadcastMessage extends Notification
 
     public function via($notifiable): array
     {
-        $channels = ['database'];
-        if ($notifiable->email ?? false) {
-            $channels[] = 'mail';
-        }
-        return $channels;
-    }
-
-    public function toMail($notifiable): MailMessage
-    {
-        return (new MailMessage)
-            ->subject($this->subject)
-            ->line($this->body)
-            ->action('Open Dashboard', url('/member'))
-            ->line('Thank you!');
+        return ['database'];
     }
 
     public function toArray($notifiable): array
