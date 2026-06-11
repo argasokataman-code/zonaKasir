@@ -9,6 +9,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 
@@ -24,7 +25,11 @@ class SendNotification extends Page implements HasForms
 
     protected static string $view = 'filament.admin.pages.send-notification';
 
-    public ?array $data = [];
+    public ?string $target = null;
+
+    public ?string $subject = null;
+
+    public ?string $body = null;
 
     public function mount(): void
     {
@@ -34,9 +39,9 @@ class SendNotification extends Page implements HasForms
     public function send(): void
     {
         $data = $this->form->getState();
+        $target = $data['target'];
         $subject = $data['subject'];
         $body = $data['body'];
-        $target = $data['target'];
 
         $tenants = $target === 'all'
             ? Tenant::where('is_active', true)->get()
@@ -60,7 +65,7 @@ class SendNotification extends Page implements HasForms
         $this->form->fill();
     }
 
-    protected function getFormSchema(): array
+    public function form(Form $form): Form
     {
         $tenantOptions = Tenant::where('is_active', true)
             ->get()
@@ -68,18 +73,19 @@ class SendNotification extends Page implements HasForms
             ->mapWithKeys(fn ($name, $id) => [$id => "{$name} ({$id})"])
             ->toArray();
 
-        return [
-            Select::make('target')
-                ->label('Send to')
-                ->options(['all' => 'All Active Tenants'] + $tenantOptions)
-                ->searchable()
-                ->required(),
-            TextInput::make('subject')
-                ->required()
-                ->maxLength(255),
-            Textarea::make('body')
-                ->required()
-                ->rows(6),
-        ];
+        return $form
+            ->schema([
+                Select::make('target')
+                    ->label('Send to')
+                    ->options(['all' => 'All Active Tenants'] + $tenantOptions)
+                    ->searchable()
+                    ->required(),
+                TextInput::make('subject')
+                    ->required()
+                    ->maxLength(255),
+                Textarea::make('body')
+                    ->required()
+                    ->rows(6),
+            ]);
     }
 }
