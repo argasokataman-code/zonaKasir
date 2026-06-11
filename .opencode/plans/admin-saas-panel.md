@@ -149,14 +149,14 @@ Schema::create('coupons', function (Blueprint $table) {
 > **Goal:** Admin monitor sistem + komunikasi dengan tenant.
 > **Durasi:** ~2-3 hari
 
-| # | Task | Detail |
-|---|------|--------|
-| 1 | **System Health** — queue status, DB connection, disk usage, PHP version, SSL cert expiry | `app/Filament/Admin/Pages/SystemHealth.php` |
-| 2 | **Error Log Viewer** — lihat `storage/logs/laravel.log` via admin (dengan filter level) | `LogViewer` page |
-| 3 | **Broadcast Notification** — kirim notifikasi ke semua tenant atau per-tenant (via email + in-app) | Livewire + queue job |
-| 4 | **Tenant Impersonation Log** — catat dan tampilkan riwayat impersonate admin | Dari activity log |
-| 5 | **Send Mail to Tenant** — form kirim email langsung ke tenant dari admin | Livewire + mail |
-| 6 | **Export Tenants CSV** — download daftar tenant + filter | Export action |
+| # | Task | Detail | Status |
+|---|------|--------|--------|
+| 1 | **System Health** — DB connection, disk usage, PHP version, log size | `app/Filament/Admin/Pages/SystemHealth.php` | ✅ |
+| 2 | **Log Viewer** — lihat `storage/logs/laravel.log` via admin, filter level + line count | `app/Filament/Admin/Pages/LogViewer.php` | ✅ |
+| 3 | **Broadcast Notification** — kirim notifikasi ke semua tenant atau per-tenant (via email + in-app) | Livewire + queue job | ❌ |
+| 4 | **Tenant Impersonation Log** — catat dan tampilkan riwayat impersonate admin | Dari activity log | ❌ |
+| 5 | **Send Mail to Tenant** — form kirim email langsung ke tenant dari admin | Livewire + mail | ❌ |
+| 6 | **Export Tenants CSV** — download daftar tenant + filter | Export action | ❌ |
 
 ---
 
@@ -222,7 +222,7 @@ database/migrations/
 | P2.3 | `feat(admin): manual billing + invoices + coupons` | InvoiceResource + CouponResource + ManualPayment | ❌ |
 | P2.4 | `feat(admin): billing cron + email notifications` | CheckBilling command + Notification classes | ❌ |
 | P2.5 | `feat(admin): billing dashboard + reports` | BillingStats + SubscriptionResource filter | ❌ |
-| P3.1 | `feat(admin): system health + log viewer` | SystemHealth + LogViewer pages | ❌ |
+| P3.1 | `feat(admin): system health + log viewer` | SystemHealth + LogViewer pages | ✅ |
 | P3.2 | `feat(admin): broadcast notification + tenant email + export` | Notification system + export CSV | ❌ |
 
 ---
