@@ -2,8 +2,8 @@
 
 namespace App\Filament\Admin\Pages;
 
-use App\Tenant;
 use App\Notifications\BroadcastMessage;
+use App\Tenant;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -49,17 +49,19 @@ class SendNotification extends Page implements HasForms
 
         $count = 0;
         foreach ($tenants as $tenant) {
-            $email = $tenant->data['tenancy_email'] ?? $tenant->data['email'] ?? null;
-            if ($email) {
-                \Illuminate\Support\Facades\Notification::route('mail', $email)
-                    ->notify(new BroadcastMessage($subject, $body));
-                $count++;
-            }
+            // Send notification inside each tenant's database
+            $tenant->run(function () use ($subject, $body, &$count) {
+                $users = \App\Models\Tenants\User::all();
+                foreach ($users as $user) {
+                    $user->notify(new BroadcastMessage($subject, $body));
+                    $count++;
+                }
+            });
         }
 
         Notification::make()
             ->success()
-            ->title("Notification sent to {$count} tenant(s)")
+            ->title("Notification sent to {$count} user(s) across {$tenants->count()} tenant(s)")
             ->send();
 
         $this->form->fill();
