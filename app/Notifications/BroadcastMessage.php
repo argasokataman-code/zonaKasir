@@ -22,6 +22,8 @@ class BroadcastMessage extends Notification
         return [
             'title' => $this->subject,
             'body' => $this->body,
+            'format' => 'filament',
+            'duration' => 'persistent',
         ];
     }
 }
