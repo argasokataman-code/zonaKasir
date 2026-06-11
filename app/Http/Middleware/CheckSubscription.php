@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Models\Subscription;
 use Closure;
 use Illuminate\Http\Request;
+use Stancl\Tenancy\Facades\Tenancy;
 
 class CheckSubscription
 {
@@ -23,21 +24,28 @@ class CheckSubscription
             return $next($request);
         }
 
-        $subscription = Subscription::where('tenant_id', $tenantId)
-            ->whereIn('status', ['trialing', 'active'])
-            ->latest()
-            ->first();
+        // Query central DB from tenant context
+        $subscription = Tenancy::central(function () use ($tenantId) {
+            return Subscription::where('tenant_id', $tenantId)
+                ->whereIn('status', ['trialing', 'active'])
+                ->latest()
+                ->first();
+        });
 
         if (! $subscription) {
             return $next($request);
         }
 
         if ($subscription->status === 'trialing' && $subscription->trial_ends_at && $subscription->trial_ends_at->isPast()) {
-            $subscription->update(['status' => 'expired']);
+            Tenancy::central(function () use ($subscription) {
+                $subscription->update(['status' => 'expired']);
+            });
         }
 
         if ($subscription->status === 'active' && $subscription->ends_at && $subscription->ends_at->isPast()) {
-            $subscription->update(['status' => 'expired']);
+            Tenancy::central(function () use ($subscription) {
+                $subscription->update(['status' => 'expired']);
+            });
         }
 
         return $next($request);
