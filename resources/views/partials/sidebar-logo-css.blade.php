@@ -1,40 +1,8 @@
 <style>
-@keyframes logoFrameFlow {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
 .fi-sidebar-header .fi-logo {
-  height: 4rem !important;
+  height: 3.5rem !important;
   width: auto;
-  padding: 0.5rem;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, #FF6600, #FF8C00, #FF6600, #FFA500);
-  background-size: 300% 300%;
-  animation: logoFrameFlow 4s ease infinite;
-  box-shadow: 
-    0 0 0 2px rgba(255, 102, 0, 0.3),
-    0 8px 32px rgba(255, 102, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
-}
-
-.fi-sidebar-header .fi-logo:hover {
-  animation-duration: 2s;
-  transform: scale(1.02);
-  box-shadow: 
-    0 0 0 3px rgba(255, 102, 0, 0.4),
-    0 12px 40px rgba(255, 102, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-.dark .fi-sidebar-header .fi-logo {
-  background: linear-gradient(135deg, #FF6600, #FF8C00, #FF6600, #FFA500);
-  background-size: 300% 300%;
-  animation: logoFrameFlow 4s ease infinite;
-  box-shadow: 
-    0 0 0 2px rgba(255, 102, 0, 0.4),
-    0 8px 32px rgba(255, 102, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  max-height: 3.5rem;
+  object-fit: contain;
 }
 </style>
