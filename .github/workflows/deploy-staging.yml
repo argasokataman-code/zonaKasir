@@ -104,6 +104,7 @@ jobs:
             tar xzf /tmp/deploy-artifacts.tar.gz
             rm -f /tmp/deploy-artifacts.tar.gz
 
+            php artisan migrate --force
             php artisan migrate --path=database/migrations/tenant --force
 
             php artisan optimize:clear
