@@ -252,6 +252,13 @@ class Cashier extends Page implements HasForms, HasTable
                 'icon' => 'assets/images/payment-methods/cash.png',
             ]);
         }
+
+        // For Midtrans payments, set payed_money = total_price (no change)
+        if ($pMethod->isMidtrans()) {
+            $request['payed_money'] = $this->total_price;
+            $request['money_changes'] = 0;
+        }
+
         $validator = Validator::make($request, [
             'fee' => ['numeric'],
             'payment_method_id' => ['required'],
@@ -276,6 +283,34 @@ class Cashier extends Page implements HasForms, HasTable
         }
         $data = array_merge($request, $sellingService->mapProductRequest($request));
         $selling = $sellingService->create($data);
+
+        // Handle Midtrans payment — generate Snap token and dispatch event
+        if ($pMethod->isMidtrans()) {
+            $midtransType = $pMethod->midtransType();
+            if ($midtransType) {
+                $selling->load(['member', 'paymentMethod', 'sellingDetails.product', 'user']);
+                $snapData = app(\App\Services\Tenants\MidtransGatewayService::class)
+                    ->createSnapToken($selling, $midtransType);
+
+                $this->dispatch('midtrans-payment', [
+                    'token' => $snapData['token'],
+                    'redirect_url' => $snapData['redirect_url'],
+                    'payment_type' => $midtransType,
+                    'amount' => $selling->total_price,
+                ]);
+
+                Notification::make()
+                    ->title(__('Payment via') . ' ' . $pMethod->name)
+                    ->body(__('Please wait for customer to complete payment'))
+                    ->info()
+                    ->send();
+
+                CartItem::query()->cashier()->delete();
+                $this->mount();
+                return;
+            }
+        }
+
         CartItem::query()
             ->cashier()
             ->delete();

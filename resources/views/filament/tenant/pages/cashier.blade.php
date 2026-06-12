@@ -500,6 +500,51 @@
     window.zonakasirCurrency = @js($currency);
     window.zonakasirLocale = @js($locale);
     let selling = null;
+
+    // Load Midtrans Snap.js
+    const midtransSnapScript = document.createElement('script');
+    midtransSnapScript.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
+    midtransSnapScript.setAttribute('data-client-key', @js(config('midtrans.client_key')));
+    document.body.appendChild(midtransSnapScript);
+
+    // Handle Midtrans payment event from Livewire
+    $wire.on('midtrans-payment', (event) => {
+      const { token, redirect_url, payment_type, amount } = event;
+
+      if (!window.snap) {
+        console.warn('Midtrans Snap not loaded yet');
+        // Fallback: open redirect URL in new tab
+        window.open(redirect_url, '_blank');
+        return;
+      }
+
+      window.snap.pay(token, {
+        // Optional actions
+        onSuccess: function(result) {
+          console.log('Midtrans payment success:', result);
+          // Reload to get updated status
+          $wire.set('cartItems', []);
+          window.location.reload();
+        },
+        onPending: function(result) {
+          console.log('Midtrans payment pending:', result);
+          // Show pending notification
+          new FilamentNotification()
+            .title('@lang('Payment pending')')
+            .body('@lang('Please complete the payment')')
+            .info()
+            .send();
+        },
+        onError: function(result) {
+          console.error('Midtrans payment error:', result);
+          new FilamentNotification()
+            .title('@lang('Payment failed')')
+            .danger()
+            .send();
+        }
+      });
+    });
+
     $wire.on('selling-created', (event) => {
       selling = event.selling;
       $wire.dispatch('close-modal', {
