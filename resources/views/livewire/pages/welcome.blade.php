@@ -132,17 +132,17 @@ state(['locale' => $locale]);
         </a>
       </div>
 
-      <div class="mt-12 sm:mt-14 grid grid-cols-3 gap-6 sm:gap-8 max-w-md mx-auto">
+      <div class="mt-12 sm:mt-14 grid grid-cols-3 gap-4 sm:gap-8 max-w-md mx-auto items-start">
         <div class="text-center">
-          <p class="text-2xl sm:text-3xl font-extrabold text-white">{{ __('landing.stat_cloud') }}</p>
+          <p class="text-xl sm:text-3xl font-extrabold text-white whitespace-nowrap">{{ __('landing.stat_cloud') }}</p>
           <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ __('landing.stat_cloud_sub') }}</p>
         </div>
         <div class="text-center border-x border-white/10 px-2">
-          <p class="text-2xl sm:text-3xl font-extrabold text-white">{{ __('landing.stat_realtime') }}</p>
+          <p class="text-xl sm:text-3xl font-extrabold text-white whitespace-nowrap">{{ __('landing.stat_realtime') }}</p>
           <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ __('landing.stat_realtime_sub') }}</p>
         </div>
         <div class="text-center">
-          <p class="text-2xl sm:text-3xl font-extrabold text-white">{{ __('landing.stat_multi') }}</p>
+          <p class="text-xl sm:text-3xl font-extrabold text-white whitespace-nowrap">{{ __('landing.stat_multi') }}</p>
           <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ __('landing.stat_multi_sub') }}</p>
         </div>
       </div>
@@ -239,7 +239,7 @@ state(['locale' => $locale]);
   </section>
 
   {{-- About --}}
-  <section id="tentang" class="py-16 sm:py-24 bg-white">
+  <section id="tentang" class="scroll-mt-20 py-16 sm:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
         <div>
@@ -340,7 +340,7 @@ state(['locale' => $locale]);
   </section>
 
   {{-- Features --}}
-  <section id="fitur" class="py-16 sm:py-24 bg-gray-50">
+  <section id="fitur" class="scroll-mt-20 py-16 sm:py-24 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 sm:mb-16">
         <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
@@ -373,7 +373,7 @@ state(['locale' => $locale]);
   </section>
 
   {{-- Modules --}}
-  <section id="menu" class="py-16 sm:py-24 bg-white">
+  <section id="menu" class="scroll-mt-20 py-16 sm:py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 sm:mb-16">
         <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
@@ -404,7 +404,7 @@ state(['locale' => $locale]);
   </section>
 
   {{-- Pricing --}}
-  <section id="harga" class="py-16 sm:py-24 bg-gray-50">
+  <section id="harga" class="scroll-mt-20 py-16 sm:py-24 bg-gray-50">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 sm:mb-16">
         <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
