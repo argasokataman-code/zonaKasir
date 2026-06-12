@@ -29,24 +29,18 @@ class MidtransGatewayService
     ];
 
     /**
-     * Generate Snap transaction token for credit_card, or Core API charge for QRIS/GoPay.
+     * Generate Snap transaction token. QRIS also uses Snap (redirect flow).
      */
     public function createSnapToken(Selling $selling, string $midtransType): array
     {
         $this->validateCredentials();
 
-        // QRIS uses Core API charge (returns qr_code_url directly)
-        if ($midtransType === 'qris') {
-            $orderId = $this->generateOrderId();
-            $serverKey = config('midtrans.server_key');
-            return $this->chargeCoreApiQris($orderId, (int) $selling->total_price, $selling, $serverKey);
-        }
-
         $orderId = $this->generateOrderId();
         $grossAmount = (int) $selling->total_price;
         $serverKey = config('midtrans.server_key');
 
-        // Credit card and others use Snap
+        // All payment types use Snap API (including QRIS)
+        // QRIS redirect_url contains the QR code for customer to scan
         return $this->createSnapTokenForPayment($selling, $orderId, $grossAmount, $midtransType, $serverKey);
     }
 
