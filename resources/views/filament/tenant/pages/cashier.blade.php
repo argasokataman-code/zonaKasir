@@ -519,6 +519,26 @@
     let selling = null;
 
     // Load Midtrans Snap.js synchronously
+    (function() {
+      var s = document.createElement('script');
+      s.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
+      s.setAttribute('data-client-key', @js(config('midtrans.client_key')));
+      s.async = false;
+      document.head.appendChild(s);
+    })();
+
+    // Load QR code library synchronously
+    (function() {
+      var q = document.createElement('script');
+      q.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
+      q.async = false;
+      q.onerror = function() {
+        console.error('QR code library failed to load');
+      };
+      document.head.appendChild(q);
+    })();
+
+    // Load Midtrans Snap.js synchronously
     (function loadSnap() {
       const script = document.createElement('script');
       script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
@@ -573,31 +593,33 @@
 
     // QR Code Generator (minimal inline implementation)
     function generateQRCode(text) {
-      const container = document.getElementById('midtrans-qr-container');
+      var container = document.getElementById('midtrans-qr-container');
       if (!container) return;
       container.innerHTML = '';
 
-      const canvas = document.createElement('canvas');
-      const size = 250;
-      canvas.width = size;
-      canvas.height = size;
-      container.appendChild(canvas);
-
-      // Use a simple QR code library loaded from CDN
-      if (typeof QRCode !== 'undefined') {
-        new QRCode(canvas, { text: text, width: size, height: size });
+      // Check if QRCode library is loaded
+      if (typeof QRCode === 'undefined') {
+        console.error('QRCode library not loaded');
+        container.innerHTML = '<div class="text-center text-red-500 p-4"><p class="font-bold">QR Code Library Error</p><p class="text-sm">Please use the link below to open payment page.</p></div>';
         return;
       }
 
-      // Fallback: load QR code library dynamically
-      const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
-      script.onload = function() {
-        if (typeof QRCode !== 'undefined') {
-          new QRCode(canvas, { text: text, width: size, height: size });
-        }
-      };
-      document.head.appendChild(script);
+      try {
+        var canvas = document.createElement('canvas');
+        container.appendChild(canvas);
+
+        new QRCode(canvas, {
+          text: text,
+          width: 250,
+          height: 250,
+          colorDark: '#000000',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      } catch (e) {
+        console.error('QR generation error:', e);
+        container.innerHTML = '<div class="text-center text-red-500 p-4"><p class="font-bold">QR Code Error</p><p class="text-sm">' + e.message + '</p></div>';
+      }
     }
 
     $wire.on('selling-created', (event) => {
