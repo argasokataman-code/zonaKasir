@@ -2,7 +2,7 @@
 
 namespace App\Filament\Admin\Pages;
 
-use App\Models\Tenant;
+use App\Tenant;
 use App\Models\Tenants\Withdrawal;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
