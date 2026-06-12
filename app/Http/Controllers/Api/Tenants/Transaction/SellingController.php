@@ -54,8 +54,15 @@ class SellingController extends Controller
             $response = new SellingCollection($selling);
 
             if ($selling->paymentMethod && $selling->paymentMethod->isMidtrans()) {
+                $midtransType = $selling->paymentMethod->midtransType();
+                abort_if(
+                    ! $midtransType,
+                    422,
+                    'Payment method type is not configured for Midtrans. Please set payment_type.'
+                );
+
                 $midtransGateway = app(MidtransGatewayService::class);
-                $snapData = $midtransGateway->createSnapToken($selling, $selling->paymentMethod->midtransType());
+                $snapData = $midtransGateway->createSnapToken($selling, $midtransType);
                 $response->additional['snap_token'] = $snapData['token'];
                 $response->additional['snap_redirect_url'] = $snapData['redirect_url'];
                 $response->additional['midtrans_payment_id'] = $snapData['midtrans_payment_id'];
