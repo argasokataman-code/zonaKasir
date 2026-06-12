@@ -313,10 +313,11 @@
   {{-- Midtrans Payment Waiting State --}}
   <div id="midtrans-waiting" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm">
     <div class="text-center max-w-md mx-auto p-8">
-      <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">{{ __('Waiting for Payment') }}</h2>
-      <div id="midtrans-qr-container" class="mb-6 flex justify-center"></div>
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">{{ __('Waiting for Payment') }}</h2>
+      <div id="midtrans-qr-container" class="mb-6 flex justify-center">
+        <img id="midtrans-qr-img" class="hidden" style="width:250px;height:250px;" alt="QR Code" />
+      </div>
       <div class="mb-4">
-        <span class="text-sm text-gray-600 dark:text-gray-400 block mb-2">{{ __('Or scan this URL:') }}</span>
         <a id="midtrans-qr-link" href="#" target="_blank"
            class="text-xs text-blue-500 break-all hover:underline" id="midtrans-qr-url"></a>
       </div>
@@ -518,109 +519,45 @@
     window.zonakasirLocale = @js($locale);
     let selling = null;
 
-    // Load Midtrans Snap.js synchronously
-    (function() {
-      var s = document.createElement('script');
-      s.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
-      s.setAttribute('data-client-key', @js(config('midtrans.client_key')));
-      s.async = false;
-      document.head.appendChild(s);
-    })();
-
-    // Load QR code library synchronously
-    (function() {
-      var q = document.createElement('script');
-      q.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
-      q.async = false;
-      q.onerror = function() {
-        console.error('QR code library failed to load');
-      };
-      document.head.appendChild(q);
-    })();
-
-    // Load Midtrans Snap.js synchronously
-    (function loadSnap() {
-      const script = document.createElement('script');
-      script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
-      script.setAttribute('data-client-key', @js(config('midtrans.client_key')));
-      script.onload = function() { console.log('Midtrans Snap.js loaded'); };
-      script.onerror = function() { console.error('Failed to load Midtrans Snap.js'); };
-      document.head.appendChild(script);
-    })();
+    // Load Midtrans Snap.js
+    var snapScript = document.createElement('script');
+    snapScript.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
+    snapScript.setAttribute('data-client-key', @js(config('midtrans.client_key')));
+    snapScript.async = false;
+    document.head.appendChild(snapScript);
 
     // Handle Midtrans payment event from Livewire
     $wire.on('midtrans-payment', (event) => {
-      const { token, redirect_url, qr_code_url, qr_string, payment_type, amount } = event;
+      const { token, redirect_url } = event;
 
-      // Set the redirect URL
-      const qrUrl = document.getElementById('midtrans-qr-url');
-      const qrLink = document.getElementById('midtrans-qr-link');
+      // Set the redirect URL on waiting overlay
+      var qrLink = document.getElementById('midtrans-qr-link');
+      var qrUrl = document.getElementById('midtrans-qr-url');
+      if (qrLink) { qrLink.href = redirect_url; qrLink.textContent = redirect_url; }
       if (qrUrl) qrUrl.textContent = redirect_url;
-      if (qrLink) qrLink.href = redirect_url;
 
-      // Generate QR code from qr_string (SnapBi) or qr_code_url (Core API) or redirect_url
-      const qrSource = qr_string || qr_code_url || redirect_url;
-      generateQRCode(qrSource);
+      // Show QR code using Google Charts API (reliable, no JS library needed)
+      var qrImg = document.getElementById('midtrans-qr-img');
+      if (qrImg) {
+        qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(redirect_url);
+        qrImg.classList.remove('hidden');
+      }
 
       // Show waiting overlay
-      const waiting = document.getElementById('midtrans-waiting');
-      if (waiting) {
-        waiting.classList.remove('hidden');
-        waiting.classList.add('flex');
-      }
+      var waiting = document.getElementById('midtrans-waiting');
+      if (waiting) { waiting.classList.remove('hidden'); waiting.classList.add('flex'); }
 
-      // Try to open Snap popup after delay (if Snap.js loaded)
-      setTimeout(() => {
+      // Also try Snap popup as fallback
+      setTimeout(function() {
         if (window.snap) {
           window.snap.pay(token, {
-            onSuccess: function(result) {
-              console.log('Midtrans payment success:', result);
-              window.location.reload();
-            },
-            onPending: function(result) {
-              console.log('Midtrans payment pending:', result);
-            },
-            onError: function(result) {
-              console.error('Midtrans payment error:', result);
-              const w = document.getElementById('midtrans-waiting');
-              if (w) w.classList.add('hidden');
-              new FilamentNotification().title('@lang('Payment failed')').danger().send();
-            }
+            onSuccess: function() { window.location.reload(); },
+            onPending: function() {},
+            onError: function() { console.error('Snap error'); }
           });
         }
-      }, 1500);
+      }, 500);
     });
-
-    // QR Code Generator (minimal inline implementation)
-    function generateQRCode(text) {
-      var container = document.getElementById('midtrans-qr-container');
-      if (!container) return;
-      container.innerHTML = '';
-
-      // Check if QRCode library is loaded
-      if (typeof QRCode === 'undefined') {
-        console.error('QRCode library not loaded');
-        container.innerHTML = '<div class="text-center text-red-500 p-4"><p class="font-bold">QR Code Library Error</p><p class="text-sm">Please use the link below to open payment page.</p></div>';
-        return;
-      }
-
-      try {
-        var canvas = document.createElement('canvas');
-        container.appendChild(canvas);
-
-        new QRCode(canvas, {
-          text: text,
-          width: 250,
-          height: 250,
-          colorDark: '#000000',
-          colorLight: '#ffffff',
-          correctLevel: QRCode.CorrectLevel.M
-        });
-      } catch (e) {
-        console.error('QR generation error:', e);
-        container.innerHTML = '<div class="text-center text-red-500 p-4"><p class="font-bold">QR Code Error</p><p class="text-sm">' + e.message + '</p></div>';
-      }
-    }
 
     $wire.on('selling-created', (event) => {
       selling = event.selling;
