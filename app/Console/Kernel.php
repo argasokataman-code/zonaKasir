@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(DeleteTempFile::class)->daily();
         $schedule->command(FCM::class)->daily();
         $schedule->command(CheckBilling::class)->daily();
+        $schedule->command(\App\Console\Commands\PaymentsReconcile::class)->dailyAt('02:00');
     }
 
     protected function commands()

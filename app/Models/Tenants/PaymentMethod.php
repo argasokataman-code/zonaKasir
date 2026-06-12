@@ -38,4 +38,19 @@ class PaymentMethod extends Model
             get: fn ($value) => config('app.url').'/'.$value,
         );
     }
+
+    public function isMidtrans(): bool
+    {
+        return ! $this->is_cash;
+    }
+
+    public function midtransType(): ?string
+    {
+        return match (true) {
+            $this->is_credit => 'credit_card',
+            $this->is_debit => 'debit_card',
+            $this->is_wallet => 'gopay', // or detect from name
+            default => null,
+        };
+    }
 }

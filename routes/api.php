@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Api\MidtransWebhookController;
 
 Route::group(['prefix' => 'domain'], function ()
 {
@@ -9,6 +10,9 @@ Route::group(['prefix' => 'domain'], function ()
         ->name('register')
         ->middleware('throttle:5,1');
 });
+
+Route::post('/webhooks/midtrans', [MidtransWebhookController::class, 'handle'])
+    ->name('webhooks.midtrans');
 
 Route::get('/test', function ()
 {
