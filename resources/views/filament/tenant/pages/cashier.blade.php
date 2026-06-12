@@ -313,20 +313,17 @@
   {{-- Midtrans Payment Waiting State --}}
   <div id="midtrans-waiting" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm">
     <div class="text-center max-w-md mx-auto p-8">
-      <div class="mb-6">
-        <svg class="animate-spin h-16 w-16 text-zonakasir-primary mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.074z"></path>
-        </svg>
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6">{{ __('Waiting for Payment') }}</h2>
+      <div id="midtrans-qr-container" class="mb-6 flex justify-center"></div>
+      <div class="mb-4">
+        <span class="text-sm text-gray-600 dark:text-gray-400 block mb-2">{{ __('Or scan this URL:') }}</span>
+        <a id="midtrans-qr-link" href="#" target="_blank"
+           class="text-xs text-blue-500 break-all hover:underline" id="midtrans-qr-url"></a>
       </div>
-      <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">{{ __('Waiting for Payment') }}</h2>
-      <p class="text-gray-600 dark:text-gray-400 mb-2">{{ __('Scan QR Code or open link below') }}</p>
-      <div id="midtrans-qr-url" class="text-sm text-blue-500 break-all mb-6"></div>
-      <a id="midtrans-qr-link" href="#" target="_blank"
-         class="inline-block bg-zonakasir-primary text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 mb-4">
-        {{ __('Open Payment Page') }}
-      </a>
-      <p class="text-xs text-gray-400">{{ __('After payment, page will refresh automatically') }}</p>
+      <button onclick="window.location.reload()"
+              class="mt-6 bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 font-semibold">
+        {{ __('Cancel & Close') }}
+      </button>
     </div>
   </div>
 
@@ -535,11 +532,14 @@
     $wire.on('midtrans-payment', (event) => {
       const { token, redirect_url, payment_type, amount } = event;
 
-      // Set the redirect URL on the waiting state element
+      // Set the redirect URL
       const qrUrl = document.getElementById('midtrans-qr-url');
       const qrLink = document.getElementById('midtrans-qr-link');
       if (qrUrl) qrUrl.textContent = redirect_url;
       if (qrLink) qrLink.href = redirect_url;
+
+      // Generate QR code from redirect URL
+      generateQRCode(redirect_url);
 
       // Show waiting overlay
       const waiting = document.getElementById('midtrans-waiting');
@@ -548,7 +548,7 @@
         waiting.classList.add('flex');
       }
 
-      // Try to open Snap popup if loaded
+      // Try to open Snap popup after delay (if Snap.js loaded)
       setTimeout(() => {
         if (window.snap) {
           window.snap.pay(token, {
@@ -561,17 +561,43 @@
             },
             onError: function(result) {
               console.error('Midtrans payment error:', result);
-              if (waiting) waiting.classList.add('hidden');
-              new FilamentNotification()
-                .title('@lang('Payment failed')')
-                .danger()
-                .send();
+              const w = document.getElementById('midtrans-waiting');
+              if (w) w.classList.add('hidden');
+              new FilamentNotification().title('@lang('Payment failed')').danger().send();
             }
           });
         }
-        // Snap.js not loaded yet → waiting overlay shows redirect URL for manual scan
-      }, 1000);
+      }, 1500);
     });
+
+    // QR Code Generator (minimal inline implementation)
+    function generateQRCode(text) {
+      const container = document.getElementById('midtrans-qr-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const canvas = document.createElement('canvas');
+      const size = 250;
+      canvas.width = size;
+      canvas.height = size;
+      container.appendChild(canvas);
+
+      // Use a simple QR code library loaded from CDN
+      if (typeof QRCode !== 'undefined') {
+        new QRCode(canvas, { text: text, width: size, height: size });
+        return;
+      }
+
+      // Fallback: load QR code library dynamically
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
+      script.onload = function() {
+        if (typeof QRCode !== 'undefined') {
+          new QRCode(canvas, { text: text, width: size, height: size });
+        }
+      };
+      document.head.appendChild(script);
+    }
 
     $wire.on('selling-created', (event) => {
       selling = event.selling;
