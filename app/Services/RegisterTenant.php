@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Constants\Role;
+use App\Models\Coupon;
 use App\Models\Subscription;
 use App\Models\Tenants\About;
 use App\Models\Tenants\User;
@@ -81,16 +82,29 @@ class RegisterTenant
         });
 
         // Create trial subscription in central DB (outside tenant context)
+        $trialDays = 14;
+        $coupon = null;
+        if (! empty($data['coupon_code'])) {
+            $coupon = Coupon::where('code', $data['coupon_code'])->first();
+            if ($coupon && $coupon->isValid() && $coupon->type === 'trial_extension') {
+                $trialDays += $coupon->trial_days ?? 0;
+            }
+        }
+
         Subscription::firstOrCreate(
             ['tenant_id' => $tenant->id],
             [
                 'plan_id' => null,
                 'status' => 'trialing',
                 'billing_cycle' => 'monthly',
-                'trial_ends_at' => now()->addDays(14),
+                'trial_ends_at' => now()->addDays($trialDays),
                 'starts_at' => now(),
             ]
         );
+
+        if ($coupon) {
+            $coupon->increment('used_count');
+        }
 
         return $tenant;
     }
