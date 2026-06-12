@@ -70,6 +70,11 @@ class Selling extends Model
         return $this->belongsTo(Table::class);
     }
 
+    public function midtransPayment()
+    {
+        return $this->hasOne(MidtransPayment::class);
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults();

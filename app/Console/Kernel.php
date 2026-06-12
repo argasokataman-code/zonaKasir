@@ -16,6 +16,9 @@ class Kernel extends ConsoleKernel
         $schedule->command(FCM::class)->daily();
         $schedule->command(CheckBilling::class)->daily();
         $schedule->command(\App\Console\Commands\PaymentsReconcile::class)->dailyAt('02:00');
+        $schedule->command(\App\Console\Commands\PaymentsGenerateSettlements::class)->dailyAt('03:00');
+        $schedule->command(\App\Console\Commands\PaymentsRetryFailedWebhooks::class)->everyTenMinutes();
+        $schedule->command(\App\Console\Commands\PaymentsCancelExpired::class)->dailyAt('08:00');
     }
 
     protected function commands()
