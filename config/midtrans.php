@@ -41,11 +41,15 @@ return [
     /*
      * SnapBi (BI-SNAP) Configuration
      * Required for QRIS, GoPay, ShopeePay via SnapBi API
+     * Private key is loaded from storage/app/private-key.pem (not from .env)
      */
     'snapbi' => [
         'client_id' => env('MIDTRANS_SNAPBI_CLIENT_ID'),
         'client_secret' => env('MIDTRANS_SNAPBI_CLIENT_SECRET'),
-        'private_key' => env('MIDTRANS_SNAPBI_PRIVATE_KEY'),
+        'private_key' => function () {
+            $path = storage_path('app/private-key.pem');
+            return file_exists($path) ? file_get_contents($path) : null;
+        },
         'partner_id' => env('MIDTRANS_SNAPBI_PARTNER_ID'),
         'channel_id' => env('MIDTRANS_SNAPBI_CHANNEL_ID'),
         'merchant_id' => env('MIDTRANS_SNAPBI_MERCHANT_ID'),
