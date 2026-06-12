@@ -332,7 +332,12 @@ class TenantPanelProvider extends PanelProvider
             $active = in_array(Route::current()->getName(), $activatedRoute);
         }
 
-        return NavigationItem::make($resource::getLabel())
+        $label = $resource::getLabel();
+        if (! filled($label)) {
+            $label = class_basename($resource);
+        }
+
+        return NavigationItem::make($label)
             ->visible($canAccess)
             ->icon($resource::getNavigationIcon())
             ->isActiveWhen(fn (): bool => $active)
