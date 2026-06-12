@@ -35,6 +35,10 @@ class WithdrawalPage extends Page implements HasActions, HasForms, HasTable
 
     protected static string $view = 'filament.tenant.pages.withdrawal';
 
+    protected static ?string $title = 'Withdrawal';
+
+    protected static ?string $navigationLabel = 'Withdrawal';
+
     public $amount = '';
 
     public function mount(): void
