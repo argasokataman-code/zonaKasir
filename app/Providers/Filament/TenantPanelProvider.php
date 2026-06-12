@@ -23,11 +23,11 @@ use App\Filament\Tenant\Pages\ProductReport;
 use App\Filament\Tenant\Pages\PurchasingReport;
 use App\Filament\Tenant\Pages\Report;
 use App\Filament\Tenant\Pages\SellingReport;
+use App\Filament\Tenant\Pages\WithdrawalPage;
 use App\Filament\Tenant\Pages\TenantLogin;
 use App\Filament\Tenant\Resources\CategoryResource;
 use App\Filament\Tenant\Resources\MemberResource;
 use App\Filament\Tenant\Resources\PaymentMethodResource;
-use App\Filament\Tenant\Resources\PermissionResource;
 use App\Filament\Tenant\Resources\ProductResource;
 use App\Filament\Tenant\Resources\PurchasingResource;
 use App\Filament\Tenant\Resources\ReceivableResource;
@@ -38,6 +38,7 @@ use App\Filament\Tenant\Resources\SupplierResource;
 use App\Filament\Tenant\Resources\TableResource;
 use App\Filament\Tenant\Resources\UserResource;
 use App\Filament\Tenant\Resources\VoucherResource;
+use App\Filament\Tenant\Resources\WithdrawalResource;
 use App\Http\Middleware\LocalizationMiddleware;
 use App\Models\Tenants\About;
 use App\Models\Tenants\UploadedFile;
@@ -212,6 +213,8 @@ class TenantPanelProvider extends PanelProvider
             ]),
             NavigationGroup::make(__('General'))->label('')->collapsible(false)->items([
                 $this->generateNavigationItem(VoucherResource::class, Voucher::class),
+                $this->generateNavigationItem(WithdrawalResource::class),
+                $this->generateNavigationItem(WithdrawalPage::class),
             ]),
             NavigationGroup::make(__('Setting'))->collapsible(false)->items([
                 $this->generateNavigationItem(GeneralSetting::class),
