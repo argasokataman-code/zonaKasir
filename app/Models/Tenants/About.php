@@ -98,27 +98,6 @@ class About extends Model
                         ->required()
                         ->translateLabel(),
                 ]),
-            \Filament\Forms\Components\Section::make('Platform Settings')
-                ->schema([
-                    \Filament\Forms\Components\TextInput::make('platform_fee_percent')
-                        ->label('Platform Fee (%)')
-                        ->numeric()
-                        ->step('0.01')
-                        ->minValue(0)
-                        ->maxValue(10)
-                        ->default(1.00)
-                        ->translateLabel()
-                        ->helperText(__('Persentase biaya yang dikenakan ZonaKasir per transaksi')),
-                    \Filament\Forms\Components\Select::make('payout_schedule')
-                        ->label('Payout Schedule')
-                        ->options([
-                            'daily' => 'Daily',
-                            'weekly' => 'Weekly',
-                            'manual' => 'Manual',
-                        ])
-                        ->default('manual')
-                        ->translateLabel(),
-                ]),
             \Filament\Forms\Components\Actions::make([
                 \Filament\Forms\Components\Actions\Action::make('Save')
                     ->translateLabel()
