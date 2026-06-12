@@ -535,36 +535,42 @@
     $wire.on('midtrans-payment', (event) => {
       const { token, redirect_url, payment_type, amount } = event;
 
-      // Show waiting state on POS
-      document.getElementById('midtrans-qr-url').href = redirect_url;
-      document.getElementById('midtrans-qr-url').textContent = redirect_url;
-      document.getElementById('midtrans-waiting').classList.remove('hidden');
-      document.getElementById('midtrans-waiting').classList.add('flex');
+      // Set the redirect URL on the waiting state element
+      const qrUrl = document.getElementById('midtrans-qr-url');
+      const qrLink = document.getElementById('midtrans-qr-link');
+      if (qrUrl) qrUrl.textContent = redirect_url;
+      if (qrLink) qrLink.href = redirect_url;
 
-      if (window.snap) {
-        window.snap.pay(token, {
-          onSuccess: function(result) {
-            console.log('Midtrans payment success:', result);
-            $wire.set('cartItems', []);
-            window.location.reload();
-          },
-          onPending: function(result) {
-            console.log('Midtrans payment pending:', result);
-            // Keep waiting state visible
-          },
-          onError: function(result) {
-            console.error('Midtrans payment error:', result);
-            document.getElementById('midtrans-waiting').classList.add('hidden');
-            new FilamentNotification()
-              .title('@lang('Payment failed')')
-              .danger()
-              .send();
-          }
-        });
-      } else {
-        // Fallback: if Snap.js not loaded, show redirect URL
-        console.warn('Snap.js not loaded, showing redirect URL');
+      // Show waiting overlay
+      const waiting = document.getElementById('midtrans-waiting');
+      if (waiting) {
+        waiting.classList.remove('hidden');
+        waiting.classList.add('flex');
       }
+
+      // Try to open Snap popup if loaded
+      setTimeout(() => {
+        if (window.snap) {
+          window.snap.pay(token, {
+            onSuccess: function(result) {
+              console.log('Midtrans payment success:', result);
+              window.location.reload();
+            },
+            onPending: function(result) {
+              console.log('Midtrans payment pending:', result);
+            },
+            onError: function(result) {
+              console.error('Midtrans payment error:', result);
+              if (waiting) waiting.classList.add('hidden');
+              new FilamentNotification()
+                .title('@lang('Payment failed')')
+                .danger()
+                .send();
+            }
+          });
+        }
+        // Snap.js not loaded yet → waiting overlay shows redirect URL for manual scan
+      }, 1000);
     });
 
     $wire.on('selling-created', (event) => {

@@ -301,21 +301,16 @@ class Cashier extends Page implements HasForms, HasTable
                 $snapData = app(\App\Services\Tenants\MidtransGatewayService::class)
                     ->createSnapToken($selling, $midtransType);
 
+                CartItem::query()->cashier()->delete();
+
+                // Close payment modal, show waiting state, then dispatch Snap event
+                $this->dispatch('close-modal', id: 'proceed-the-payment');
                 $this->dispatch('midtrans-payment', [
                     'token' => $snapData['token'],
                     'redirect_url' => $snapData['redirect_url'],
                     'payment_type' => $midtransType,
                     'amount' => $selling->total_price,
                 ]);
-
-                Notification::make()
-                    ->title(__('Payment via') . ' ' . $pMethod->name)
-                    ->body(__('Please wait for customer to complete payment'))
-                    ->info()
-                    ->send();
-
-                CartItem::query()->cashier()->delete();
-                $this->mount();
                 return;
             }
         }
