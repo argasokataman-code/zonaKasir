@@ -178,7 +178,7 @@ Route::middleware([
 
                 Route::get('/withdrawal', [WithdrawalController::class, 'index'])->can('read withdrawal');
                 Route::post('/withdrawal', [WithdrawalController::class, 'store'])
-                    ->middleware('throttle:30,1')
+                    ->middleware('throttle:30,1', 'withdrawal.ratelimit')
                     ->can('create withdrawal');
                 Route::post('/withdrawal/{withdrawal}/approve', [WithdrawalController::class, 'approve'])->can('update withdrawal');
                 Route::post('/withdrawal/{withdrawal}/reject', [WithdrawalController::class, 'reject'])->can('update withdrawal');

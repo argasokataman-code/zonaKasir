@@ -6,7 +6,10 @@ use App\Models\Tenants\Withdrawal;
 use App\Models\Tenants\About;
 use App\Models\Tenants\IdempotencyLog;
 use App\Models\Tenants\LedgerEntry;
+use App\Notifications\WithdrawalApproved;
+use App\Notifications\WithdrawalRejected;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Throwable;
 
 class WithdrawalService
@@ -148,6 +151,9 @@ class WithdrawalService
                 ->where('reference_id', $withdrawal->id)
                 ->update(['reference_type' => 'withdrawal_complete']);
 
+            // Send notification to tenant
+            Notification::send($withdrawal->requestedBy, new WithdrawalApproved($withdrawal));
+
         } catch (Throwable $e) {
             $withdrawal->update([
                 'status'            => 'failed',
@@ -191,6 +197,9 @@ class WithdrawalService
                 referenceType: 'withdrawal_rejected',
                 referenceId: $withdrawal->id,
             );
+
+            // Send notification to tenant
+            Notification::send($withdrawal->requestedBy, new WithdrawalRejected($withdrawal));
 
             return $withdrawal->fresh();
         });
