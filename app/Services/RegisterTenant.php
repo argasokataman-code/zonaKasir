@@ -74,6 +74,9 @@ class RegisterTenant
                 '--class' => 'PaymentMethodSeeder',
             ]);
             Artisan::call('db:seed', [
+                '--class' => 'DigitalPaymentMethodSeeder',
+            ]);
+            Artisan::call('db:seed', [
                 '--class' => 'CategorySeeder',
             ]);
             if (! $user->hasRole(Role::admin)) {

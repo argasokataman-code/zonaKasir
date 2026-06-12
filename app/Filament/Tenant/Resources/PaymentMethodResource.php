@@ -5,8 +5,8 @@ namespace App\Filament\Tenant\Resources;
 use App\Filament\Tenant\Resources\PaymentMethodResource\Pages;
 use App\Models\Tenants\PaymentMethod;
 use App\Traits\HasTranslatableResource;
-use Filament\Forms\Components\Card;
-use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -29,12 +29,31 @@ class PaymentMethodResource extends Resource
                 TextInput::make('name')
                     ->translateLabel()
                     ->columnSpanFull(),
-                Card::make([
+                Section::make([
                     Checkbox::make('is_cash')->inline(),
                     Checkbox::make('is_debit')->inline(),
                     Checkbox::make('is_credit')->inline(),
                     Checkbox::make('is_wallet')->inline(),
-                ]),
+                ])->columns(2),
+                Select::make('payment_type')
+                    ->label(__('Payment Gateway Type'))
+                    ->options([
+                        'cash' => 'Cash',
+                        '' => __('Offline'),
+                        'credit_card' => 'Credit Card (Midtrans)',
+                        'debit_card' => 'Debit Card (Midtrans)',
+                        'gopay' => 'GoPay (Midtrans)',
+                        'shopeepay' => 'ShopeePay (Midtrans)',
+                        'qris' => 'QRIS (Midtrans)',
+                        'bank_transfer' => 'Bank Transfer (Midtrans)',
+                        'indomaret' => 'Indomaret (Midtrans)',
+                        'alfamart' => 'Alfamart (Midtrans)',
+                        'kredivo' => 'Kredivo (Midtrans)',
+                        'akulaku' => 'Akulaku (Midtrans)',
+                    ])
+                    ->native(false)
+                    ->translateLabel()
+                    ->helperText(__('Pilih tipe pembayaran digital untuk diproses melalui Midtrans')),
             ]);
     }
 

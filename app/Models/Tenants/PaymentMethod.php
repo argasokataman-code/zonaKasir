@@ -16,7 +16,7 @@ class PaymentMethod extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     protected static $recordEvents = ['created', 'updated', 'deleted'];
 
@@ -41,16 +41,11 @@ class PaymentMethod extends Model
 
     public function isMidtrans(): bool
     {
-        return ! $this->is_cash;
+        return ! $this->is_cash && $this->payment_type !== 'cash';
     }
 
     public function midtransType(): ?string
     {
-        return match (true) {
-            $this->is_credit => 'credit_card',
-            $this->is_debit => 'debit_card',
-            $this->is_wallet => 'gopay', // or detect from name
-            default => null,
-        };
+        return $this->payment_type;
     }
 }
