@@ -49,8 +49,17 @@ class WithdrawalService
             }
 
             $autoMax = config('midtrans.withdrawal_approval.auto_approve_max', 5000000);
+            $singleAdminMax = config('midtrans.withdrawal_approval.single_admin_max', 25000000);
             $tenantAge = $about->created_at->diffInDays(now());
             $shouldAutoApprove = $amount <= $autoMax && $tenantAge >= 30;
+
+            if ($amount > $singleAdminMax) {
+                $status = 'pending'; // requires 2 admin approval
+            } elseif ($shouldAutoApprove) {
+                $status = 'approved';
+            } else {
+                $status = 'pending';
+            }
 
             $withdrawal = Withdrawal::create([
                 'amount'              => $amount,
@@ -58,7 +67,7 @@ class WithdrawalService
                 'bank_account_name'   => $about->bank_account_name,
                 'bank_account_number' => $about->bank_account_number,
                 'bank_code'           => $about->bank_code,
-                'status'              => $shouldAutoApprove ? 'approved' : 'pending',
+                'status'              => $status,
                 'idempotency_key'     => $idempotencyKey,
                 'requested_by'        => auth()->id(),
                 'approved_by'         => $shouldAutoApprove ? auth()->id() : null,
@@ -94,6 +103,16 @@ class WithdrawalService
     {
         $withdrawal = Withdrawal::findOrFail($withdrawalId);
         abort_if($withdrawal->status !== 'pending', 400, 'Withdrawal already processed');
+
+        $singleAdminMax = config('midtrans.withdrawal_approval.single_admin_max', 25000000);
+
+        // High-value withdrawals need 2 admin approvals
+        if ($withdrawal->amount > $singleAdminMax) {
+            if ($withdrawal->approved_by === null) {
+                $withdrawal->update(['approved_by' => $approvedBy, 'status' => 'approved']);
+                return $withdrawal->fresh();
+            }
+        }
 
         try {
             $withdrawal->update(['status' => 'processing']);

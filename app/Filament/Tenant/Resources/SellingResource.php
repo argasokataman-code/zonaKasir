@@ -77,6 +77,16 @@ class SellingResource extends Resource
                     ->sortable()
                     ->visible(feature(ProductInitialPrice::class))
                     ->money(Setting::get('currency', 'IDR')),
+                TextColumn::make('midtransPayment.status')
+                    ->label('Midtrans')
+                    ->badge()
+                    ->colors([
+                        'warning' => 'pending',
+                        'success' => 'settlement',
+                        'danger' => 'expired',
+                        'gray' => 'deny',
+                    ])
+                    ->toggleable(),
             ])
             ->searchPlaceholder('Search (Code, User, Customer Number')
             ->header(view('filament.tenant.resources.sellings.headers.overview', [

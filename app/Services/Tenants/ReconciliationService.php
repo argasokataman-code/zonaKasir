@@ -22,10 +22,7 @@ class ReconciliationService
         $mismatches = 0;
         $yesterday = now()->subDay()->startOfDay();
 
-        // 1. Fetch Midtrans transactions (paginated)
         $midtransTxs = $this->fetchMidtransTransactions($yesterday);
-
-        // 2. Cross-validate against DB
         $ourTxs = MidtransPayment::whereDate('paid_at', $yesterday)
             ->where('status', 'settlement')
             ->get();
@@ -34,7 +31,7 @@ class ReconciliationService
             $our = $ourTxs->firstWhere('order_id', $mtx['order_id']);
 
             if (!$our) {
-                Log::warning('Reconciliation: missing in DB', [
+                Log::channel('finance')->error('RECON_MISSING_IN_DB', [
                     'order_id' => $mtx['order_id'],
                     'midtrans_gross' => $mtx['gross_amount'],
                 ]);
@@ -43,7 +40,7 @@ class ReconciliationService
             }
 
             if ((float) $mtx['gross_amount'] !== (float) $our->gross_amount) {
-                Log::warning('Reconciliation: amount mismatch', [
+                Log::channel('finance')->warning('RECON_AMOUNT_MISMATCH', [
                     'order_id' => $mtx['order_id'],
                     'midtrans' => $mtx['gross_amount'],
                     'our' => $our->gross_amount,
@@ -52,7 +49,6 @@ class ReconciliationService
             }
         }
 
-        // 3. Balance invariant check
         $ledgerBalance = $this->ledger->getCurrentBalance();
         $calculatedBalance = MidtransPayment::where('status', 'settlement')
             ->where('paid_at', '<=', $yesterday->copy()->endOfDay())
@@ -61,20 +57,24 @@ class ReconciliationService
             ->where('created_at', '<=', $yesterday->copy()->endOfDay())
             ->sum('amount');
         $expected = $calculatedBalance - $withdrawn;
+        $diff = $ledgerBalance - $expected;
 
-        if (abs($ledgerBalance - $expected) > 1) {
-            Log::critical('Reconciliation: balance mismatch', [
+        if (abs($diff) > 1) {
+            Log::channel('finance')->critical('RECON_BALANCE_MISMATCH', [
                 'ledger' => $ledgerBalance,
                 'expected' => $expected,
-                'diff' => $ledgerBalance - $expected,
+                'diff' => $diff,
             ]);
             $mismatches++;
         }
 
-        // 4. Generate settlement report
         if ($mismatches === 0) {
+            Log::channel('finance')->info('RECON_PASSED', ['date' => $yesterday->format('Y-m-d')]);
             $this->generateSettlement($yesterday);
         }
+
+        return $mismatches;
+    }
 
         return $mismatches;
     }

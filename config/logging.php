@@ -117,6 +117,20 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'finance' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/finance.log'),
+            'level' => 'info',
+            'days' => 365,
+        ],
+
+        'midtrans' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/midtrans.log'),
+            'level' => 'debug',
+            'days' => 30,
+        ],
     ],
 
 ];

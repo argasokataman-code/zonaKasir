@@ -2,6 +2,7 @@
 
 namespace App\Models\Tenants;
 
+use App\Models\Tenants\Traits\EnsuresLedgerBalance;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
@@ -11,7 +12,7 @@ use Spatie\Activitylog\LogOptions;
  */
 class LedgerEntry extends Model
 {
-    use LogsActivity;
+    use LogsActivity, EnsuresLedgerBalance;
 
     protected $guarded = ['id'];
 

@@ -18,6 +18,9 @@ use App\Http\Controllers\Api\Tenants\Reports\SellingReportController as ApiSelli
 use App\Http\Controllers\Api\Tenants\Settings\SecureInitialPriceController;
 use App\Http\Controllers\Api\Tenants\Transaction\CashDrawerController;
 use App\Http\Controllers\Api\Tenants\Transaction\DashboardController;
+use App\Http\Controllers\Api\Tenants\Reports\BalanceController;
+use App\Http\Controllers\Api\Tenants\Reports\ReconciliationController;
+use App\Http\Controllers\Api\Tenants\Reports\SettlementController;
 use App\Http\Controllers\Api\Tenants\Transaction\SellingController;
 use App\Http\Controllers\Api\Tenants\Transaction\WithdrawalController;
 use App\Http\Controllers\Api\Tenants\UploadController;
@@ -213,6 +216,12 @@ Route::middleware([
                     ->can('generate selling report');
                 Route::post('/product', ApiProductReportController::class)
                     ->can('generate product report');
+                Route::get('/balance', [BalanceController::class, 'index'])
+                    ->can('read balance');
+                Route::get('/settlements', [SettlementController::class, 'index'])
+                    ->can('read settlement');
+                Route::post('/reconciliation/run', [ReconciliationController::class, 'run'])
+                    ->can('manage settings');
             });
 
             Route::group(['prefix' => 'printer'], function () {
