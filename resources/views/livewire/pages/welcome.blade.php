@@ -93,147 +93,156 @@ state(['locale' => $locale]);
   </nav>
 
   {{-- Hero --}}
-  <section class="relative flex items-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 overflow-hidden">
+  <section class="relative bg-gray-950 overflow-hidden">
+    {{-- Static, GPU-cheap backdrop: two glows + faint grid --}}
     <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
-      <div class="absolute -top-32 -right-32 w-[420px] h-[420px] bg-zonakasir-primary/15 rounded-full blur-3xl"></div>
-      <div class="absolute -bottom-32 -left-32 w-[420px] h-[420px] bg-zonakasir-primary/10 rounded-full blur-3xl"></div>
+      <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[420px] rounded-full"
+           style="background: radial-gradient(closest-side, rgba(255,102,0,0.22), transparent 70%)"></div>
+      <div class="absolute bottom-0 -left-40 w-[480px] h-[480px] rounded-full"
+           style="background: radial-gradient(closest-side, rgba(255,102,0,0.10), transparent 70%)"></div>
+      <div class="absolute inset-0 opacity-[0.04]"
+           style="background-image: linear-gradient(rgba(255,255,255,.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.6) 1px, transparent 1px); background-size: 56px 56px; mask-image: radial-gradient(ellipse 80% 60% at 50% 35%, black, transparent)"></div>
     </div>
 
-    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-16 sm:pt-36 sm:pb-24 w-full text-center">
-      <div class="inline-flex items-center gap-2 bg-white/10 border border-white/10 rounded-full px-5 py-2 mb-7">
-        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
-        <span class="text-white/90 text-sm font-medium">{{ __('landing.hero_badge') }}</span>
+    <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 w-full text-center">
+      <div class="inline-flex items-center gap-2 bg-white/[0.07] border border-white/10 rounded-full px-5 py-2 mb-8">
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
+        <span class="text-white/80 text-sm font-medium">{{ __('landing.hero_badge') }}</span>
       </div>
 
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] tracking-tight">
-        <span class="block">{{ __('landing.hero_title_1') }}</span>
-        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-zonakasir-primary to-orange-400">{{ __('landing.hero_title_2') }}</span>
-        <span class="block">{{ __('landing.hero_title_3') }}</span>
+      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.05] tracking-tight">
+        {{ __('landing.hero_title_1') }}
+        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-zonakasir-primary to-orange-600">{{ __('landing.hero_title_2') }}</span>
+        <span class="block text-white/90">{{ __('landing.hero_title_3') }}</span>
       </h1>
 
-      <p class="mt-6 text-base sm:text-lg lg:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+      <p class="mt-7 text-base sm:text-lg lg:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
         {{ __('landing.hero_subtitle') }}
       </p>
 
-      <div class="mt-9 flex flex-col sm:flex-row gap-4 justify-center">
+      <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
         <a href="{{ route('auth.register') }}"
-           class="bg-zonakasir-primary text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-colors hover:bg-orange-600 flex items-center justify-center gap-3">
+           class="group bg-gradient-to-r from-zonakasir-primary to-orange-600 text-white px-9 py-4 rounded-2xl font-semibold text-lg shadow-xl shadow-orange-600/25 transition-all hover:shadow-2xl hover:shadow-orange-600/40 hover:brightness-110 flex items-center justify-center gap-3">
           <span>{{ __('landing.hero_cta') }}</span>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
           </svg>
         </a>
         <a href="#fitur"
-           class="border border-white/20 text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-colors hover:bg-white/10 flex items-center justify-center gap-3">
+           class="border border-white/15 bg-white/[0.04] text-white px-9 py-4 rounded-2xl font-semibold text-lg transition-colors hover:bg-white/10 flex items-center justify-center gap-3">
           <span>{{ __('landing.hero_see_features') }}</span>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
           </svg>
         </a>
       </div>
 
-      <div class="mt-12 sm:mt-14 grid grid-cols-3 gap-4 sm:gap-8 max-w-md mx-auto items-start">
-        <div class="text-center">
-          <p class="text-xl sm:text-3xl font-extrabold text-white whitespace-nowrap">{{ __('landing.stat_cloud') }}</p>
-          <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ __('landing.stat_cloud_sub') }}</p>
+      {{-- Glass info chips --}}
+      <div class="mt-12 flex flex-wrap justify-center gap-3 sm:gap-4">
+        @foreach([
+          ['t' => __('landing.stat_cloud'), 's' => __('landing.stat_cloud_sub'), 'icon' => 'M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z'],
+          ['t' => __('landing.stat_realtime'), 's' => __('landing.stat_realtime_sub'), 'icon' => 'M13 10V3L4 14h7v7l9-11h-7z'],
+          ['t' => __('landing.stat_multi') . ' ' . __('landing.stat_multi_sub'), 's' => 'Web · Android', 'icon' => 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z'],
+        ] as $chip)
+        <div class="flex items-center gap-3 bg-white/[0.05] border border-white/10 rounded-2xl px-5 py-3 text-left">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500/30 to-orange-500/5 border border-orange-500/20 flex items-center justify-center">
+            <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="{{ $chip['icon'] }}"/>
+            </svg>
+          </div>
+          <div>
+            <p class="text-white font-bold text-sm leading-tight whitespace-nowrap">{{ $chip['t'] }}</p>
+            <p class="text-gray-500 text-xs leading-tight whitespace-nowrap">{{ $chip['s'] }}</p>
+          </div>
         </div>
-        <div class="text-center border-x border-white/10 px-2">
-          <p class="text-xl sm:text-3xl font-extrabold text-white whitespace-nowrap">{{ __('landing.stat_realtime') }}</p>
-          <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ __('landing.stat_realtime_sub') }}</p>
-        </div>
-        <div class="text-center">
-          <p class="text-xl sm:text-3xl font-extrabold text-white whitespace-nowrap">{{ __('landing.stat_multi') }}</p>
-          <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ __('landing.stat_multi_sub') }}</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {{-- App preview --}}
-  <section class="relative bg-gradient-to-b from-gray-900 to-gray-800 py-14 sm:py-20">
-    <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-8 sm:mb-12">
-        <span class="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 text-sm font-medium text-white/80">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          {{ __('landing.mockup_badge') }}
-        </span>
+        @endforeach
       </div>
 
-      {{-- Laptop mockup (static, lightweight) --}}
-      <div class="relative w-full max-w-3xl mx-auto">
-        <div class="relative bg-gray-800 rounded-t-2xl p-2 sm:p-3 pb-0 shadow-2xl">
-          <div class="bg-white rounded-t-xl overflow-hidden aspect-[16/10]">
-            <div class="bg-gray-100 px-3 py-1.5 flex items-center gap-2 border-b border-gray-200">
-              <div class="flex gap-1">
-                <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
-                <div class="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
-                <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
-              </div>
-              <div class="flex-1 bg-white rounded h-5 ml-2 flex items-center px-2 border border-gray-200">
-                <span class="text-[9px] text-gray-400">toko-anda.zonakasir.com/member/cashier</span>
-              </div>
-            </div>
-            <div class="flex h-[calc(100%-2.25rem)] bg-gray-50">
-              <div class="w-2/3 p-2">
-                <div class="bg-white rounded-lg border border-gray-200 h-6 flex items-center px-2 mb-2">
-                  <svg class="w-2.5 h-2.5 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                  <span class="text-[8px] text-gray-400">Search (SKU, name, barcode)</span>
+      {{-- App preview folded into the hero --}}
+      <div class="relative mt-14 sm:mt-20 pb-16 sm:pb-24">
+        <div class="absolute -inset-x-8 bottom-0 top-1/3 rounded-[3rem]"
+             style="background: radial-gradient(closest-side, rgba(255,102,0,0.12), transparent 75%)" aria-hidden="true"></div>
+        <div class="relative w-full max-w-3xl mx-auto">
+          <div class="relative bg-gray-800 rounded-t-2xl p-2 sm:p-3 pb-0 shadow-2xl ring-1 ring-white/10">
+            <div class="bg-white rounded-t-xl overflow-hidden aspect-[16/10]">
+              <div class="bg-gray-100 px-3 py-1.5 flex items-center gap-2 border-b border-gray-200">
+                <div class="flex gap-1">
+                  <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+                  <div class="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
+                  <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
                 </div>
-                <div class="grid grid-cols-3 gap-1.5">
-                  @foreach([
-                    ['name' => 'Indomie Goreng', 'price' => 'Rp 3.500', 'bg' => 'from-yellow-300 to-orange-300', 'emoji' => '🍜'],
-                    ['name' => 'Teh Botol', 'price' => 'Rp 4.000', 'bg' => 'from-green-300 to-emerald-400', 'emoji' => '🍵'],
-                    ['name' => 'Kopi Susu', 'price' => 'Rp 18.000', 'bg' => 'from-amber-300 to-orange-400', 'emoji' => '☕'],
-                    ['name' => 'Le Minerale', 'price' => 'Rp 4.500', 'bg' => 'from-blue-300 to-cyan-400', 'emoji' => '💧'],
-                    ['name' => 'Pocari Sweat', 'price' => 'Rp 7.000', 'bg' => 'from-cyan-300 to-sky-400', 'emoji' => '🧃'],
-                    ['name' => 'Chitato 68g', 'price' => 'Rp 12.500', 'bg' => 'from-purple-300 to-violet-400', 'emoji' => '🥔'],
-                  ] as $p)
-                  <div class="bg-white rounded-lg border border-gray-100 overflow-hidden shadow-sm">
-                    <div class="bg-gradient-to-br {{ $p['bg'] }} h-9 sm:h-11 flex items-center justify-center">
-                      <span class="text-lg sm:text-xl">{{ $p['emoji'] }}</span>
-                    </div>
-                    <div class="p-1.5">
-                      <div class="text-[8px] font-bold text-zonakasir-primary">{{ $p['price'] }}</div>
-                      <div class="text-[7px] font-semibold text-gray-800 leading-tight mt-0.5">{{ $p['name'] }}</div>
-                    </div>
-                  </div>
-                  @endforeach
+                <div class="flex-1 bg-white rounded h-5 ml-2 flex items-center px-2 border border-gray-200">
+                  <span class="text-[9px] text-gray-400">toko-anda.zonakasir.com/member/cashier</span>
                 </div>
               </div>
-              <div class="w-1/3 bg-white border-l border-gray-200 flex flex-col">
-                <div class="px-2 pt-2 pb-1 border-b border-gray-100">
-                  <div class="text-[10px] font-semibold text-gray-800">Orders details</div>
+              <div class="flex h-[calc(100%-2.25rem)] bg-gray-50">
+                <div class="w-2/3 p-2">
+                  <div class="bg-white rounded-lg border border-gray-200 h-6 flex items-center px-2 mb-2">
+                    <svg class="w-2.5 h-2.5 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <span class="text-[8px] text-gray-400">Search (SKU, name, barcode)</span>
+                  </div>
+                  <div class="grid grid-cols-3 gap-1.5">
+                    @foreach([
+                      ['name' => 'Indomie Goreng', 'price' => 'Rp 3.500', 'bg' => 'from-yellow-300 to-orange-300', 'emoji' => '🍜'],
+                      ['name' => 'Teh Botol', 'price' => 'Rp 4.000', 'bg' => 'from-green-300 to-emerald-400', 'emoji' => '🍵'],
+                      ['name' => 'Kopi Susu', 'price' => 'Rp 18.000', 'bg' => 'from-amber-300 to-orange-400', 'emoji' => '☕'],
+                      ['name' => 'Le Minerale', 'price' => 'Rp 4.500', 'bg' => 'from-blue-300 to-cyan-400', 'emoji' => '💧'],
+                      ['name' => 'Pocari Sweat', 'price' => 'Rp 7.000', 'bg' => 'from-cyan-300 to-sky-400', 'emoji' => '🧃'],
+                      ['name' => 'Chitato 68g', 'price' => 'Rp 12.500', 'bg' => 'from-purple-300 to-violet-400', 'emoji' => '🥔'],
+                    ] as $p)
+                    <div class="bg-white rounded-lg border border-gray-100 overflow-hidden shadow-sm">
+                      <div class="bg-gradient-to-br {{ $p['bg'] }} h-9 sm:h-11 flex items-center justify-center">
+                        <span class="text-lg sm:text-xl">{{ $p['emoji'] }}</span>
+                      </div>
+                      <div class="p-1.5">
+                        <div class="text-[8px] font-bold text-zonakasir-primary">{{ $p['price'] }}</div>
+                        <div class="text-[7px] font-semibold text-gray-800 leading-tight mt-0.5">{{ $p['name'] }}</div>
+                      </div>
+                    </div>
+                    @endforeach
+                  </div>
                 </div>
-                <div class="flex-1 px-2 py-1 space-y-1">
-                  @foreach([
-                    ['name' => 'Indomie Goreng ×3', 'price' => 'Rp 10.500'],
-                    ['name' => 'Teh Botol ×2', 'price' => 'Rp 8.000'],
-                    ['name' => 'Kopi Susu ×1', 'price' => 'Rp 18.000'],
-                  ] as $cart)
-                  <div class="border border-gray-100 rounded-md p-1.5">
-                    <div class="flex justify-between">
-                      <span class="text-[7px] font-semibold text-gray-800">{{ $cart['name'] }}</span>
-                      <span class="text-[7px] font-semibold text-zonakasir-primary">{{ $cart['price'] }}</span>
+                <div class="w-1/3 bg-white border-l border-gray-200 flex flex-col">
+                  <div class="px-2 pt-2 pb-1 border-b border-gray-100">
+                    <div class="text-[10px] font-semibold text-gray-800">Orders details</div>
+                  </div>
+                  <div class="flex-1 px-2 py-1 space-y-1">
+                    @foreach([
+                      ['name' => 'Indomie Goreng ×3', 'price' => 'Rp 10.500'],
+                      ['name' => 'Teh Botol ×2', 'price' => 'Rp 8.000'],
+                      ['name' => 'Kopi Susu ×1', 'price' => 'Rp 18.000'],
+                    ] as $cart)
+                    <div class="border border-gray-100 rounded-md p-1.5">
+                      <div class="flex justify-between">
+                        <span class="text-[7px] font-semibold text-gray-800">{{ $cart['name'] }}</span>
+                        <span class="text-[7px] font-semibold text-zonakasir-primary">{{ $cart['price'] }}</span>
+                      </div>
+                    </div>
+                    @endforeach
+                  </div>
+                  <div class="px-2 py-1.5 border-t border-gray-100 bg-gray-50">
+                    <div class="flex justify-between text-[8px]">
+                      <span class="font-bold text-gray-800">Total</span>
+                      <span class="font-bold text-zonakasir-primary">Rp 36.500</span>
                     </div>
                   </div>
-                  @endforeach
-                </div>
-                <div class="px-2 py-1.5 border-t border-gray-100 bg-gray-50">
-                  <div class="flex justify-between text-[8px]">
-                    <span class="font-bold text-gray-800">Total</span>
-                    <span class="font-bold text-zonakasir-primary">Rp 36.500</span>
-                  </div>
-                </div>
-                <div class="px-2 pb-2 pt-1">
-                  <div class="bg-zonakasir-primary rounded-md py-1.5 text-center text-[8px] font-bold text-white">
-                    Proceed to payment
+                  <div class="px-2 pb-2 pt-1">
+                    <div class="bg-zonakasir-primary rounded-md py-1.5 text-center text-[8px] font-bold text-white">
+                      Proceed to payment
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+          <div class="bg-gray-700 h-3 sm:h-4 rounded-b-2xl mx-8 sm:mx-12"></div>
         </div>
-        <div class="bg-gray-700 h-3 sm:h-4 rounded-b-2xl mx-8 sm:mx-12"></div>
+        <p class="relative mt-6 text-center">
+          <span class="inline-flex items-center gap-2 text-sm font-medium text-white/60">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            {{ __('landing.mockup_badge') }}
+          </span>
+        </p>
       </div>
     </div>
   </section>
@@ -358,9 +367,9 @@ state(['locale' => $locale]);
           ['title' => __('landing.feature_report_title'), 'desc' => __('landing.feature_report_desc'), 'icon' => 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'],
           ['title' => __('landing.feature_support_title'), 'desc' => __('landing.feature_support_desc'), 'icon' => 'M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z'],
         ] as $feature)
-        <div class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-gray-100 transition-shadow hover:shadow-lg">
-          <div class="w-14 h-14 bg-gradient-to-br from-zonakasir-primary/10 to-orange-50 rounded-2xl flex items-center justify-center mb-5">
-            <svg class="w-7 h-7 text-zonakasir-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-gray-100 transition-all hover:shadow-xl hover:-translate-y-1 hover:border-orange-200">
+          <div class="w-14 h-14 bg-gradient-to-br from-zonakasir-primary to-orange-500 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-orange-500/25">
+            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ $feature['icon'] }}"/>
             </svg>
           </div>
