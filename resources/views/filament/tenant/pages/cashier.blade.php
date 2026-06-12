@@ -530,7 +530,7 @@
 
     // Handle Midtrans payment event from Livewire
     $wire.on('midtrans-payment', (event) => {
-      const { token, redirect_url, payment_type, amount } = event;
+      const { token, redirect_url, qr_code_url, qr_string, payment_type, amount } = event;
 
       // Set the redirect URL
       const qrUrl = document.getElementById('midtrans-qr-url');
@@ -538,8 +538,9 @@
       if (qrUrl) qrUrl.textContent = redirect_url;
       if (qrLink) qrLink.href = redirect_url;
 
-      // Generate QR code from redirect URL
-      generateQRCode(redirect_url);
+      // Generate QR code from qr_string (SnapBi) or qr_code_url (Core API) or redirect_url
+      const qrSource = qr_string || qr_code_url || redirect_url;
+      generateQRCode(qrSource);
 
       // Show waiting overlay
       const waiting = document.getElementById('midtrans-waiting');

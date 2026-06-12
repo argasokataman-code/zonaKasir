@@ -29,15 +29,17 @@ class MidtransGatewayService
     ];
 
     /**
-     * Generate Snap transaction token for credit_card, or SnapBi for QRIS/GoPay.
+     * Generate Snap transaction token for credit_card, or Core API charge for QRIS/GoPay.
      */
     public function createSnapToken(Selling $selling, string $midtransType): array
     {
         $this->validateCredentials();
 
-        // QRIS uses SnapBi API (returns qr_string directly for POS)
+        // QRIS uses Core API charge (returns qr_code_url directly)
         if ($midtransType === 'qris') {
-            return app(SnapBiQrisService::class)->createPayment($selling);
+            $orderId = $this->generateOrderId();
+            $serverKey = config('midtrans.server_key');
+            return $this->chargeCoreApiQris($orderId, (int) $selling->total_price, $selling, $serverKey);
         }
 
         $orderId = $this->generateOrderId();
@@ -46,6 +48,58 @@ class MidtransGatewayService
 
         // Credit card and others use Snap
         return $this->createSnapTokenForPayment($selling, $orderId, $grossAmount, $midtransType, $serverKey);
+    }
+
+    private function chargeCoreApiQris(
+        string $orderId,
+        int $grossAmount,
+        Selling $selling,
+        string $serverKey,
+    ): array {
+        $params = [
+            'payment_type' => 'qris',
+            'transaction_details' => [
+                'order_id' => $orderId,
+                'gross_amount' => $grossAmount,
+            ],
+        ];
+
+        $response = Http::withBasicAuth($serverKey, '')
+            ->withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ])
+            ->post(self::CORE_API_URLS[config('midtrans.environment', 'sandbox')] . '/charge', $params);
+
+        if ($response->failed()) {
+            Log::error('Midtrans Core API QRIS charge failed', [
+                'selling_id' => $selling->id,
+                'status' => $response->status(),
+                'error' => $response->json(),
+            ]);
+            throw new \RuntimeException('Gagal membuat QRIS: ' . $this->getErrorMessage($response));
+        }
+
+        $data = $response->json();
+
+        $payment = MidtransPayment::create([
+            'selling_id' => $selling->id,
+            'order_id' => $orderId,
+            'gross_amount' => $selling->total_price,
+            'payment_type' => 'qris',
+            'status' => 'pending',
+        ]);
+
+        // Core API QRIS returns qr_code_url (image) and redirect_url
+        return [
+            'token' => null,
+            'redirect_url' => $data['redirect_url'] ?? '',
+            'qr_code_url' => $data['qr_code_url'] ?? null,
+            'qr_string' => null,
+            'payment_type' => 'qris',
+            'midtrans_payment_id' => $payment->id,
+            'api' => 'core_api',
+        ];
     }
 
     private function chargeCoreApi(
