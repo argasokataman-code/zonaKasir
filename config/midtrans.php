@@ -39,6 +39,19 @@ return [
     'environment' => env('MIDTRANS_ENVIRONMENT', 'sandbox'),
 
     /*
+     * SnapBi (BI-SNAP) Configuration
+     * Required for QRIS, GoPay, ShopeePay via SnapBi API
+     */
+    'snapbi' => [
+        'client_id' => env('MIDTRANS_SNAPBI_CLIENT_ID'),
+        'client_secret' => env('MIDTRANS_SNAPBI_CLIENT_SECRET'),
+        'private_key' => env('MIDTRANS_SNAPBI_PRIVATE_KEY'),
+        'partner_id' => env('MIDTRANS_SNAPBI_PARTNER_ID'),
+        'channel_id' => env('MIDTRANS_SNAPBI_CHANNEL_ID'),
+        'merchant_id' => env('MIDTRANS_SNAPBI_MERCHANT_ID'),
+    ],
+
+    /*
      * MDR Fee rates per payment method
      * type: 'percentage' | 'flat'
      */
