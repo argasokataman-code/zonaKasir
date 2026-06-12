@@ -75,7 +75,7 @@ class MidtransGatewayService
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ])
-            ->post(self::CORE_API_URLS[config('midtrans.environment', 'sandbox')] . '/' . $orderId . '/charge', $params);
+            ->post(self::CORE_API_URLS[config('midtrans.environment', 'sandbox')] . '/charge', $params);
 
         if ($response->failed()) {
             Log::error('Midtrans Core API charge failed', [
