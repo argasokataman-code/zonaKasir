@@ -32,6 +32,11 @@ class PaymentMethod extends Model
         'is_wallet' => 'boolean',
     ];
 
+    public const MIDTRAMS_TYPES = [
+        'credit_card', 'debit_card', 'gopay', 'shopeepay', 'qris',
+        'bank_transfer', 'indomaret', 'alfamart', 'kredivo', 'akulaku',
+    ];
+
     public function icon(): Attribute
     {
         return Attribute::make(
@@ -41,11 +46,11 @@ class PaymentMethod extends Model
 
     public function isMidtrans(): bool
     {
-        return ! $this->is_cash && $this->payment_type !== 'cash';
+        return in_array($this->payment_type, self::MIDTRAMS_TYPES);
     }
 
     public function midtransType(): ?string
     {
-        return $this->payment_type;
+        return $this->isMidtrans() ? $this->payment_type : null;
     }
 }
