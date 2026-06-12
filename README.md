@@ -89,7 +89,12 @@ We welcome contributions from the community! If you'd like to contribute to zona
 5. Create a new Pull Request.
    
 ## License
-This project is licensed under the GPL-3.0 license.
+This project is licensed under the **GNU General Public License v3.0**.
+
+**zonaKasir** is a rebranded & modified fork of [lakasir/lakasir](https://github.com/lakasir/lakasir), originally created by **Wahyu Hidayat** and contributors.  
+We thank the original authors for their open-source work.
+
+See the [LICENSE](LICENSE) file for the full license text.
 
 ## Contact
 For any inquiries or support, please contact zonakasirapp@gmail.com or you can open discussion in discussion features

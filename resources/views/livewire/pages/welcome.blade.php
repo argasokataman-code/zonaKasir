@@ -20,6 +20,32 @@ $menu = [
     ],
 ];
 
+// Clean SVG icons for mockups
+$navIcons = [
+    'dashboard' => '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>',
+    'cashier' => '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>',
+    'selling' => '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"/></svg>',
+    'member' => '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/></svg>',
+    'product' => '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>',
+    'category' => '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 6h.008v.008H6V6z"/></svg>',
+    'setting' => '<svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>',
+    'trash' => '<svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/></svg>',
+    'search' => '<svg class="w-2 h-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>',
+    'back' => '<svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>',
+    'plus' => '<svg class="w-2 h-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v12m6-6H6"/></svg>',
+    'minus' => '<svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12H6"/></svg>',
+    'arrow-right' => '<svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>',
+];
+
+$productGradients = [
+    'bg-gradient-to-br from-yellow-300 to-orange-300',
+    'bg-gradient-to-br from-green-300 to-emerald-400',
+    'bg-gradient-to-br from-red-300 to-rose-400',
+    'bg-gradient-to-br from-blue-300 to-cyan-400',
+    'bg-gradient-to-br from-cyan-300 to-sky-400',
+    'bg-gradient-to-br from-purple-300 to-violet-400',
+];
+
 $prices = [
     [
         'title' => 'Pribadi',
@@ -73,11 +99,58 @@ state([
     'menu' => $menu,
     'prices' => $prices,
     'mainFeatures' => $mainFeatures,
+    'navIcons' => $navIcons,
+    'productGradients' => $productGradients,
 ]);
 
 ?>
 
 <div class="overflow-hidden">
+  {{-- GSAP Scroll Animations --}}
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof gsap === 'undefined') return;
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Animate sections on scroll
+      gsap.utils.toArray('[data-gsap]').forEach(el => {
+        const vars = JSON.parse(el.dataset.gsap);
+        gsap.from(el, {
+          ...vars,
+          scrollTrigger: {
+            trigger: el,
+            start: vars.start || 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      });
+
+      // Parallax decoration elements
+      gsap.utils.toArray('[data-parallax]').forEach(el => {
+        gsap.to(el, {
+          y: () => parseFloat(el.dataset.parallax) || 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: el.parentElement,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        });
+      });
+
+      // Hero entrance timeline
+      const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+      heroTl
+        .from('[data-hero="badge"]', { opacity: 0, y: 20, duration: 0.6, delay: 0.3 })
+        .from('[data-hero="title"]', { opacity: 0, y: 30, duration: 0.7 }, '-=0.3')
+        .from('[data-hero="sub"]', { opacity: 0, y: 20, duration: 0.5 }, '-=0.4')
+        .from('[data-hero="cta"]', { opacity: 0, y: 20, duration: 0.5, stagger: 0.15 }, '-=0.3')
+        .from('[data-hero="stats"]', { opacity: 0, y: 15, duration: 0.4 }, '-=0.2')
+        .from('[data-hero="scroll"]', { opacity: 0, y: 10, duration: 0.4 }, '-=0.3');
+    });
+  </script>
+
   {{-- Loading Screen --}}
   <div x-data="{ loading: true }" x-init="setTimeout(() => loading = false, 1500)" x-show="loading"
        x-transition:leave="transition ease-in duration-500" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
@@ -184,7 +257,7 @@ state([
          x-transition:enter-start="opacity-0 translate-y-12"
          x-transition:enter-end="opacity-100 translate-y-0">
 
-      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/10 rounded-full px-5 py-2.5 mb-8 animate-fade-in-up" style="animation-delay: 0.1s">
+      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/10 rounded-full px-5 py-2.5 mb-8" data-hero="badge">
         <span class="relative flex h-2.5 w-2.5">
           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
           <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
@@ -315,22 +388,22 @@ state([
                     <span class="text-gray-900 text-[7px] font-bold">zonaKasir</span>
                   </div>
                   {{-- Nav Items --}}
-                  @foreach([
-                    ['label' => 'Dashboard', 'active' => false, 'icon' => '📊'],
-                    ['label' => 'Cashier', 'active' => true, 'icon' => '🛒'],
-                    ['label' => 'Selling', 'active' => false, 'icon' => '📋'],
-                    ['label' => 'Member', 'active' => false, 'icon' => '👤'],
-                    ['label' => 'Product', 'active' => false, 'icon' => '📦'],
-                    ['label' => 'Category', 'active' => false, 'icon' => '🏷'],
+                   @foreach([
+                    ['label' => 'Dashboard', 'active' => false, 'icon' => $navIcons['dashboard']],
+                    ['label' => 'Cashier', 'active' => true, 'icon' => $navIcons['cashier']],
+                    ['label' => 'Selling', 'active' => false, 'icon' => $navIcons['selling']],
+                    ['label' => 'Member', 'active' => false, 'icon' => $navIcons['member']],
+                    ['label' => 'Product', 'active' => false, 'icon' => $navIcons['product']],
+                    ['label' => 'Category', 'active' => false, 'icon' => $navIcons['category']],
                   ] as $nav)
                   <div class="flex items-center gap-1.5 px-2 py-1 rounded-md text-[7px] {{ $nav['active'] ? 'bg-zonakasir-primary text-white font-semibold' : 'text-gray-600 hover:bg-gray-50' }}">
-                    <span class="text-[8px]">{{ $nav['icon'] }}</span>
+                    <span class="text-[8px]">{!! $nav['icon'] !!}</span>
                     <span>{{ $nav['label'] }}</span>
                   </div>
                   @endforeach
                   <div class="mt-auto border-t border-gray-100 pt-1 px-2">
                     <div class="flex items-center gap-1 text-[7px] text-gray-400">
-                      <span>⚙</span>
+                      <span>{!! $navIcons['setting'] !!}</span>
                       <span>Setting</span>
                     </div>
                   </div>
@@ -341,25 +414,24 @@ state([
                   <div class="w-2/3 p-1.5 sm:p-2">
                     {{-- Search Bar --}}
                     <div class="bg-white rounded-lg border border-gray-200 h-5 sm:h-6 flex items-center px-2 mb-2">
-                      <svg class="w-2.5 h-2.5 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                      <span class="text-[7px] text-gray-400">Search (SKU, name, barcode)</span>
+                      {!! $navIcons['search'] !!}
+                      <span class="text-[7px] text-gray-400 ml-1">Search (SKU, name, barcode)</span>
                     </div>
                     {{-- Product Cards Grid --}}
                     <div class="grid grid-cols-3 gap-1.5">
                       @php
                       $products = [
-                        ['name' => 'Indomie Goreng', 'price' => 'Rp 3.500', 'stock' => 48, 'bg' => 'from-yellow-300 to-orange-300', 'emoji' => '🍜'],
-                        ['name' => 'Teh Botol Sosro', 'price' => 'Rp 4.000', 'stock' => 24, 'bg' => 'from-green-300 to-emerald-400', 'emoji' => '🍵'],
-                        ['name' => 'Rokok Sampoerna', 'price' => 'Rp 28.000', 'stock' => 12, 'bg' => 'from-red-300 to-rose-400', 'emoji' => '🚬'],
-                        ['name' => 'Le Minerale 600ml', 'price' => 'Rp 4.500', 'stock' => 36, 'bg' => 'from-blue-300 to-cyan-400', 'emoji' => '💧'],
-                        ['name' => 'Pocari Sweat', 'price' => 'Rp 7.000', 'stock' => 18, 'bg' => 'from-cyan-300 to-sky-400', 'emoji' => '🧃'],
-                        ['name' => 'Chitato 68g', 'price' => 'Rp 12.500', 'stock' => 8, 'bg' => 'from-purple-300 to-violet-400', 'emoji' => '🥔'],
+                        ['name' => 'Indomie Goreng', 'price' => 'Rp 3.500', 'stock' => 48, 'gradient' => $productGradients[0]],
+                        ['name' => 'Teh Botol Sosro', 'price' => 'Rp 4.000', 'stock' => 24, 'gradient' => $productGradients[1]],
+                        ['name' => 'Rokok Sampoerna', 'price' => 'Rp 28.000', 'stock' => 12, 'gradient' => $productGradients[2]],
+                        ['name' => 'Le Minerale 600ml', 'price' => 'Rp 4.500', 'stock' => 36, 'gradient' => $productGradients[3]],
+                        ['name' => 'Pocari Sweat', 'price' => 'Rp 7.000', 'stock' => 18, 'gradient' => $productGradients[4]],
+                        ['name' => 'Chitato 68g', 'price' => 'Rp 12.500', 'stock' => 8, 'gradient' => $productGradients[5]],
                       ];
                       @endphp
                       @foreach($products as $pi => $p)
                       <div class="bg-white rounded-lg border border-gray-100 overflow-hidden shadow-sm">
-                        <div class="bg-gradient-to-br {{ $p['bg'] }} h-8 sm:h-10 flex items-center justify-center relative">
-                          <span class="text-lg sm:text-xl drop-shadow-sm">{{ $p['emoji'] }}</span>
+                        <div class="{{ $p['gradient'] }} h-8 sm:h-10 flex items-center justify-center relative">
                         </div>
                         <div class="p-1 sm:p-1.5">
                           <div class="text-[7px] sm:text-[8px] font-bold text-zonakasir-primary">{{ $p['price'] }}</div>
@@ -393,10 +465,10 @@ state([
                           <span class="text-[6px] sm:text-[7px] font-semibold text-zonakasir-primary">{{ $cart['price'] }}</span>
                         </div>
                         <div class="flex items-center gap-1 mt-1">
-                          <div class="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded bg-gray-100 flex items-center justify-center text-[6px] text-gray-400">−</div>
+                          <div class="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded bg-gray-100 flex items-center justify-center text-gray-400">{!! $navIcons['minus'] !!}</div>
                           <span class="text-[6px] sm:text-[7px] font-semibold w-3 text-center">{{ $cart['qty'] }}</span>
-                          <div class="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded bg-zonakasir-primary flex items-center justify-center text-[6px] text-white">+</div>
-                          <div class="ml-auto w-3 h-3 sm:w-3.5 sm:h-3.5 rounded bg-red-50 flex items-center justify-center text-[5px] text-red-400">🗑</div>
+                          <div class="w-3 h-3 sm:w-3.5 sm:h-3.5 rounded bg-zonakasir-primary flex items-center justify-center text-white">{!! $navIcons['plus'] !!}</div>
+                          <div class="ml-auto w-3 h-3 sm:w-3.5 sm:h-3.5 rounded bg-red-50 flex items-center justify-center text-red-400">{!! $navIcons['trash'] !!}</div>
                         </div>
                       </div>
                       @endforeach
@@ -452,7 +524,7 @@ state([
                 <div class="bg-white px-2 pt-1.5 sm:pt-2 pb-1 border-b border-gray-100 shadow-sm">
                   <div class="flex items-center justify-between mb-1">
                     <div class="flex items-center gap-1">
-                      <svg class="w-2 h-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                      {!! $navIcons['back'] !!}
                       <span class="text-[8px] sm:text-[10px] font-semibold text-gray-900">Cashier</span>
                     </div>
                     <div class="w-3 h-3 rounded bg-gray-100 flex items-center justify-center">
@@ -465,7 +537,7 @@ state([
                   </div>
                   {{-- Search --}}
                   <div class="bg-gray-100 rounded-md h-4 flex items-center px-1.5 gap-1">
-                    <svg class="w-2 h-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    {!! $navIcons['search'] !!}
                     <span class="text-[5px] sm:text-[6px] text-gray-400">Cari produk...</span>
                     <div class="ml-auto w-3 h-3 rounded bg-zonakasir-primary flex items-center justify-center">
                       <svg class="w-1.5 h-1.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"/></svg>
@@ -482,17 +554,16 @@ state([
                 <div class="flex-1 bg-gray-50 overflow-hidden p-1 space-y-1">
                   @php
                   $mobileProducts = [
-                    ['name' => 'Indomie Goreng', 'desc' => 'Mie instan rasa ayam bawang', 'price' => 'Rp 3.500', 'bg' => 'from-yellow-300 to-orange-300', 'emoji' => '🍜'],
-                    ['name' => 'Teh Botol Sosro', 'desc' => 'Teh dalam kemasan 450ml', 'price' => 'Rp 4.000', 'bg' => 'from-green-300 to-emerald-400', 'emoji' => '🍵'],
-                    ['name' => 'Rokok Sampoerna', 'desc' => 'Rokok mild 16 batang', 'price' => 'Rp 28.000', 'bg' => 'from-red-300 to-rose-400', 'emoji' => '🚬'],
-                    ['name' => 'Le Minerale', 'desc' => 'Air mineral 600ml', 'price' => 'Rp 4.500', 'bg' => 'from-blue-300 to-cyan-400', 'emoji' => '💧'],
-                    ['name' => 'Pocari Sweat', 'desc' => 'Minuman isotonik 350ml', 'price' => 'Rp 7.000', 'bg' => 'from-cyan-300 to-sky-400', 'emoji' => '🧃'],
+                    ['name' => 'Indomie Goreng', 'desc' => 'Mie instan rasa ayam bawang', 'price' => 'Rp 3.500', 'gradient' => $productGradients[0]],
+                    ['name' => 'Teh Botol Sosro', 'desc' => 'Teh dalam kemasan 450ml', 'price' => 'Rp 4.000', 'gradient' => $productGradients[1]],
+                    ['name' => 'Rokok Sampoerna', 'desc' => 'Rokok mild 16 batang', 'price' => 'Rp 28.000', 'gradient' => $productGradients[2]],
+                    ['name' => 'Le Minerale', 'desc' => 'Air mineral 600ml', 'price' => 'Rp 4.500', 'gradient' => $productGradients[3]],
+                    ['name' => 'Pocari Sweat', 'desc' => 'Minuman isotonik 350ml', 'price' => 'Rp 7.000', 'gradient' => $productGradients[4]],
                   ];
                   @endphp
                   @foreach($mobileProducts as $mp)
                   <div class="bg-white rounded-lg p-1 flex items-center gap-1.5 shadow-sm">
-                    <div class="bg-gradient-to-br {{ $mp['bg'] }} w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex-shrink-0 flex items-center justify-center">
-                      <span class="text-sm sm:text-base">{{ $mp['emoji'] }}</span>
+                    <div class="{{ $mp['gradient'] }} w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex-shrink-0 flex items-center justify-center">
                     </div>
                     <div class="flex-1 min-w-0">
                       <div class="text-[6px] sm:text-[7px] font-semibold text-gray-900 truncate">{{ $mp['name'] }}</div>
@@ -662,10 +733,10 @@ state([
                 <div class="bg-white rounded-xl p-2 border border-gray-100 shadow-sm">
                   <span class="text-[7px] font-semibold text-gray-700">Best Selling Today</span>
                   <div class="mt-1 space-y-1">
-                    @foreach([['name' => 'Indomie Goreng', 'qty' => '48', 'emoji' => '🍜', 'bg' => 'bg-yellow-100'], ['name' => 'Teh Botol Sosro', 'qty' => '32', 'emoji' => '🍵', 'bg' => 'bg-green-100'], ['name' => 'Rokok Sampoerna', 'qty' => '24', 'emoji' => '🚬', 'bg' => 'bg-red-100']] as $bp)
+                    @foreach([['name' => 'Indomie Goreng', 'qty' => '48', 'bg' => 'bg-yellow-300'], ['name' => 'Teh Botol Sosro', 'qty' => '32', 'bg' => 'bg-green-300'], ['name' => 'Rokok Sampoerna', 'qty' => '24', 'bg' => 'bg-red-300']] as $bp)
                     <div class="flex justify-between items-center py-0.5 border-b border-gray-50 last:border-0">
                       <div class="flex items-center gap-1">
-                        <div class="w-4 h-4 rounded {{ $bp['bg'] }} flex items-center justify-center text-[6px]">{{ $bp['emoji'] }}</div>
+                        <div class="w-4 h-4 rounded {{ $bp['bg'] }}"></div>
                         <span class="text-[6px] text-gray-700">{{ $bp['name'] }}</span>
                       </div>
                       <span class="text-[6px] text-zonakasir-primary font-semibold">{{ $bp['qty'] }} sold</span>
@@ -876,9 +947,9 @@ state([
                       <div class="text-[6px] font-semibold text-gray-700">Top Selling Hari Ini</div>
                       <span class="text-[3px] text-zonakasir-primary">Lihat Semua</span>
                     </div>
-                    @foreach([['name' => 'Indomie Goreng', 'qty' => 48, 'pct' => 100, 'emoji' => '🍜', 'bg' => 'bg-yellow-100'], ['name' => 'Teh Botol Sosro', 'qty' => 32, 'pct' => 67, 'emoji' => '🍵', 'bg' => 'bg-green-100'], ['name' => 'Rokok Sampoerna', 'qty' => 24, 'pct' => 50, 'emoji' => '🚬', 'bg' => 'bg-red-100']] as $bp)
+                    @foreach([['name' => 'Indomie Goreng', 'qty' => 48, 'pct' => 100, 'bg' => 'bg-gradient-to-br from-yellow-300 to-orange-300'], ['name' => 'Teh Botol Sosro', 'qty' => 32, 'pct' => 67, 'bg' => 'bg-gradient-to-br from-green-300 to-emerald-400'], ['name' => 'Rokok Sampoerna', 'qty' => 24, 'pct' => 50, 'bg' => 'bg-gradient-to-br from-red-300 to-rose-400']] as $bp)
                     <div class="flex items-center gap-1.5 py-0.5">
-                      <div class="w-3 h-3 rounded {{ $bp['bg'] }} flex items-center justify-center text-[5px] flex-shrink-0">{{ $bp['emoji'] }}</div>
+                      <div class="w-3 h-3 rounded {{ $bp['bg'] }} flex-shrink-0"></div>
                       <div class="flex-1 min-w-0">
                         <div class="flex justify-between items-center">
                           <span class="text-[5px] text-gray-700 font-medium truncate">{{ $bp['name'] }}</span>
@@ -938,18 +1009,18 @@ state([
                     {{-- Rows --}}
                     @php
                     $stockProducts = [
-                      ['name' => 'Indomie Goreng', 'sku' => 'IND-001', 'stock' => '48', 'price' => 'Rp 3.500', 'stockColor' => 'text-green-600', 'emoji' => '🍜', 'bg' => 'bg-yellow-100'],
-                      ['name' => 'Teh Botol Sosro', 'sku' => 'TBS-002', 'stock' => '24', 'price' => 'Rp 4.000', 'stockColor' => 'text-green-600', 'emoji' => '🍵', 'bg' => 'bg-green-100'],
-                      ['name' => 'Rokok Sampoerna', 'sku' => 'RKS-003', 'stock' => '3', 'price' => 'Rp 28.000', 'stockColor' => 'text-red-600', 'emoji' => '🚬', 'bg' => 'bg-red-100'],
-                      ['name' => 'Le Minerale', 'sku' => 'LEM-004', 'stock' => '36', 'price' => 'Rp 4.500', 'stockColor' => 'text-green-600', 'emoji' => '💧', 'bg' => 'bg-blue-100'],
-                      ['name' => 'Pocari Sweat', 'sku' => 'POS-005', 'stock' => '18', 'price' => 'Rp 7.000', 'stockColor' => 'text-green-600', 'emoji' => '🧃', 'bg' => 'bg-cyan-100'],
-                      ['name' => 'Chitato 68g', 'sku' => 'CHI-006', 'stock' => '8', 'price' => 'Rp 12.500', 'stockColor' => 'text-yellow-600', 'emoji' => '🥔', 'bg' => 'bg-purple-100'],
+                      ['name' => 'Indomie Goreng', 'sku' => 'IND-001', 'stock' => '48', 'price' => 'Rp 3.500', 'stockColor' => 'text-green-600', 'gradient' => $productGradients[0]],
+                      ['name' => 'Teh Botol Sosro', 'sku' => 'TBS-002', 'stock' => '24', 'price' => 'Rp 4.000', 'stockColor' => 'text-green-600', 'gradient' => $productGradients[1]],
+                      ['name' => 'Rokok Sampoerna', 'sku' => 'RKS-003', 'stock' => '3', 'price' => 'Rp 28.000', 'stockColor' => 'text-red-600', 'gradient' => $productGradients[2]],
+                      ['name' => 'Le Minerale', 'sku' => 'LEM-004', 'stock' => '36', 'price' => 'Rp 4.500', 'stockColor' => 'text-green-600', 'gradient' => $productGradients[3]],
+                      ['name' => 'Pocari Sweat', 'sku' => 'POS-005', 'stock' => '18', 'price' => 'Rp 7.000', 'stockColor' => 'text-green-600', 'gradient' => $productGradients[4]],
+                      ['name' => 'Chitato 68g', 'sku' => 'CHI-006', 'stock' => '8', 'price' => 'Rp 12.500', 'stockColor' => 'text-yellow-600', 'gradient' => $productGradients[5]],
                     ];
                     @endphp
                     @foreach($stockProducts as $sp)
                     <div class="grid grid-cols-5 gap-0.5 px-2 py-1 border-b border-gray-50 items-center">
                       <div class="flex items-center gap-1 col-span-2">
-                        <div class="w-4 h-4 rounded {{ $sp['bg'] }} flex-shrink-0 flex items-center justify-center text-[6px]">{{ $sp['emoji'] }}</div>
+                        <div class="w-4 h-4 rounded {{ $sp['gradient'] }} flex-shrink-0"></div>
                         <span class="text-[5px] font-medium text-gray-800 truncate">{{ $sp['name'] }}</span>
                       </div>
                       <span class="text-[5px] text-gray-500">{{ $sp['sku'] }}</span>

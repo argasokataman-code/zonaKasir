@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Constants\Role;
+use App\Models\Subscription;
 use App\Models\Tenants\About;
 use App\Models\Tenants\User;
 use App\Notifications\DomainCreated;
@@ -78,6 +79,18 @@ class RegisterTenant
                 $user->assignRole(Role::admin);
             }
         });
+
+        // Create trial subscription in central DB (outside tenant context)
+        Subscription::firstOrCreate(
+            ['tenant_id' => $tenant->id],
+            [
+                'plan_id' => null,
+                'status' => 'trialing',
+                'billing_cycle' => 'monthly',
+                'trial_ends_at' => now()->addDays(14),
+                'starts_at' => now(),
+            ]
+        );
 
         return $tenant;
     }

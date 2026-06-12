@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'url' => 'https://api.github.com/repos/lakasir/lakasir/releases/latest',
+    'url' => 'https://api.github.com/repos/argasokataman-code/zonaKasir/releases/latest',
     'artisan_after_update' => [
         'migrate' => [
             '--force' => true,

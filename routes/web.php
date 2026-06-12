@@ -23,3 +23,10 @@ Route::middleware([
     ->group(function () {
         //
     });
+
+Route::middleware(['web', 'auth:admin'])->group(function () {
+    Route::get('/admin/tenants/export/csv', [\App\Http\Controllers\TenantExportController::class, 'csv'])
+        ->name('admin.tenants.export.csv');
+    Route::delete('/admin/tenants/{id}/destroy', [\App\Http\Controllers\TenantExportController::class, 'destroy'])
+        ->name('admin.tenants.destroy');
+});

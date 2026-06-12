@@ -58,6 +58,10 @@
     @livewireScripts
     @filamentScripts
 
+    {{-- GSAP CDN for landing page animations --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
   </body>
 </html>
 

@@ -1,0 +1,27 @@
+name: SSH Command
+
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: 'Command to run on server'
+        required: true
+        default: 'whoami && pwd && ls -la'
+
+jobs:
+  ssh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add host
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Run command
+        run: |
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} "${{ inputs.command }}"

@@ -10,8 +10,9 @@
 /public/app/
 /nginx/*.log
 /packages
-/public/build/manifest.json
+public/build/manifest.json
 public/build
+*.dmg
 
 # Production env (never commit real .env)
 .env.production

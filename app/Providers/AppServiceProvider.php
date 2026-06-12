@@ -71,6 +71,9 @@ class AppServiceProvider extends ServiceProvider
             $mainPath = database_path('migrations');
             $directories = glob($mainPath.'/*', GLOB_ONLYDIR);
 
+            // Exclude tenant migrations — they run via tenancy package, not globally
+            $directories = array_filter($directories, fn ($dir) => basename($dir) !== 'tenant');
+
             $this->loadMigrationsFrom($directories);
         }
 
