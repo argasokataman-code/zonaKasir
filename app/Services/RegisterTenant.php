@@ -65,14 +65,19 @@ class RegisterTenant
 
             $user->notify(new DomainCreated($data['domain']));
 
+            // --force is required when APP_ENV=production; without it db:seed
+            // aborts and the owner ends up without the admin role
             Artisan::call('db:seed', [
                 '--class' => 'PermissionSeeder',
+                '--force' => true,
             ]);
             Artisan::call('db:seed', [
                 '--class' => 'PaymentMethodSeeder',
+                '--force' => true,
             ]);
             Artisan::call('db:seed', [
                 '--class' => 'CategorySeeder',
+                '--force' => true,
             ]);
             if (! $user->hasRole(Role::admin)) {
                 $user->assignRole(Role::admin);
