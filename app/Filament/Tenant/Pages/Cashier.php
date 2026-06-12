@@ -30,6 +30,7 @@ use Filament\Pages\Page;
 use Filament\Support\RawJs;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection as CollectionSupport;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -242,6 +243,14 @@ class Cashier extends Page implements HasForms, HasTable
         ]);
 
         $pMethod = PaymentMethod::find($request['payment_method_id']);
+
+        Log::info('PaymentMethod check', [
+            'payment_method_id' => $request['payment_method_id'] ?? null,
+            'pMethod_name' => $pMethod->name ?? null,
+            'pMethod_payment_type' => $pMethod->payment_type ?? null,
+            'isMidtrans' => $pMethod?->isMidtrans(),
+        ]);
+
         if (! $pMethod) {
             $pMethod = PaymentMethod::create([
                 'name' => 'Cash',
