@@ -242,7 +242,7 @@ class MidtransGatewayService
         return "T{$microtime}-{$random}";
     }
 
-    private function getApiUrl(?string $merchantId): string
+    private function getApiUrl(): string
     {
         $environment = config('midtrans.environment', 'sandbox');
         return self::SNAP_API_URLS[$environment] ?? self::SNAP_API_URLS['sandbox'];
