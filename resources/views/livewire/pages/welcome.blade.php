@@ -27,9 +27,9 @@ state(['locale' => $locale]);
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-14">
         <a href="/" class="flex items-center gap-2.5">
-          <img src="{{ asset('assets/logo/logo.svg') }}" class="h-8" alt="zonaKasir">
+          <img src="{{ asset('assets/logo/logo.svg') }}" class="h-8" alt="ZonaKasir">
           <span class="text-lg font-bold tracking-tight transition-colors"
-                :class="scrolled ? 'text-gray-900' : 'text-white'">zonaKasir</span>
+                :class="scrolled ? 'text-gray-900' : 'text-white'">ZonaKasir</span>
         </a>
 
         <div class="hidden md:flex items-center gap-1">
@@ -291,7 +291,7 @@ state(['locale' => $locale]);
                   <div class="w-5 h-5 bg-zonakasir-primary rounded-md flex items-center justify-center">
                     <span class="text-white text-[6px] font-bold">ZK</span>
                   </div>
-                  <span class="text-gray-900 text-[8px] font-bold">zonaKasir</span>
+                  <span class="text-gray-900 text-[8px] font-bold">ZonaKasir</span>
                 </div>
                 @foreach([
                   ['label' => 'Dashboard', 'active' => true],
@@ -421,7 +421,7 @@ state(['locale' => $locale]);
           <h3 class="text-xl font-bold text-gray-900">{{ __('landing.plan_starter') }}</h3>
           <p class="mt-2 text-sm text-gray-500">{{ __('landing.plan_starter_desc') }}</p>
           <div class="mt-5 flex items-baseline gap-1">
-            <span class="text-4xl font-extrabold text-gray-900">IDR 99.000</span>
+            <span class="text-4xl font-extrabold text-gray-900">IDR 50.000</span>
             <span class="text-gray-400 font-medium">{{ __('landing.price_month') }}</span>
           </div>
           <ul class="mt-7 space-y-3 flex-1">
@@ -443,7 +443,7 @@ state(['locale' => $locale]);
           <h3 class="text-xl font-bold text-white">{{ __('landing.plan_business') }}</h3>
           <p class="mt-2 text-sm text-gray-400">{{ __('landing.plan_business_desc') }}</p>
           <div class="mt-5 flex items-baseline gap-1">
-            <span class="text-4xl font-extrabold text-white">IDR 249.000</span>
+            <span class="text-4xl font-extrabold text-white">IDR 199.000</span>
             <span class="text-gray-500 font-medium">{{ __('landing.price_month') }}</span>
           </div>
           <ul class="mt-7 space-y-3 flex-1">
@@ -481,11 +481,11 @@ state(['locale' => $locale]);
   <footer class="bg-gray-900 border-t border-white/10 py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center gap-2.5">
-        <img src="{{ asset('assets/logo/logo.svg') }}" class="h-7" alt="zonaKasir">
-        <span class="text-white font-bold">zonaKasir</span>
+        <img src="{{ asset('assets/logo/logo.svg') }}" class="h-7" alt="ZonaKasir">
+        <span class="text-white font-bold">ZonaKasir</span>
       </div>
       <p class="text-gray-500 text-sm text-center">{{ __('landing.footer_tagline') }}</p>
-      <p class="text-gray-600 text-sm">© {{ date('Y') }} zonaKasir. {{ __('landing.footer_rights') }}</p>
+      <p class="text-gray-600 text-sm">© {{ date('Y') }} ZonaKasir. {{ __('landing.footer_rights') }}</p>
     </div>
   </footer>
 </div>

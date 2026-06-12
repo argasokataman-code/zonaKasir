@@ -11,7 +11,7 @@ return [
     'hero_badge' => 'Platform POS untuk Bisnis Indonesia',
     'hero_title_1' => 'Kelola Toko',
     'hero_title_2' => 'Lebih Mudah',
-    'hero_title_3' => 'dengan zonaKasir',
+    'hero_title_3' => 'dengan ZonaKasir',
     'hero_subtitle' => 'Aplikasi point of sale (POS) berbasis cloud yang membantu anda mengelola penjualan, stok, dan keuangan toko dengan mudah dan efisien.',
     'hero_cta' => 'Mulai Sekarang',
     'hero_see_features' => 'Lihat Fitur',
@@ -30,7 +30,7 @@ return [
     'about_title_1' => 'Solusi POS',
     'about_title_2' => 'Modern',
     'about_title_3' => 'untuk Bisnis Anda',
-    'about_text' => 'zonaKasir adalah aplikasi point of sale yang dirancang untuk memudahkan pengelolaan bisnis anda. Dengan fitur lengkap dan antarmuka yang intuitif, zonaKasir membantu anda mencatat penjualan, mengelola stok, dan memantau keuangan toko secara real-time.',
+    'about_text' => 'ZonaKasir adalah aplikasi point of sale yang dirancang untuk memudahkan pengelolaan bisnis anda. Dengan fitur lengkap dan antarmuka yang intuitif, ZonaKasir membantu anda mencatat penjualan, mengelola stok, dan memantau keuangan toko secara real-time.',
     'about_fast' => 'Cepat',
     'about_fast_sub' => 'Transaksi instan',
     'about_safe' => 'Aman',
@@ -38,8 +38,8 @@ return [
 
     // Features
     'features_badge' => 'Fitur Unggulan',
-    'features_title' => 'Kenapa Pilih zonaKasir?',
-    'features_subtitle' => 'zonaKasir hadir dengan fitur-fitur terbaik untuk membantu bisnis anda berkembang.',
+    'features_title' => 'Kenapa Pilih ZonaKasir?',
+    'features_subtitle' => 'ZonaKasir hadir dengan fitur-fitur terbaik untuk membantu bisnis anda berkembang.',
     'feature_cloud_title' => 'Berbasis Cloud',
     'feature_cloud_desc' => 'Tanpa instalasi dan tanpa server sendiri. Data anda aman, ter-backup, dan selalu tersedia.',
     'feature_platform_title' => 'Multi Platform',

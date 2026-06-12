@@ -11,7 +11,7 @@ return [
     'hero_badge' => 'POS Platform for Indonesian Businesses',
     'hero_title_1' => 'Manage Your Store',
     'hero_title_2' => 'More Easily',
-    'hero_title_3' => 'with zonaKasir',
+    'hero_title_3' => 'with ZonaKasir',
     'hero_subtitle' => 'A cloud-based point of sale (POS) application that helps you manage sales, inventory, and store finances easily and efficiently.',
     'hero_cta' => 'Get Started',
     'hero_see_features' => 'See Features',
@@ -30,7 +30,7 @@ return [
     'about_title_1' => 'A Modern',
     'about_title_2' => 'POS Solution',
     'about_title_3' => 'for Your Business',
-    'about_text' => 'zonaKasir is a point of sale application designed to make running your business easier. With a complete feature set and an intuitive interface, zonaKasir helps you record sales, manage inventory, and monitor store finances in real time.',
+    'about_text' => 'ZonaKasir is a point of sale application designed to make running your business easier. With a complete feature set and an intuitive interface, ZonaKasir helps you record sales, manage inventory, and monitor store finances in real time.',
     'about_fast' => 'Fast',
     'about_fast_sub' => 'Instant transactions',
     'about_safe' => 'Secure',
@@ -38,8 +38,8 @@ return [
 
     // Features
     'features_badge' => 'Key Features',
-    'features_title' => 'Why Choose zonaKasir?',
-    'features_subtitle' => 'zonaKasir comes with the best features to help your business grow.',
+    'features_title' => 'Why Choose ZonaKasir?',
+    'features_subtitle' => 'ZonaKasir comes with the best features to help your business grow.',
     'feature_cloud_title' => 'Cloud-based',
     'feature_cloud_desc' => 'No installation and no servers to maintain. Your data is safe, backed up, and always available.',
     'feature_platform_title' => 'Multi Platform',
