@@ -337,6 +337,11 @@ class Cashier extends Page implements HasForms, HasTable
         $this->calculateTotalPrice();
     }
 
+    public function setPaymentMethodId(int $paymentMethodId): void
+    {
+        $this->cartDetail['payment_method_id'] = $paymentMethodId;
+    }
+
     private function validateVoucher(string $code): bool
     {
         $voucherService = new VoucherService();
