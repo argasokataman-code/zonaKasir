@@ -22,7 +22,7 @@ class DigitalPaymentMethodSeeder extends Seeder
         ];
 
         foreach ($methods as $method) {
-            PaymentMethod::firstOrCreate(
+            PaymentMethod::updateOrCreate(
                 ['name' => $method['name']],
                 $method
             );
