@@ -84,6 +84,10 @@ class RegisterTenantForm extends Component implements HasForms
                                 ->label('Domain')
                                 ->rules(['unique:tenants,id', new Domain])
                                 ->suffix('.'.config('tenancy.central_domains')[0]),
+                            TextInput::make('coupon_code')
+                                ->label('Kode Kupon (Opsional)')
+                                ->placeholder('Masukkan kode kupon jika ada')
+                                ->maxLength(50),
                         ])
                         ->icon('heroicon-o-globe-alt'),
                 ])
