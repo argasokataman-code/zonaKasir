@@ -19,6 +19,7 @@ class WithdrawalService
     /**
      * Request withdrawal. Idempotency key required.
      * Auto-approves small withdrawals (< auto_approve_max) for tenants 30+ days.
+     * Amounts > single_admin_max require 2 admin approvals.
      *
      * @throws InsufficientBalanceException
      */
@@ -51,14 +52,16 @@ class WithdrawalService
             $autoMax = config('midtrans.withdrawal_approval.auto_approve_max', 5000000);
             $singleAdminMax = config('midtrans.withdrawal_approval.single_admin_max', 25000000);
             $tenantAge = $about->created_at->diffInDays(now());
-            $shouldAutoApprove = $amount <= $autoMax && $tenantAge >= 30;
 
             if ($amount > $singleAdminMax) {
-                $status = 'pending'; // requires 2 admin approval
-            } elseif ($shouldAutoApprove) {
+                $status = 'pending';
+                $approvedBy = null;
+            } elseif ($amount <= $autoMax && $tenantAge >= 30) {
                 $status = 'approved';
+                $approvedBy = auth()->id();
             } else {
                 $status = 'pending';
+                $approvedBy = null;
             }
 
             $withdrawal = Withdrawal::create([
@@ -70,8 +73,8 @@ class WithdrawalService
                 'status'              => $status,
                 'idempotency_key'     => $idempotencyKey,
                 'requested_by'        => auth()->id(),
-                'approved_by'         => $shouldAutoApprove ? auth()->id() : null,
-                'processed_at'        => $shouldAutoApprove ? now() : null,
+                'approved_by'         => $approvedBy,
+                'processed_at'        => $status === 'approved' ? now() : null,
             ]);
 
             $this->ledger->entry(
@@ -97,6 +100,11 @@ class WithdrawalService
     }
 
     /**
+     * Approve a withdrawal.
+     * - Amount > single_admin_max (25jt): requires 2 different admin approvals
+     * - First approval saves approved_by, status stays pending
+     * - Second approval (different admin) triggers disbursement
+     *
      * @throws DisbursementFailedException
      */
     public function approve(int $withdrawalId, int $approvedBy): Withdrawal
@@ -106,12 +114,14 @@ class WithdrawalService
 
         $singleAdminMax = config('midtrans.withdrawal_approval.single_admin_max', 25000000);
 
-        // High-value withdrawals need 2 admin approvals
+        // 2-admin approval flow for high value withdrawals
         if ($withdrawal->amount > $singleAdminMax) {
             if ($withdrawal->approved_by === null) {
-                $withdrawal->update(['approved_by' => $approvedBy, 'status' => 'approved']);
+                $withdrawal->update(['approved_by' => $approvedBy]);
                 return $withdrawal->fresh();
             }
+            abort_if($withdrawal->approved_by === $approvedBy, 400, 'Second approval must be from different admin');
+            // proceed to disbursement below
         }
 
         try {
