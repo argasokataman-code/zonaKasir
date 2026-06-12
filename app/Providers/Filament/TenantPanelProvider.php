@@ -28,6 +28,7 @@ use App\Filament\Tenant\Pages\TenantLogin;
 use App\Filament\Tenant\Resources\CategoryResource;
 use App\Filament\Tenant\Resources\MemberResource;
 use App\Filament\Tenant\Resources\PaymentMethodResource;
+use App\Filament\Tenant\Resources\PermissionResource;
 use App\Filament\Tenant\Resources\ProductResource;
 use App\Filament\Tenant\Resources\PurchasingResource;
 use App\Filament\Tenant\Resources\ReceivableResource;
