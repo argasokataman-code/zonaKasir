@@ -101,8 +101,13 @@ class TenantPanelProvider extends PanelProvider
         );
 
         FilamentView::registerRenderHook(
-            PanelsRenderHook::HEAD_END,
+            PanelsRenderHook::SIDEBAR_NAV_START,
             fn () => view('partials.sidebar-logo-css')
+        );
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::BODY_START,
+            fn () => view('partials.shop-wallpaper')
         );
 
         FilamentView::registerRenderHook(
@@ -129,6 +134,7 @@ class TenantPanelProvider extends PanelProvider
             ->sidebarFullyCollapsibleOnDesktop()
             ->darkMode(config('app.dark_mode', true))
             ->databaseNotifications()
+            ->lazyLoadedDatabaseNotifications(false)
             ->id('tenant')
             ->viteTheme('resources/css/filament/tenant/theme.css')
             ->colors(['primary' => Color::hex('#FF6600')])
@@ -264,13 +270,11 @@ class TenantPanelProvider extends PanelProvider
     private function initializeDefaultPanel(Panel $panel): void
     {
         try {
-            if (Schema::hasTable('abouts') && $about = About::first()) {
-                $logo = $about->photo
-                    ? UploadedFile::urlFromPath($about->photo, config('filesystems.upload_disk'))
-                    : asset('assets/logo/logo.svg');
+            if (Schema::hasTable('abouts')) {
+                $about = About::first();
 
                 $panel->brandName($about->shop_name ?? 'Your Brand')
-                    ->brandLogo($logo);
+                    ->brandLogo(asset('assets/logo/logo.svg'));
             }
         } catch (\Throwable) {
             // DB not available during build/package-discovery
@@ -281,12 +285,9 @@ class TenantPanelProvider extends PanelProvider
     {
         try {
             $about = About::first();
-            $logo = $about?->photo
-                ? UploadedFile::urlFromPath($about->photo, config('filesystems.upload_disk'))
-                : asset('assets/logo/logo.svg');
 
             $panel->brandName($about->shop_name ?? 'Your Brand')
-                ->brandLogo($logo);
+                ->brandLogo(asset('assets/logo/logo.svg'));
         } catch (\Throwable) {
             // DB not available during build/package-discovery
         }

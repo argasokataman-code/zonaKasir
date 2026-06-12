@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CheckBilling;
 use App\Console\Commands\DeleteTempFile;
 use App\Console\Commands\FCM;
 use Illuminate\Console\Scheduling\Schedule;
@@ -13,6 +14,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command(DeleteTempFile::class)->daily();
         $schedule->command(FCM::class)->daily();
+        $schedule->command(CheckBilling::class)->daily();
     }
 
     protected function commands()

@@ -5,14 +5,64 @@ on:
     branches:
       - main
 
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
 jobs:
-  deploy:
-    name: Deploy to Shared Hosting
+  build-and-deploy:
+    name: Build & Deploy to Staging
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: mbstring, bcmath, intl, pdo_mysql
+          tools: composer:v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Cache Composer
+        uses: actions/cache@v4
+        with:
+          path: vendor
+          key: composer-${{ hashFiles('composer.lock') }}
+
+      - name: Install PHP deps
+        run: composer install --no-dev --prefer-dist --no-interaction
+
+      - name: Install JS deps
+        run: npm ci --no-audit --no-fund
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Package artifacts
+        run: |
+          tar czf /tmp/deploy-artifacts.tar.gz \
+            vendor \
+            public/build
+          echo "Artifact size: $(du -sh /tmp/deploy-artifacts.tar.gz | cut -f1)"
+
+      - name: Create version tag
+        id: tag
+        run: |
+          TAG="staging-v1.0.${GITHUB_RUN_NUMBER}"
+          git tag "${TAG}"
+          git push origin "${TAG}"
+          echo "tag=${TAG}" >> "${GITHUB_OUTPUT}"
 
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.0
@@ -22,38 +72,56 @@ jobs:
       - name: Add host to known_hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy via SSH
+        env:
+          HOST: ${{ secrets.SSH_HOST }}
+          USER: ${{ secrets.SSH_USERNAME }}
+          PORT: ${{ secrets.SSH_PORT }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+          VERSION_TAG: ${{ steps.tag.outputs.tag }}
         run: |
-          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} << 'DEPLOY'
-            cd ${{ secrets.DEPLOY_PATH }}
+          PORT="${PORT:-2223}"
 
-            # Maintenance mode
-            php artisan down --retry=60
+          # Upload artifacts to /tmp
+          echo "Uploading $(du -h /tmp/deploy-artifacts.tar.gz | cut -f1)"
+          cat /tmp/deploy-artifacts.tar.gz | ssh -p "${PORT}" "${USER}@${HOST}" "cat > /tmp/deploy-artifacts.tar.gz && sync"
+          ssh -p "${PORT}" "${USER}@${HOST}" "ls -la /tmp/deploy-artifacts.tar.gz"
 
-            # Pull latest code
-            git pull origin main
+          # Deploy
+          ssh -p "${PORT}" "${USER}@${HOST}" bash -s << 'DEPLOY'
+            set -e
 
-            # Install PHP dependencies
-            export COMPOSER_ALLOW_SUPERUSER=1
-            composer install --no-dev --prefer-dist --no-interaction
+            cd "${{ secrets.DEPLOY_PATH }}"
 
-            # Install JS dependencies & build
-            npm ci --no-audit --no-fund
-            npm run build
+            php artisan down --retry=60 2>/dev/null || true
 
-            # Run migrations
-            php artisan migrate --path=database/migrations/tenant --force --seed
+            git stash push --message "deploy-stash-$(date +%s)" 2>/dev/null || true
+            git fetch origin main
+            git reset --hard origin/main
+            git stash drop 2>/dev/null || true
 
-            # Clear caches
+            test -f .env || { echo "ERROR: .env missing!"; cp .env.example .env 2>/dev/null || true; }
+
+            rm -rf vendor public/build 2>/dev/null || true
+            tar xzf /tmp/deploy-artifacts.tar.gz
+            rm -f /tmp/deploy-artifacts.tar.gz
+
+            # Run central migrations (tenant migrations added by tenancy package)
+            php artisan migrate --force 2>/dev/null || true
+            php artisan db:seed --class=AdminSeeder --force 2>/dev/null || true
+
             php artisan optimize:clear
-            php artisan config:cache
-            php artisan route:cache
             php artisan view:cache
-            php artisan filament:assets
-            php artisan livewire:publish --assets
 
-            # Bring app back up
+            php artisan storage:link 2>/dev/null || true
+            php artisan filament:assets 2>/dev/null || true
+
+            # Write exact version from CI tag
+            echo "${{ steps.tag.outputs.tag }}" > version.txt
+
             php artisan up
+
+            echo "Deploy complete!"
           DEPLOY
