@@ -5,8 +5,6 @@ namespace App\Filament\Tenant\Resources;
 use App\Filament\Tenant\Resources\PaymentMethodResource\Pages;
 use App\Models\Tenants\PaymentMethod;
 use App\Traits\HasTranslatableResource;
-use Filament\Forms\Components\Checkbox;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -27,35 +25,39 @@ class PaymentMethodResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->translateLabel()
-                    ->columnSpanFull(),
-                Section::make([
-                    Checkbox::make('is_cash')->inline(),
-                    Checkbox::make('is_debit')->inline(),
-                    Checkbox::make('is_credit')->inline(),
-                    Checkbox::make('is_wallet')->inline(),
-                ])->columns(2),
                 Select::make('payment_type')
-                    ->label(__('Payment Gateway Type'))
-                    ->options([
-                        'cash' => 'Cash',
-                        '' => __('Offline'),
-                        'credit_card' => 'Credit Card (Midtrans)',
-                        'debit_card' => 'Debit Card (Midtrans)',
-                        'gopay' => 'GoPay (Midtrans)',
-                        'shopeepay' => 'ShopeePay (Midtrans)',
-                        'qris' => 'QRIS (Midtrans)',
-                        'bank_transfer' => 'Bank Transfer (Midtrans)',
-                        'indomaret' => 'Indomaret (Midtrans)',
-                        'alfamart' => 'Alfamart (Midtrans)',
-                        'kredivo' => 'Kredivo (Midtrans)',
-                        'akulaku' => 'Akulaku (Midtrans)',
-                    ])
+                    ->label(__('Payment Type'))
+                    ->options(self::paymentTypeOptions())
                     ->native(false)
+                    ->live()
+                    ->reactive()
+                    ->required()
                     ->translateLabel()
-                    ->helperText(__('Pilih tipe pembayaran digital untuk diproses melalui Midtrans')),
-            ]);
+                    ->helperText(__('Pilih tipe pembayaran. Nama metode akan otomatis terisi.')),
+                TextInput::make('name')
+                    ->label(__('Display Name'))
+                    ->translateLabel()
+                    ->required()
+                    ->helperText(__('Nama yang muncul di POS dan struk.')),
+            ])
+            ->columns(1);
+    }
+
+    public static function paymentTypeOptions(): array
+    {
+        return [
+            'cash' => __('Tunai / Cash'),
+            'gopay' => 'GoPay (Midtrans)',
+            'shopeepay' => 'ShopeePay (Midtrans)',
+            'qris' => 'QRIS (Midtrans)',
+            'credit_card' => 'Kartu Kredit (Midtrans)',
+            'debit_card' => 'Kartu Debit (Midtrans)',
+            'bank_transfer' => 'Transfer Bank (Midtrans)',
+            'indomaret' => 'Indomaret (Midtrans)',
+            'alfamart' => 'Alfamart (Midtrans)',
+            'kredivo' => 'Kredivo (Midtrans)',
+            'akulaku' => 'Akulaku (Midtrans)',
+        ];
     }
 
     public static function table(Table $table): Table
@@ -65,42 +67,23 @@ class PaymentMethodResource extends Resource
                 TextColumn::make('name')
                     ->translateLabel()
                     ->searchable(),
+                TextColumn::make('payment_type')
+                    ->label(__('Payment Type'))
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'cash' => 'success',
+                        'gopay', 'shopeepay', 'qris' => 'warning',
+                        'credit_card', 'debit_card' => 'info',
+                        'bank_transfer', 'indomaret', 'alfamart' => 'gray',
+                        'kredivo', 'akulaku' => 'danger',
+                        default => 'gray',
+                    })
+                    ->translateLabel(),
                 TextColumn::make('is_cash')
+                    ->label(__('Type'))
                     ->badge()
-                    ->getStateUsing(function (PaymentMethod $pMethod) {
-                        return $pMethod->is_cash ? 'Yes' : 'No';
-                    })
-                    ->color(fn (string $state): string => match ($state) {
-                        'No' => 'danger',
-                        'Yes' => 'success',
-                    }),
-                TextColumn::make('is_debit')
-                    ->badge()
-                    ->getStateUsing(function (PaymentMethod $pMethod) {
-                        return $pMethod->is_debit ? 'Yes' : 'No';
-                    })
-                    ->color(fn (string $state): string => match ($state) {
-                        'No' => 'danger',
-                        'Yes' => 'success',
-                    }),
-                TextColumn::make('is_credit')
-                    ->badge()
-                    ->getStateUsing(function (PaymentMethod $pMethod) {
-                        return $pMethod->is_credit ? 'Yes' : 'No';
-                    })
-                    ->color(fn (string $state): string => match ($state) {
-                        'No' => 'danger',
-                        'Yes' => 'success',
-                    }),
-                TextColumn::make('is_wallet')
-                    ->badge()
-                    ->getStateUsing(function (PaymentMethod $pMethod) {
-                        return $pMethod->is_wallet ? 'Yes' : 'No';
-                    })
-                    ->color(fn (string $state): string => match ($state) {
-                        'No' => 'danger',
-                        'Yes' => 'success',
-                    }),
+                    ->getStateUsing(fn (PaymentMethod $m) => $m->isMidtrans() ? 'Midtrans' : 'Cash')
+                    ->color(fn (string $s): string => $s === 'Cash' ? 'success' : 'warning'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),

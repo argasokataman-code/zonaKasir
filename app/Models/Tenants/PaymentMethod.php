@@ -32,10 +32,33 @@ class PaymentMethod extends Model
         'is_wallet' => 'boolean',
     ];
 
-    public const MIDTRAMS_TYPES = [
+    public const MIDTRANS_TYPES = [
         'credit_card', 'debit_card', 'gopay', 'shopeepay', 'qris',
         'bank_transfer', 'indomaret', 'alfamart', 'kredivo', 'akulaku',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function (self $method) {
+            $method->setFlagsFromPaymentType();
+        });
+
+        static::updating(function (self $method) {
+            $method->setFlagsFromPaymentType();
+        });
+    }
+
+    private function setFlagsFromPaymentType(): void
+    {
+        if (! $this->payment_type) {
+            return;
+        }
+
+        $this->is_cash = in_array($this->payment_type, ['cash']);
+        $this->is_debit = in_array($this->payment_type, ['debit_card', 'bank_transfer']);
+        $this->is_credit = in_array($this->payment_type, ['credit_card', 'kredivo', 'akulaku']);
+        $this->is_wallet = in_array($this->payment_type, ['gopay', 'shopeepay', 'qris']);
+    }
 
     public function icon(): Attribute
     {
@@ -46,7 +69,7 @@ class PaymentMethod extends Model
 
     public function isMidtrans(): bool
     {
-        return in_array($this->payment_type, self::MIDTRAMS_TYPES);
+        return in_array($this->payment_type, self::MIDTRANS_TYPES);
     }
 
     public function midtransType(): ?string
