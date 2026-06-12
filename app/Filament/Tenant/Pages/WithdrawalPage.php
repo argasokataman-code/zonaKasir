@@ -151,4 +151,9 @@ class WithdrawalPage extends Page implements HasActions, HasForms, HasTable
     {
         return true;
     }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Withdrawal');
+    }
 }
