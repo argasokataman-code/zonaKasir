@@ -75,69 +75,49 @@ class About extends Model
     public static function paymentGatewayForm(): array
     {
         return [
-            \Filament\Forms\Components\Tabs::make('PaymentGatewayTabs')
-                ->tabs([
-                    \Filament\Forms\Components\Tabs\Tab::make('Midtrans')
-                        ->schema([
-                            \Filament\Forms\Components\TextInput::make('midtrans_merchant_id')
-                                ->label('Merchant ID')
-                                ->password()
-                                ->revealable()
-                                ->translateLabel(),
-                            \Filament\Forms\Components\TextInput::make('midtrans_client_key')
-                                ->label('Client Key')
-                                ->password()
-                                ->revealable()
-                                ->translateLabel(),
-                            \Filament\Forms\Components\TextInput::make('midtrans_server_key')
-                                ->label('Server Key')
-                                ->password()
-                                ->revealable()
-                                ->translateLabel(),
-                            \Filament\Forms\Components\Select::make('midtrans_environment')
-                                ->label('Environment')
-                                ->options([
-                                    'sandbox' => 'Sandbox (Testing)',
-                                    'production' => 'Production (Live)',
-                                ])
-                                ->default('sandbox')
-                                ->translateLabel(),
-                            \Filament\Forms\Components\TextInput::make('platform_fee_percent')
-                                ->label('Platform Fee (%)')
-                                ->numeric()
-                                ->step('0.01')
-                                ->minValue(0)
-                                ->maxValue(10)
-                                ->default(1.00)
-                                ->translateLabel(),
-                            \Filament\Forms\Components\Select::make('payout_schedule')
-                                ->label('Payout Schedule')
-                                ->options([
-                                    'daily' => 'Daily',
-                                    'weekly' => 'Weekly',
-                                    'manual' => 'Manual',
-                                ])
-                                ->default('manual')
-                                ->translateLabel(),
-                        ]),
-                    \Filament\Forms\Components\Tabs\Tab::make('Bank Account')
-                        ->schema([
-                            \Filament\Forms\Components\TextInput::make('bank_name')
-                                ->label('Bank Name')
-                                ->placeholder('BCA, Mandiri, BNI, BRI, etc.')
-                                ->translateLabel(),
-                            \Filament\Forms\Components\TextInput::make('bank_account_name')
-                                ->label('Account Name')
-                                ->translateLabel(),
-                            \Filament\Forms\Components\TextInput::make('bank_account_number')
-                                ->label('Account Number')
-                                ->translateLabel(),
-                            \Filament\Forms\Components\TextInput::make('bank_code')
-                                ->label('Bank Code')
-                                ->placeholder('014 for BCA, 008 for Mandiri, etc.')
-                                ->maxLength(10)
-                                ->translateLabel(),
-                        ]),
+            \Filament\Forms\Components\Section::make('Bank Account')
+                ->description(__('Rekening bank untuk pencairan dana dari ZonaKasir'))
+                ->schema([
+                    \Filament\Forms\Components\TextInput::make('bank_name')
+                        ->label('Bank Name')
+                        ->placeholder('BCA, Mandiri, BNI, BRI, etc.')
+                        ->required()
+                        ->translateLabel(),
+                    \Filament\Forms\Components\TextInput::make('bank_account_name')
+                        ->label('Account Name')
+                        ->required()
+                        ->translateLabel(),
+                    \Filament\Forms\Components\TextInput::make('bank_account_number')
+                        ->label('Account Number')
+                        ->required()
+                        ->translateLabel(),
+                    \Filament\Forms\Components\TextInput::make('bank_code')
+                        ->label('Bank Code')
+                        ->placeholder('014 for BCA, 008 for Mandiri, etc.')
+                        ->maxLength(10)
+                        ->required()
+                        ->translateLabel(),
+                ]),
+            \Filament\Forms\Components\Section::make('Platform Settings')
+                ->schema([
+                    \Filament\Forms\Components\TextInput::make('platform_fee_percent')
+                        ->label('Platform Fee (%)')
+                        ->numeric()
+                        ->step('0.01')
+                        ->minValue(0)
+                        ->maxValue(10)
+                        ->default(1.00)
+                        ->translateLabel()
+                        ->helperText(__('Persentase biaya yang dikenakan ZonaKasir per transaksi')),
+                    \Filament\Forms\Components\Select::make('payout_schedule')
+                        ->label('Payout Schedule')
+                        ->options([
+                            'daily' => 'Daily',
+                            'weekly' => 'Weekly',
+                            'manual' => 'Manual',
+                        ])
+                        ->default('manual')
+                        ->translateLabel(),
                 ]),
             \Filament\Forms\Components\Actions::make([
                 \Filament\Forms\Components\Actions\Action::make('Save')
