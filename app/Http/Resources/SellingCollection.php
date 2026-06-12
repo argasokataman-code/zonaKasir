@@ -4,13 +4,16 @@ namespace App\Http\Resources;
 
 use App\Models\Tenants\Selling;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 /**
  * @mixin Selling
  */
 class SellingCollection extends JsonResource
 {
-    public function toArray($request)
+    public array $additional = [];
+
+    public function toArray($request): array
     {
         return [
             'id' => $this->id,
@@ -39,5 +42,10 @@ class SellingCollection extends JsonResource
             'selling_details' => SellingDetailCollection::collection($this->whenLoaded('sellingDetails')),
             'cashier' => $this->whenLoaded('user'),
         ];
+    }
+
+    public function additional(Request $request): array
+    {
+        return $this->additional;
     }
 }

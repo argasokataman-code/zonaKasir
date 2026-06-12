@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Tenants\Sellings\TransactionSellingStoreRequest;
 use App\Http\Resources\SellingCollection;
 use App\Models\Tenants\Selling;
+use App\Services\Tenants\MidtransGatewayService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -49,12 +50,24 @@ class SellingController extends Controller
             $selling = $request->store();
             $selling->load(['member', 'paymentMethod', 'sellingDetails.product', 'user']);
 
+            // Handle Midtrans payment (digital payment methods)
+            $response = new SellingCollection($selling);
+
+            if ($selling->paymentMethod && $selling->paymentMethod->isMidtrans()) {
+                $midtransGateway = app(MidtransGatewayService::class);
+                $snapData = $midtransGateway->createSnapToken($selling, $selling->paymentMethod->midtransType());
+                $response->additional['snap_token'] = $snapData['token'];
+                $response->additional['snap_redirect_url'] = $snapData['redirect_url'];
+                $response->additional['midtrans_payment_id'] = $snapData['midtrans_payment_id'];
+                $response->additional['is_midtrans_payment'] = true;
+            }
+
             DB::commit();
 
             return $this->buildResponse()
                 ->setCode(201)
                 ->setMessage('success create selling')
-                ->setData(new SellingCollection($selling))
+                ->setData($response)
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();

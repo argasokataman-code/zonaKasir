@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\Tenants\Settings\SecureInitialPriceController;
 use App\Http\Controllers\Api\Tenants\Transaction\CashDrawerController;
 use App\Http\Controllers\Api\Tenants\Transaction\DashboardController;
 use App\Http\Controllers\Api\Tenants\Transaction\SellingController;
+use App\Http\Controllers\Api\Tenants\Transaction\WithdrawalController;
 use App\Http\Controllers\Api\Tenants\UploadController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -33,6 +34,7 @@ use App\Livewire\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
+use \App\Http\Middleware\PlanFeatureMiddleware;
 
 Route::middleware([
     'web',
@@ -41,7 +43,7 @@ Route::middleware([
     \App\Http\Middleware\CheckTenantActive::class,
     \App\Http\Middleware\CheckSubscription::class,
 ])
-    ->group(function () {
+->group(function () {
         Route::get('/', function () {
             return redirect()->to('/member');
         });
@@ -170,6 +172,13 @@ Route::middleware([
                     ->middleware('throttle:30,1')
                     ->can('create selling');
                 Route::get('/selling/{selling}', [SellingController::class, 'show'])->can('read selling');
+
+                Route::get('/withdrawal', [WithdrawalController::class, 'index'])->can('read withdrawal');
+                Route::post('/withdrawal', [WithdrawalController::class, 'store'])
+                    ->middleware('throttle:30,1')
+                    ->can('create withdrawal');
+                Route::post('/withdrawal/{withdrawal}/approve', [WithdrawalController::class, 'approve'])->can('update withdrawal');
+                Route::post('/withdrawal/{withdrawal}/reject', [WithdrawalController::class, 'reject'])->can('update withdrawal');
                 Route::group(['prefix' => 'cash-drawer'], function () {
                     Route::get('/', [CashDrawerController::class, 'show']);
                     Route::post('/', [CashDrawerController::class, 'store'])
@@ -224,6 +233,18 @@ Route::middleware([
                     ->name('notification.update');
                 Route::delete('/clear', [NotificationController::class, 'clear'])
                     ->name('notification.destroy');
+            });
+
+            Route::group(['prefix' => 'coupon'], function () {
+                Route::post('/redeem', [\App\Http\Controllers\Api\Tenants\CouponController::class, 'redeem']);
+            });
+
+            Route::group(['prefix' => 'billing'], function () {
+                Route::get('/invoices', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'index']);
+                Route::post('/invoices', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'create']);
+                Route::get('/invoices/{id}', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'show']);
+                Route::post('/invoices/{id}/pay', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'pay']);
+                Route::get('/features', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'features']);
             });
 
             Route::get('/user', function (Request $request) {
