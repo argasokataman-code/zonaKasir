@@ -8,6 +8,7 @@ use App\Models\Tenants\Selling;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use SnapBi\SnapBi;
+use SnapBi\SnapBiConfig;
 
 class SnapBiQrisService
 {
@@ -23,14 +24,14 @@ class SnapBiQrisService
         $privateKey = is_callable($config['private_key']) ? $config['private_key']() : $config['private_key'];
 
         // Configure SnapBi
-        SnapBi\Config::$isProduction = config('midtrans.environment') === 'production';
-        SnapBi\Config::$snapBiClientId = $config['client_id'];
-        SnapBi\Config::$snapBiClientSecret = $config['client_secret'];
-        SnapBi\Config::$snapBiPrivateKey = $privateKey;
-        SnapBi\Config::$snapBiPartnerId = $config['partner_id'];
-        SnapBi\Config::$snapBiMerchantId = $config['merchant_id'];
-        SnapBi\Config::$snapBiChannelId = $config['channel_id'] ?? '';
-        SnapBi\Config::$enableLogging = config('app.debug', false);
+        SnapBiConfig::$isProduction = config('midtrans.environment') === 'production';
+        SnapBiConfig::$snapBiClientId = $config['client_id'];
+        SnapBiConfig::$snapBiClientSecret = $config['client_secret'];
+        SnapBiConfig::$snapBiPrivateKey = $privateKey;
+        SnapBiConfig::$snapBiPartnerId = $config['partner_id'];
+        SnapBiConfig::$snapBiMerchantId = $config['merchant_id'];
+        SnapBiConfig::$snapBiChannelId = $config['channel_id'] ?? '';
+        SnapBiConfig::$enableLogging = config('app.debug', false);
 
         $orderId = 'Q-' . (int) (microtime(true) * 1000) . '-' . random_int(1000, 9999);
 
