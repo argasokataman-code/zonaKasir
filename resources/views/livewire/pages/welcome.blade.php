@@ -415,14 +415,37 @@ state(['locale' => $locale]);
         <p class="mt-4 text-gray-600 max-w-2xl mx-auto text-base sm:text-lg">{{ __('landing.pricing_subtitle') }}</p>
       </div>
 
+      <div x-data="{ annual: false }">
+      {{-- Billing toggle --}}
+      <div class="flex justify-center mb-10">
+        <div class="inline-flex items-center bg-white border border-gray-200 rounded-full p-1 shadow-sm">
+          <button type="button" x-on:click="annual = false"
+                  class="px-5 py-2 rounded-full text-sm font-semibold transition-colors"
+                  :class="annual ? 'text-gray-500' : 'bg-zonakasir-primary text-white'">
+            {{ __('landing.billing_monthly') }}
+          </button>
+          <button type="button" x-on:click="annual = true"
+                  class="px-5 py-2 rounded-full text-sm font-semibold transition-colors flex items-center gap-2"
+                  :class="annual ? 'bg-zonakasir-primary text-white' : 'text-gray-500'">
+            {{ __('landing.billing_annual') }}
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                  :class="annual ? 'bg-white/20 text-white' : 'bg-green-100 text-green-700'">{{ __('landing.save_two_months') }}</span>
+          </button>
+        </div>
+      </div>
+
       <div class="grid md:grid-cols-2 gap-6 lg:gap-8 items-stretch">
         {{-- Starter --}}
         <div class="bg-white rounded-3xl p-7 sm:p-9 border border-gray-200 flex flex-col">
           <h3 class="text-xl font-bold text-gray-900">{{ __('landing.plan_starter') }}</h3>
           <p class="mt-2 text-sm text-gray-500">{{ __('landing.plan_starter_desc') }}</p>
-          <div class="mt-5 flex items-baseline gap-1">
+          <div class="mt-5 flex items-baseline gap-1" x-show="!annual">
             <span class="text-4xl font-extrabold text-gray-900">IDR 25.000</span>
             <span class="text-gray-400 font-medium">{{ __('landing.price_month') }}</span>
+          </div>
+          <div class="mt-5 flex items-baseline gap-1" x-show="annual" x-cloak>
+            <span class="text-4xl font-extrabold text-gray-900">IDR 249.000</span>
+            <span class="text-gray-400 font-medium">{{ __('landing.price_year') }}</span>
           </div>
           <ul class="mt-7 space-y-3 flex-1">
             @foreach([__('landing.plan_starter_1'), __('landing.plan_starter_2'), __('landing.plan_starter_3'), __('landing.plan_starter_4'), __('landing.plan_starter_5')] as $inc)
@@ -442,9 +465,13 @@ state(['locale' => $locale]);
           <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-zonakasir-primary text-white text-xs font-bold px-4 py-1.5 rounded-full whitespace-nowrap">{{ __('landing.plan_popular') }}</span>
           <h3 class="text-xl font-bold text-white">{{ __('landing.plan_business') }}</h3>
           <p class="mt-2 text-sm text-gray-400">{{ __('landing.plan_business_desc') }}</p>
-          <div class="mt-5 flex items-baseline gap-1">
+          <div class="mt-5 flex items-baseline gap-1" x-show="!annual">
             <span class="text-4xl font-extrabold text-white">IDR 49.000</span>
             <span class="text-gray-500 font-medium">{{ __('landing.price_month') }}</span>
+          </div>
+          <div class="mt-5 flex items-baseline gap-1" x-show="annual" x-cloak>
+            <span class="text-4xl font-extrabold text-white">IDR 490.000</span>
+            <span class="text-gray-500 font-medium">{{ __('landing.price_year') }}</span>
           </div>
           <ul class="mt-7 space-y-3 flex-1">
             @foreach([__('landing.plan_business_1'), __('landing.plan_business_2'), __('landing.plan_business_3'), __('landing.plan_business_4'), __('landing.plan_business_5')] as $inc)
@@ -458,6 +485,7 @@ state(['locale' => $locale]);
             {{ __('landing.plan_cta') }}
           </a>
         </div>
+      </div>
       </div>
     </div>
   </section>
