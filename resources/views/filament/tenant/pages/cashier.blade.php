@@ -194,7 +194,7 @@
             <div class="mb-4 grid grid-cols-2 gap-2 md:grid-cols-4">
               <template x-for="paymentMethod in paymentMethods">
                 <div
-                  x-on:click="cartDetail['payment_method_id'] = paymentMethod.id; $wire.cartDetail['payment_method_id'] = paymentMethod.id;"
+                  x-on:click="cartDetail['payment_method_id'] = paymentMethod.id; $wire.cartDetail = {...$wire.cartDetail, payment_method_id: paymentMethod.id};"
                   class="flex cursor-pointer justify-center rounded-md border-none px-3 py-2 text-xs hover:scale-105 dark:text-white md:text-sm"
                   :class="cartDetail['payment_method_id'] == paymentMethod.id ? 'bg-zonakasir-primary text-white' :
                       'dark:bg-gray-900 bg-gray-300 '"
