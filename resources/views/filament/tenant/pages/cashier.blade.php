@@ -310,6 +310,26 @@
     </x-slot>
   </x-filament::modal>
 
+  {{-- Midtrans Payment Waiting State --}}
+  <div id="midtrans-waiting" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm">
+    <div class="text-center max-w-md mx-auto p-8">
+      <div class="mb-6">
+        <svg class="animate-spin h-16 w-16 text-zonakasir-primary mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.074z"></path>
+        </svg>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">{{ __('Waiting for Payment') }}</h2>
+      <p class="text-gray-600 dark:text-gray-400 mb-2">{{ __('Scan QR Code or open link below') }}</p>
+      <div id="midtrans-qr-url" class="text-sm text-blue-500 break-all mb-6"></div>
+      <a id="midtrans-qr-link" href="#" target="_blank"
+         class="inline-block bg-zonakasir-primary text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 mb-4">
+        {{ __('Open Payment Page') }}
+      </a>
+      <p class="text-xs text-gray-400">{{ __('After payment, page will refresh automatically') }}</p>
+    </div>
+  </div>
+
   @include('partials.receipt-preview')
   <x-filament::modal id="modal-selected-table" width="xl" :close-by-clicking-away="false" :close-by-escaping="false">
     <div class="grid grid-cols-4 gap-4">
@@ -501,48 +521,50 @@
     window.zonakasirLocale = @js($locale);
     let selling = null;
 
-    // Load Midtrans Snap.js
-    const midtransSnapScript = document.createElement('script');
-    midtransSnapScript.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
-    midtransSnapScript.setAttribute('data-client-key', @js(config('midtrans.client_key')));
-    document.body.appendChild(midtransSnapScript);
+    // Load Midtrans Snap.js synchronously
+    (function loadSnap() {
+      const script = document.createElement('script');
+      script.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
+      script.setAttribute('data-client-key', @js(config('midtrans.client_key')));
+      script.onload = function() { console.log('Midtrans Snap.js loaded'); };
+      script.onerror = function() { console.error('Failed to load Midtrans Snap.js'); };
+      document.head.appendChild(script);
+    })();
 
     // Handle Midtrans payment event from Livewire
     $wire.on('midtrans-payment', (event) => {
       const { token, redirect_url, payment_type, amount } = event;
 
-      if (!window.snap) {
-        console.warn('Midtrans Snap not loaded yet');
-        // Fallback: open redirect URL in new tab
-        window.open(redirect_url, '_blank');
-        return;
-      }
+      // Show waiting state on POS
+      document.getElementById('midtrans-qr-url').href = redirect_url;
+      document.getElementById('midtrans-qr-url').textContent = redirect_url;
+      document.getElementById('midtrans-waiting').classList.remove('hidden');
+      document.getElementById('midtrans-waiting').classList.add('flex');
 
-      window.snap.pay(token, {
-        // Optional actions
-        onSuccess: function(result) {
-          console.log('Midtrans payment success:', result);
-          // Reload to get updated status
-          $wire.set('cartItems', []);
-          window.location.reload();
-        },
-        onPending: function(result) {
-          console.log('Midtrans payment pending:', result);
-          // Show pending notification
-          new FilamentNotification()
-            .title('@lang('Payment pending')')
-            .body('@lang('Please complete the payment')')
-            .info()
-            .send();
-        },
-        onError: function(result) {
-          console.error('Midtrans payment error:', result);
-          new FilamentNotification()
-            .title('@lang('Payment failed')')
-            .danger()
-            .send();
-        }
-      });
+      if (window.snap) {
+        window.snap.pay(token, {
+          onSuccess: function(result) {
+            console.log('Midtrans payment success:', result);
+            $wire.set('cartItems', []);
+            window.location.reload();
+          },
+          onPending: function(result) {
+            console.log('Midtrans payment pending:', result);
+            // Keep waiting state visible
+          },
+          onError: function(result) {
+            console.error('Midtrans payment error:', result);
+            document.getElementById('midtrans-waiting').classList.add('hidden');
+            new FilamentNotification()
+              .title('@lang('Payment failed')')
+              .danger()
+              .send();
+          }
+        });
+      } else {
+        // Fallback: if Snap.js not loaded, show redirect URL
+        console.warn('Snap.js not loaded, showing redirect URL');
+      }
     });
 
     $wire.on('selling-created', (event) => {
