@@ -3,23 +3,23 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="zonaKasir merupakan aplikasi point of sale (POS) yang memudahkan pengelolaan bisnis Anda. unduh secara gratis">
-    <meta name="keywords" content="POS, open-source, gratis, free, murah">
+    <meta name="description" content="zonaKasir adalah platform point of sale (POS) berbasis cloud untuk bisnis Indonesia — kasir, stok, dan laporan dalam satu aplikasi.">
+    <meta name="keywords" content="POS, point of sale, kasir, aplikasi kasir, manajemen stok, Indonesia">
     <meta name="author" content="zonaKasir">
     <link rel="shortcut icon" type="image/svg+xml" href="/assets/logo/icon.svg">
 
     <!-- Open Graph tags for social media -->
-    <meta property="og:title" content="zonaKasir - Aplikasi Point of Sale (POS) Gratis">
-    <meta property="og:description" content="zonaKasir merupakan aplikasi point of sale (POS) yang memudahkan pengelolaan bisnis Anda. unduh secara gratis">
+    <meta property="og:title" content="zonaKasir - Platform Point of Sale (POS) untuk Bisnis Indonesia">
+    <meta property="og:description" content="zonaKasir adalah platform point of sale (POS) berbasis cloud untuk bisnis Indonesia — kasir, stok, dan laporan dalam satu aplikasi.">
     <meta property="og:url" content="{{ env('APP_URL') }}">
     <meta property="og:image" content="{{ env('APP_URL') }}/assets/logo/logo.svg">
     <meta property="og:type" content="website">
 
     <!-- Twitter Card tags for Twitter -->
-    <meta name="twitter:card" content="zonaKasir - Aplikasi Point of Sale (POS) Gratis">
+    <meta name="twitter:card" content="zonaKasir - Platform Point of Sale (POS) untuk Bisnis Indonesia">
     <meta name="twitter:site" content="@yourtwitterhandle">
-    <meta name="twitter:title" content="zonaKasir - Aplikasi Point of Sale (POS) Gratis">
-    <meta name="twitter:description" content="zonaKasir merupakan aplikasi point of sale (POS) yang memudahkan pengelolaan bisnis Anda. unduh secara gratis">
+    <meta name="twitter:title" content="zonaKasir - Platform Point of Sale (POS) untuk Bisnis Indonesia">
+    <meta name="twitter:description" content="zonaKasir adalah platform point of sale (POS) berbasis cloud untuk bisnis Indonesia — kasir, stok, dan laporan dalam satu aplikasi.">
     <meta name="twitter:image" content="{{ env('APP_URL') }}/assets/logo/logo.svg">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
