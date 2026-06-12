@@ -22,7 +22,7 @@ return new class extends Migration
             $table->double('fee_rate_value')->nullable();
             $table->timestamps();
 
-            $table->index(['ledgerable_type', 'ledgerable_id']);
+            // morphs() already creates index on (ledgerable_type, ledgerable_id)
             $table->index(['reference_type', 'reference_id']);
             $table->index('created_at');
         });
