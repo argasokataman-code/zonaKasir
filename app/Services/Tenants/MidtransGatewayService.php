@@ -23,31 +23,112 @@ class MidtransGatewayService
         private readonly LedgerService $ledger,
     ) {}
 
+    private const CORE_API_URLS = [
+        'sandbox' => 'https://api.sandbox.midtrans.com/v2',
+        'production' => 'https://api.midtrans.com/v2',
+    ];
+
     /**
-     * Generate Snap transaction token for a selling.
+     * Generate Snap transaction token for credit_card, or Core API charge for QRIS/GoPay.
      */
     public function createSnapToken(Selling $selling, string $midtransType): array
     {
         $about = About::first();
         $this->validateCredentials();
 
+        $orderId = $this->generateOrderId();
+        $grossAmount = (int) $selling->total_price;
+
+        $serverKey = config('midtrans.server_key');
+
+        // QRIS and GoPay use Core API charge (not Snap) to get QR code directly
+        if (in_array($midtransType, ['qris', 'gopay', 'shopeepay', 'bank_transfer'])) {
+            return $this->chargeCoreApi($orderId, $grossAmount, $midtransType, $selling, $serverKey);
+        }
+
+        // Credit card and others use Snap
+        return $this->createSnapTokenForPayment($selling, $orderId, $grossAmount, $midtransType, $serverKey);
+    }
+
+    private function chargeCoreApi(
+        string $orderId,
+        int $grossAmount,
+        string $midtransType,
+        Selling $selling,
+        string $serverKey,
+    ): array {
+        $params = [
+            'payment_type' => $midtransType,
+            'transaction_details' => [
+                'order_id' => $orderId,
+                'gross_amount' => $grossAmount,
+            ],
+        ];
+
+        // For QRIS, add optional acquirer
+        if ($midtransType === 'qris') {
+            $params['acquirer'] = 'gopay';
+        }
+
+        $response = Http::withBasicAuth($serverKey, '')
+            ->withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ])
+            ->post(self::CORE_API_URLS[config('midtrans.environment', 'sandbox')] . '/' . $orderId . '/charge', $params);
+
+        if ($response->failed()) {
+            Log::error('Midtrans Core API charge failed', [
+                'selling_id' => $selling->id,
+                'payment_type' => $midtransType,
+                'status' => $response->status(),
+                'error' => $response->json(),
+            ]);
+            throw new \RuntimeException('Gagal membuat pembayaran Midtrans: ' . $this->getErrorMessage($response));
+        }
+
+        $data = $response->json();
+
+        // Create payment record
+        $payment = MidtransPayment::create([
+            'selling_id' => $selling->id,
+            'order_id' => $orderId,
+            'gross_amount' => $selling->total_price,
+            'payment_type' => $midtransType,
+            'status' => 'pending',
+        ]);
+
+        // Core API response contains qr_code_url for QRIS
+        return [
+            'token' => null,
+            'redirect_url' => $data['qr_code_url'] ?? $data['redirect_url'] ?? '',
+            'qr_string' => $data['qr_string'] ?? null,
+            'payment_type' => $midtransType,
+            'midtrans_payment_id' => $payment->id,
+            'api' => 'core_api',
+        ];
+    }
+
+    private function createSnapTokenForPayment(
+        Selling $selling,
+        string $orderId,
+        int $grossAmount,
+        string $midtransType,
+        string $serverKey,
+    ): array {
         $params = [
             'transaction_details' => [
-                'order_id' => $this->generateOrderId(),
-                'gross_amount' => (int) $selling->total_price,
+                'order_id' => $orderId,
+                'gross_amount' => $grossAmount,
             ],
             'customer_details' => [
                 'first_name' => $selling->member?->name ?? 'Guest',
             ],
-            'credit_card' => $midtransType === 'credit_card' ? ['secure' => true] : null,
         ];
 
-        // Remove null credit_card if not applicable
-        if ($params['credit_card'] === null) {
-            unset($params['credit_card']);
+        if ($midtransType === 'credit_card') {
+            $params['credit_card'] = ['secure' => true];
         }
-
-        $serverKey = config('midtrans.server_key');
 
         $response = Http::withBasicAuth($serverKey, '')
             ->withHeaders([
@@ -67,18 +148,21 @@ class MidtransGatewayService
 
         $data = $response->json();
 
-        // Create payment record
         $payment = MidtransPayment::create([
             'selling_id' => $selling->id,
-            'order_id' => $params['transaction_details']['order_id'],
+            'order_id' => $orderId,
             'gross_amount' => $selling->total_price,
+            'payment_type' => $midtransType,
             'status' => 'pending',
         ]);
 
         return [
             'token' => $data['token'],
             'redirect_url' => $data['redirect_url'],
+            'qr_string' => null,
+            'payment_type' => $midtransType,
             'midtrans_payment_id' => $payment->id,
+            'api' => 'snap',
         ];
     }
 
