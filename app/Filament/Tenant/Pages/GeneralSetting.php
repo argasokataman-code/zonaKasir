@@ -194,67 +194,10 @@ class GeneralSetting extends Page implements HasActions, HasForms
                         ->statePath('profile')
                         ->translateLabel()
                         ->schema(Profile::form()),
-                    Tabs\Tab::make('Payment Gateway')
-                        ->statePath('about')
-                        ->translateLabel()
-                        ->schema([
-                            \Filament\Forms\Components\TextInput::make('midtrans_merchant_id')
-                                ->label('Merchant ID')
-                                ->password()
-                                ->revealable()
-                                ->translateLabel(),
-                            \Filament\Forms\Components\TextInput::make('midtrans_client_key')
-                                ->label('Client Key')
-                                ->password()
-                                ->revealable()
-                                ->translateLabel(),
-                            \Filament\Forms\Components\TextInput::make('midtrans_server_key')
-                                ->label('Server Key')
-                                ->password()
-                                ->revealable()
-                                ->translateLabel(),
-                            \Filament\Forms\Components\TextInput::make('platform_fee_percent')
-                                ->label('Platform Fee (%)')
-                                ->numeric()
-                                ->step('0.01')
-                                ->minValue(0)
-                                ->maxValue(10)
-                                ->default(1.00)
-                                ->translateLabel(),
-                            \Filament\Forms\Components\Select::make('payout_schedule')
-                                ->label('Payout Schedule')
-                                ->options([
-                                    'daily' => 'Daily',
-                                    'weekly' => 'Weekly',
-                                    'manual' => 'Manual',
-                                ])
-                                ->default('manual')
-                                ->translateLabel(),
-                            \Filament\Forms\Components\Section::make('Bank Account')
-                                ->schema([
-                                    \Filament\Forms\Components\TextInput::make('bank_name')
-                                        ->label('Bank Name')
-                                        ->placeholder('BCA, Mandiri, BNI, BRI, etc.')
-                                        ->translateLabel(),
-                                    \Filament\Forms\Components\TextInput::make('bank_account_name')
-                                        ->label('Account Name')
-                                        ->translateLabel(),
-                                    \Filament\Forms\Components\TextInput::make('bank_account_number')
-                                        ->label('Account Number')
-                                        ->translateLabel(),
-                                    \Filament\Forms\Components\TextInput::make('bank_code')
-                                        ->label('Bank Code')
-                                        ->placeholder('014 for BCA, 008 for Mandiri, etc.')
-                                        ->maxLength(10)
-                                        ->translateLabel(),
-                                ]),
-                            \Filament\Forms\Components\Actions::make([
-                                Actions\Action::make('Save')
-                                    ->translateLabel()
-                                    ->requiresConfirmation()
-                                    ->action('saveAbout'),
-                            ]),
-                        ]),
+            Tabs\Tab::make('Payment Gateway')
+                ->statePath('about')
+                ->translateLabel()
+                ->schema(About::paymentGatewayForm()),
                 ]),
         ]);
     }
