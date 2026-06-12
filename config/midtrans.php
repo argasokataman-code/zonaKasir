@@ -46,10 +46,10 @@ return [
     'snapbi' => [
         'client_id' => env('MIDTRANS_SNAPBI_CLIENT_ID'),
         'client_secret' => env('MIDTRANS_SNAPBI_CLIENT_SECRET'),
-        'private_key' => function () {
+        'private_key' => env('MIDTRANS_SNAPBI_PRIVATE_KEY', function () {
             $path = storage_path('app/private-key.pem');
             return file_exists($path) ? file_get_contents($path) : null;
-        },
+        }),
         'partner_id' => env('MIDTRANS_SNAPBI_PARTNER_ID'),
         'channel_id' => env('MIDTRANS_SNAPBI_CHANNEL_ID'),
         'merchant_id' => env('MIDTRANS_SNAPBI_MERCHANT_ID'),

@@ -19,11 +19,14 @@ class SnapBiQrisService
         $config = config('midtrans.snapbi');
         $this->validateConfig($config);
 
+        // Resolve Closure values
+        $privateKey = is_callable($config['private_key']) ? $config['private_key']() : $config['private_key'];
+
         // Configure SnapBi
         SnapBi\Config::$isProduction = config('midtrans.environment') === 'production';
         SnapBi\Config::$snapBiClientId = $config['client_id'];
         SnapBi\Config::$snapBiClientSecret = $config['client_secret'];
-        SnapBi\Config::$snapBiPrivateKey = $config['private_key'];
+        SnapBi\Config::$snapBiPrivateKey = $privateKey;
         SnapBi\Config::$snapBiPartnerId = $config['partner_id'];
         SnapBi\Config::$snapBiMerchantId = $config['merchant_id'];
         SnapBi\Config::$snapBiChannelId = $config['channel_id'] ?? '';
@@ -81,11 +84,23 @@ class SnapBiQrisService
 
     private function validateConfig(array $config): void
     {
-        $required = ['client_id', 'client_secret', 'private_key', 'partner_id', 'merchant_id'];
+        $required = ['client_id', 'client_secret', 'partner_id', 'merchant_id'];
         foreach ($required as $key) {
-            if (empty($config[$key])) {
+            $value = $config[$key];
+            if (is_callable($value)) {
+                $value = $value();
+            }
+            if (empty($value)) {
                 throw new \RuntimeException("SnapBi {$key} belum dikonfigurasi di .env");
             }
+        }
+        // Private key must be loaded from file
+        $privateKey = $config['private_key'];
+        if (is_callable($privateKey)) {
+            $privateKey = $privateKey();
+        }
+        if (empty($privateKey)) {
+            throw new \RuntimeException("SnapBi private_key belum ada di storage/app/private-key.pem");
         }
     }
 }
