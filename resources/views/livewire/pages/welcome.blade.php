@@ -421,7 +421,7 @@ state(['locale' => $locale]);
           <h3 class="text-xl font-bold text-gray-900">{{ __('landing.plan_starter') }}</h3>
           <p class="mt-2 text-sm text-gray-500">{{ __('landing.plan_starter_desc') }}</p>
           <div class="mt-5 flex items-baseline gap-1">
-            <span class="text-4xl font-extrabold text-gray-900">IDR 50.000</span>
+            <span class="text-4xl font-extrabold text-gray-900">IDR 25.000</span>
             <span class="text-gray-400 font-medium">{{ __('landing.price_month') }}</span>
           </div>
           <ul class="mt-7 space-y-3 flex-1">
@@ -443,7 +443,7 @@ state(['locale' => $locale]);
           <h3 class="text-xl font-bold text-white">{{ __('landing.plan_business') }}</h3>
           <p class="mt-2 text-sm text-gray-400">{{ __('landing.plan_business_desc') }}</p>
           <div class="mt-5 flex items-baseline gap-1">
-            <span class="text-4xl font-extrabold text-white">IDR 199.000</span>
+            <span class="text-4xl font-extrabold text-white">IDR 49.000</span>
             <span class="text-gray-500 font-medium">{{ __('landing.price_month') }}</span>
           </div>
           <ul class="mt-7 space-y-3 flex-1">
