@@ -29,7 +29,7 @@ class MidtransGatewayService
     public function createSnapToken(Selling $selling, string $midtransType): array
     {
         $about = About::first();
-        $this->validateCredentials($about);
+        $this->validateCredentials();
 
         $params = [
             'transaction_details' => [
@@ -47,12 +47,14 @@ class MidtransGatewayService
             unset($params['credit_card']);
         }
 
-        $response = Http::withBasicAuth($about->midtrans_server_key, '')
+        $serverKey = config('midtrans.server_key');
+
+        $response = Http::withBasicAuth($serverKey, '')
             ->withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ])
-            ->post($this->getApiUrl($about->midtrans_merchant_id), $params);
+            ->post($this->getApiUrl(), $params);
 
         if ($response->failed()) {
             Log::error('Midtrans Snap token failed', [
@@ -251,10 +253,13 @@ class MidtransGatewayService
         return $response->json('error_messages.0') ?? 'Unknown error';
     }
 
-    private function validateCredentials(About $about): void
+    private function validateCredentials(): void
     {
-        if (empty($about->midtrans_server_key) || $about->midtrans_server_key === null) {
-            throw new \RuntimeException('Midtrans server key belum dikonfigurasi. Silakan isi di Pengaturan Toko.');
+        $serverKey = config('midtrans.server_key');
+        $merchantId = config('midtrans.merchant_id');
+
+        if (empty($serverKey) || empty($merchantId)) {
+            throw new \RuntimeException('Midtrans server key atau merchant ID belum dikonfigurasi di .env');
         }
     }
 }
