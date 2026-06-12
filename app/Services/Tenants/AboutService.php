@@ -20,6 +20,15 @@ class AboutService
                 'shop_location',
                 'business_type',
                 'other_business_type',
+                'midtrans_merchant_id',
+                'midtrans_client_key',
+                'midtrans_server_key',
+                'platform_fee_percent',
+                'payout_schedule',
+                'bank_name',
+                'bank_account_name',
+                'bank_account_number',
+                'bank_code',
             ]));
 
         $owner = User::owner()->first();
