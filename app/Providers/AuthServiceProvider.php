@@ -80,6 +80,9 @@ class AuthServiceProvider extends ServiceProvider
             if ($user->is_owner) {
                 return true;
             }
+            if ($user instanceof Admin) {
+                return true;
+            }
             if (in_array($ability, $this->defaultAbility)) {
                 return true;
             }
