@@ -83,7 +83,7 @@ class PaymentMethodResource extends Resource
                     ->label(__('Type'))
                     ->badge()
                     ->getStateUsing(fn (PaymentMethod $m) => $m->isMidtrans() ? 'Midtrans' : 'Cash')
-                    ->color(fn (string $s): string => $s === 'Cash' ? 'success' : 'warning'),
+                    ->color(fn (string $state): string => $state === 'Cash' ? 'success' : 'warning'),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
