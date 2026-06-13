@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\Tenants\Transaction;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tenants\CashDrawer;
+use App\Models\Tenants\User;
+use App\Notifications\CashDrawerAlert;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -38,6 +40,12 @@ class CashDrawerController extends Controller
 
             DB::commit();
 
+            if ($lastOpenedCashDrawer) {
+                User::all()->each(function ($user) use ($lastOpenedCashDrawer) {
+                    $user->notify(new \App\Notifications\CashDrawerAlert($lastOpenedCashDrawer, 'opened'));
+                });
+            }
+
             return $this->buildResponse()
                 ->setData($lastOpenedCashDrawer)
                 ->setMessage('Cash drawer opened successfully')
@@ -69,8 +77,14 @@ class CashDrawerController extends Controller
             $lastOpenedCashDrawer->update([
                 'closed_by' => auth()->id()
             ]);
-            
+
             DB::commit();
+
+            if ($lastOpenedCashDrawer) {
+                User::all()->each(function ($user) use ($lastOpenedCashDrawer) {
+                    $user->notify(new \App\Notifications\CashDrawerAlert($lastOpenedCashDrawer, 'closed'));
+                });
+            }
 
             return $this->buildResponse()
                 ->setData($lastOpenedCashDrawer)

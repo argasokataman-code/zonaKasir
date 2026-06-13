@@ -25,6 +25,14 @@ class CheckBilling extends Command
         foreach ($expiredTrials as $sub) {
             $sub->update(['status' => 'expired']);
             $this->line("  Trial expired: {$sub->tenant_id}");
+            // Notify tenant users about trial expiration
+            if ($sub->tenant) {
+                $sub->tenant->users()->each(function ($user) {
+                    $user->notify(new \App\Notifications\SubscriptionExpiring(
+                        "Your trial period has ended. Please subscribe to continue using the service."
+                    ));
+                });
+            }
         }
 
         // Expire active subscriptions that have ended
@@ -36,6 +44,14 @@ class CheckBilling extends Command
         foreach ($ended as $sub) {
             $sub->update(['status' => 'expired']);
             $this->line("  Subscription ended: {$sub->tenant_id}");
+            // Notify tenant users about expiration
+            if ($sub->tenant) {
+                $sub->tenant->users()->each(function ($user) {
+                    $user->notify(new \App\Notifications\SubscriptionExpiring(
+                        "Your subscription plan has expired. Please renew at the dashboard."
+                    ));
+                });
+            }
         }
 
         $this->info('Done.');

@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use App\Models\Tenants\Member;
+use App\Models\Tenants\User;
+use App\Notifications\MemberRegistered;
 
 class MemberObserver
 {
@@ -21,5 +23,12 @@ class MemberObserver
             // Generate the new customer code
             $member->code = 'CUS'.str_pad($lastCount + 1, 4, '0', STR_PAD_LEFT);
         }
+    }
+
+    public function created(Member $member): void
+    {
+        User::all()->each(function ($user) use ($member) {
+            $user->notify(new MemberRegistered($member));
+        });
     }
 }
