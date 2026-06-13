@@ -4,29 +4,37 @@ namespace App\Services\Tenants;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
 
 class SnapBiPayoutProvider implements DisbursementProvider
 {
+    private ?string $cachedToken = null;
+
     private function getAccessToken(): string
     {
-        return Cache::remember('midtrans_snapbi_token', 3600, function () {
-            $config = config('midtrans.snapbi');
-            
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-            ])->post('https://api.sandbox.midtrans.com/snapbi/v1.0/access-token', [
-                'clientId' => $config['client_id'],
-                'clientSecret' => $config['client_secret'],
+        if ($this->cachedToken !== null) {
+            return $this->cachedToken;
+        }
+
+        $config = config('midtrans.snapbi');
+
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+        ])->post('https://api.sandbox.midtrans.com/snapbi/v1.0/access-token', [
+            'clientId' => $config['client_id'],
+            'clientSecret' => $config['client_secret'],
+        ]);
+
+        if ($response->failed()) {
+            Log::error('SnapBI Access Token failed', [
+                'status' => $response->status(),
+                'error' => $response->json(),
             ]);
+            throw new \RuntimeException('Gagal mendapatkan Access Token SnapBI: ' . ($response->json('responseMessage') ?? 'Unknown error'));
+        }
 
-            if ($response->failed()) {
-                Log::error('SnapBI Access Token failed', ['error' => $response->json()]);
-                throw new \RuntimeException('Gagal mendapatkan Access Token SnapBI');
-            }
+        $this->cachedToken = $response->json('accessToken');
 
-            return $response->json('accessToken');
-        });
+        return $this->cachedToken;
     }
 
     private function generateSignature(string $timestamp, string $path, string $payload, string $clientSecret): string
