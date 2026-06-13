@@ -44,6 +44,14 @@ return [
             'driver' => 'session',
             'provider' => 'tenants',
         ],
+        'member' => [
+            'driver' => 'session',
+            'provider' => 'members',
+        ],
+        'member_api' => [
+            'driver' => 'sanctum',
+            'provider' => 'members',
+        ],
     ],
 
     /*
@@ -72,6 +80,11 @@ return [
         'tenants' => [
             'driver' => 'eloquent',
             'model' => App\Models\Tenants\User::class,
+        ],
+
+        'members' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Tenants\Member::class,
         ],
 
         // 'users' => [

@@ -20,6 +20,14 @@ class Voucher extends Model
 
     protected static $recordEvents = ['created', 'updated', 'deleted'];
 
+    protected function casts(): array
+    {
+        return [
+            'start_date' => 'date',
+            'expired' => 'date',
+        ];
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults();

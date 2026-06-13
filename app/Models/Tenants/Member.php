@@ -2,29 +2,37 @@
 
 namespace App\Models\Tenants;
 
-use App\Models\Tenants\LoyaltyPointLog;
-use App\Models\Tenants\Receivable;
-use App\Models\Tenants\Selling;
-use App\Models\Tenants\Voucher;
-use App\Models\Tenants\WalletTransaction;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @mixin IdeHelperMember
  */
-class Member extends Model
+class Member extends Authenticatable
 {
-    use HasFactory, SoftDeletes, LogsActivity;
+    use HasApiTokens, HasFactory, SoftDeletes, LogsActivity, Notifiable;
 
     protected $guarded = ['id'];
 
+    protected $hidden = ['password', 'remember_token'];
+
     protected static $recordEvents = ['created', 'updated', 'deleted'];
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'joined_date' => 'date',
+            'password' => 'hashed',
+        ];
+    }
 
     public function getActivitylogOptions(): LogOptions
     {

@@ -70,6 +70,32 @@ Route::middleware([
         Route::post('/member/login', [AuthenticatedSessionController::class, 'store'])
             ->middleware('guest')
             ->name('filament.tenant.auth.login.post');
+
+        // Member self-service portal
+        Route::prefix('portal')->name('member.portal.')->group(function () {
+            Route::get('/login', [\App\Http\Controllers\MemberPortal\Auth\AuthenticatedSessionController::class, 'create'])
+                ->middleware('guest')
+                ->name('login');
+            Route::post('/login', [\App\Http\Controllers\MemberPortal\Auth\AuthenticatedSessionController::class, 'store'])
+                ->middleware('guest');
+
+            Route::middleware('auth:member')->group(function () {
+                Route::get('/dashboard', [\App\Http\Controllers\MemberPortal\MemberDashboardController::class, 'index'])
+                    ->name('dashboard');
+                Route::get('/purchases', [\App\Http\Controllers\MemberPortal\MemberPurchaseHistoryController::class, 'index'])
+                    ->name('purchases');
+                Route::get('/profile', [\App\Http\Controllers\MemberPortal\MemberProfileController::class, 'edit'])
+                    ->name('profile');
+                Route::put('/profile', [\App\Http\Controllers\MemberPortal\MemberProfileController::class, 'update'])
+                    ->name('profile.update');
+                Route::get('/wallet', [\App\Http\Controllers\MemberPortal\MemberWalletController::class, 'index'])
+                    ->name('wallet');
+                Route::get('/vouchers', [\App\Http\Controllers\MemberPortal\MemberVoucherController::class, 'index'])
+                    ->name('vouchers');
+                Route::post('/logout', [\App\Http\Controllers\MemberPortal\Auth\AuthenticatedSessionController::class, 'destroy'])
+                    ->name('logout');
+            });
+        });
     });
 
 Route::middleware([

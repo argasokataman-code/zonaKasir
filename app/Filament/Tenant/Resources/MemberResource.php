@@ -48,6 +48,11 @@ class MemberResource extends Resource
                 TextInput::make('email')
                     ->label(__('Contact'))
                     ->placeholder(__('Please provide a valid email address or whatsapp/phone number.')),
+                TextInput::make('password')
+                    ->label(__('Portal Password'))
+                    ->password()
+                    ->nullable()
+                    ->hint(__('Leave empty to keep current. Required for customer portal login.')),
                 DatePicker::make('joined_date')
                     ->translateLabel(),
             ]);
