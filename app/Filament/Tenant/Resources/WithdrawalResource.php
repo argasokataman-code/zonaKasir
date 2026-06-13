@@ -24,13 +24,18 @@ class WithdrawalResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-up-on-square';
 
-    protected static ?string $navigationLabel = 'Withdrawals';
+    protected static ?string $navigationLabel = 'Manage Withdrawals';
 
-    protected static ?string $slug = 'withdrawals';
+    protected static ?string $slug = 'manage-withdrawals';
+
+    public static function canAccess(): bool
+    {
+        return can('manage withdrawals');
+    }
 
     public static function getBreadcrumb(): string
     {
-        return __('Withdrawals');
+        return __('Manage Withdrawals');
     }
 
     public static function table(Table $table): Table
