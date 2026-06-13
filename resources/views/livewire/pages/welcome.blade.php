@@ -145,22 +145,20 @@ state(['locale' => $locale]);
         </a>
       </div>
 
-      {{-- Glass info chips --}}
-      <div class="reveal reveal-delay-4 mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-2xl mx-auto">
+      {{-- Quick highlights — borderless, lightweight --}}
+      <div class="reveal reveal-delay-4 mt-9 sm:mt-12 flex flex-wrap items-center justify-center gap-x-7 gap-y-4 sm:gap-x-10">
         @foreach([
           ['t' => __('landing.stat_cloud'), 's' => __('landing.stat_cloud_sub'), 'icon' => 'M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z'],
           ['t' => __('landing.stat_realtime'), 's' => __('landing.stat_realtime_sub'), 'icon' => 'M13 10V3L4 14h7v7l9-11h-7z'],
           ['t' => __('landing.stat_multi') . ' ' . __('landing.stat_multi_sub'), 's' => 'Web · Android', 'icon' => 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z'],
         ] as $chip)
-        <div class="flex items-center justify-center sm:justify-start gap-3 sm:gap-2.5 bg-white/[0.05] border border-white/10 rounded-2xl px-4 sm:px-5 py-3 sm:py-3.5 transition-colors hover:bg-white/[0.08]">
-          <div class="w-10 h-10 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-orange-500/30 to-orange-500/5 border border-orange-500/20 flex items-center justify-center flex-shrink-0">
-            <svg class="w-5 h-5 sm:w-4 sm:h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="{{ $chip['icon'] }}"/>
-            </svg>
-          </div>
-          <div class="min-w-0 text-left">
-            <p class="text-white font-bold text-sm sm:text-xs leading-tight">{{ $chip['t'] }}</p>
-            <p class="text-gray-400 text-xs sm:text-[11px] leading-tight mt-0.5">{{ $chip['s'] }}</p>
+        <div class="flex items-center gap-2.5">
+          <svg class="w-5 h-5 text-zonakasir-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="{{ $chip['icon'] }}"/>
+          </svg>
+          <div class="text-left">
+            <span class="text-white font-semibold text-sm leading-tight">{{ $chip['t'] }}</span>
+            <span class="text-gray-500 text-xs"> · {{ $chip['s'] }}</span>
           </div>
         </div>
         @endforeach
