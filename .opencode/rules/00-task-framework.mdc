@@ -21,14 +21,18 @@ Setiap kali task diberikan, WAJIB jalanin urutan ini. **No skip.**
   ```
 
 ### 🔍 FASE 2: SOURCE DISCOVERY (Verifikasi dari source, jangan halusinasi)
-Cari info dengan priority ini:
-1. **Dokumentasi project** — cek `docs/`, `README.md`, AGENTS.md
-2. **Aktual code** — `routes/`, `controllers/`, `models/`, `services/`, `tests/`
-3. **Test files** — ada test untuk feature ini atau tidak
-4. **Permission/config** — siapa berhak akses, env settings
-5. **Error/stack trace** — kalau bugfix, cari dari logs
+Cari info dengan priority ini — **pakai path langsung, jangan grep lama**:
 
-**Jangan:** Asumsi behavior. Verifikasi dari kode aktual.
+| Priority | Lokasi Aktual | Cara Cepat Akses |
+|----------|--------------|------------------|
+| 1. Docs project | `docs/README.md` → index<br>`docs/reports/` → audit<br>`docs/guides/` → quick fixes<br>`docs/planning/` → roadmap | Buka file `.md` langsung |
+| 2. Routes | `routes/tenant.php` (tenant API)<br>`routes/api.php` (central API)<br>`routes/web.php` (web) | `read routes/tenant.php` |
+| 3. Controllers | `app/Http/Controllers/Api/Tenants/` (API)<br>`app/Http/Controllers/` (base) | `read app/Http/Controllers/Api/Tenants/{Domain}/{Controller}.php` |
+| 4. Models | `app/Models/Tenants/` (multi-tenant)<br>`app/Models/` (central) | `read app/Models/Tenants/{Model}.php` |
+| 5. Services | `app/Services/` (shared)<br>`app/Services/Tenants/` (tenant) | `read app/Services/{Service}.php` |
+| 6. Filament | `app/Filament/Tenant/Resources/`<br>`app/Filament/Tenant/Pages/` | `read app/Filament/Tenant/Resources/{Resource}.php` |
+| 7. Tests | `tests/Feature/` (E2E/integration)<br>`tests/Unit/` (unit) | `read tests/Feature/{Path}/{Test}.php` |
+| 8. Config/Permission | `config/permission.php`<br>`config/tenancy.php`<br>`app/Policies/` | `read config/{file}.php` |
 
 **Output format:**
 ```
@@ -67,7 +71,7 @@ Jawab pertanyaan:
 
 ### 💻 FASE 4: CODE (Hanya file in-scope)
 - **Touch HANYA file di "In scope"** — jangan asal rambah
-- Follow security baseline:
+- Follow security baseline (see `.opencode/rules/02-security.mdc`):
   - Auth check server-side
   - Validation lengkap (bukan type-only)
   - RBAC permission check
@@ -79,6 +83,10 @@ Jawab pertanyaan:
 
 ### ✅ FASE 5: VERIFY (Test + manual check)
 - **Run test suite** — harus ALL PASS (untuk in-scope files)
+  - `php artisan test` (all)
+  - `php artisan test --filter=TestName` (specific)
+  - `php artisan test tests/Feature/Path/To/Test.php` (file)
+  - `vendor/bin/pest --filter="test name"` (direct)
 - **Manual smoke test:**
   - Happy path: Endpoint berfungsi sesuai spec
   - Invalid input: Validation error proper (400, not 500)
@@ -216,41 +224,30 @@ Untuk **trivial tasks** (typo fix, config one-liner, simple UI tweak, docs updat
 
 **JANGAN bikin dokumen sembarangan.** Sebelum create/update dokumen:
 
-### Allowed Folders (sesuai Lakasir structure):
+### Current Folder Structure:
 ```
-docs/                  ← Project docs (organized by domain/feature)
-  ├── api/             ← API docs
-  ├── features/        ← Feature specs
-  ├── planning/        ← Planning & roadmap
-  └── [etc per domain]
+docs/                    ← Project docs (by domain)
+  ├── guides/            ← Quick fixes, server access
+  ├── reports/           ← Audit & verification reports
+  ├── planning/          ← Feature plans & roadmap
+  ├── *.md              ← Root docs: API_RESPONSE_STANDARD, REBRANDING_PLAN, E2E_TESTING_REPORT
 
-.github/instructions/  ← GitHub/PR instruction summaries ONLY
-.cursor/               ← Cursor rules (.mdc files) ONLY
-README.md              ← Top-level reference
-AGENTS.md              ← Agent rules (already exists)
-AUDIT_REPORT.md        ← Audit findings
-QUICK_FIXES.md         ← Quick fix guide
+.opencode/               ← Agent instructions (opencode)
+  ├── rules/             ← Modular .mdc rule files
+
+.github/workflows/       ← CI/CD workflows (deploy, ssh-command)
 ```
 
-### Naming Consistency:
-- `.cursor/` → `kebab-case.mdc` (00-session-preamble.mdc, 01-task-rules.mdc)
-- `docs/` → `UPPERCASE-or-README.md` (IMPLEMENTATION.md, README.md, etc)
-- `docs/api/` → `resource-name.md` (products.md, users.md, transactions.md)
-- Root `.md` → DESCRIPTIVE-NAME.md (AUDIT_REPORT.md, QUICK_FIXES.md)
+### Naming Rules:
+- `.opencode/rules/` → `NN-descriptive-name.mdc` (00-task-framework.mdc)
+- `docs/` → `UPPERCASE.md` for standalone, `snake_case.md` for inside folders
+- Root `.md` → `DESCRIPTIVE-NAME.md`
 
-### BEFORE Creating Dokumen:
-- [ ] Folder already exists? Use it. Don't create new folder.
-- [ ] Dokumen sudah ada? Don't duplicate. Link or update instead.
-- [ ] File naming sesuai rule? (kebab-case, UPPERCASE, extension)
-- [ ] File ini akan tracked di git atau local-only?
-- [ ] File ini ter-reference di index/README atau orphan?
-
-### NOT ALLOWED:
-- ❌ Random `.md` di root (cek AGENTS.md dulu)
-- ❌ Create subfolder baru tanpa alasan
-- ❌ Duplicate docs di multiple places
-- ❌ Orphan files (unreferenced, untracked, ignored)
-- ❌ Inconsistent naming (UPPERCASE vs lowercase mix)
+### DO NOT:
+- ❌ Create new subfolders tanpa alasan jelas
+- ❌ Duplicate docs (update existing, or link)
+- ❌ Orphan files (harus referenced di `docs/README.md` index)
+- ❌ Inconsistent casing
 
 ---
 
@@ -284,32 +281,37 @@ QUICK_FIXES.md         ← Quick fix guide
 
 ## 📚 Quick Reference — Lakasir Project Structure
 
-**Key files untuk reference:**
-- `AGENTS.md` — Code style guide + build commands
-- `AUDIT_REPORT.md` — 20 identified issues + fixes
-- `QUICK_FIXES.md` — Action plan prioritized
-- `app/` — Application code
-  - `Http/Controllers/` — Endpoints
-  - `Models/Tenants/` — Multi-tenant models
-  - `Services/` — Business logic
-  - `Filament/Tenant/` — Admin panel
-- `routes/tenant.php` — All tenant routes
-- `tests/` — Test suite (currently broken, 82 failed)
-- `config/database.php` — DB configuration
-- `.env.example` — Environment reference
+**Key files untuk reference (baca langsung, jangan grep kalau bisa):**
 
-**Current issues (read AUDIT_REPORT.md):**
-- 🔴 Test DB connection broken
-- 🔴 Debug code in production
-- 🟠 Missing permission checks (6 endpoints)
-- 🟠 Inconsistent API responses
-- 🟡 6 TODO items blocking features
+| Area | Path Utama | Sub-path |
+|------|-----------|----------|
+| Routes tenant | `routes/tenant.php` | — |
+| Routes central | `routes/api.php` | — |
+| Routes web | `routes/web.php` | — |
+| API Controllers | `app/Http/Controllers/Api/Tenants/` | `Master/`, `Transaction/`, `Report/` |
+| Models tenant | `app/Models/Tenants/` | `Selling`, `Product`, `Member`, `CartItem`, `PaymentMethod` |
+| Services | `app/Services/` | `Tenants/MidtransGatewayService.php`, `VoucherService.php` |
+| Filament Pages | `app/Filament/Tenant/Pages/` | `Cashier.php`, `CashierReport.php` |
+| Filament Resources | `app/Filament/Tenant/Resources/` | `ProductResource.php`, `SellingResource.php` |
+| Tests | `tests/Feature/` | `E2E/`, `Http/Controllers/Api/Tenants/Master/` |
+| Permissions | `config/permission.php` | — |
+| Policies | `app/Policies/` | — |
+| DB cfg | `config/database.php` | — |
+| Env | `.env.example` | — |
+| Helpers | `app/helpers.php` | `hasFeatureAndPermission()`, `can()`, `price_format()` |
+| Audit log  | `docs/reports/` | 6 audit files |
+| Agent rules | `.opencode/rules/` | 3 modular .mdc files |
+
+**Status terkini:**
+- Tests: ✅ 52 pass, 0 fail
+- Code quality: 🟢 High priority resolved
+- Production ready: 🟡 Yes (E2E, rate limiting, audit logging done)
 
 ---
 
 ## 🔗 How to Use This Rule
 
-1. **Copy this file path:** `.cursor/00-universal-agent-rules.mdc`
+1. **Rule file:** `.opencode/rules/00-task-framework.mdc` (this file)
 2. **For each task:** Read Fase 1-6 in order
 3. **For ambiguity:** Always ask in Fase 1, never assume
 4. **For implementation:** Strict Fase 3 scope definition
@@ -319,5 +321,5 @@ QUICK_FIXES.md         ← Quick fix guide
 ---
 
 **Applicable to:** All Lakasir POS tasks  
-**Updated:** May 29, 2026  
-**Authority:** AGENTS.md + AUDIT_REPORT.md + Project guidelines
+**Updated:** June 13, 2026  
+**Authority:** AGENTS.md + .opencode/rules/ + Project guidelines

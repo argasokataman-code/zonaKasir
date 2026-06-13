@@ -23,6 +23,7 @@ Complete documentation for the zonaKasir POS application. All resources are orga
 - Includes: Critical fixes (today), high priority (week 1), quick wins, checklists
 
 ### 📖 **API Documentation**
+- [API Response Standard](API_RESPONSE_STANDARD.md) — Standardized JSON response format
 - Coming soon: API endpoint documentation
 - Resource: products, users, transactions, reports, etc.
 
@@ -30,7 +31,12 @@ Complete documentation for the zonaKasir POS application. All resources are orga
 - Coming soon: Feature documentation by domain
 - Sections: Inventory, Sales, Reporting, Multi-tenancy, etc.
 
+### 📋 **Planning & Roadmap**
+- [Midtrans Payment Integration](planning/MIDTRANS_PAYMENT_INTEGRATION_PLAN.md) — Complete spec v1.3
+- [Rebranding Plan](REBRANDING_PLAN.md) — Lakasir → zonaKasir migration tracking
+
 ### 🚀 **Development Guides**
+- [Server Access](guides/SERVER_ACCESS.md) — Staging SSH, commands, GitHub Actions
 - Coming soon: Setup, deployment, troubleshooting guides
 
 ---
@@ -40,11 +46,17 @@ Complete documentation for the zonaKasir POS application. All resources are orga
 **Getting Started:**
 - See [../../AGENTS.md](../../AGENTS.md) for code style and build commands
 - See [../../README.md](../../README.md) for project overview
+- See [.opencode/rules/00-task-framework.mdc](.opencode/rules/00-task-framework.mdc) for 6-phase task framework
+
+**Agent Rules (modular):**
+- [.opencode/rules/00-task-framework.mdc](.opencode/rules/00-task-framework.mdc) — 6-phase task execution
+- [.opencode/rules/01-code-style.mdc](.opencode/rules/01-code-style.mdc) — Code style & naming
+- [.opencode/rules/02-security.mdc](.opencode/rules/02-security.mdc) — Security, CI/CD, git conventions
 
 **Current Status:**
-- Test Suite: 🔴 82 failed, 4 passed (DB connection broken)
-- Code Quality: 🟠 High (20 issues identified)
-- Production Ready: ❌ Not yet (Phase 1 stabilization pending)
+- Test Suite: 🟢 52 passed, 0 failed
+- Code Quality: 🟢 Good (high priority items resolved)
+- Production Ready: 🟡 Medium (E2E tests, rate limiting, audit logging remain)
 
 **Immediate Actions:**
 1. Fix test database connection ([see Quick Fixes](guides/QUICK_FIXES.md#critical-do-first---today))
@@ -53,6 +65,6 @@ Complete documentation for the zonaKasir POS application. All resources are orga
 
 ---
 
-**Last Updated:** May 29, 2026  
+**Last Updated:** June 13, 2026  
 **Maintained by:** Development Team  
-**Related:** [AUDIT_REPORT.md](reports/AUDIT.md) | [QUICK_FIXES.md](guides/QUICK_FIXES.md)
+**Related:** [AGENTS.md](../../AGENTS.md) | [QUICK_FIXES.md](guides/QUICK_FIXES.md) | [AUDIT_REPORT.md](reports/AUDIT.md)

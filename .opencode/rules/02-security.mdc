@@ -1,0 +1,65 @@
+# Security & Best Practices — Lakasir
+
+## NEVER Modify deploy-staging.yml
+- The deploy workflow is stable. Do NOT edit it for debugging or temporary fixes.
+- If you need to run commands on the staging server, use the SSH workflow instead:
+  ```bash
+  gh workflow run ssh-command.yml --ref main --field command="<your command here>"
+  ```
+- Commits that change the deploy YAML should only happen when adding permanent infrastructure changes.
+
+## Use SSH Workflow for Staging Fixes
+- Staging server: `jogn3455@jogjatourdrive.com` port `2223`
+- To run a quick command: use `gh workflow run ssh-command.yml`
+- To view output: `gh run watch <run-id>` or check the Actions tab on GitHub
+
+## CI/CD Safety
+- Never commit `public/build/` (gitignored)
+- Never commit `.env` or secrets
+- If deploy fails, check: SSH keys, GitHub Secrets, build process
+- Staging: `ssh -p 2223 jogn3455@jogjatourdrive.com` (deploy target)
+- App: `https://zonakasir.jogjatourdrive.com` (staging hostname)
+
+## Commit + Build Rule
+When instructed to `commit` and `build`:
+- Stage ALL workspace changes (`git add -A`)
+- Do NOT create partial commits (unless user explicitly requests)
+- If there are unrelated/risky changes, pause and ask first
+- Verify with `git status --porcelain` before committing
+- After commit, push triggers auto-deploy via CI/CD
+- **Do NOT build locally** — CI handles `npm run build`
+
+## Security Baseline
+- Auth check server-side on every protected endpoint
+- Validation lengkap (bukan type-only) — `FormRequest` classes with complex rules
+- RBAC permission check with `can()` helper (Filament) + `->can()` middleware (API)
+- No hardcoded secrets or credentials (GitHub Secrets for CI/CD)
+- API responses via `ApiResponseService` (consistent format)
+- Rate limiting on critical endpoints (`throttle:5,1` on auth, `throttle:60,1` on tenant routes)
+- Audit logging via `spatie/laravel-activitylog` on 14 models (Member, Supplier, Stock, PaymentMethod, CashDrawer, Voucher, etc.)
+
+## Commit Conventions
+
+Format: `type(scope): description`
+
+| Type | When |
+|------|------|
+| `fix` | Bug fix |
+| `feat` | New feature |
+| `refactor` | Code restructure |
+| `style` | UI/CSS only |
+| `perf` | Performance |
+| `ci` | CI/CD workflow changes |
+| `docs` | Documentation |
+| `chore` | Tooling, deps, config |
+
+## Branch Naming
+
+**Strategy:** Primarily trunk-based on `main`. Use feature/fix branches for parallel or risky work.
+
+| Branch | Purpose | Auto-deploy |
+|--------|---------|-------------|
+| `main` | Production-ready staging | ✅ Yes |
+| `feat/*` | Feature branches (remote only, delete after merge) | ❌ No |
+| `fix/*` | Bug fix branches (remote only, delete after merge) | ❌ No |
+| `1.x` | Maintenance branch for v1.x | ❌ No |

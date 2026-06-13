@@ -1,0 +1,176 @@
+# Lakasir Code Style Rules
+
+## Critical Rules
+
+### Always use Context7 for library/API documentation
+Before generating ANY code that uses a library, framework, or API:
+1. Use Context7 (`ctx7` CLI or MCP tools) to fetch up-to-date documentation
+2. Don't rely on training data — it may be outdated
+3. Always include `use context7` or `use library /library/id` in your prompt
+4. This prevents hallucinated APIs, wrong parameters, and outdated examples
+
+## Code Style Guidelines
+
+### Import Ordering
+```php
+// 1. Internal classes (App\*)
+use App\Models\Tenants\Product;
+use App\Services\ProductService;
+// 2. PHP built-ins (if needed)
+use Exception;
+use Closure;
+// 3. Laravel framework (Illuminate\*)
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+// 4. Third-party packages
+use Spatie\Activitylog\Traits\LogsActivity;
+use Stancl\Tenancy\Facades\Tenancy;
+```
+
+### Naming Conventions
+- **Classes:** PascalCase (e.g., `ProductController`, `VoucherService`)
+- **Methods:** camelCase (e.g., `filterCategory()`, `applicable()`)
+- **Variables:** camelCase (e.g., `$product`, `$cartItems`)
+- **Database columns:** snake_case (e.g., `product_id`, `created_at`)
+- **Constants:** UPPER_CASE (e.g., `ROLE_ADMIN`)
+
+### Formatting
+- **PHP:** 4 spaces indentation
+- **Blade/JS/CSS:** 2 spaces indentation
+- **Line length:** 120 characters max
+- **Arrays:** Short syntax `[]` not `array()`
+- **Braces:** PSR-12 style (opening brace on same line)
+
+### Type Annotations
+- Use PHP 8.1+ typed properties and return types
+- Always declare parameter types and return types
+```php
+public function index(): JsonResponse
+public function validate(string $attribute, mixed $value, Closure $fail): void
+```
+
+### Models
+```php
+// PREFERRED for new models (simpler, safer with mass assignment)
+protected $guarded = ['id'];
+
+// ALTERNATIVE (existing codebase uses both - some use $fillable, some use empty $guarded)
+// protected $fillable = ['name', 'email'];  // older pattern
+// protected $guarded = [];                   // not recommended
+
+protected $appends = ['computed_field'];   // For accessors
+
+public function product(): BelongsTo       // Relationship with return type
+{
+    return $this->belongsTo(Product::class);
+}
+```
+
+**Note:** Codebase has mixed model patterns:
+- `PaymentMethod` → `$guarded = ['id']` ✅ (preferred)
+- `Product` → `$guarded = ['id', 'hero_images_url', 'expired']`
+- `Category` → `$guarded = []` (empty, not recommended)
+- `User` → `$fillable = [...]` (older pattern)
+
+### Controllers
+- **For new controllers:** use Form Requests for validation (e.g., `ProductRequest`)
+- **Existing controllers** use mixed patterns:
+  - ✅ Some use Form Requests (`ProductController`, `StockController`, `SellingController`)
+  - ❌ Some use inline `$request->validate([...])` or `$this->validate($request, [...])` (`InvoiceController`, `CouponController`, `ProfileController`, `AboutController`)
+  - When modifying an existing controller, **keep its current validation pattern** unless asked to refactor
+- Use `ApiResponseService` for consistent JSON responses
+- Controllers extend base `Controller` class
+
+### Error Handling
+```php
+try {
+    DB::beginTransaction();
+    // operations
+    DB::commit();
+} catch (Exception $e) {
+    DB::rollBack();
+    throw $e;
+}
+```
+
+### Testing (Pest)
+```php
+<?php
+
+use App\Models\Tenants\User;
+use Illuminate\Http\Response;
+use Tests\RefreshDatabaseWithTenant;
+
+uses(RefreshDatabaseWithTenant::class);
+
+test('can create product', function () {
+    $user = User::first();
+    actingAs($user)->postJson('/api/master/product', $data)
+        ->assertStatus(Response::HTTP_CREATED);
+});
+```
+
+## Architecture Patterns
+
+### Multi-tenancy
+- Uses `stancl/tenancy` with database-per-tenant
+- Tenant models in `app/Models/Tenants/`
+- Use `RefreshDatabaseWithTenant` trait in tests
+- Call `mockTenant()` for tenant context in tests
+
+### Filament Resources
+- Located in `app/Filament/Tenant/Resources/`
+- Use `HasTranslatableResource` trait for navigation labels
+
+### Feature Flags
+Use Laravel Pennant:
+```php
+if (feature(FeatureClass::class)) {
+    // feature enabled
+}
+```
+
+### Helper Functions
+Global helpers in `app/helpers.php`:
+- `hasFeatureAndPermission()`
+- `can()`
+- `price_format()`
+
+## Key Directories
+- `app/Http/Controllers/Api/Tenants/` - API controllers
+- `app/Filament/Tenant/Resources/` - Filament admin resources
+- `app/Services/` - Business logic services
+- `app/Policies/` - Authorization policies
+- `database/migrations/tenant/` - Tenant migrations
+- `tests/Feature/` - Feature tests
+
+## Build/Lint/Test Commands
+
+### Dependencies
+```bash
+composer install          # Install PHP dependencies
+npm install              # Install frontend dependencies
+```
+
+### Build
+```bash
+npm run dev              # Development build (Vite)
+npm run build           # Production build
+```
+
+### Test Commands
+```bash
+php artisan test                                    # Run all tests
+php artisan test --filter=TestName                  # Run specific test by name
+php artisan test tests/Feature/Path/To/Test.php     # Run single test file
+vendor/bin/pest                                     # Run Pest directly
+vendor/bin/pest --filter="test name here"           # Run specific test
+```
+
+### Database Setup
+```bash
+php artisan key:generate
+php artisan migrate --path=database/migrations/tenant --seed
+php artisan filament:assets
+php artisan livewire:publish --assets
+```
