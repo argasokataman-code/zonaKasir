@@ -20,9 +20,13 @@ class WithdrawalResource extends Resource
 
     protected static ?string $model = Withdrawal::class;
 
+    protected static ?string $label = 'Withdrawal';
+
     protected static ?string $navigationIcon = 'heroicon-o-arrow-up-on-square';
 
     protected static ?string $navigationLabel = 'Withdrawals';
+
+    protected static ?string $slug = 'withdrawals';
 
     public static function getBreadcrumb(): string
     {
