@@ -53,9 +53,6 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         },
-        "classmap": [
-            "Skill-grabber/SkillGrabber.php"
-        ],
         "files": [
             "app/helpers.php"
         ]
