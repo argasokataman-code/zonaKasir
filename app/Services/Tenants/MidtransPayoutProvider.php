@@ -33,9 +33,9 @@ class MidtransPayoutProvider implements DisbursementProvider
             'environment' => $environment,
         ]);
 
-        // Sandbox mode: log only, don't call real API
+        // Sandbox: call Midtrans sandbox API for balance tracking
         if ($environment === 'sandbox') {
-            return $this->handleSandbox($payload);
+            return $this->handleSandbox($payload, $serverKey);
         }
 
         // Production: call real Midtrans Disbursement API
@@ -67,21 +67,13 @@ class MidtransPayoutProvider implements DisbursementProvider
         return $response->json();
     }
 
-    private function handleSandbox(array $payload): array
+    private function handleSandbox(array $payload, string $serverKey): array
     {
-        $fakeId = 'MDZ' . strtoupper(substr(md5(uniqid()), 0, 10));
-
-        Log::info('Midtrans Disbursement SANDBOX — logged only', [
-            'fake_id' => $fakeId,
+        Log::info('Midtrans Disbursement SANDBOX — calling real API', [
             'payload' => $payload,
         ]);
 
-        return [
-            'id' => $fakeId,
-            'status' => 'completed',
-            'message' => 'Sandbox mode — logged only, no real transfer',
-            'sandbox' => true,
-        ];
+        return $this->handleProduction($payload, $serverKey);
     }
 
     private function handleProduction(array $payload, string $serverKey): array
