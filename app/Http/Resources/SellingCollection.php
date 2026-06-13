@@ -42,9 +42,4 @@ class SellingCollection extends JsonResource
             'cashier' => $this->whenLoaded('user'),
         ];
     }
-
-    public function additional(Request $request): array
-    {
-        return $this->additional;
-    }
 }
