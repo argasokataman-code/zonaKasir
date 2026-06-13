@@ -71,11 +71,14 @@ class AppServiceProvider extends ServiceProvider
             return $columns ? $query : $this;
         });
         $mainPath = database_path('migrations');
-        $directories = glob($mainPath.'/*', GLOB_ONLYDIR);
 
-        $directories = array_filter($directories, fn ($dir) => basename($dir) !== 'tenant');
+        // Load 2026+ billing migrations from main path, plus all tenant migrations
+        $billingMigrations = glob($mainPath.'/2026_*.php');
+        $this->loadMigrationsFrom($billingMigrations);
 
-        $this->loadMigrationsFrom($directories);
+        if (is_dir(database_path('migrations/tenant'))) {
+            $this->loadMigrationsFrom(database_path('migrations/tenant'));
+        }
 
         Feature::resolveScopeUsing(fn ($driver) => null);
         Feature::discover();
