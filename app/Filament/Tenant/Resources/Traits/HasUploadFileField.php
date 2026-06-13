@@ -56,17 +56,47 @@ trait HasUploadFileField
         if ($shouldFetchFileInformation) {
             try {
                 if (! $storage->exists($file)) {
+                    \Illuminate\Support\Facades\Log::warning('UF: file not found', [
+                        'disk' => $component->getDiskName(),
+                        'file' => $file,
+                        'root' => $storage->path(''),
+                    ]);
                     return null;
                 }
-            } catch (UnableToCheckFileExistence) {
+            } catch (UnableToCheckFileExistence $e) {
+                \Illuminate\Support\Facades\Log::warning('UF: check failed', [
+                    'error' => $e->getMessage(),
+                    'disk' => $component->getDiskName(),
+                    'file' => $file,
+                ]);
+                return null;
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('UF: exception', [
+                    'error' => $e->getMessage(),
+                    'disk' => $component->getDiskName(),
+                    'file' => $file,
+                ]);
                 return null;
             }
         }
 
+        try {
+            $size = $shouldFetchFileInformation ? $storage->size($file) : 0;
+            $type = $shouldFetchFileInformation ? $storage->mimeType($file) : null;
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('UF: size/type failed', [
+                'error' => $e->getMessage(),
+                'disk' => $component->getDiskName(),
+                'file' => $file,
+            ]);
+            $size = 0;
+            $type = null;
+        }
+
         return [
             'name' => $file,
-            'size' => $shouldFetchFileInformation ? $storage->size($file) : 0,
-            'type' => $shouldFetchFileInformation ? $storage->mimeType($file) : null,
+            'size' => $size,
+            'type' => $type,
             'url' => UploadedFile::urlFromPath($file, $component->getDiskName()),
         ];
     }
