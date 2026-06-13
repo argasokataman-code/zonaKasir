@@ -10,6 +10,7 @@ use Spatie\Activitylog\LogOptions;
 /**
  * @mixin IdeHelperLedgerEntry
  */
+use App\Models\Traits\HasTenant;
 class LedgerEntry extends Model
 {
     use LogsActivity, EnsuresLedgerBalance;

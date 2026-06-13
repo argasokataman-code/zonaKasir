@@ -26,6 +26,7 @@ use Spatie\Activitylog\LogOptions;
  * @property string $heroImage The URL of the first hero image (accessor)
  * @property array $heroImagesUrl The array of full URLs (accessor)
  */
+use App\Models\Traits\HasTenant;
 class Product extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;

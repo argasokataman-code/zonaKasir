@@ -10,6 +10,7 @@ use Spatie\Activitylog\LogOptions;
 /**
  * @mixin IdeHelperSettlement
  */
+use App\Models\Traits\HasTenant;
 class Settlement extends Model
 {
     use HasFactory, LogsActivity;

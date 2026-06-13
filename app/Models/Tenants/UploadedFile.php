@@ -20,9 +20,10 @@ use Illuminate\Support\Facades\Storage;
  * @property string $relative_path
  * @property string $disk
  */
+use App\Models\Traits\HasTenant;
 class UploadedFile extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenant;
 
     protected $fillable = [
         'name',

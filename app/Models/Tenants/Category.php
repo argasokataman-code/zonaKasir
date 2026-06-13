@@ -11,6 +11,7 @@ use Spatie\Activitylog\LogOptions;
 /**
  * @mixin IdeHelperCategory
  */
+use App\Models\Traits\HasTenant;
 class Category extends Model
 {
     use HasFactory, LogsActivity;

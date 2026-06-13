@@ -9,9 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @mixin IdeHelperSellingDetail
  */
+use App\Models\Traits\HasTenant;
 class SellingDetail extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenant;
 
     protected $guarded = [];
 

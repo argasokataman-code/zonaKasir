@@ -19,6 +19,7 @@ use Tapp\FilamentTimezoneField\Forms\Components\TimezoneSelect;
 /**
  * @mixin IdeHelperProfile
  */
+use App\Models\Traits\HasTenant;
 class Profile extends Model
 {
     use HasFactory,

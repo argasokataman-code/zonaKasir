@@ -12,6 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * @mixin IdeHelperPaymentMethod
  */
+use App\Models\Traits\HasTenant;
 class PaymentMethod extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;

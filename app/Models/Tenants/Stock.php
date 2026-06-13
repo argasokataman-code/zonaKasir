@@ -21,6 +21,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * @mixin IdeHelperStock
  */
+use App\Models\Traits\HasTenant;
 class Stock extends Model
 {
     use HasFactory, LogsActivity;

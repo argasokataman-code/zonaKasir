@@ -13,6 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * @mixin IdeHelperSupplier
  */
+use App\Models\Traits\HasTenant;
 class Supplier extends Model
 {
     use HasFactory, HasSupplierForm, HasSupplierTable, SoftDeletes, LogsActivity;

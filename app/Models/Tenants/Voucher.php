@@ -10,6 +10,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * @mixin IdeHelperVoucher
  */
+use App\Models\Traits\HasTenant;
 class Voucher extends Model
 {
     use HasFactory, LogsActivity;

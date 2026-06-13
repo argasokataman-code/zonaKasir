@@ -10,9 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @mixin IdeHelperPurchasing
  */
+use App\Models\Traits\HasTenant;
 class Purchasing extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenant;
 
     protected $guarded = ['id'];
 

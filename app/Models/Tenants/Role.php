@@ -9,6 +9,7 @@ use Spatie\Permission\PermissionRegistrar;
 /**
  * @mixin IdeHelperRole
  */
+use App\Models\Traits\HasTenant;
 class Role extends ModelsRole
 {
     public function mobilePermissions(): BelongsToMany

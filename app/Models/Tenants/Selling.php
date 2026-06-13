@@ -14,6 +14,7 @@ use Spatie\Activitylog\LogOptions;
 /**
  * @mixin IdeHelperSelling
  */
+use App\Models\Traits\HasTenant;
 class Selling extends Model
 {
     use HasFactory, UseTimezoneAwareQuery, LogsActivity;
