@@ -34,3 +34,12 @@ Route::middleware(['web', 'auth:admin'])->group(function () {
 // Midtrans webhook - no auth, no throttle
 Route::post('/webhooks/midtrans', [\App\Http\Controllers\Api\MidtransWebhookController::class, 'handle'])
     ->name('webhooks.midtrans');
+
+// Serve uploaded files from storage/app/public
+Route::get('/storage/{path}', function (string $path) {
+    $fullPath = storage_path('app/public/' . $path);
+    if (! file_exists($fullPath)) {
+        abort(404);
+    }
+    return response()->file($fullPath);
+})->where('path', '.*');
