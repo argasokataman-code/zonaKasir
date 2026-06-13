@@ -54,8 +54,10 @@ class PlanResource extends Resource
                     ->default(1),
                 Forms\Components\Toggle::make('is_active')
                     ->default(true),
-                Forms\Components\TagsInput::make('features')
-                    ->label('Features (one per tag)'),
+                Forms\Components\CheckboxList::make('features')
+                    ->label('Features')
+                    ->options(config('plans.features'))
+                    ->columns(2),
             ]);
     }
 
@@ -85,6 +87,11 @@ class PlanResource extends Resource
                 TextColumn::make('created_at')
                     ->dateTime('d M Y')
                     ->sortable(),
+                TextColumn::make('features')
+                    ->formatStateUsing(fn ($state) => collect($state)
+                        ->map(fn ($f) => config('plans.features.'.$f, $f))
+                        ->take(4)
+                        ->implode(', ').(count($state) > 4 ? ' +'.(count($state) - 4).' more' : '')),
             ])
             ->defaultSort('price_monthly')
             ->actions([
