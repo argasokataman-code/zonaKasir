@@ -5,6 +5,7 @@ namespace App\Filament\Tenant\Resources;
 use App\Filament\Tenant\Resources\MemberResource\Pages;
 use App\Filament\Tenant\Resources\MemberResource\RelationManagers;
 use App\Models\Tenants\Member;
+use App\Models\Tenants\Setting;
 use App\Traits\HasTranslatableResource;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -78,6 +79,10 @@ class MemberResource extends Resource
                 TextColumn::make('total_points')
                     ->label(__('Points'))
                     ->sortable(),
+                TextColumn::make('wallet_balance')
+                    ->label(__('Wallet'))
+                    ->money(Setting::get('currency', 'IDR'))
+                    ->sortable(),
                 TextColumn::make('identity_number')
                     ->label(__('Identity number'))
                     ->searchable()
@@ -102,6 +107,7 @@ class MemberResource extends Resource
             RelationManagers\SellingsRelationManager::class,
             RelationManagers\LoyaltyPointLogsRelationManager::class,
             RelationManagers\VouchersRelationManager::class,
+            RelationManagers\WalletTransactionsRelationManager::class,
         ];
     }
 
