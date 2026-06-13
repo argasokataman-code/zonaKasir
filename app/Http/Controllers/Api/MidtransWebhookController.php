@@ -32,7 +32,7 @@ class MidtransWebhookController extends Controller
         // Initialize tenant context (stancl/tenancy)
         // Note: abouts table is per-tenant, need tenant DB to verify
         try {
-            $tenant = \App\Models\Tenant::find($tenantId);
+            $tenant = \App\Tenant::find($tenantId);
             if (!$tenant) {
                 Log::error('Midtrans webhook: tenant not found', ['tenant_id' => $tenantId]);
                 return response()->json(['error' => 'Tenant not found'], 404);
