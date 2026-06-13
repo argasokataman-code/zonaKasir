@@ -170,14 +170,17 @@ Global helpers in `app/helpers.php`:
 - **[.cursor/00-universal-agent-rules.mdc](.cursor/00-universal-agent-rules.mdc)** — Mandatory 6-phase task execution framework (eliminates hallucination, enforces scope discipline)
 
 **Current Project Status:**
-- Test Suite: 🟢 52 passed, 0 failed
-- Code Quality: 🟢 Good (high priority items resolved)
-- Production Ready: 🟡 Medium (E2E tests, rate limiting, audit logging remain)
+- Test Suite: 🟢 236 passed, 0 failed (duration: ~50s)
+- Code Quality: 🟢 Good (all audit issues resolved)
+- Security: 🟡 Medium (1 critical + 1 high finding — see docs/guides/QUICK_FIXES.md)
+- Production Ready: 🟡 Medium (security fixes pending)
 
 **Immediate Actions Required (See docs/guides/QUICK_FIXES.md):**
 - 🔴 Critical: ✅ All done (debug dump removed, permission checks added, tests running)
-- 🟠 High: ✅ All done (API responses standardized, type hints/transactions/null checks added to all controllers)
+- 🟠 High: ✅ All done (API responses standardized, type hints/transactions/null checks added)
 - 🟡 Medium: ✅ All done (E2E tests, rate limiting, audit logging completed)
+- 🔴 New - Security: Add auth to web report PDF routes (`routes/tenant.php:46-56`)
+- 🟠 New - Security: Add permission gates to Supplier routes (`routes/tenant.php:120`)
 1. Run `php artisan test` to ensure all tests pass
 2. Verify code follows PSR-12 formatting
 3. Use `$guarded = ['id']` for new models
