@@ -59,7 +59,9 @@ class WithdrawalApproval extends Page implements HasForms
             }
         }
 
-        tenancy()->end();
+        if (tenancy()->initialized) {
+            tenancy()->end();
+        }
     }
 
     public function approve(string $tenantId, int $withdrawalId): void
@@ -82,7 +84,9 @@ class WithdrawalApproval extends Page implements HasForms
         } catch (\Throwable $e) {
             Notification::make()->title('Error: ' . $e->getMessage())->danger()->send();
         } finally {
-            tenancy()->end();
+            if (tenancy()->initialized) {
+                tenancy()->end();
+            }
         }
     }
 
@@ -106,7 +110,9 @@ class WithdrawalApproval extends Page implements HasForms
         } catch (\Throwable $e) {
             Notification::make()->title('Error: ' . $e->getMessage())->danger()->send();
         } finally {
-            tenancy()->end();
+            if (tenancy()->initialized) {
+                tenancy()->end();
+            }
         }
     }
 }
