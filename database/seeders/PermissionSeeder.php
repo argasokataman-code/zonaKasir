@@ -58,6 +58,12 @@ class PermissionSeeder extends Seeder
                         ],
                         'guard' => ['web', 'sanctum'],
                     ],
+                    'member analytics' => [
+                        'permission' => [
+                            'r',
+                        ],
+                        'guard' => ['web'],
+                    ],
                     'selling' => [
                         'permission' => [
                             'c', 'r', 'u', 'd',

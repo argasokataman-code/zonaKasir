@@ -3,6 +3,7 @@
 namespace App\Filament\Tenant\Resources\MemberResource\Pages;
 
 use App\Filament\Tenant\Resources\MemberResource;
+use App\Filament\Tenant\Resources\MemberResource\Widgets\MemberStatsWidget;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -19,6 +20,13 @@ class ListMembers extends ListRecords
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            MemberStatsWidget::class,
         ];
     }
 
