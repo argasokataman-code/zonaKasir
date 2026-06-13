@@ -111,6 +111,11 @@ class TenantPanelProvider extends PanelProvider
             fn () => view('version-indicator')
         );
 
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::SIDEBAR_FOOTER,
+            fn () => view('license-indicator')
+        );
+
         if (app()->environment('demo')) {
             FilamentView::registerRenderHook(
                 PanelsRenderHook::BODY_START,
