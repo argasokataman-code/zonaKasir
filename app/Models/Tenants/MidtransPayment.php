@@ -17,6 +17,10 @@ class MidtransPayment extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'cart_data' => 'json',
+    ];
+
     protected static $recordEvents = ['created', 'updated'];
 
     public function selling(): BelongsTo
