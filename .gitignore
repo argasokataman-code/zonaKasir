@@ -40,3 +40,5 @@ database/lakasir_*
 # Deploy keys (gitignored locally, used by GitHub Actions)
 .deploy/
 /public/vendor
+database/lakasir_toko_testing
+database/lakasir_tokotest
