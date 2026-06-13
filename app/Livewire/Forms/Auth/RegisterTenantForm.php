@@ -76,7 +76,8 @@ class RegisterTenantForm extends Component implements HasForms
                                 ->string(),
                         ])
                         ->icon('heroicon-o-shopping-bag'),
-                    Wizard\Step::make(__('Shop Detail'))
+                    Wizard\Step::make(__('Coupon'))
+                        ->description(__('Have a coupon code? Enter it here (optional)'))
                         ->schema([
                             TextInput::make('coupon_code')
                                 ->label('Kode Kupon (Opsional)')
