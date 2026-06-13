@@ -52,43 +52,19 @@ trait HasUploadFileField
             ];
         }
 
-        // $file is a string path (legacy behavior)
-        if ($shouldFetchFileInformation) {
-            try {
-                if (! $storage->exists($file)) {
-                    \Illuminate\Support\Facades\Log::warning('UF: file not found', [
-                        'disk' => $component->getDiskName(),
-                        'file' => $file,
-                        'root' => $storage->path(''),
-                    ]);
-                    return null;
-                }
-            } catch (UnableToCheckFileExistence $e) {
-                \Illuminate\Support\Facades\Log::warning('UF: check failed', [
-                    'error' => $e->getMessage(),
-                    'disk' => $component->getDiskName(),
-                    'file' => $file,
-                ]);
-                return null;
-            } catch (\Throwable $e) {
-                \Illuminate\Support\Facades\Log::warning('UF: exception', [
-                    'error' => $e->getMessage(),
-                    'disk' => $component->getDiskName(),
-                    'file' => $file,
-                ]);
-                return null;
-            }
-        }
-
+        // $file is a string path
+        // Don't return null if file doesn't exist on disk yet —
+        // Filament v3.3+ keeps new uploads in Livewire tmp until form submit.
+        // Just return the URL; the preview uses Livewire's temp URL for new files.
         try {
-            $size = $shouldFetchFileInformation ? $storage->size($file) : 0;
-            $type = $shouldFetchFileInformation ? $storage->mimeType($file) : null;
-        } catch (\Throwable $e) {
-            \Illuminate\Support\Facades\Log::warning('UF: size/type failed', [
-                'error' => $e->getMessage(),
-                'disk' => $component->getDiskName(),
-                'file' => $file,
-            ]);
+            if ($shouldFetchFileInformation && $storage->exists($file)) {
+                $size = $storage->size($file);
+                $type = $storage->mimeType($file);
+            } else {
+                $size = 0;
+                $type = null;
+            }
+        } catch (\Throwable) {
             $size = 0;
             $type = null;
         }
