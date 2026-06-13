@@ -4,12 +4,11 @@ namespace App\Filament\Admin\Pages;
 
 use App\Tenant;
 use App\Models\Tenants\Withdrawal;
+use App\Services\Tenants\WithdrawalService;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Illuminate\Support\Facades\DB;
 
 class WithdrawalApproval extends Page implements HasForms
 {
@@ -21,7 +20,6 @@ class WithdrawalApproval extends Page implements HasForms
     protected static string $view = 'filament.admin.pages.withdrawal-approval';
 
     public array $withdrawals = [];
-    public ?int $selectedTenantId = null;
 
     public function mount(): void
     {
@@ -57,7 +55,6 @@ class WithdrawalApproval extends Page implements HasForms
                     ];
                 }
             } catch (\Throwable $e) {
-                // Skip this tenant if initialization fails
                 continue;
             }
         }
@@ -77,23 +74,10 @@ class WithdrawalApproval extends Page implements HasForms
                 return;
             }
 
-            // Check 2-admin approval for > 25jt
-            $singleAdminMax = config('midtrans.withdrawal_approval.single_admin_max', 25000000);
-            $adminId = 1; // Admin user ID
+            $adminId = auth()->id();
+            app(WithdrawalService::class)->approve($withdrawal->id, $adminId);
 
-            if ($withdrawal->amount > $singleAdminMax) {
-                if ($withdrawal->approved_by === null) {
-                    $withdrawal->update(['approved_by' => $adminId]);
-                    Notification::make()->title('First approval recorded - needs second admin approval')->success()->send();
-                } else {
-                    $withdrawal->update(['status' => 'approved', 'processed_at' => now()]);
-                    Notification::make()->title('Withdrawal approved')->success()->send();
-                }
-            } else {
-                $withdrawal->update(['status' => 'approved', 'approved_by' => $adminId, 'processed_at' => now()]);
-                Notification::make()->title('Withdrawal approved')->success()->send();
-            }
-
+            Notification::make()->title('Withdrawal approved & disbursed via Midtrans')->success()->send();
             $this->loadPendingWithdrawals();
         } catch (\Throwable $e) {
             Notification::make()->title('Error: ' . $e->getMessage())->danger()->send();
@@ -114,12 +98,8 @@ class WithdrawalApproval extends Page implements HasForms
                 return;
             }
 
-            $adminId = 1; // Admin user ID
-            $withdrawal->update([
-                'status' => 'rejected',
-                'rejected_by' => $adminId,
-                'rejection_reason' => 'Rejected by admin',
-            ]);
+            $adminId = auth()->id();
+            app(WithdrawalService::class)->reject($withdrawal->id, $adminId, 'Rejected by admin');
 
             Notification::make()->title('Withdrawal rejected')->warning()->send();
             $this->loadPendingWithdrawals();
