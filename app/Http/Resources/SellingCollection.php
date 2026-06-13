@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
  */
 class SellingCollection extends JsonResource
 {
-    public array $additional = [];
 
     public function toArray($request): array
     {
