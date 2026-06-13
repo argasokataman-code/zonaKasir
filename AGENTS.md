@@ -5,6 +5,20 @@
 > - `01-code-style.mdc` — Code style, naming, conventions, build/test commands
 > - `02-security.mdc` — Security, deploy, CI/CD, git conventions
 
+## 🚨 HARD-STOP: KLASIFIK W A J I B di BARIS PERTAMA
+
+**SETIAP KALI user kirim pesan yang minta action, WAJIB:**
+
+> **Baris pertama respons:**
+> ```
+> Classification: [Audit/Bugfix/Feature/Refactor/Question/FixingBug/Docs/Other]
+> Role: [Admin/Tenant/Both]
+> ```
+
+**Jika baris pertama bukan classification → agent MELANGGAR RULES. Tidak ada alasan.**
+
+---
+
 ## 🚨 WAJIB: SETIAP KALI DAPAT TASK, BACA DULU INI
 
 Sebelum mengerjakan task apapun, WAJIB:

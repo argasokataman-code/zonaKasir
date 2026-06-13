@@ -104,5 +104,7 @@ return [
     'payout' => [
         'enabled' => true,
         'method' => 'midtrans', // 'midtrans' — use Midtrans Disbursement API
+        'url' => env('MIDTRANS_DISBURSEMENT_URL', 'https://api.midtrans.com/v2/disbursement'),
+        'sandbox_url' => env('MIDTRANS_DISBURSEMENT_SANDBOX_URL', 'https://api.sandbox.midtrans.com/v2/disbursement'),
     ],
 ];

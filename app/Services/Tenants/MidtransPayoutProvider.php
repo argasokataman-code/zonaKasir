@@ -7,11 +7,6 @@ use Illuminate\Support\Facades\Log;
 
 class MidtransPayoutProvider implements DisbursementProvider
 {
-    private const DISBURSEMENT_URLS = [
-        'sandbox' => 'https://api.sandbox.midtrans.com/v2/disbursement',
-        'production' => 'https://api.midtrans.com/v2/disbursement',
-    ];
-
     public function send(array $params): array
     {
         $serverKey = config('midtrans.server_key');
@@ -47,7 +42,7 @@ class MidtransPayoutProvider implements DisbursementProvider
         $serverKey = config('midtrans.server_key');
         $environment = config('midtrans.environment', 'sandbox');
 
-        $url = self::DISBURSEMENT_URLS[$environment] . "/{$disburseId}/status";
+        $url = $this->getDisbursementUrl($environment) . "/{$disburseId}/status";
 
         $response = Http::withBasicAuth($serverKey, '')
             ->withHeaders([
@@ -69,21 +64,21 @@ class MidtransPayoutProvider implements DisbursementProvider
 
     private function handleSandbox(array $payload, string $serverKey): array
     {
-        Log::info('Midtrans Disbursement SANDBOX — calling real API', [
+        Log::info('Midtrans Disbursement SANDBOX — calling sandbox API', [
             'payload' => $payload,
         ]);
 
-        return $this->handleProduction($payload, $serverKey);
+        return $this->handleProduction($payload, $serverKey, config('midtrans.payout.sandbox_url'));
     }
 
-    private function handleProduction(array $payload, string $serverKey): array
+    private function handleProduction(array $payload, string $serverKey, ?string $url = null): array
     {
         $response = Http::withBasicAuth($serverKey, '')
             ->withHeaders([
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ])
-            ->post(self::DISBURSEMENT_URLS['production'], $payload);
+            ->post($url ?? config('midtrans.payout.url'), $payload);
 
         if ($response->failed()) {
             Log::error('Midtrans Disbursement failed', [
@@ -121,5 +116,14 @@ class MidtransPayoutProvider implements DisbursementProvider
     private function getErrorMessage($response): string
     {
         return $response->json('error_messages.0') ?? 'Unknown error';
+    }
+
+    private function getDisbursementUrl(string $environment): string
+    {
+        if ($environment === 'sandbox') {
+            return config('midtrans.payout.sandbox_url');
+        }
+
+        return config('midtrans.payout.url');
     }
 }

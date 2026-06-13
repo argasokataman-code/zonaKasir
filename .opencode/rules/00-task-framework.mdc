@@ -56,14 +56,22 @@
 
 Setiap kali task diberikan, WAJIB jalanin urutan ini. **No skip.**
 
-### 🔴 STEP 0: BACA RULES (sudah di atas)
+### 🔴 STEP 0: BACA RULES + TASK TYPE CLASSIFICATION (WAJIB)
+
+**Setiap BARIS PERTAMA dari respons agent WAJIB diawali dengan:**
+```
+Classification: [Audit/Bugfix/Feature/Refactor/Question/FixingBug/Docs/Other]
+Role: [Admin/Tenant/Both]
+```
+Ini WAJIB ditulis di setiap percakapan baru, sebelum Fase 1. **No skip. Jika tidak ada, berarti agent belum menjalankan Step 0.**
 
 ### ⏸️ FASE 1: STOP & PAHAMI (Jangan langsung kode)
 - Baca task 2x dengan teliti
 - Tanya balik jika ada ambiguitas (jangan asumsi)
 - **CEK ROLE WAJIB dulu:** Admin (central) vs Tenant (per-cabang) — jangan code tanpa cek ini
-- **Output format:**
+- **Output format (WAJIB ditulis di chat setiap task):**
   ```
+  Task Classification: [Audit/Bugfix/Feature/Refactor/Question/FixingBug/docs/Other]
   Task: [ringkas task dalam 1 kalimat]
   Domain: [modul/fitur yang affected]
   Type: [bugfix/feature/refactor/docs/etc]
@@ -196,6 +204,7 @@ Jawab pertanyaan:
 
 | Phase | Rule | Consequence |
 |-------|------|-------------|
+| 0 | **CLASSIFICATION: WAJIB tulis Classification + Role di baris pertama setiap percakapan baru** | Agent skip Step 0, classification hilang |
 | 0 | **CEK ROLE: Admin vs Tenant sebelum Fase 1** | Scope bleed, code di role salah |
 | 0 | **CEK SERVER: Wajib via MCP `markfetch` jika butuh status** | Halusinasi server status |
 | 1 | If ambiguous → **Ask, don't assume** | Scope creep, regressions |

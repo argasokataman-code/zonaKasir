@@ -341,6 +341,13 @@ class MidtransGatewayService
                 $this->finalizeSettlement($payment, $payload);
             }
 
+            // Send payment status notification to the selling user
+            if ($payment->selling && $payment->selling->user) {
+                $payment->selling->user->notify(
+                    new \App\Notifications\PaymentStatus($payment, $oldStatus, $newStatus)
+                );
+            }
+
             // Mark idempotency as completed
             $idemLog->update([
                 'status' => 'completed',
