@@ -152,13 +152,13 @@ state(['locale' => $locale]);
           ['t' => __('landing.stat_realtime'), 's' => __('landing.stat_realtime_sub'), 'icon' => 'M13 10V3L4 14h7v7l9-11h-7z'],
           ['t' => __('landing.stat_multi') . ' ' . __('landing.stat_multi_sub'), 's' => 'Web · Android', 'icon' => 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z'],
         ] as $chip)
-        <div class="flex items-center gap-3 sm:gap-2.5 bg-white/[0.05] border border-white/10 rounded-2xl px-4 sm:px-5 py-3 sm:py-3.5 transition-colors hover:bg-white/[0.08]">
+        <div class="flex items-center justify-center sm:justify-start gap-3 sm:gap-2.5 bg-white/[0.05] border border-white/10 rounded-2xl px-4 sm:px-5 py-3 sm:py-3.5 transition-colors hover:bg-white/[0.08]">
           <div class="w-10 h-10 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-orange-500/30 to-orange-500/5 border border-orange-500/20 flex items-center justify-center flex-shrink-0">
             <svg class="w-5 h-5 sm:w-4 sm:h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="{{ $chip['icon'] }}"/>
             </svg>
           </div>
-          <div class="min-w-0">
+          <div class="min-w-0 text-left">
             <p class="text-white font-bold text-sm sm:text-xs leading-tight">{{ $chip['t'] }}</p>
             <p class="text-gray-400 text-xs sm:text-[11px] leading-tight mt-0.5">{{ $chip['s'] }}</p>
           </div>
@@ -418,8 +418,8 @@ state(['locale' => $locale]);
           ['title' => __('landing.feature_report_title'), 'desc' => __('landing.feature_report_desc'), 'icon' => 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'],
           ['title' => __('landing.feature_support_title'), 'desc' => __('landing.feature_support_desc'), 'icon' => 'M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z'],
         ] as $feature)
-        <div class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-orange-200">
-          <div class="w-14 h-14 bg-gradient-to-br from-zonakasir-primary to-orange-500 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-orange-500/25">
+        <div class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-orange-200 text-center sm:text-left">
+          <div class="w-14 h-14 bg-gradient-to-br from-zonakasir-primary to-orange-500 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-orange-500/25 mx-auto sm:mx-0">
             <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ $feature['icon'] }}"/>
             </svg>
@@ -476,8 +476,8 @@ state(['locale' => $locale]);
           ['title' => __('landing.menu_stock_title'), 'desc' => __('landing.menu_stock_desc'), 'icon' => 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'],
           ['title' => __('landing.menu_cashier_title'), 'desc' => __('landing.menu_cashier_desc'), 'icon' => 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z'],
         ] as $m)
-        <div class="bg-gray-50 rounded-3xl p-7 sm:p-8 border border-gray-100 transition-all duration-300 hover:bg-white hover:shadow-xl">
-          <div class="w-14 h-14 bg-zonakasir-primary rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-orange-500/20">
+        <div class="bg-gray-50 rounded-3xl p-7 sm:p-8 border border-gray-100 transition-all duration-300 hover:bg-white hover:shadow-xl text-center sm:text-left">
+          <div class="w-14 h-14 bg-zonakasir-primary rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-orange-500/20 mx-auto sm:mx-0">
             <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ $m['icon'] }}"/>
             </svg>
