@@ -23,6 +23,12 @@ return [
     'stat_multi' => 'Multi',
     'stat_multi_sub' => 'Platform',
 
+    // Stats
+    'stat_count_stores' => 'Active Stores',
+    'stat_count_uptime' => 'Uptime',
+    'stat_count_support' => 'Support',
+    'stat_count_years' => 'Years Experience',
+
     // Mockup section
     'mockup_badge' => 'Available on Web & Mobile',
 

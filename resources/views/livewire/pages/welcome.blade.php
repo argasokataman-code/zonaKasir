@@ -253,10 +253,16 @@ state(['locale' => $locale]);
         </p>
       </div>
     </div>
+    {{-- Wave divider --}}
+    <div class="absolute bottom-0 left-0 right-0 translate-y-px" aria-hidden="true">
+      <svg class="w-full h-auto" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0 40c240-20 480-30 720-20s480 30 720 10v50H0V40z" fill="#ffffff"/>
+      </svg>
+    </div>
   </section>
 
   {{-- About --}}
-  <section id="tentang" class="scroll-mt-20 py-16 sm:py-24 bg-white reveal">
+  <section id="tentang" class="relative scroll-mt-20 py-16 sm:py-24 bg-white reveal">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
         <div>
@@ -298,52 +304,83 @@ state(['locale' => $locale]);
           </div>
         </div>
 
-        {{-- Dashboard mockup (static) --}}
-        <div class="relative">
-          <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/10 to-orange-100 rounded-3xl"></div>
-          <div class="relative rounded-3xl shadow-2xl w-full bg-gray-50 overflow-hidden aspect-[4/3] border border-gray-200">
-            <div class="flex h-full">
-              <div class="hidden sm:flex w-[22%] bg-white border-r border-gray-200 flex-col py-2 px-1.5">
-                <div class="flex items-center gap-1.5 px-1.5 py-1 mb-3">
-                  <div class="w-5 h-5 bg-zonakasir-primary rounded-md flex items-center justify-center">
-                    <span class="text-white text-[6px] font-bold">ZK</span>
-                  </div>
-                  <span class="text-gray-900 text-[8px] font-bold">ZonaKasir</span>
+        {{-- Dashboard mockup --}}
+        <div class="relative reveal reveal-delay-2">
+          {{-- Glow behind the mockup --}}
+          <div class="absolute -inset-4 bg-gradient-to-tr from-zonakasir-primary/20 via-orange-400/10 to-amber-300/5 rounded-[2.5rem] blur-xl" aria-hidden="true"></div>
+          <div class="relative">
+            {{-- Decorative rings --}}
+            <div class="absolute -top-6 -right-6 w-20 h-20 border border-zonakasir-primary/10 rounded-full" aria-hidden="true"></div>
+            <div class="absolute -bottom-4 -left-4 w-14 h-14 border border-orange-400/10 rounded-full" aria-hidden="true"></div>
+            {{-- Main frame --}}
+            <div class="relative bg-white rounded-2xl shadow-2xl shadow-orange-900/10 ring-1 ring-gray-200 overflow-hidden">
+              {{-- Browser header --}}
+              <div class="bg-gray-100 px-3 sm:px-4 py-2 sm:py-2.5 flex items-center gap-2 border-b border-gray-200">
+                <div class="flex gap-1 sm:gap-1.5">
+                  <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-400/80"></div>
+                  <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-400/80"></div>
+                  <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-400/80"></div>
                 </div>
-                @foreach([
-                  ['label' => 'Dashboard', 'active' => true],
-                  ['label' => 'Cashier', 'active' => false],
-                  ['label' => 'Selling', 'active' => false],
-                  ['label' => 'Product', 'active' => false],
-                  ['label' => 'Report', 'active' => false],
-                ] as $nav)
-                <div class="flex items-center gap-1.5 px-2 py-1 rounded-md text-[7px] {{ $nav['active'] ? 'bg-zonakasir-primary text-white font-semibold' : 'text-gray-500' }}">
-                  <div class="w-1 h-1 rounded-full {{ $nav['active'] ? 'bg-white' : 'bg-gray-300' }}"></div>
-                  {{ $nav['label'] }}
+                <div class="flex-1 bg-white rounded-md h-5 sm:h-6 flex items-center px-2 sm:px-3 border border-gray-200 ml-2">
+                  <svg class="w-3 h-3 text-gray-300 mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg>
+                  <span class="text-[8px] sm:text-[10px] text-gray-400 truncate">toko-anda.zonakasir.com/dashboard</span>
                 </div>
-                @endforeach
               </div>
-              <div class="flex-1 p-2.5">
-                <div class="text-[10px] font-bold text-gray-900 mb-2">Dashboard</div>
-                <div class="grid grid-cols-3 gap-1.5 mb-2">
-                  <div class="bg-white rounded-xl p-2 border border-gray-100 shadow-sm">
-                    <div class="text-[5px] text-gray-400 mb-0.5">Today Total Revenue</div>
-                    <div class="text-[10px] font-bold text-gray-900">2.5M</div>
+              {{-- Content --}}
+              <div class="bg-gray-50 p-3 sm:p-4">
+                {{-- Info cards --}}
+                <div class="grid grid-cols-3 gap-2 mb-3">
+                  <div class="bg-white rounded-xl p-2.5 sm:p-3 border border-gray-100">
+                    <div class="flex items-center gap-1.5 mb-1.5">
+                      <div class="w-5 h-5 sm:w-6 sm:h-6 bg-emerald-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                      </div>
+                      <span class="text-[7px] sm:text-[9px] text-gray-400">Pendapatan Hari Ini</span>
+                    </div>
+                    <div class="text-sm sm:text-base font-bold text-gray-900">Rp 2.5M</div>
+                    <div class="text-[7px] sm:text-[9px] text-emerald-600 mt-0.5 flex items-center gap-0.5">
+                      <svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+                      12% dr kemarin
+                    </div>
                   </div>
-                  <div class="bg-white rounded-xl p-2 border border-gray-100 shadow-sm">
-                    <div class="text-[5px] text-gray-400 mb-0.5">Sales Today</div>
-                    <div class="text-[10px] font-bold text-gray-900">128</div>
+                  <div class="bg-white rounded-xl p-2.5 sm:p-3 border border-gray-100">
+                    <div class="flex items-center gap-1.5 mb-1.5">
+                      <div class="w-5 h-5 sm:w-6 sm:h-6 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                      </div>
+                      <span class="text-[7px] sm:text-[9px] text-gray-400">Penjualan Hari Ini</span>
+                    </div>
+                    <div class="text-sm sm:text-base font-bold text-gray-900">128</div>
+                    <div class="text-[7px] sm:text-[9px] text-emerald-600 mt-0.5 flex items-center gap-0.5">
+                      <svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+                      8% dr kemarin
+                    </div>
                   </div>
-                  <div class="bg-white rounded-xl p-2 border border-gray-100 shadow-sm">
-                    <div class="text-[5px] text-gray-400 mb-0.5">Discount Today</div>
-                    <div class="text-[10px] font-bold text-gray-900">125K</div>
+                  <div class="bg-white rounded-xl p-2.5 sm:p-3 border border-gray-100">
+                    <div class="flex items-center gap-1.5 mb-1.5">
+                      <div class="w-5 h-5 sm:w-6 sm:h-6 bg-orange-100 rounded-lg flex items-center justify-center">
+                        <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                      </div>
+                      <span class="text-[7px] sm:text-[9px] text-gray-400">Diskon Hari Ini</span>
+                    </div>
+                    <div class="text-sm sm:text-base font-bold text-gray-900">Rp 125K</div>
+                    <div class="text-[7px] sm:text-[9px] text-red-500 mt-0.5 flex items-center gap-0.5">
+                      <svg class="w-2 h-2 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+                      3% dr kemarin
+                    </div>
                   </div>
                 </div>
-                <div class="bg-white rounded-xl p-2 border border-gray-100 shadow-sm">
-                  <div class="flex items-end gap-1 h-24">
-                    @foreach([30, 45, 35, 60, 42, 75, 55] as $i => $h)
-                    <div class="flex-1 h-full flex flex-col justify-end">
-                      <div class="w-full rounded-t {{ $i === 5 ? 'bg-zonakasir-primary' : 'bg-zonakasir-primary/20' }}" style="height: {{ $h }}%"></div>
+                {{-- Chart --}}
+                <div class="bg-white rounded-xl p-3 sm:p-4 border border-gray-100">
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="text-[9px] sm:text-[11px] font-semibold text-gray-800">Ringkasan Penjualan 7 Hari</span>
+                    <span class="text-[7px] sm:text-[9px] text-gray-400">Minggu ini</span>
+                  </div>
+                  <div class="flex items-end justify-between gap-1 h-16 sm:h-20 px-1">
+                    @foreach([['day' => 'Sen', 'h' => 55, 'active' => false], ['day' => 'Sel', 'h' => 40, 'active' => false], ['day' => 'Rab', 'h' => 70, 'active' => false], ['day' => 'Kam', 'h' => 35, 'active' => false], ['day' => 'Jum', 'h' => 60, 'active' => false], ['day' => 'Sab', 'h' => 85, 'active' => true], ['day' => 'Min', 'h' => 45, 'active' => false]] as $bar)
+                    <div class="flex-1 flex flex-col items-center gap-1">
+                      <div class="w-full rounded-t-md {{ $bar['active'] ? 'bg-gradient-to-t from-zonakasir-primary to-orange-400' : 'bg-gray-200' }}" style="height: {{ $bar['h'] }}%"></div>
+                      <span class="text-[7px] sm:text-[8px] {{ $bar['active'] ? 'text-zonakasir-primary font-semibold' : 'text-gray-400' }}">{{ $bar['day'] }}</span>
                     </div>
                     @endforeach
                   </div>
@@ -354,10 +391,16 @@ state(['locale' => $locale]);
         </div>
       </div>
     </div>
+    {{-- Wave divider --}}
+    <div class="absolute bottom-0 left-0 right-0 translate-y-px" aria-hidden="true">
+      <svg class="w-full h-auto" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0 30c360 15 720-15 1080 10s360-15 360-10v50H0V30z" fill="#f9fafb"/>
+      </svg>
+    </div>
   </section>
 
   {{-- Features --}}
-  <section id="fitur" class="scroll-mt-20 py-16 sm:py-24 bg-gray-50 reveal">
+  <section id="fitur" class="relative scroll-mt-20 py-16 sm:py-24 bg-gray-50 reveal">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 sm:mb-16">
         <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
@@ -383,6 +426,33 @@ state(['locale' => $locale]);
           </div>
           <h3 class="text-lg font-bold text-gray-900">{{ $feature['title'] }}</h3>
           <p class="mt-2 text-sm text-gray-600 leading-relaxed">{{ $feature['desc'] }}</p>
+        </div>
+        @endforeach
+      </div>
+    </div>
+    {{-- Wave divider --}}
+    <div class="absolute bottom-0 left-0 right-0 translate-y-px" aria-hidden="true">
+      <svg class="w-full h-auto" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0 30c240-10 480 20 720 15s480-25 720-10v55H0V30z" fill="#ffffff"/>
+      </svg>
+    </div>
+  </section>
+
+  {{-- Trust Stats --}}
+  <section class="relative py-14 sm:py-18 bg-white reveal">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
+        @foreach([
+          ['n' => '500+', 'l' => __('landing.stat_count_stores')],
+          ['n' => '99.9%', 'l' => __('landing.stat_count_uptime')],
+          ['n' => '24/7', 'l' => __('landing.stat_count_support')],
+          ['n' => '10+', 'l' => __('landing.stat_count_years')],
+        ] as $stat)
+        <div class="reveal" style="transition-delay: {{ $loop->index * 0.1 }}s">
+          <div class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-zonakasir-primary to-orange-500">
+            {{ $stat['n'] }}
+          </div>
+          <div class="mt-2 text-sm sm:text-base text-gray-500 font-medium">{{ $stat['l'] }}</div>
         </div>
         @endforeach
       </div>
@@ -421,7 +491,7 @@ state(['locale' => $locale]);
   </section>
 
   {{-- Pricing --}}
-  <section id="harga" class="scroll-mt-20 py-16 sm:py-24 bg-gray-50 reveal">
+  <section id="harga" class="relative scroll-mt-20 py-16 sm:py-24 bg-gray-50 reveal">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 sm:mb-16">
         <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
@@ -505,10 +575,16 @@ state(['locale' => $locale]);
       </div>
       </div>
     </div>
+    {{-- Wave divider --}}
+    <div class="absolute bottom-0 left-0 right-0 translate-y-px" aria-hidden="true">
+      <svg class="w-full h-auto" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0 20c300-5 420 25 720 20s540-20 720 10v50H0V20z" fill="#ffffff"/>
+      </svg>
+    </div>
   </section>
 
   {{-- FAQ --}}
-  <section id="faq" class="scroll-mt-20 py-16 sm:py-24 bg-white reveal">
+  <section id="faq" class="relative scroll-mt-20 py-16 sm:py-24 bg-white reveal">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 sm:mb-16">
         <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
@@ -553,6 +629,12 @@ state(['locale' => $locale]);
         </div>
         @endforeach
       </div>
+    </div>
+    {{-- Wave divider --}}
+    <div class="absolute bottom-0 left-0 right-0 translate-y-px" aria-hidden="true">
+      <svg class="w-full h-auto" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+        <path d="M0 25c180 12 540 30 900 0s360-35 540-10v65H0V25z" fill="#111827"/>
+      </svg>
     </div>
   </section>
 

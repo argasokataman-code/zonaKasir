@@ -23,6 +23,12 @@ return [
     'stat_multi' => 'Multi',
     'stat_multi_sub' => 'Platform',
 
+    // Stats
+    'stat_count_stores' => 'Toko Aktif',
+    'stat_count_uptime' => 'Uptime',
+    'stat_count_support' => 'Dukungan',
+    'stat_count_years' => 'Tahun Pengalaman',
+
     // Mockup section
     'mockup_badge' => 'Tersedia di Web & Mobile',
 
