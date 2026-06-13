@@ -4,9 +4,22 @@
 
 ---
 
+## 🚨 WAJIB SEBELUM MULAI TASK APAPUN
+
+**Baca ketiga file ini SEKALI SEKALI di awal task:**
+1. `.opencode/rules/00-task-framework.mdc` — 6-phase framework
+2. `.opencode/rules/01-code-style.mdc` — code style, naming, build/test commands
+3. `.opencode/rules/02-security.mdc` — security, deploy, CI/CD, git conventions
+
+**Tanpa baca rules = TUGAS TIDAK BOLEH DIMULAI.**
+
+---
+
 ## 🔄 CONTINUOUS PROMPTING — 6 Fase Per Task
 
 Setiap kali task diberikan, WAJIB jalanin urutan ini. **No skip.**
+
+### 🔴 STEP 0: BACA RULES (sudah di atas)
 
 ### ⏸️ FASE 1: STOP & PAHAMI (Jangan langsung kode)
 - Baca task 2x dengan teliti
