@@ -4,6 +4,7 @@ namespace App\Filament\Tenant\Resources;
 
 use App\Filament\Tenant\Resources\SettlementResource\Pages;
 use App\Models\Tenants\Settlement;
+use App\Traits\HasTranslatableResource;
 use Filament\Resources\Resource;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
