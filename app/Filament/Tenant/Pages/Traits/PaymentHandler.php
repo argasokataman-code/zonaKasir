@@ -141,6 +141,8 @@ trait PaymentHandler
 
         $payment->update([
             'selling_id' => $selling->id,
+            'status' => 'settlement',
+            'paid_at' => now(),
         ]);
 
         CartItem::query()->cashier()->delete();
