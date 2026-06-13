@@ -28,6 +28,9 @@ class PaymentSettings extends Page implements HasForms
             'MIDTRANS_CLIENT_KEY' => config('midtrans.client_key'),
             'MIDTRANS_SERVER_KEY' => config('midtrans.server_key'),
             'MIDTRANS_ENVIRONMENT' => config('midtrans.environment'),
+            'FLIP_SECRET_KEY' => config('flip.secret_key'),
+            'FLIP_WEBHOOK_TOKEN' => config('flip.webhook_token'),
+            'FLIP_BASE_URL' => config('flip.base_url'),
         ]);
     }
 
@@ -55,6 +58,23 @@ class PaymentSettings extends Page implements HasForms
                             ->revealable(),
                         TextInput::make('MIDTRANS_ENVIRONMENT')
                             ->label('Environment')
+                            ->readOnly(),
+                    ]),
+                Section::make('Flip (Disbursement) Configuration')
+                    ->description('Settings are managed via .env file on the server. These values are read-only and shown for reference.')
+                    ->schema([
+                        TextInput::make('FLIP_SECRET_KEY')
+                            ->label('Secret Key')
+                            ->readOnly()
+                            ->password()
+                            ->revealable(),
+                        TextInput::make('FLIP_WEBHOOK_TOKEN')
+                            ->label('Webhook Token')
+                            ->readOnly()
+                            ->password()
+                            ->revealable(),
+                        TextInput::make('FLIP_BASE_URL')
+                            ->label('Base URL')
                             ->readOnly(),
                     ]),
             ]);
