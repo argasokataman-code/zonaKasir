@@ -26,13 +26,13 @@
                             </div>
                             <div class="flex space-x-2">
                                 <x-filament::button 
-                                    wire:click="approve({{ $wd['tenant_id'] }}, {{ $wd['withdrawal_id'] }})"
+                                    wire:click="approve('{{ $wd['tenant_id'] }}', {{ $wd['withdrawal_id'] }})"
                                     color="success"
                                     size="sm">
                                     Approve
                                 </x-filament::button>
                                 <x-filament::button 
-                                    wire:click="reject({{ $wd['tenant_id'] }}, {{ $wd['withdrawal_id'] }})"
+                                    wire:click="reject('{{ $wd['tenant_id'] }}', {{ $wd['withdrawal_id'] }})"
                                     color="danger"
                                     size="sm">
                                     Reject

@@ -65,7 +65,7 @@ class WithdrawalApproval extends Page implements HasForms
         tenancy()->end();
     }
 
-    public function approve(int $tenantId, int $withdrawalId): void
+    public function approve(string $tenantId, int $withdrawalId): void
     {
         try {
             $tenant = Tenant::find($tenantId);
@@ -102,7 +102,7 @@ class WithdrawalApproval extends Page implements HasForms
         }
     }
 
-    public function reject(int $tenantId, int $withdrawalId): void
+    public function reject(string $tenantId, int $withdrawalId): void
     {
         try {
             $tenant = Tenant::find($tenantId);
