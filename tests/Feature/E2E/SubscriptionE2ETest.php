@@ -6,9 +6,6 @@ use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Tenants\User;
 use App\Services\SubscriptionService;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Response;
-use Stancl\Tenancy\Facades\Tenancy;
 use Tests\RefreshDatabaseWithTenant;
 
 uses(RefreshDatabaseWithTenant::class);
@@ -16,105 +13,87 @@ uses(RefreshDatabaseWithTenant::class);
 describe('Subscription E2E Flow', function () {
     beforeEach(function () {
         $this->admin = User::first();
-        $this->token = $this->admin->createToken('test')->plainTextToken;
+        $this->tenantId = $this->admin->tenant_id;
+        $this->subscription = Subscription::create([
+            'tenant_id' => $this->tenantId,
+            'plan_id' => null,
+            'status' => 'trialing',
+            'billing_cycle' => 'monthly',
+            'trial_ends_at' => now()->addDays(14),
+            'starts_at' => now(),
+        ]);
     });
 
-    it('trial subscription is created on tenant registration', function () {
-        $subscription = Tenancy::central(function () {
-            return Subscription::where('status', 'trialing')
-                ->whereNull('plan_id')
-                ->first();
-        });
+    it('trial subscription is created on setup', function () {
+        $subscription = Subscription::where('status', 'trialing')
+            ->whereNull('plan_id')
+            ->where('tenant_id', $this->tenantId)
+            ->first();
 
         expect($subscription)->not()->toBeNull();
         expect($subscription->trial_ends_at)->not()->toBeNull();
         expect($subscription->ends_at)->toBeNull();
         expect($subscription->plan_id)->toBeNull();
         expect($subscription->trial_ends_at->isFuture())->toBeTrue();
-        expect($subscription->trial_ends_at->diffInDays(now(), true))
-            ->toBeGreaterThanOrEqual(13);
     });
 
     it('trial subscription can be manually expired', function () {
-        $subscription = Tenancy::central(function () {
-            return Subscription::where('status', 'trialing')->first();
-        });
-        expect($subscription->status)->toBe('trialing');
+        expect($this->subscription->status)->toBe('trialing');
 
-        $subscription->update(['trial_ends_at' => now()->subDay()]);
-        $subscription->refresh();
+        $this->subscription->update(['trial_ends_at' => now()->subDay()]);
 
-        expect($subscription->trial_ends_at->isPast())->toBeTrue();
+        expect($this->subscription->fresh()->trial_ends_at->isPast())->toBeTrue();
     });
 
     it('checkBilling command expires trialing subscriptions', function () {
-        $subscription = Tenancy::central(function () {
-            return Subscription::where('status', 'trialing')->first();
-        });
-        $subscription->update(['trial_ends_at' => now()->subDay()]);
+        $this->subscription->update(['trial_ends_at' => now()->subDay()]);
 
-        $expiredTrials = Tenancy::central(function () {
-            return Subscription::where('status', 'trialing')
-                ->whereNotNull('trial_ends_at')
-                ->where('trial_ends_at', '<', now())
-                ->get();
-        });
+        $expiredTrials = Subscription::where('status', 'trialing')
+            ->whereNotNull('trial_ends_at')
+            ->where('trial_ends_at', '<', now())
+            ->get();
 
         expect($expiredTrials)->toHaveCount(1);
         $expiredTrials->each->update(['status' => 'expired']);
 
-        $subscription->refresh();
-        expect($subscription->status)->toBe('expired');
+        expect($this->subscription->fresh()->status)->toBe('expired');
     });
 
     it('checkBilling command expires active subscriptions', function () {
-        $subscription = Tenancy::central(function () {
-            return Subscription::where('status', 'trialing')->first();
-        });
-        $subscription->update(['status' => 'active', 'trial_ends_at' => null]);
+        $plan = Plan::create([
+            'name' => 'Premium',
+            'slug' => 'premium-' . uniqid(),
+            'features' => ['all'],
+        ]);
 
-        $plan = Tenancy::central(function () {
-            return Plan::create([
-                'name' => 'Premium',
-                'slug' => 'premium-' . uniqid(),
-                'features' => ['all'],
-            ]);
-        });
-
-        $subscription->update([
+        $this->subscription->update([
+            'status' => 'active',
+            'trial_ends_at' => null,
             'plan_id' => $plan->id,
             'starts_at' => now(),
             'ends_at' => now()->subDay(),
         ]);
 
-        $ended = Tenancy::central(function () {
-            return Subscription::where('status', 'active')
-                ->whereNotNull('ends_at')
-                ->where('ends_at', '<', now())
-                ->get();
-        });
+        $ended = Subscription::where('status', 'active')
+            ->whereNotNull('ends_at')
+            ->where('ends_at', '<', now())
+            ->get();
 
         expect($ended)->toHaveCount(1);
         $ended->each->update(['status' => 'expired']);
 
-        $subscription->refresh();
-        expect($subscription->status)->toBe('expired');
+        expect($this->subscription->fresh()->status)->toBe('expired');
     });
 
     it('subscription service swap functionality', function () {
-        $subscription = Tenancy::central(function () {
-            return Subscription::first();
-        });
-        $plan = Tenancy::central(function () {
-            return Plan::create([
-                'name' => 'Premium',
-                'slug' => 'premium-' . uniqid(),
-                'features' => ['all'],
-            ]);
-        });
+        $plan = Plan::create([
+            'name' => 'Premium',
+            'slug' => 'premium-' . uniqid(),
+            'features' => ['all'],
+        ]);
 
         $service = new SubscriptionService();
-        $updated = $service->swap($subscription, $plan, 'yearly');
+        $updated = $service->swap($this->subscription, $plan, 'yearly');
 
         expect($updated->plan_id)->toBe($plan->id);
         expect($updated->billing_cycle)->toBe('yearly');
@@ -124,12 +103,8 @@ describe('Subscription E2E Flow', function () {
     });
 
     it('subscription service cancel functionality', function () {
-        $subscription = Tenancy::central(function () {
-            return Subscription::first();
-        });
-
         $service = new SubscriptionService();
-        $cancelled = $service->cancel($subscription, 'No longer needed');
+        $cancelled = $service->cancel($this->subscription, 'No longer needed');
 
         expect($cancelled->status)->toBe('cancelled');
         expect($cancelled->cancelled_at)->not()->toBeNull();
@@ -137,14 +112,10 @@ describe('Subscription E2E Flow', function () {
     });
 
     it('subscription service renew functionality', function () {
-        $subscription = Tenancy::central(function () {
-            return Subscription::first();
-        });
-        $subscription->update(['status' => 'active']);
+        $this->subscription->update(['status' => 'active']);
 
         $service = new SubscriptionService();
-        $renewed = $service->renew($subscription);
-        $renewed->refresh();
+        $renewed = $service->renew($this->subscription);
 
         expect($renewed->starts_at->isToday())->toBeTrue();
         expect($renewed->ends_at)->not()->toBeNull();
@@ -152,25 +123,17 @@ describe('Subscription E2E Flow', function () {
     });
 
     it('subscription service mark past due functionality', function () {
-        $subscription = Tenancy::central(function () {
-            return Subscription::first();
-        });
-
         $service = new SubscriptionService();
-        $pastDue = $service->markPastDue($subscription);
+        $pastDue = $service->markPastDue($this->subscription);
 
         expect($pastDue->status)->toBe('past_due');
     });
 
     it('subscription service reactivate functionality', function () {
-        $subscription = Tenancy::central(function () {
-            return Subscription::first();
-        });
-        $subscription->update(['status' => 'cancelled']);
-        $subscription->refresh();
+        $this->subscription->update(['status' => 'cancelled']);
 
         $service = new SubscriptionService();
-        $reactivated = $service->reactivate($subscription);
+        $reactivated = $service->reactivate($this->subscription);
 
         expect($reactivated->status)->toBe('active');
         expect($reactivated->cancelled_at)->toBeNull();

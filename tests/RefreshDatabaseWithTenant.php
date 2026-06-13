@@ -9,17 +9,18 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 trait RefreshDatabaseWithTenant
 {
     use RefreshDatabase {
-        refreshDatabase as parentRefreshDatabase;
         beginDatabaseTransaction as parentBeginDatabaseTransaction;
     }
 
     public function beginDatabaseTransaction()
     {
+        $this->parentBeginDatabaseTransaction();
+
         $tenantId = 'toko_testing';
 
         $this->user = User::factory()->create([
             'tenant_id' => $tenantId,
-            'email' => 'admin@tokotesting.com',
+            'email' => 'admin_' . uniqid() . '@tokotesting.com',
             'is_owner' => true,
         ]);
 
@@ -28,7 +29,5 @@ trait RefreshDatabaseWithTenant
             'shop_name' => 'Toko Testing',
             'business_type' => 'retail',
         ]);
-
-        $this->parentBeginDatabaseTransaction();
     }
 }
