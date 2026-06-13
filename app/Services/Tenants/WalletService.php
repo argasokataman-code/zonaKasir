@@ -40,12 +40,21 @@ class WalletService
 
     public function pay(Member $member, int $amount, Selling $selling): WalletTransaction
     {
-        if ($member->wallet_balance < $amount) {
-            throw new \InvalidArgumentException('Insufficient wallet balance');
+        if ($amount <= 0) {
+            throw new \InvalidArgumentException('Payment amount must be positive');
         }
 
         return DB::transaction(function () use ($member, $amount, $selling) {
-            $member->decrement('wallet_balance', $amount);
+            // Lock the member row and re-check the balance INSIDE the transaction,
+            // so two concurrent payments can't both pass the check and overdraw.
+            $locked = Member::whereKey($member->id)->lockForUpdate()->first();
+
+            if ($locked->wallet_balance < $amount) {
+                throw new \InvalidArgumentException('Insufficient wallet balance');
+            }
+
+            $locked->decrement('wallet_balance', $amount);
+            $member->wallet_balance = $locked->wallet_balance;
 
             $transaction = WalletTransaction::create([
                 'member_id' => $member->id,
@@ -53,7 +62,7 @@ class WalletService
                 'sourceable_id' => $selling->id,
                 'type' => 'payment',
                 'amount' => $amount,
-                'balance_after' => $member->fresh()->wallet_balance,
+                'balance_after' => $locked->fresh()->wallet_balance,
                 'note' => "Payment for transaction {$selling->code}",
             ]);
 
