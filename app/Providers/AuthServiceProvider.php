@@ -104,11 +104,9 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         ResetPassword::createUrlUsing(function ($notifiable, $token) {
-            /** @var \App\Tenant $tenant */
-            $tenant = tenant();
-            $domain = $tenant?->domains()->first()?->domain ?? parse_url(config('app.url'), PHP_URL_HOST);
+            $host = parse_url(config('app.url'), PHP_URL_HOST);
 
-            return "https://{$domain}/reset-password/{$token}?email=".urlencode($notifiable->getEmailForPasswordReset());
+            return "https://{$host}/reset-password/{$token}?email=".urlencode($notifiable->getEmailForPasswordReset());
         });
     }
 }

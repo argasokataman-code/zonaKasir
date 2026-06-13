@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Coupon;
 use App\Models\Subscription;
 use Illuminate\Support\Facades\DB;
-use Stancl\Tenancy\Facades\Tenancy;
 use Exception;
 
 class CouponService
@@ -13,9 +12,7 @@ class CouponService
     public function redeem(string $code, string|int $tenantId): array
     {
         return DB::transaction(function () use ($code, $tenantId) {
-            $coupon = Tenancy::central(function () use ($code) {
-                return Coupon::where('code', $code)->lockForUpdate()->first();
-            });
+            $coupon = Coupon::where('code', $code)->lockForUpdate()->first();
 
             if (! $coupon) {
                 throw new Exception('Kode kupon tidak ditemukan');
@@ -29,9 +26,7 @@ class CouponService
                 return $this->applyTrialExtension($coupon, $tenantId);
             }
 
-            Tenancy::central(function () use ($coupon) {
-                $coupon->increment('used_count');
-            });
+            $coupon->increment('used_count');
 
             return [
                 'success' => true,
@@ -44,12 +39,10 @@ class CouponService
 
     private function applyTrialExtension(Coupon $coupon, string|int $tenantId): array
     {
-        $subscription = Tenancy::central(function () use ($tenantId) {
-            return Subscription::where('tenant_id', $tenantId)
-                ->whereIn('status', ['trialing', 'active'])
-                ->latest()
-                ->first();
-        });
+        $subscription = Subscription::where('tenant_id', $tenantId)
+            ->whereIn('status', ['trialing', 'active'])
+            ->latest()
+            ->first();
 
         if (! $subscription) {
             throw new Exception('Tidak ada langganan aktif untuk tenant ini');
@@ -67,9 +60,7 @@ class CouponService
             ]);
         }
 
-        Tenancy::central(function () use ($coupon) {
-            $coupon->increment('used_count');
-        });
+        $coupon->increment('used_count');
 
         return [
             'success' => true,

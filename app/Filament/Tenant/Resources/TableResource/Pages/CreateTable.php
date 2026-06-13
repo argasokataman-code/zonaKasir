@@ -18,7 +18,7 @@ class CreateTable extends CreateRecord
     protected function beforeCreate(): void
     {
         $access = app(PlanAccessService::class);
-        $tenantId = tenant('id');
+        $tenantId = auth()->user()->tenant_id;
         $currentCount = TableModel::count();
 
         if (! $access->canCreateStore($tenantId, $currentCount)) {
