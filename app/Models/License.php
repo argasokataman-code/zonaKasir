@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class License extends Model
 {
+    /** Always use the central database — never a tenant database. */
+    protected $connection = 'mysql';
+
     protected $guarded = ['id'];
 
     protected $casts = [
