@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Api\MidtransWebhookController;
+use App\Http\Controllers\Api\SubscriptionWebhookController;
 
 Route::group(['prefix' => 'domain'], function ()
 {
@@ -13,6 +14,9 @@ Route::group(['prefix' => 'domain'], function ()
 
 Route::post('/webhooks/midtrans', [MidtransWebhookController::class, 'handle'])
     ->name('webhooks.midtrans');
+
+Route::post('/webhooks/subscription', [SubscriptionWebhookController::class, 'handle'])
+    ->name('webhooks.subscription');
 
 Route::post('/webhooks/flip', [App\Http\Controllers\Api\Webhooks\FlipWebhookController::class, 'handle'])
     ->name('webhooks.flip');

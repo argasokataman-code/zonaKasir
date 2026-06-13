@@ -26,7 +26,7 @@ class PlanFeatureMiddleware
 
         return response()->json([
             'message' => "Feature '{$feature}' is not available in your current plan",
-            'upgrade_url' => '/admin/subscription/upgrade',
+            'upgrade_url' => '/member/subscription',
         ], 403);
     }
 }

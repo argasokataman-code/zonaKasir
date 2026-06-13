@@ -23,6 +23,7 @@ use App\Filament\Tenant\Pages\ProductReport;
 use App\Filament\Tenant\Pages\PurchasingReport;
 use App\Filament\Tenant\Pages\Report;
 use App\Filament\Tenant\Pages\SellingReport;
+use App\Filament\Tenant\Pages\ManageSubscription;
 use App\Filament\Tenant\Pages\WithdrawalPage;
 use App\Filament\Tenant\Pages\TenantLogin;
 use App\Filament\Tenant\Resources\CategoryResource;
@@ -218,6 +219,7 @@ class TenantPanelProvider extends PanelProvider
                 $this->generateNavigationItem(SettlementResource::class),
                 $this->generateNavigationItem(WithdrawalResource::class),
                 $this->generateNavigationItem(WithdrawalPage::class),
+                $this->generateNavigationItem(ManageSubscription::class),
             ]),
             NavigationGroup::make(__('Setting'))->collapsible(false)->items([
                 $this->generateNavigationItem(GeneralSetting::class),

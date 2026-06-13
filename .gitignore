@@ -34,6 +34,9 @@ tasks/
 opencode.json
 version.txt
 
+# Local-only tools
+/Skill-grabber
+
 # Deploy keys (gitignored locally, used by GitHub Actions)
 .deploy/
 

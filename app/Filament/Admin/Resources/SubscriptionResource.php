@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources;
 
+use App\Models\Plan;
 use App\Models\Subscription;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -9,7 +10,8 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\BadgeColumn;
+use Filament\Notifications\Notification;
+use Illuminate\Support\Facades\Config;
 
 class SubscriptionResource extends Resource
 {
@@ -22,6 +24,37 @@ class SubscriptionResource extends Resource
     protected static ?string $pluralLabel = 'Subscriptions';
 
     protected static ?string $slug = 'subscriptions';
+
+    public static function form(Form $form): Form
+    {
+        $cn = Config::get('tenancy.database.central_connection', 'mysql');
+        $plans = Plan::on($cn)->pluck('name', 'id')->toArray();
+
+        return $form
+            ->schema([
+                Forms\Components\Select::make('plan_id')
+                    ->label('Plan')
+                    ->options($plans)
+                    ->nullable(),
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'trialing' => 'Trialing',
+                        'active' => 'Active',
+                        'past_due' => 'Past Due',
+                        'expired' => 'Expired',
+                        'cancelled' => 'Cancelled',
+                    ])
+                    ->required(),
+                Forms\Components\Select::make('billing_cycle')
+                    ->options([
+                        'monthly' => 'Monthly',
+                        'yearly' => 'Yearly',
+                    ])
+                    ->required(),
+                Forms\Components\DateTimePicker::make('trial_ends_at'),
+                Forms\Components\DateTimePicker::make('ends_at'),
+            ]);
+    }
 
     public static function table(Table $table): Table
     {
@@ -66,9 +99,37 @@ class SubscriptionResource extends Resource
                         'expired' => 'Expired',
                         'cancelled' => 'Cancelled',
                     ]),
+                Tables\Filters\SelectFilter::make('plan_id')
+                    ->label('Plan')
+                    ->options(fn () => Plan::pluck('name', 'id')->toArray()),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('activate')
+                    ->label('Activate')
+                    ->icon('heroicon-o-check-circle')
+                    ->color('success')
+                    ->hidden(fn ($record) => $record->status === 'active' || $record->status === 'trialing')
+                    ->requiresConfirmation()
+                    ->action(fn ($record) => $record->update(['status' => 'active'])),
+                Tables\Actions\Action::make('suspend')
+                    ->label('Suspend')
+                    ->icon('heroicon-o-pause-circle')
+                    ->color('warning')
+                    ->hidden(fn ($record) => $record->status === 'expired' || $record->status === 'cancelled' || $record->status === 'past_due')
+                    ->requiresConfirmation()
+                    ->action(fn ($record) => $record->update(['status' => 'past_due'])),
+                Tables\Actions\Action::make('expire')
+                    ->label('Expire')
+                    ->icon('heroicon-o-x-circle')
+                    ->color('danger')
+                    ->hidden(fn ($record) => $record->status === 'expired' || $record->status === 'cancelled')
+                    ->requiresConfirmation()
+                    ->action(fn ($record) => $record->update(['status' => 'expired'])),
+            ])
+            ->bulkActions([
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 

@@ -37,16 +37,20 @@ class PlanResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('price_monthly')
                     ->numeric()
+                    ->minValue(0)
                     ->prefix('Rp')
                     ->required(),
                 Forms\Components\TextInput::make('price_yearly')
                     ->numeric()
+                    ->minValue(0)
                     ->prefix('Rp'),
                 Forms\Components\TextInput::make('max_stores')
                     ->numeric()
+                    ->minValue(0)
                     ->default(1),
                 Forms\Components\TextInput::make('max_users')
                     ->numeric()
+                    ->minValue(0)
                     ->default(1),
                 Forms\Components\Toggle::make('is_active')
                     ->default(true),
