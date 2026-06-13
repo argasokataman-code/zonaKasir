@@ -19,12 +19,14 @@ class MidtransWebhookController extends Controller
         $payload = $request->all();
         $orderId = $payload['order_id'] ?? '';
 
+        Log::info('Midtrans webhook received', ['payload' => $payload]);
+
         // Extract tenant ID from order_id prefix format: T{tenant_id}-{microtime}-{random(4)}
         $tenantId = $this->extractTenantId($orderId);
 
         if (!$tenantId) {
             Log::error('Midtrans webhook: invalid order_id format', ['order_id' => $orderId]);
-            return response()->json(['error' => 'Invalid order_id format'], 400);
+            return response()->json(['status' => 'ok', 'message' => 'Test notification received'], 200);
         }
 
         // Initialize tenant context (stancl/tenancy)
