@@ -523,54 +523,64 @@ state(['locale' => $locale]);
 
       <div class="grid md:grid-cols-2 gap-6 lg:gap-8 items-stretch">
         {{-- Starter --}}
-        <div class="bg-white rounded-3xl p-7 sm:p-9 border border-gray-200 flex flex-col">
-          <h3 class="text-xl font-bold text-gray-900">{{ __('landing.plan_starter') }}</h3>
-          <p class="mt-2 text-sm text-gray-500">{{ __('landing.plan_starter_desc') }}</p>
-          <div class="mt-5 flex items-baseline gap-1" x-show="!annual">
-            <span class="text-4xl font-extrabold text-gray-900">IDR 25.000</span>
-            <span class="text-gray-400 font-medium">{{ __('landing.price_month') }}</span>
+        <div class="group bg-white rounded-3xl p-7 sm:p-9 border border-gray-200 flex flex-col transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-orange-100 hover:border-orange-200">
+          {{-- Subtle glow on hover --}}
+          <div class="absolute inset-0 rounded-3xl bg-gradient-to-b from-orange-400/0 to-amber-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" aria-hidden="true"
+               style="background: radial-gradient(ellipse 120% 80% at 50% 0%, rgba(255,102,0,0.07) 0%, transparent 70%);"></div>
+          <div class="relative">
+            <h3 class="text-xl font-bold text-gray-900">{{ __('landing.plan_starter') }}</h3>
+            <p class="mt-2 text-sm text-gray-500">{{ __('landing.plan_starter_desc') }}</p>
+            <div class="mt-5 flex items-baseline gap-1" x-show="!annual">
+              <span class="text-4xl font-extrabold text-gray-900 transition-colors duration-500 group-hover:text-zonakasir-primary">IDR 25.000</span>
+              <span class="text-gray-400 font-medium">{{ __('landing.price_month') }}</span>
+            </div>
+            <div class="mt-5 flex items-baseline gap-1" x-show="annual" x-cloak>
+              <span class="text-4xl font-extrabold text-gray-900 transition-colors duration-500 group-hover:text-zonakasir-primary">IDR 249.000</span>
+              <span class="text-gray-400 font-medium">{{ __('landing.price_year') }}</span>
+            </div>
+            <ul class="mt-7 space-y-3 flex-1">
+              @foreach([__('landing.plan_starter_1'), __('landing.plan_starter_2'), __('landing.plan_starter_3'), __('landing.plan_starter_4'), __('landing.plan_starter_5')] as $inc)
+              <li class="flex items-center gap-3 text-sm text-gray-700">
+                <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                {{ $inc }}
+              </li>
+              @endforeach
+            </ul>
+            <a href="{{ route('auth.register') }}" class="mt-8 block text-center border-2 border-zonakasir-primary text-zonakasir-primary py-3.5 rounded-2xl font-semibold transition-all duration-300 hover:bg-zonakasir-primary hover:text-white hover:shadow-lg hover:shadow-orange-500/25 hover:scale-[1.02]">
+              {{ __('landing.plan_cta') }}
+            </a>
           </div>
-          <div class="mt-5 flex items-baseline gap-1" x-show="annual" x-cloak>
-            <span class="text-4xl font-extrabold text-gray-900">IDR 249.000</span>
-            <span class="text-gray-400 font-medium">{{ __('landing.price_year') }}</span>
-          </div>
-          <ul class="mt-7 space-y-3 flex-1">
-            @foreach([__('landing.plan_starter_1'), __('landing.plan_starter_2'), __('landing.plan_starter_3'), __('landing.plan_starter_4'), __('landing.plan_starter_5')] as $inc)
-            <li class="flex items-center gap-3 text-sm text-gray-700">
-              <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              {{ $inc }}
-            </li>
-            @endforeach
-          </ul>
-          <a href="{{ route('auth.register') }}" class="mt-8 block text-center border-2 border-zonakasir-primary text-zonakasir-primary py-3.5 rounded-2xl font-semibold transition-colors hover:bg-zonakasir-primary hover:text-white">
-            {{ __('landing.plan_cta') }}
-          </a>
         </div>
 
         {{-- Business --}}
-        <div class="relative bg-gray-900 rounded-3xl p-7 sm:p-9 flex flex-col shadow-2xl">
-          <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-zonakasir-primary text-white text-xs font-bold px-4 py-1.5 rounded-full whitespace-nowrap">{{ __('landing.plan_popular') }}</span>
-          <h3 class="text-xl font-bold text-white">{{ __('landing.plan_business') }}</h3>
-          <p class="mt-2 text-sm text-gray-400">{{ __('landing.plan_business_desc') }}</p>
-          <div class="mt-5 flex items-baseline gap-1" x-show="!annual">
-            <span class="text-4xl font-extrabold text-white">IDR 49.000</span>
-            <span class="text-gray-500 font-medium">{{ __('landing.price_month') }}</span>
+        <div class="group relative bg-gray-900 rounded-3xl p-7 sm:p-9 flex flex-col shadow-2xl transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_25px_60px_-15px_rgba(255,102,0,0.3)]">
+          {{-- Glow ring on hover --}}
+          <div class="absolute inset-0 rounded-3xl ring-1 ring-white/10 group-hover:ring-zonakasir-primary/30 transition-all duration-500 pointer-events-none" aria-hidden="true"></div>
+          {{-- Badge --}}
+          <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-zonakasir-primary text-white text-xs font-bold px-4 py-1.5 rounded-full whitespace-nowrap shadow-lg shadow-orange-500/30 transition-all duration-300 group-hover:shadow-orange-500/50 group-hover:scale-105">{{ __('landing.plan_popular') }}</span>
+          <div class="relative">
+            <h3 class="text-xl font-bold text-white">{{ __('landing.plan_business') }}</h3>
+            <p class="mt-2 text-sm text-gray-400">{{ __('landing.plan_business_desc') }}</p>
+            <div class="mt-5 flex items-baseline gap-1" x-show="!annual">
+              <span class="text-4xl font-extrabold text-white transition-colors duration-500 group-hover:text-zonakasir-primary">IDR 49.000</span>
+              <span class="text-gray-500 font-medium">{{ __('landing.price_month') }}</span>
+            </div>
+            <div class="mt-5 flex items-baseline gap-1" x-show="annual" x-cloak>
+              <span class="text-4xl font-extrabold text-white transition-colors duration-500 group-hover:text-zonakasir-primary">IDR 490.000</span>
+              <span class="text-gray-500 font-medium">{{ __('landing.price_year') }}</span>
+            </div>
+            <ul class="mt-7 space-y-3 flex-1">
+              @foreach([__('landing.plan_business_1'), __('landing.plan_business_2'), __('landing.plan_business_3'), __('landing.plan_business_4'), __('landing.plan_business_5')] as $inc)
+              <li class="flex items-center gap-3 text-sm text-gray-300">
+                <svg class="w-5 h-5 text-zonakasir-primary flex-shrink-0 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                {{ $inc }}
+              </li>
+              @endforeach
+            </ul>
+            <a href="{{ route('auth.register') }}" class="mt-8 block text-center bg-zonakasir-primary text-white py-3.5 rounded-2xl font-semibold transition-all duration-300 hover:bg-orange-600 hover:shadow-lg hover:shadow-orange-500/40 hover:scale-[1.02]">
+              {{ __('landing.plan_cta') }}
+            </a>
           </div>
-          <div class="mt-5 flex items-baseline gap-1" x-show="annual" x-cloak>
-            <span class="text-4xl font-extrabold text-white">IDR 490.000</span>
-            <span class="text-gray-500 font-medium">{{ __('landing.price_year') }}</span>
-          </div>
-          <ul class="mt-7 space-y-3 flex-1">
-            @foreach([__('landing.plan_business_1'), __('landing.plan_business_2'), __('landing.plan_business_3'), __('landing.plan_business_4'), __('landing.plan_business_5')] as $inc)
-            <li class="flex items-center gap-3 text-sm text-gray-300">
-              <svg class="w-5 h-5 text-zonakasir-primary flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-              {{ $inc }}
-            </li>
-            @endforeach
-          </ul>
-          <a href="{{ route('auth.register') }}" class="mt-8 block text-center bg-zonakasir-primary text-white py-3.5 rounded-2xl font-semibold transition-colors hover:bg-orange-600">
-            {{ __('landing.plan_cta') }}
-          </a>
         </div>
       </div>
       </div>
