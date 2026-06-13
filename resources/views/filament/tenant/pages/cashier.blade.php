@@ -194,7 +194,7 @@
             <div class="mb-4 grid grid-cols-2 gap-2 md:grid-cols-4">
               <template x-for="paymentMethod in paymentMethods">
                 <div
-                  x-on:click="cartDetail['payment_method_id'] = paymentMethod.id; $wire.setPaymentMethodId(paymentMethod.id);"
+                  x-on:click="selectPayment(paymentMethod)"
                   class="flex cursor-pointer justify-center rounded-md border-none px-3 py-2 text-xs hover:scale-105 dark:text-white md:text-sm"
                   :class="cartDetail['payment_method_id'] == paymentMethod.id ? 'bg-zonakasir-primary text-white' :
                       'dark:bg-gray-900 bg-gray-300 '"
@@ -703,6 +703,17 @@
           this.displayValue += number;
           this.$refs.payedMoney.value = moneyFormat(this.displayValue);
           this.changes();
+        },
+        selectPayment(method) {
+          this.cartDetail['payment_method_id'] = method.id;
+          $wire.setPaymentMethodId(method.id);
+
+          // Midtrans types that don't need calculator: directly proceed payment
+          var midtransTypes = [/*'credit_card',*/ 'debit_card', 'gopay', 'shopeepay', 'qris', 'bank_transfer', 'indomaret', 'alfamart', 'kredivo', 'akulaku'];
+          if (midtransTypes.includes(method.payment_type)) {
+            // Small delay to allow Livewire to sync payment_method_id
+            setTimeout(() => { $wire.proceedThePayment(); }, 100);
+          }
         },
         changes() {
           let val = this.$refs.payedMoney.value || '';
