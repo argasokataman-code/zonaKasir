@@ -70,15 +70,12 @@ class AppServiceProvider extends ServiceProvider
 
             return $columns ? $query : $this;
         });
-        if (! config('tenancy.central_domains')[0]) {
-            $mainPath = database_path('migrations');
-            $directories = glob($mainPath.'/*', GLOB_ONLYDIR);
+        $mainPath = database_path('migrations');
+        $directories = glob($mainPath.'/*', GLOB_ONLYDIR);
 
-            // Exclude tenant migrations — they run via tenancy package, not globally
-            $directories = array_filter($directories, fn ($dir) => basename($dir) !== 'tenant');
+        $directories = array_filter($directories, fn ($dir) => basename($dir) !== 'tenant');
 
-            $this->loadMigrationsFrom($directories);
-        }
+        $this->loadMigrationsFrom($directories);
 
         Feature::resolveScopeUsing(fn ($driver) => null);
         Feature::discover();

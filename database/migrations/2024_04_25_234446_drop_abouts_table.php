@@ -11,14 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (Schema::hasTable('abouts')) {
-            if (config('database.default') !== 'testing') {
-                Artisan::call('tenants:run app:move-about-to-tenant');
-            }
-        }
-        if (config('tenancy.central_domains')[0] != null) {
-            Schema::dropIfExists('abouts');
-        }
     }
 
     /**
