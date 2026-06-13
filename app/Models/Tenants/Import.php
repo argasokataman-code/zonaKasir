@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Traits\HasTenant;
 class Import extends ModelsImport
 {
+    use HasTenant;
     use HasFactory, HasTenant;
 
     public function user(): BelongsTo

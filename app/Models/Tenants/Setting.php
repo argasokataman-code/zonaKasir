@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Models\Traits\HasTenant;
 class Setting extends Model
 {
+    use HasTenant;
     use HasFactory, HasTenant;
 
     protected $fillable = ['key', 'value'];

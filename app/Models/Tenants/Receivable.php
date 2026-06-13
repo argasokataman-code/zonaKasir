@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Traits\HasTenant;
 class Receivable extends Model
 {
+    use HasTenant;
     use HasFactory, HasTenant;
 
     protected $guarded = ['id'];

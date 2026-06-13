@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Traits\HasTenant;
 class UploadedFile extends Model
 {
+    use HasTenant;
     use HasFactory, HasTenant;
 
     protected $fillable = [

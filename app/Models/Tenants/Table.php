@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Traits\HasTenant;
 class Table extends Model
 {
+    use HasTenant;
     use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];

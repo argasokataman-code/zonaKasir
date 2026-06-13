@@ -18,6 +18,7 @@ use Illuminate\Support\Str;
 use App\Models\Traits\HasTenant;
 class CartItem extends Model
 {
+    use HasTenant;
     use HasFactory, HasTenant;
 
     protected $fillable = [

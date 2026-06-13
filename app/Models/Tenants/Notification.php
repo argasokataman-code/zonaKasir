@@ -11,5 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasTenant;
 class Notification extends Model
 {
+    use HasTenant;
     use HasFactory, HasTenant;
 }

@@ -15,6 +15,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Traits\HasTenant;
 class CashDrawer extends Model
 {
+    use HasTenant;
     use HasFactory, SoftDeletes, LogsActivity;
 
     protected $guarded = ['id'];
