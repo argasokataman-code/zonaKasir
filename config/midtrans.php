@@ -73,9 +73,10 @@ return [
     ],
 
     /*
-     * Default platform fee percentage (per tenant, overridable in abouts table)
+     * Platform fee percentage — 0% (no additional fee to tenants, only Midtrans MDR applies)
+     * Kept in config as fallback; abouts table column uses this as default value.
      */
-    'platform_fee_percent_default' => 1.00,
+    'platform_fee_percent_default' => 0,
 
     /*
      * Minimum withdrawal amount
