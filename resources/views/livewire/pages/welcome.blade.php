@@ -17,7 +17,15 @@ state(['locale' => $locale]);
 
 ?>
 
-<div class="overflow-hidden antialiased">
+<div class="overflow-hidden antialiased"
+     x-data="{
+       init() {
+         const obs = new IntersectionObserver((entries) => {
+           entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+         }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+         this.$el.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+       }
+     }">
 
   {{-- Navbar --}}
   <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
@@ -33,7 +41,7 @@ state(['locale' => $locale]);
         </a>
 
         <div class="hidden md:flex items-center gap-1">
-          @foreach([__('landing.nav_features') => '#fitur', __('landing.nav_menu') => '#menu', __('landing.nav_pricing') => '#harga'] as $label => $href)
+          @foreach([__('landing.nav_about') => '#tentang', __('landing.nav_features') => '#fitur', __('landing.nav_menu') => '#menu', __('landing.nav_pricing') => '#harga'] as $label => $href)
           <a href="{{ $href }}" class="px-4 py-2 font-medium rounded-full transition-colors"
              :class="scrolled ? 'text-gray-600 hover:text-zonakasir-primary' : 'text-white/80 hover:text-white'">
             {{ $label }}
@@ -77,7 +85,7 @@ state(['locale' => $locale]);
     <div x-show="mobileMenu" x-cloak x-transition.opacity.duration.150ms
          class="md:hidden absolute top-full left-4 right-4 mt-2 bg-white shadow-2xl rounded-2xl overflow-hidden border border-gray-100">
       <div class="p-4 space-y-1">
-        @foreach([__('landing.nav_features') => '#fitur', __('landing.nav_menu') => '#menu', __('landing.nav_pricing') => '#harga'] as $label => $href)
+        @foreach([__('landing.nav_about') => '#tentang', __('landing.nav_features') => '#fitur', __('landing.nav_menu') => '#menu', __('landing.nav_pricing') => '#harga'] as $label => $href)
         <a href="{{ $href }}" class="block px-4 py-3 text-gray-700 hover:text-zonakasir-primary hover:bg-zonakasir-primary/5 rounded-xl font-medium"
            x-on:click="mobileMenu = false">
           {{ $label }}
@@ -105,22 +113,22 @@ state(['locale' => $locale]);
     </div>
 
     <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 w-full text-center">
-      <div class="inline-flex items-center gap-2 bg-white/[0.07] border border-white/10 rounded-full px-5 py-2 mb-8">
+      <div class="reveal inline-flex items-center gap-2 bg-white/[0.07] border border-white/10 rounded-full px-5 py-2 mb-8">
         <span class="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
         <span class="text-white/80 text-sm font-medium">{{ __('landing.hero_badge') }}</span>
       </div>
 
-      <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.05] tracking-tight">
+      <h1 class="reveal reveal-delay-1 text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.05] tracking-tight">
         {{ __('landing.hero_title_1') }}
         <span class="block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-zonakasir-primary to-orange-600">{{ __('landing.hero_title_2') }}</span>
         <span class="block text-white/90">{{ __('landing.hero_title_3') }}</span>
       </h1>
 
-      <p class="mt-7 text-base sm:text-lg lg:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+      <p class="reveal reveal-delay-2 mt-7 text-base sm:text-lg lg:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
         {{ __('landing.hero_subtitle') }}
       </p>
 
-      <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+      <div class="reveal reveal-delay-3 mt-10 flex flex-col sm:flex-row gap-4 justify-center">
         <a href="{{ route('auth.register') }}"
            class="group bg-gradient-to-r from-zonakasir-primary to-orange-600 text-white px-9 py-4 rounded-2xl font-semibold text-lg shadow-xl shadow-orange-600/25 transition-all hover:shadow-2xl hover:shadow-orange-600/40 hover:brightness-110 flex items-center justify-center gap-3">
           <span>{{ __('landing.hero_cta') }}</span>
@@ -138,7 +146,7 @@ state(['locale' => $locale]);
       </div>
 
       {{-- Glass info chips --}}
-      <div class="mt-12 flex flex-wrap justify-center gap-3 sm:gap-4">
+      <div class="reveal reveal-delay-4 mt-12 flex flex-wrap justify-center gap-3 sm:gap-4">
         @foreach([
           ['t' => __('landing.stat_cloud'), 's' => __('landing.stat_cloud_sub'), 'icon' => 'M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z'],
           ['t' => __('landing.stat_realtime'), 's' => __('landing.stat_realtime_sub'), 'icon' => 'M13 10V3L4 14h7v7l9-11h-7z'],
@@ -183,16 +191,16 @@ state(['locale' => $locale]);
                   </div>
                   <div class="grid grid-cols-3 gap-1.5">
                     @foreach([
-                      ['name' => 'Indomie Goreng', 'price' => 'Rp 3.500', 'bg' => 'from-yellow-300 to-orange-300', 'emoji' => '🍜'],
-                      ['name' => 'Teh Botol', 'price' => 'Rp 4.000', 'bg' => 'from-green-300 to-emerald-400', 'emoji' => '🍵'],
-                      ['name' => 'Kopi Susu', 'price' => 'Rp 18.000', 'bg' => 'from-amber-300 to-orange-400', 'emoji' => '☕'],
-                      ['name' => 'Le Minerale', 'price' => 'Rp 4.500', 'bg' => 'from-blue-300 to-cyan-400', 'emoji' => '💧'],
-                      ['name' => 'Pocari Sweat', 'price' => 'Rp 7.000', 'bg' => 'from-cyan-300 to-sky-400', 'emoji' => '🧃'],
-                      ['name' => 'Chitato 68g', 'price' => 'Rp 12.500', 'bg' => 'from-purple-300 to-violet-400', 'emoji' => '🥔'],
+                      ['name' => 'Indomie Goreng', 'price' => 'Rp 3.500', 'bg' => 'from-yellow-300 to-orange-300', 'icon' => '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 8h18M8 8V5M16 8V5"/><line x1="7" y1="11" x2="7" y2="15"/><line x1="10" y1="11" x2="14" y2="15"/><circle cx="17" cy="13" r="2"/>'],
+                      ['name' => 'Teh Botol', 'price' => 'Rp 4.000', 'bg' => 'from-green-300 to-emerald-400', 'icon' => '<rect x="7" y="2" width="10" height="18" rx="3"/><rect x="9" y="4" width="6" height="4" rx="1"/><circle cx="12" cy="11" r="3" fill="white" opacity="0.35"/>'],
+                      ['name' => 'Kopi Susu', 'price' => 'Rp 18.000', 'bg' => 'from-amber-300 to-orange-400', 'icon' => '<path d="M5 3h3l2 4H5z"/><rect x="8" y="7" width="8" height="9" rx="2"/><path d="M8 8a4 5 0 0 0 8 0"/><rect x="7" y="6" width="10" height="2" rx="1"/>'],
+                      ['name' => 'Le Minerale', 'price' => 'Rp 4.500', 'bg' => 'from-blue-300 to-cyan-400', 'icon' => '<rect x="7" y="2" width="10" height="15" rx="3"/><path d="M9 6l3-3 3 3"/><path d="M9 9l3-3 3 3"/><circle cx="12" cy="12" r="2" fill="white" opacity="0.35"/>'],
+                      ['name' => 'Pocari Sweat', 'price' => 'Rp 7.000', 'bg' => 'from-cyan-300 to-sky-400', 'icon' => '<rect x="6" y="3" width="12" height="16" rx="2"/><rect x="8" y="5" width="8" height="3" rx="1"/><rect x="8" y="10" width="8" height="2" rx="0.5" fill="white" opacity="0.3"/><rect x="8" y="13" width="5" height="2" rx="0.5" fill="white" opacity="0.2"/>'],
+                      ['name' => 'Chitato 68g', 'price' => 'Rp 12.500', 'bg' => 'from-purple-300 to-violet-400', 'icon' => '<rect x="3" y="4" width="18" height="16" rx="2"/><rect x="3" y="4" width="18" height="5" rx="2"/><circle cx="12" cy="12" r="4" fill="white" opacity="0.3"/><circle cx="10" cy="10" r="1.5" fill="white" opacity="0.4"/>'],
                     ] as $p)
                     <div class="bg-white rounded-lg border border-gray-100 overflow-hidden shadow-sm">
                       <div class="bg-gradient-to-br {{ $p['bg'] }} h-9 sm:h-11 flex items-center justify-center">
-                        <span class="text-lg sm:text-xl">{{ $p['emoji'] }}</span>
+                        <svg class="w-5 h-5 text-white/80" fill="none" stroke="white" stroke-width="1.5" viewBox="0 0 24 24">{!! $p['icon'] !!}</svg>
                       </div>
                       <div class="p-1.5">
                         <div class="text-[8px] font-bold text-zonakasir-primary">{{ $p['price'] }}</div>
@@ -248,7 +256,7 @@ state(['locale' => $locale]);
   </section>
 
   {{-- About --}}
-  <section id="tentang" class="scroll-mt-20 py-16 sm:py-24 bg-white">
+  <section id="tentang" class="scroll-mt-20 py-16 sm:py-24 bg-white reveal">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
         <div>
@@ -349,7 +357,7 @@ state(['locale' => $locale]);
   </section>
 
   {{-- Features --}}
-  <section id="fitur" class="scroll-mt-20 py-16 sm:py-24 bg-gray-50">
+  <section id="fitur" class="scroll-mt-20 py-16 sm:py-24 bg-gray-50 reveal">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 sm:mb-16">
         <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
@@ -382,7 +390,7 @@ state(['locale' => $locale]);
   </section>
 
   {{-- Modules --}}
-  <section id="menu" class="scroll-mt-20 py-16 sm:py-24 bg-white">
+  <section id="menu" class="scroll-mt-20 py-16 sm:py-24 bg-white reveal">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 sm:mb-16">
         <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
@@ -413,7 +421,7 @@ state(['locale' => $locale]);
   </section>
 
   {{-- Pricing --}}
-  <section id="harga" class="scroll-mt-20 py-16 sm:py-24 bg-gray-50">
+  <section id="harga" class="scroll-mt-20 py-16 sm:py-24 bg-gray-50 reveal">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-12 sm:mb-16">
         <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
@@ -499,8 +507,57 @@ state(['locale' => $locale]);
     </div>
   </section>
 
+  {{-- FAQ --}}
+  <section id="faq" class="scroll-mt-20 py-16 sm:py-24 bg-white reveal">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12 sm:mb-16">
+        <div class="inline-flex items-center gap-2 bg-zonakasir-primary/10 rounded-full px-4 py-1.5 mb-4">
+          <span class="w-1.5 h-1.5 bg-zonakasir-primary rounded-full"></span>
+          <span class="text-zonakasir-primary text-sm font-semibold">{{ __('landing.faq_badge') }}</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900">{{ __('landing.faq_title') }}</h2>
+        <p class="mt-4 text-gray-600 max-w-2xl mx-auto text-base sm:text-lg">{{ __('landing.faq_subtitle') }}</p>
+      </div>
+
+      <div class="space-y-3" x-data="{ open: null }">
+        @foreach([
+          ['q' => __('landing.faq_q1'), 'a' => __('landing.faq_a1')],
+          ['q' => __('landing.faq_q2'), 'a' => __('landing.faq_a2')],
+          ['q' => __('landing.faq_q3'), 'a' => __('landing.faq_a3')],
+          ['q' => __('landing.faq_q4'), 'a' => __('landing.faq_a4')],
+          ['q' => __('landing.faq_q5'), 'a' => __('landing.faq_a5')],
+          ['q' => __('landing.faq_q6'), 'a' => __('landing.faq_a6')],
+        ] as $i => $faq)
+        <div class="border border-gray-200 rounded-2xl overflow-hidden transition-colors"
+             :class="open === {{ $i }} ? 'border-zonakasir-primary/30 bg-orange-50/30' : 'bg-white hover:border-gray-300'">
+          <button type="button" x-on:click="open = open === {{ $i }} ? null : {{ $i }}"
+                  class="w-full flex items-center justify-between px-6 py-5 text-left">
+            <span class="text-base sm:text-lg font-semibold text-gray-900 pr-4">{{ $faq['q'] }}</span>
+            <span class="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300"
+                  :class="open === {{ $i }} ? 'bg-zonakasir-primary text-white rotate-180' : 'bg-gray-100 text-gray-500'">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </span>
+          </button>
+          <div x-show="open === {{ $i }}"
+               x-transition:enter="transition ease-out duration-300"
+               x-transition:enter-start="opacity-0 -translate-y-2"
+               x-transition:enter-end="opacity-100 translate-y-0"
+               x-transition:leave="transition ease-in duration-200"
+               x-transition:leave-start="opacity-100 translate-y-0"
+               x-transition:leave-end="opacity-0 -translate-y-2"
+               x-cloak>
+            <div class="px-6 pb-5 text-gray-600 leading-relaxed text-sm sm:text-base">{{ $faq['a'] }}</div>
+          </div>
+        </div>
+        @endforeach
+      </div>
+    </div>
+  </section>
+
   {{-- CTA --}}
-  <section class="py-16 sm:py-24 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+  <section class="py-16 sm:py-24 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 reveal">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white leading-tight">{{ __('landing.cta_title') }}</h2>
       <p class="mt-5 text-gray-400 text-base sm:text-lg">{{ __('landing.cta_subtitle') }}</p>
@@ -515,14 +572,80 @@ state(['locale' => $locale]);
   </section>
 
   {{-- Footer --}}
-  <footer class="bg-gray-900 border-t border-white/10 py-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-2.5">
-        <img src="{{ asset('assets/logo/logo.svg') }}" class="h-7" alt="ZonaKasir">
-        <span class="text-white font-bold">ZonaKasir</span>
+  <footer class="bg-gray-900 pt-14 sm:pt-18 pb-8 border-t border-white/5 reveal">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-14">
+        {{-- Brand --}}
+        <div class="sm:col-span-2 lg:col-span-1">
+          <div class="flex items-center gap-2.5 mb-4">
+            <img src="{{ asset('assets/logo/logo.svg') }}" class="h-8" alt="ZonaKasir">
+            <span class="text-white font-bold text-lg">ZonaKasir</span>
+          </div>
+          <p class="text-gray-400 text-sm leading-relaxed mb-5">{{ __('landing.footer_desc') }}</p>
+          <div class="flex items-center gap-3">
+            @foreach(['whatsapp', 'email'] as $contact)
+            <a href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:bg-zonakasir-primary hover:text-white hover:border-zonakasir-primary transition-colors">
+              @if($contact === 'whatsapp')
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+              @else
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              @endif
+            </a>
+            @endforeach
+          </div>
+        </div>
+
+        {{-- Links --}}
+        <div>
+          <h4 class="text-white font-semibold mb-4 text-sm">{{ __('landing.footer_links_title') }}</h4>
+          <ul class="space-y-2.5">
+            @foreach([
+              __('landing.nav_about') => '#tentang',
+              __('landing.nav_features') => '#fitur',
+              __('landing.nav_menu') => '#menu',
+              __('landing.nav_pricing') => '#harga',
+              __('landing.faq_badge') => '#faq',
+            ] as $label => $href)
+            <li><a href="{{ $href }}" class="text-gray-400 hover:text-white text-sm transition-colors">{{ $label }}</a></li>
+            @endforeach
+          </ul>
+        </div>
+
+        {{-- Contact --}}
+        <div>
+          <h4 class="text-white font-semibold mb-4 text-sm">{{ __('landing.footer_contact_title') }}</h4>
+          <ul class="space-y-2.5">
+            <li class="flex items-center gap-2.5 text-gray-400 text-sm">
+              <svg class="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+              zonakasirapp@gmail.com
+            </li>
+            <li class="flex items-center gap-2.5 text-gray-400 text-sm">
+              <svg class="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Yogyakarta, Indonesia
+            </li>
+            <li class="flex items-center gap-2.5 text-gray-400 text-sm">
+              <svg class="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              {{ __('landing.footer_hours') }}
+            </li>
+          </ul>
+        </div>
+
+        {{-- Legal --}}
+        <div>
+          <h4 class="text-white font-semibold mb-4 text-sm">{{ __('landing.footer_legal_title') }}</h4>
+          <ul class="space-y-2.5">
+            <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">{{ __('landing.footer_privacy') }}</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">{{ __('landing.footer_terms') }}</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">{{ __('landing.footer_refund') }}</a></li>
+          </ul>
+        </div>
       </div>
-      <p class="text-gray-500 text-sm text-center">{{ __('landing.footer_tagline') }}</p>
-      <p class="text-gray-600 text-sm">© {{ date('Y') }} ZonaKasir. {{ __('landing.footer_rights') }}</p>
+
+      {{-- Bottom bar --}}
+      <div class="mt-12 pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p class="text-gray-600 text-sm">© {{ date('Y') }} ZonaKasir. {{ __('landing.footer_rights') }}</p>
+        <p class="text-gray-600 text-xs">{{ __('landing.footer_made_with') }} &hearts; {{ __('landing.footer_made_in') }}</p>
+      </div>
     </div>
   </footer>
 </div>

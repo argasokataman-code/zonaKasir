@@ -2,189 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== Animations ===== */
-
-/* Fade In Up */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ===== Scroll Reveal ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.animate-fade-in-up {
-  animation: fadeInUp 0.7s ease-out both;
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
-
-/* Float */
-@keyframes float {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(-24px) scale(1.02); }
-}
-.animate-float {
-  animation: float 7s ease-in-out infinite;
-}
-
-@keyframes floatDelayed {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(-18px) scale(1.01); }
-}
-.animate-float-delayed {
-  animation: floatDelayed 9s ease-in-out infinite;
-  animation-delay: 2s;
-}
-
-@keyframes floatSlow {
-  0%, 100% { transform: rotate(3deg) scale(1.05); }
-  50% { transform: rotate(5deg) scale(1.08); }
-}
-.animate-float-slow {
-  animation: floatSlow 8s ease-in-out infinite;
-}
-
-/* Pulse Slow */
-@keyframes pulseSlow {
-  0%, 100% { opacity: 0.03; transform: scale(1); }
-  50% { opacity: 0.08; transform: scale(1.15); }
-}
-.animate-pulse-slow {
-  animation: pulseSlow 5s ease-in-out infinite;
-}
-
-/* Float Cards */
-@keyframes floatCard {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-12px) rotate(1deg); }
-  66% { transform: translateY(-6px) rotate(-0.5deg); }
-}
-.animate-float-card {
-  animation: floatCard 5s ease-in-out infinite;
-}
-
-@keyframes floatCardDelayed {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  33% { transform: translateY(-10px) rotate(-1deg); }
-  66% { transform: translateY(-4px) rotate(0.5deg); }
-}
-.animate-float-card-delayed {
-  animation: floatCardDelayed 6s ease-in-out infinite;
-  animation-delay: 1s;
-}
-
-/* Float Particles */
-@keyframes floatParticle {
-  0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.4; }
-  25% { transform: translateY(-30px) translateX(10px); opacity: 0.8; }
-  50% { transform: translateY(-15px) translateX(-5px); opacity: 0.5; }
-  75% { transform: translateY(-40px) translateX(15px); opacity: 0.9; }
-}
-.animate-float-particle {
-  animation: floatParticle 6s ease-in-out infinite;
-}
-
-@keyframes floatParticleDelayed {
-  0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.3; }
-  25% { transform: translateY(-25px) translateX(-10px); opacity: 0.7; }
-  50% { transform: translateY(-35px) translateX(8px); opacity: 0.4; }
-  75% { transform: translateY(-20px) translateX(-12px); opacity: 0.8; }
-}
-.animate-float-particle-delayed {
-  animation: floatParticleDelayed 8s ease-in-out infinite;
-  animation-delay: 3s;
-}
-
-/* Scroll Indicator */
-@keyframes scrollIndicator {
-  0%, 100% { transform: translateY(0px); opacity: 1; }
-  50% { transform: translateY(8px); opacity: 0.5; }
-}
-.animate-scroll-indicator {
-  animation: scrollIndicator 1.5s ease-in-out infinite;
-}
-
-/* Grid Move */
-@keyframes gridMove {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(50px, 50px); }
-}
-.animate-grid-move {
-  animation: gridMove 20s linear infinite;
-}
-
-/* Heartbeat */
-@keyframes heartbeat {
-  0%, 100% { transform: scale(1); }
-  15% { transform: scale(1.2); }
-  30% { transform: scale(1); }
-  45% { transform: scale(1.15); }
-  60% { transform: scale(1); }
-}
-.animate-heartbeat {
-  animation: heartbeat 2s ease-in-out infinite;
-}
-
-/* Card Gradient Breathe */
-@keyframes gradientBreathe {
-  0%, 100% { transform: rotate(3deg) scale(1.05); opacity: 0.8; }
-  25% { transform: rotate(5deg) scale(1.08); opacity: 1; }
-  50% { transform: rotate(2deg) scale(1.06); opacity: 0.9; }
-  75% { transform: rotate(4deg) scale(1.09); opacity: 1; }
-}
-.animate-gradient-breathe {
-  animation: gradientBreathe 6s ease-in-out infinite;
-}
-
-/* Card Gradient Drift */
-@keyframes gradientDrift {
-  0%, 100% { transform: rotate(-3deg) scale(1.05) translate(0, 0); }
-  25% { transform: rotate(-1deg) scale(1.07) translate(2%, -1%); }
-  50% { transform: rotate(-4deg) scale(1.06) translate(-1%, 2%); }
-  75% { transform: rotate(-2deg) scale(1.08) translate(1%, -2%); }
-}
-.animate-gradient-drift {
-  animation: gradientDrift 8s ease-in-out infinite;
-}
-
-/* Card Gradient Shimmer */
-@keyframes gradientShimmer {
-  0%, 100% { transform: rotate(3deg) scale(1.05); filter: brightness(1); }
-  33% { transform: rotate(5deg) scale(1.08); filter: brightness(1.1); }
-  66% { transform: rotate(2deg) scale(1.06); filter: brightness(0.95); }
-}
-.animate-gradient-shimmer {
-  animation: gradientShimmer 7s ease-in-out infinite;
-}
-
-/* Card Gradient Pulse */
-@keyframes gradientPulse {
-  0%, 100% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.05); opacity: 1; }
-}
-.animate-gradient-pulse {
-  animation: gradientPulse 4s ease-in-out infinite;
-}
-
-/* Card Gradient Float */
-@keyframes gradientFloat {
-  0%, 100% { transform: translateY(0) scale(1.05) rotate(3deg); }
-  33% { transform: translateY(-3%) scale(1.07) rotate(4deg); }
-  66% { transform: translateY(2%) scale(1.04) rotate(2deg); }
-}
-.animate-gradient-float {
-  animation: gradientFloat 9s ease-in-out infinite;
-}
-
-/* Menu Card Accent Glow */
-@keyframes accentGlow {
-  0%, 100% { opacity: 0.15; transform: scale(1) rotate(0deg); }
-  50% { opacity: 0.3; transform: scale(1.1) rotate(5deg); }
-}
-.animate-accent-glow {
-  animation: accentGlow 5s ease-in-out infinite;
-}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
 
 /* ===== Base ===== */
 

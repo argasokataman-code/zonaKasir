@@ -2,6 +2,7 @@
 
 return [
     // Navbar
+    'nav_about' => 'Tentang',
     'nav_features' => 'Fitur',
     'nav_menu' => 'Modul',
     'nav_pricing' => 'Harga',
@@ -86,12 +87,38 @@ return [
     'plan_cta' => 'Daftar Sekarang',
     'plan_contact' => 'Hubungi Kami',
 
+    // FAQ
+    'faq_badge' => 'Pertanyaan',
+    'faq_title' => 'Yang Sering Ditanyakan',
+    'faq_subtitle' => 'Pertanyaan yang sering diajukan oleh pengguna ZonaKasir.',
+    'faq_q1' => 'Apa itu ZonaKasir?',
+    'faq_a1' => 'ZonaKasir adalah aplikasi point of sale (POS) berbasis cloud yang membantu anda mengelola penjualan, stok barang, laporan keuangan, dan operasional toko dalam satu platform. Akses dari browser atau Android.',
+    'faq_q2' => 'Bagaimana cara berlangganan?',
+    'faq_a2' => 'Cukup daftar akun, pilih paket (Starter atau Business), dan lakukan pembayaran. Akun anda akan langsung aktif dan siap digunakan.',
+    'faq_q3' => 'Apakah bisa digunakan di HP?',
+    'faq_a3' => 'Ya, ZonaKasir bisa diakses melalui browser di laptop/PC dan juga tersedia aplikasi Android. Semua data tersinkronisasi otomatis antar perangkat.',
+    'faq_q4' => 'Apakah data saya aman?',
+    'faq_a4' => 'Keamanan data adalah prioritas kami. Semua data dienkripsi, di-backup harian, dan disimpan di server yang aman. Anda tetap pemilik penuh data toko anda.',
+    'faq_q5' => 'Apakah ada dukungan teknis?',
+    'faq_a5' => 'Ya, kami menyediakan dukungan via WhatsApp untuk paket Starter dan prioritas 24 jam untuk paket Business. Kami juga bantu pemasangan dan pelatihan.',
+    'faq_q6' => 'Bisa coba dulu sebelum berlangganan?',
+    'faq_a6' => 'Tentu! Tim kami siap memberikan demo langsung via video call. Anda bisa melihat sendiri bagaimana ZonaKasir bekerja sebelum memutuskan berlangganan.',
+
     // CTA
     'cta_title' => 'Siap Mengembangkan Bisnis Anda?',
     'cta_subtitle' => 'Daftarkan toko anda sekarang dan mulai kelola penjualan dengan lebih mudah.',
     'cta_button' => 'Daftarkan Toko Anda',
 
     // Footer
-    'footer_tagline' => 'Platform point of sale untuk bisnis Indonesia.',
+    'footer_desc' => 'Platform point of sale berbasis cloud untuk bisnis Indonesia. Kelola penjualan, stok, dan keuangan dalam satu tempat.',
+    'footer_links_title' => 'Navigasi',
+    'footer_contact_title' => 'Kontak',
+    'footer_hours' => 'Senin—Sabtu, 08:00—20:00 WIB',
+    'footer_legal_title' => 'Legal',
+    'footer_privacy' => 'Kebijakan Privasi',
+    'footer_terms' => 'Syarat & Ketentuan',
+    'footer_refund' => 'Kebijakan Pengembalian',
+    'footer_made_with' => 'Dibuat dengan',
+    'footer_made_in' => 'di Yogyakarta',
     'footer_rights' => 'Hak cipta dilindungi.',
 ];

@@ -2,6 +2,7 @@
 
 return [
     // Navbar
+    'nav_about' => 'About',
     'nav_features' => 'Features',
     'nav_menu' => 'Modules',
     'nav_pricing' => 'Pricing',
@@ -86,12 +87,38 @@ return [
     'plan_cta' => 'Sign Up Now',
     'plan_contact' => 'Contact Us',
 
+    // FAQ
+    'faq_badge' => 'Questions',
+    'faq_title' => 'Frequently Asked Questions',
+    'faq_subtitle' => 'Common questions asked by ZonaKasir users.',
+    'faq_q1' => 'What is ZonaKasir?',
+    'faq_a1' => 'ZonaKasir is a cloud-based point of sale (POS) application that helps you manage sales, inventory, financial reports, and store operations in one platform. Access it from a browser or Android.',
+    'faq_q2' => 'How does the subscription work?',
+    'faq_a2' => 'Simply register an account, choose a plan (Starter or Business), and complete the payment. Your account will be activated immediately and ready to use.',
+    'faq_q3' => 'Can I use it on my phone?',
+    'faq_a3' => 'Yes, ZonaKasir is accessible via browser on laptop/PC and also available as an Android app. All data syncs automatically between devices.',
+    'faq_q4' => 'Is my data secure?',
+    'faq_a4' => 'Data security is our priority. All data is encrypted, backed up daily, and stored on secure servers. You retain full ownership of your store data.',
+    'faq_q5' => 'Is there technical support?',
+    'faq_a5' => 'Yes, we provide WhatsApp support for the Starter plan and 24-hour priority support for the Business plan. We also assist with onboarding and training.',
+    'faq_q6' => 'Can I try it before subscribing?',
+    'faq_a6' => 'Of course! Our team is ready to provide a live demo via video call. See for yourself how ZonaKasir works before deciding to subscribe.',
+
     // CTA
     'cta_title' => 'Ready to Grow Your Business?',
     'cta_subtitle' => 'Register your store now and start managing sales the easy way.',
     'cta_button' => 'Register Your Store',
 
     // Footer
-    'footer_tagline' => 'A point of sale platform for Indonesian businesses.',
+    'footer_desc' => 'A cloud-based point of sale platform for Indonesian businesses. Manage sales, inventory, and finances all in one place.',
+    'footer_links_title' => 'Navigation',
+    'footer_contact_title' => 'Contact',
+    'footer_hours' => 'Mon—Sat, 08:00—20:00 WIB',
+    'footer_legal_title' => 'Legal',
+    'footer_privacy' => 'Privacy Policy',
+    'footer_terms' => 'Terms & Conditions',
+    'footer_refund' => 'Refund Policy',
+    'footer_made_with' => 'Made with',
+    'footer_made_in' => 'in Yogyakarta',
     'footer_rights' => 'All rights reserved.',
 ];
