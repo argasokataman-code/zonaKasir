@@ -96,4 +96,13 @@ return [
         'single_admin_max' => 25000000,     // 5-25jt single admin
         // > 25jt requires 2 admin approvals
     ],
+
+    /*
+     * Midtrans Disbursement/Payout Configuration
+     * Used for withdrawal disbursements to bank accounts
+     */
+    'payout' => [
+        'enabled' => true,
+        'method' => 'midtrans', // 'midtrans' — use Midtrans Disbursement API
+    ],
 ];
