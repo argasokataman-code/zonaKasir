@@ -12,6 +12,15 @@ class VoucherService
 
     private float $price;
 
+    private function maskCode(string $code): string
+    {
+        if (strlen($code) <= 4) {
+            return str_repeat('*', strlen($code));
+        }
+
+        return substr($code, 0, 2) . str_repeat('*', strlen($code) - 4) . substr($code, -2);
+    }
+
     public function applyable(string $code, float $price): ?VoucherService
     {
         $now = now();
@@ -19,18 +28,18 @@ class VoucherService
         $voucher = Voucher::whereCode($code)
             ->first();
         if (! $voucher) {
-            Log::warning("Voucher not found: {$code}");
+            Log::warning('Voucher not found: ' . $this->maskCode($code));
             return null;
         }
         if ($voucher?->minimal_buying <= $price && $now->gte($voucher->start_date) && $now->lte($voucher->expired) && $voucher->kuota > 0) {
             $this->price = $price;
             $this->voucher = $voucher;
-            Log::info("Voucher applied: {$code} for price {$price}");
+            Log::info('Voucher applied: ' . $this->maskCode($code) . " for price {$price}");
 
             return $this;
         }
 
-        Log::warning("Voucher conditions not met: {$code}", [
+        Log::warning('Voucher conditions not met: ' . $this->maskCode($code), [
             'minimal_buying' => $voucher?->minimal_buying,
             'price' => $price,
             'start_date' => $voucher?->start_date,
@@ -69,6 +78,6 @@ class VoucherService
             'kuota' => $this->voucher->kuota - 1,
         ]);
         $remaining = $this->voucher->kuota - 1;
-        Log::info("Voucher used: {$this->voucher->code}, remaining quota: {$remaining}");
+        Log::info('Voucher used: ' . $this->maskCode($this->voucher->code) . ", remaining quota: {$remaining}");
     }
 }
