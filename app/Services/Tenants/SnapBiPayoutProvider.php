@@ -7,7 +7,46 @@ use Illuminate\Support\Facades\Log;
 
 class SnapBiPayoutProvider implements DisbursementProvider
 {
+    private const SNAP_BI_SANDBOX_BASE_URL = 'https://merchants.sbx.midtrans.com';
+    private const SNAP_BI_PRODUCTION_BASE_URL = 'https://merchants.midtrans.com';
+    private const ACCESS_TOKEN_PATH = '/v1.0/access-token/b2b';
+
     private ?string $cachedToken = null;
+
+    private function getBaseUrl(): string
+    {
+        return config('midtrans.environment', 'sandbox') === 'production'
+            ? self::SNAP_BI_PRODUCTION_BASE_URL
+            : self::SNAP_BI_SANDBOX_BASE_URL;
+    }
+
+    private function generateAsymmetricSignature(string $clientId, string $timestamp, string $privateKey): string
+    {
+        $stringToSign = $clientId . '|' . $timestamp;
+        $binarySignature = null;
+        openssl_sign($stringToSign, $binarySignature, $privateKey, OPENSSL_ALGO_SHA256);
+
+        return base64_encode($binarySignature);
+    }
+
+    private function generateSymmetricSignature(
+        string $accessToken,
+        array $requestBody,
+        string $method,
+        string $path,
+        string $clientSecret,
+        string $timestamp
+    ): string {
+        $minifiedBody = json_encode($requestBody, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $hashedBody = hash('sha256', $minifiedBody, true);
+        $hexEncodedHash = bin2hex($hashedBody);
+        $lowercaseHexHash = strtolower($hexEncodedHash);
+
+        $payload = strtoupper($method) . ':' . $path . ':' . $accessToken . ':' . $lowercaseHexHash . ':' . $timestamp;
+        $hmac = hash_hmac('sha512', $payload, $clientSecret, true);
+
+        return base64_encode($hmac);
+    }
 
     private function getAccessToken(): string
     {
@@ -16,12 +55,17 @@ class SnapBiPayoutProvider implements DisbursementProvider
         }
 
         $config = config('midtrans.snapbi');
+        $timestamp = now()->toIso8601String();
+        $signature = $this->generateAsymmetricSignature($config['client_id'], $timestamp, $config['private_key']);
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
-        ])->post('https://api.sandbox.midtrans.com/snapbi/v1.0/access-token', [
-            'clientId' => $config['client_id'],
-            'clientSecret' => $config['client_secret'],
+            'Accept' => 'application/json',
+            'X-CLIENT-KEY' => $config['client_id'],
+            'X-SIGNATURE' => $signature,
+            'X-TIMESTAMP' => $timestamp,
+        ])->post($this->getBaseUrl() . self::ACCESS_TOKEN_PATH, [
+            'grant_type' => 'client_credentials',
         ]);
 
         if ($response->failed()) {
@@ -29,7 +73,7 @@ class SnapBiPayoutProvider implements DisbursementProvider
                 'status' => $response->status(),
                 'error' => $response->json(),
             ]);
-            throw new \RuntimeException('Gagal mendapatkan Access Token SnapBI: ' . ($response->json('responseMessage') ?? 'Unknown error'));
+            throw new \RuntimeException('Gagal mendapatkan Access Token SnapBI: ' . ($response->json('error_description') ?? $response->body()));
         }
 
         $this->cachedToken = $response->json('accessToken');
@@ -37,27 +81,18 @@ class SnapBiPayoutProvider implements DisbursementProvider
         return $this->cachedToken;
     }
 
-    private function generateSignature(string $timestamp, string $path, string $payload, string $clientSecret): string
-    {
-        $stringToSign = "POST:" . $path . ":" . $timestamp . ":" . $payload;
-        return base64_encode(hash_hmac('sha256', $stringToSign, $clientSecret, true));
-    }
-
     public function send(array $params): array
     {
         $config = config('midtrans.snapbi');
-        $environment = config('midtrans.environment', 'sandbox');
-        $baseUrl = $environment === 'sandbox' 
-            ? 'https://api.sandbox.midtrans.com/snapbi/v1.0' 
-            : 'https://api.midtrans.com/snapbi/v1.0';
-
+        $baseUrl = $this->getBaseUrl();
+        $path = '/v1.0/disbursement';
         $token = $this->getAccessToken();
-        $path = '/disbursement';
-        
+        $timestamp = now()->toIso8601String();
+
         $payload = [
             'partnerReferenceNo' => $params['idempotency_key'],
             'amount' => [
-                'value' => number_format((float)$params['amount'], 2, '.', ''),
+                'value' => number_format((float) $params['amount'], 2, '.', ''),
                 'currency' => 'IDR',
             ],
             'beneficiaryAccountNo' => $params['account_number'],
@@ -66,18 +101,20 @@ class SnapBiPayoutProvider implements DisbursementProvider
             'remark' => $params['remark'] ?? 'Zonakasir Disbursement',
         ];
 
-        $jsonPayload = json_encode($payload);
-        $timestamp = now()->toIso8601String();
-        $signature = $this->generateSignature($timestamp, $path, $jsonPayload, $config['client_secret']);
+        $signature = $this->generateSymmetricSignature(
+            $token, $payload, 'post', $path,
+            $config['client_secret'], $timestamp
+        );
 
         $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $token,
-            'X-SIGNATURE' => $signature,
-            'X-TIMESTAMP' => $timestamp,
             'X-PARTNER-ID' => $config['partner_id'],
             'X-EXTERNAL-ID' => $params['idempotency_key'],
             'CHANNEL-ID' => $config['channel_id'] ?? 'ZONAKASIR',
-            'Content-Type' => 'application/json',
+            'X-TIMESTAMP' => $timestamp,
+            'X-SIGNATURE' => $signature,
         ])->post($baseUrl . $path, $payload);
 
         if ($response->failed()) {
@@ -85,7 +122,9 @@ class SnapBiPayoutProvider implements DisbursementProvider
                 'status' => $response->status(),
                 'error' => $response->json(),
             ]);
-            throw new DisbursementFailedException('SnapBI Disbursement failed: ' . ($response->json('responseMessage') ?? 'Unknown error'));
+            throw new DisbursementFailedException(
+                'SnapBI Disbursement failed: ' . ($response->json('responseMessage') ?? $response->body())
+            );
         }
 
         $data = $response->json();
@@ -100,49 +139,39 @@ class SnapBiPayoutProvider implements DisbursementProvider
     public function status(string $disburseId): array
     {
         $config = config('midtrans.snapbi');
-        $environment = config('midtrans.environment', 'sandbox');
-        $baseUrl = $environment === 'sandbox' 
-            ? 'https://api.sandbox.midtrans.com/snapbi/v1.0' 
-            : 'https://api.midtrans.com/snapbi/v1.0';
-
+        $baseUrl = $this->getBaseUrl();
+        $path = '/v1.0/disbursement/status';
         $token = $this->getAccessToken();
-        $path = '/transaction-history-list';
+        $timestamp = now()->toIso8601String();
 
-        // The status endpoint for SnapBI is transaction-history-list
-        // You need to send a POST request with specific body to get the status
         $payload = [
             'partnerReferenceNo' => $disburseId,
-            'additionalInfo' => [
-                'types' => ['DISBURSEMENT'],
-            ]
         ];
 
-        $jsonPayload = json_encode($payload);
-        $timestamp = now()->toIso8601String();
-        $signature = $this->generateSignature($timestamp, $path, $jsonPayload, $config['client_secret']);
+        $signature = $this->generateSymmetricSignature(
+            $token, $payload, 'post', $path,
+            $config['client_secret'], $timestamp
+        );
 
         $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . $token,
-            'X-SIGNATURE' => $signature,
-            'X-TIMESTAMP' => $timestamp,
-            'X-PARTNER-ID' => $config['partner_id'],
-            'CHANNEL-ID' => $config['channel_id'] ?? 'ZONAKASIR',
             'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $token,
+            'X-PARTNER-ID' => $config['partner_id'],
+            'X-EXTERNAL-ID' => $disburseId,
+            'CHANNEL-ID' => $config['channel_id'] ?? 'ZONAKASIR',
+            'X-TIMESTAMP' => $timestamp,
+            'X-SIGNATURE' => $signature,
         ])->post($baseUrl . $path, $payload);
 
         if ($response->failed()) {
             return ['id' => $disburseId, 'status' => 'unknown', 'error' => $response->json()];
         }
 
-        $history = $response->json('detailData.0');
-        if (!$history) {
-            return ['id' => $disburseId, 'status' => 'not_found'];
-        }
-
         return [
             'id' => $disburseId,
-            'status' => $history['additionalInfo']['status'] ?? 'unknown',
-            'response' => $history,
+            'status' => $response->json('status') ?? 'unknown',
+            'response' => $response->json(),
         ];
     }
 }
