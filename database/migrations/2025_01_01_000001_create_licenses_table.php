@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('key')->unique();
             $table->string('plan'); // 'trial', 'starter', 'business'
             $table->string('status')->default('active'); // 'active', 'expired', 'revoked'
-            $table->string('tenant_id'); // tenant subdomain identifier
+            $table->string('tenant_id')->nullable(); // tenant subdomain; null = unassigned key
             $table->timestamp('expires_at')->nullable();
             $table->timestamp('activated_at')->nullable();
             $table->timestamps();

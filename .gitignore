@@ -35,3 +35,4 @@ version.txt
 
 # Deploy keys (gitignored locally, used by GitHub Actions)
 .deploy/
+/public/vendor
