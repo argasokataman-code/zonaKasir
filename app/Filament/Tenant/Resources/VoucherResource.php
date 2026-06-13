@@ -4,6 +4,7 @@ namespace App\Filament\Tenant\Resources;
 
 use App\Filament\Tenant\Resources\Traits\RedirectToIndex;
 use App\Filament\Tenant\Resources\VoucherResource\Pages;
+use App\Models\Tenants\Member;
 use App\Models\Tenants\Setting;
 use App\Models\Tenants\Voucher;
 use App\Traits\HasTranslatableResource;
@@ -32,6 +33,13 @@ class VoucherResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('member_id')
+                    ->translateLabel()
+                    ->label(__('Member'))
+                    ->options(fn () => Member::pluck('name', 'id'))
+                    ->searchable()
+                    ->nullable()
+                    ->hint(__('Leave empty for global voucher')),
                 TextInput::make('name')
                     ->translateLabel()
                     ->required(),
@@ -85,6 +93,11 @@ class VoucherResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
+                TextColumn::make('member.name')
+                    ->label(__('Member'))
+                    ->placeholder(__('Global'))
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('id')
                     ->searchable()
                     ->sortable(),

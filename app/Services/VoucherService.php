@@ -21,11 +21,17 @@ class VoucherService
         return substr($code, 0, 2) . str_repeat('*', strlen($code) - 4) . substr($code, -2);
     }
 
-    public function applyable(string $code, float $price): ?VoucherService
+    public function applyable(string $code, float $price, ?int $memberId = null): ?VoucherService
     {
         $now = now();
         /** @var Voucher $voucher */
         $voucher = Voucher::whereCode($code)
+            ->where(function ($q) use ($memberId) {
+                $q->whereNull('member_id');
+                if ($memberId !== null) {
+                    $q->orWhere('member_id', $memberId);
+                }
+            })
             ->first();
         if (! $voucher) {
             Log::warning('Voucher not found: ' . $this->maskCode($code));

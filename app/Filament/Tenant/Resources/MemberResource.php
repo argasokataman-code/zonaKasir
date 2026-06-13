@@ -101,6 +101,7 @@ class MemberResource extends Resource
         return [
             RelationManagers\SellingsRelationManager::class,
             RelationManagers\LoyaltyPointLogsRelationManager::class,
+            RelationManagers\VouchersRelationManager::class,
         ];
     }
 
