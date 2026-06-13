@@ -14,6 +14,9 @@ Route::group(['prefix' => 'domain'], function ()
 Route::post('/webhooks/midtrans', [MidtransWebhookController::class, 'handle'])
     ->name('webhooks.midtrans');
 
+Route::post('/webhooks/flip', [App\Http\Controllers\Api\Webhooks\FlipWebhookController::class, 'handle'])
+    ->name('webhooks.flip');
+
 Route::get('/test', function ()
 {
     return response()->json([
