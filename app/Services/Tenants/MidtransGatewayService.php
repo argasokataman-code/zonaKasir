@@ -355,7 +355,7 @@ class MidtransGatewayService
         $fees = $this->feeCalculator->calculate(
             paymentType: $payment->payment_type,
             grossAmount: $payment->gross_amount,
-            platformFeePercent: $about->platform_fee_percent ?? 1.0,
+            platformFeePercent: $about->platform_fee_percent ?? 0,
         );
 
         $this->applyFeeAndLedger($payment, $fees, $about);
@@ -367,7 +367,7 @@ class MidtransGatewayService
         $fees = $this->feeCalculator->calculate(
             paymentType: $payload['payment_type'],
             grossAmount: $payment->gross_amount,
-            platformFeePercent: $about->platform_fee_percent ?? 1.0,
+            platformFeePercent: $about->platform_fee_percent ?? 0,
         );
 
         $this->applyFeeAndLedger($payment, $fees, $about);
