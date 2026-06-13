@@ -528,10 +528,10 @@
 
       // Handle Midtrans payment event from Livewire
       $wire.on('midtrans-payment', (event) => {
-        var data = event.detail || event;
-        var token = data.token || data[0];
-        var redirect_url = data.redirect_url || data[1];
-        if (!token || !redirect_url) { console.error('Midtrans: missing data', data); return; }
+        var data = Array.isArray(event) ? event[0] : (event.detail || event);
+        var token = data && data.token;
+        var redirect_url = data && data.redirect_url;
+        if (!token || !redirect_url) { console.error('Midtrans: missing data', event); return; }
         var qrLink = document.getElementById('midtrans-qr-link');
         if (qrLink) { qrLink.href = redirect_url; qrLink.textContent = redirect_url; }
         var qrImg = document.getElementById('midtrans-qr-img');
