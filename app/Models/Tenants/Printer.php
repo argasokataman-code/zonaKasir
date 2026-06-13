@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasTenant;
 class Printer extends Model
 {
+    use HasTenant;
     use HasFactory, HasTenant;
 
     protected $guarded = ['id'];

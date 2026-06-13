@@ -13,6 +13,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Traits\HasTenant;
 class Voucher extends Model
 {
+    use HasTenant;
     use HasFactory, LogsActivity;
 
     protected $guarded = ['id'];

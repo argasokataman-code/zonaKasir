@@ -29,6 +29,7 @@ use Spatie\Activitylog\LogOptions;
 use App\Models\Traits\HasTenant;
 class Product extends Model
 {
+    use HasTenant;
     use HasFactory, SoftDeletes, LogsActivity;
 
     protected $guarded = ['id', 'hero_images_url', 'expired'];

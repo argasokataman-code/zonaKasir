@@ -17,6 +17,7 @@ use Spatie\Activitylog\LogOptions;
 use App\Models\Traits\HasTenant;
 class Selling extends Model
 {
+    use HasTenant;
     use HasFactory, UseTimezoneAwareQuery, LogsActivity;
 
     protected $guarded = ['friend_price'];

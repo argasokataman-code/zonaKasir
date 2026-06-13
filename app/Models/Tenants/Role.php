@@ -12,6 +12,7 @@ use Spatie\Permission\PermissionRegistrar;
 use App\Models\Traits\HasTenant;
 class Role extends ModelsRole
 {
+    use HasTenant;
     public function mobilePermissions(): BelongsToMany
     {
         return $this->belongsToMany(

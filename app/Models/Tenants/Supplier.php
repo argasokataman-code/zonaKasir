@@ -16,6 +16,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Traits\HasTenant;
 class Supplier extends Model
 {
+    use HasTenant;
     use HasFactory, HasSupplierForm, HasSupplierTable, SoftDeletes, LogsActivity;
 
     protected $guarded = ['id'];

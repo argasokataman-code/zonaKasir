@@ -14,6 +14,7 @@ use Spatie\Activitylog\LogOptions;
 use App\Models\Traits\HasTenant;
 class MidtransPayment extends Model
 {
+    use HasTenant;
     use HasFactory, LogsActivity;
 
     protected $guarded = ['id'];

@@ -22,6 +22,7 @@ use Tapp\FilamentTimezoneField\Forms\Components\TimezoneSelect;
 use App\Models\Traits\HasTenant;
 class Profile extends Model
 {
+    use HasTenant;
     use HasFactory,
         HasUploadFileField;
 

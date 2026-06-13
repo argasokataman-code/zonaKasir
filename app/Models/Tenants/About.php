@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasTenant;
 class About extends Model
 {
+    use HasTenant;
     use HasFactory,
         HasUploadFileField;
 

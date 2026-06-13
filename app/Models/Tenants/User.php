@@ -25,6 +25,7 @@ use Spatie\Permission\Traits\HasRoles;
 use App\Models\Traits\HasTenant;
 class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
 {
+    use HasTenant;
     use HasApiTokens, HasFactory, HasRoles, HasTenant, Notifiable, SoftDeletes;
 
     /**

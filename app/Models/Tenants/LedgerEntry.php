@@ -13,6 +13,7 @@ use Spatie\Activitylog\LogOptions;
 use App\Models\Traits\HasTenant;
 class LedgerEntry extends Model
 {
+    use HasTenant;
     use LogsActivity, EnsuresLedgerBalance;
 
     protected $guarded = ['id'];

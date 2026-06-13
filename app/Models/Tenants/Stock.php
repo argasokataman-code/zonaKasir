@@ -24,6 +24,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use App\Models\Traits\HasTenant;
 class Stock extends Model
 {
+    use HasTenant;
     use HasFactory, LogsActivity;
 
     protected static $recordEvents = ['created', 'updated', 'deleted'];
