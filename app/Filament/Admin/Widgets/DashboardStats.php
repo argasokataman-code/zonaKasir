@@ -2,7 +2,7 @@
 
 namespace App\Filament\Admin\Widgets;
 
-use App\Tenant;
+use App\Models\Tenants\User;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -10,16 +10,20 @@ class DashboardStats extends BaseWidget
 {
     protected function getStats(): array
     {
-        $total = Tenant::count();
-        $thisMonth = Tenant::whereMonth('created_at', now()->month)
+        $total = User::distinct('tenant_id')->count('tenant_id');
+        $thisMonth = User::whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
-            ->count();
-        $lastMonth = Tenant::whereMonth('created_at', now()->subMonth()->month)
+            ->distinct('tenant_id')
+            ->count('tenant_id');
+        $lastMonth = User::whereMonth('created_at', now()->subMonth()->month)
             ->whereYear('created_at', now()->subMonth()->year)
-            ->count();
+            ->distinct('tenant_id')
+            ->count('tenant_id');
         $trend = $lastMonth > 0 ? round(($thisMonth - $lastMonth) / $lastMonth * 100) : 0;
 
-        $latest = Tenant::latest()->take(5)->get();
+        $latestTenantId = User::distinct('tenant_id')
+            ->latest()
+            ->value('tenant_id');
 
         return [
             Stat::make('Total Tenants', number_format($total))
@@ -30,8 +34,8 @@ class DashboardStats extends BaseWidget
                 ->description($trend >= 0 ? "↑ {$trend}% from last month" : "↓ {$trend}% from last month")
                 ->descriptionIcon($trend >= 0 ? 'heroicon-o-arrow-trending-up' : 'heroicon-o-arrow-trending-down')
                 ->color($trend >= 0 ? 'success' : 'danger'),
-            Stat::make('Latest Tenant', $latest->first()?->data['full_name'] ?? 'N/A')
-                ->description($latest->first()?->created_at?->diffForHumans() ?? '')
+            Stat::make('Latest Tenant', $latestTenantId ?? 'N/A')
+                ->description('Most recent registration')
                 ->descriptionIcon('heroicon-o-user-plus'),
         ];
     }
