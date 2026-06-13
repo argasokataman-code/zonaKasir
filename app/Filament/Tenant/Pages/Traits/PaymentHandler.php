@@ -145,6 +145,8 @@ trait PaymentHandler
             'paid_at' => now(),
         ]);
 
+        app(\App\Services\Tenants\MidtransGatewayService::class)->confirmSettlement($payment);
+
         CartItem::query()->cashier()->delete();
 
         Notification::make()

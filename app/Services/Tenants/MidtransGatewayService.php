@@ -349,6 +349,18 @@ class MidtransGatewayService
         });
     }
 
+    public function confirmSettlement(MidtransPayment $payment): void
+    {
+        $about = About::first();
+        $fees = $this->feeCalculator->calculate(
+            paymentType: $payment->payment_type,
+            grossAmount: $payment->gross_amount,
+            platformFeePercent: $about->platform_fee_percent ?? 1.0,
+        );
+
+        $this->applyFeeAndLedger($payment, $fees, $about);
+    }
+
     private function finalizeSettlement(MidtransPayment $payment, array $payload): void
     {
         $about = About::first();
@@ -358,6 +370,11 @@ class MidtransGatewayService
             platformFeePercent: $about->platform_fee_percent ?? 1.0,
         );
 
+        $this->applyFeeAndLedger($payment, $fees, $about);
+    }
+
+    private function applyFeeAndLedger(MidtransPayment $payment, array $fees, About $about): void
+    {
         // Save fee breakdown to payment
         $payment->forceFill([
             'fee_midtrans' => $fees['fee_midtrans'],
