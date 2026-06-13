@@ -464,7 +464,7 @@ class MidtransGatewayService
 
     private function generateOrderId(): string
     {
-        $tenantId = tenant('id') ?? \Filament::getTenant()?->id ?? 'X';
+        $tenantId = auth()->user()->tenant_id ?? \Filament::getTenant()?->id ?? 'X';
         $microtime = (int) (microtime(true) * 1000);
         $random = str_pad(random_int(0, 9999), 4, '0', STR_PAD_LEFT);
         return "T{$tenantId}-{$microtime}-{$random}";

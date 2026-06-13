@@ -10,7 +10,6 @@ use App\Services\PlanAccessService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Stancl\Tenancy\Facades\Tenancy;
 
 class InvoiceController extends Controller
 {
@@ -21,13 +20,11 @@ class InvoiceController extends Controller
 
     public function index(): JsonResponse
     {
-        $tenantId = tenant('id');
+        $tenantId = auth()->user()->tenant_id;
 
-        $invoices = Tenancy::central(function () use ($tenantId) {
-            return Invoice::where('tenant_id', $tenantId)
-                ->latest()
-                ->get();
-        });
+        $invoices = Invoice::where('tenant_id', $tenantId)
+            ->latest()
+            ->get();
 
         return $this->buildResponse()
             ->setData($invoices)
@@ -41,15 +38,13 @@ class InvoiceController extends Controller
         ]);
 
         try {
-            $tenantId = tenant('id');
+            $tenantId = auth()->user()->tenant_id;
 
-            $subscription = Tenancy::central(function () use ($tenantId) {
-                return Subscription::with('plan')
-                    ->where('tenant_id', $tenantId)
-                    ->whereIn('status', ['trialing', 'active'])
-                    ->latest()
-                    ->first();
-            });
+            $subscription = Subscription::with('plan')
+                ->where('tenant_id', $tenantId)
+                ->whereIn('status', ['trialing', 'active'])
+                ->latest()
+                ->first();
 
             if (! $subscription) {
                 return $this->buildResponse()
@@ -85,13 +80,11 @@ class InvoiceController extends Controller
 
     public function show(string $id): JsonResponse
     {
-        $tenantId = tenant('id');
+        $tenantId = auth()->user()->tenant_id;
 
-        $invoice = Tenancy::central(function () use ($tenantId, $id) {
-            return Invoice::where('tenant_id', $tenantId)
-                ->where('id', $id)
-                ->first();
-        });
+        $invoice = Invoice::where('tenant_id', $tenantId)
+            ->where('id', $id)
+            ->first();
 
         if (! $invoice) {
             return $this->buildResponse()
@@ -108,13 +101,11 @@ class InvoiceController extends Controller
     public function pay(string $id): JsonResponse
     {
         try {
-            $tenantId = tenant('id');
+            $tenantId = auth()->user()->tenant_id;
 
-            $invoice = Tenancy::central(function () use ($tenantId, $id) {
-                return Invoice::where('tenant_id', $tenantId)
-                    ->where('id', $id)
-                    ->first();
-            });
+            $invoice = Invoice::where('tenant_id', $tenantId)
+                ->where('id', $id)
+                ->first();
 
             if (! $invoice) {
                 return $this->buildResponse()
@@ -139,7 +130,7 @@ class InvoiceController extends Controller
 
     public function features(): JsonResponse
     {
-        $tenantId = tenant('id');
+        $tenantId = auth()->user()->tenant_id;
 
         $features = $this->planAccessService->getCurrentPlanFeatures($tenantId);
         $isActive = $this->planAccessService->isSubscriptionActive($tenantId);

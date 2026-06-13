@@ -20,7 +20,7 @@ class CreateUser extends CreateRecord
     protected function beforeCreate(): void
     {
         $access = app(PlanAccessService::class);
-        $tenantId = tenant('id');
+        $tenantId = auth()->user()->tenant_id;
         $currentCount = User::count();
 
         if (! $access->canCreateUser($tenantId, $currentCount)) {

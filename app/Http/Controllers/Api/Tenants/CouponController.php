@@ -17,7 +17,7 @@ class CouponController extends Controller
         ]);
 
         try {
-            $tenantId = tenant('id');
+            $tenantId = auth()->user()->tenant_id;
             if (! $tenantId) {
                 return $this->buildResponse()
                     ->setCode(400)

@@ -14,7 +14,7 @@ class PlanFeatureMiddleware
 
     public function handle(Request $request, Closure $next, string $feature): mixed
     {
-        $tenantId = tenant('id');
+        $tenantId = auth()->user()->tenant_id;
 
         if (! $tenantId) {
             return $next($request);

@@ -15,10 +15,8 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Stancl\Tenancy\Facades\Tenancy;
 
 class ManageSubscription extends Page implements HasForms
 {
@@ -45,8 +43,7 @@ class ManageSubscription extends Page implements HasForms
 
     public function form(Form $form): Form
     {
-        $cn = Config::get('tenancy.database.central_connection', 'mysql');
-        $plans = Plan::on($cn)->where('is_active', true)->orderBy('price_monthly')->get();
+        $plans = Plan::where('is_active', true)->orderBy('price_monthly')->get();
 
         $planOptions = $plans->mapWithKeys(fn ($p) => [
             $p->id => "{$p->name} — Rp ".number_format($p->price_monthly, 0, ',', '.').'/bln'.($p->price_yearly ? ' (Rp '.number_format($p->price_yearly, 0, ',', '.').'/thn)' : ''),
@@ -78,34 +75,32 @@ class ManageSubscription extends Page implements HasForms
 
         $planId = $data['plan_id'];
         $billingCycle = $data['billing_cycle'];
-        $tenantId = tenant('id');
+        $tenantId = auth()->user()->tenant_id;
 
         try {
             $this->snapRedirectUrl = null;
 
-            Tenancy::central(function () use ($tenantId, $planId, $billingCycle) {
-                $plan = Plan::findOrFail($planId);
+            $plan = Plan::findOrFail($planId);
 
-                $subscription = Subscription::where('tenant_id', $tenantId)
-                    ->whereIn('status', ['trialing', 'active'])
-                    ->latest()
-                    ->first();
+            $subscription = Subscription::where('tenant_id', $tenantId)
+                ->whereIn('status', ['trialing', 'active'])
+                ->latest()
+                ->first();
 
-                if (! $subscription) {
-                    throw new \RuntimeException('No active subscription found');
-                }
+            if (! $subscription) {
+                throw new \RuntimeException('No active subscription found');
+            }
 
-                $invoice = app(InvoiceService::class)->createInvoice($subscription, 'midtrans');
+            $invoice = app(InvoiceService::class)->createInvoice($subscription, 'midtrans');
 
-                $subscription->update([
-                    'plan_id' => $plan->id,
-                    'billing_cycle' => $billingCycle,
-                    'starts_at' => now(),
-                    'ends_at' => $billingCycle === 'yearly' ? now()->addYear() : now()->addMonth(),
-                ]);
+            $subscription->update([
+                'plan_id' => $plan->id,
+                'billing_cycle' => $billingCycle,
+                'starts_at' => now(),
+                'ends_at' => $billingCycle === 'yearly' ? now()->addYear() : now()->addMonth(),
+            ]);
 
-                $this->snapRedirectUrl = $this->generateSnapRedirect($invoice, $subscription);
-            });
+            $this->snapRedirectUrl = $this->generateSnapRedirect($invoice, $subscription);
         } catch (\Throwable $e) {
             Log::error('Subscription failed', ['error' => $e->getMessage()]);
 
@@ -192,48 +187,42 @@ class ManageSubscription extends Page implements HasForms
 
     public function getCurrentPlan(): ?array
     {
-        $tenantId = tenant('id');
+        $tenantId = auth()->user()->tenant_id;
 
-        return Tenancy::central(function () use ($tenantId) {
-            $access = app(PlanAccessService::class);
-            $plan = $access->getPlan($tenantId);
-            $sub = $access->getActiveSubscription($tenantId);
+        $access = app(PlanAccessService::class);
+        $plan = $access->getPlan($tenantId);
+        $sub = $access->getActiveSubscription($tenantId);
 
-            if (! $plan) {
-                return null;
-            }
+        if (! $plan) {
+            return null;
+        }
 
-            return [
-                'id' => $plan->id,
-                'name' => $plan->name,
-                'price_monthly' => $plan->price_monthly,
-                'price_yearly' => $plan->price_yearly,
-                'features' => $plan->features ?? [],
-                'max_stores' => $plan->max_stores,
-                'max_users' => $plan->max_users,
-                'billing_cycle' => $sub?->billing_cycle ?? 'monthly',
-                'status' => $sub?->status ?? 'none',
-                'is_on_trial' => $access->isOnTrial($tenantId),
-            ];
-        });
+        return [
+            'id' => $plan->id,
+            'name' => $plan->name,
+            'price_monthly' => $plan->price_monthly,
+            'price_yearly' => $plan->price_yearly,
+            'features' => $plan->features ?? [],
+            'max_stores' => $plan->max_stores,
+            'max_users' => $plan->max_users,
+            'billing_cycle' => $sub?->billing_cycle ?? 'monthly',
+            'status' => $sub?->status ?? 'none',
+            'is_on_trial' => $access->isOnTrial($tenantId),
+        ];
     }
 
     public function getAvailablePlans(): array
     {
-        $cn = Config::get('tenancy.database.central_connection', 'mysql');
-
-        return Plan::on($cn)->where('is_active', true)->orderBy('price_monthly')->get()->toArray();
+        return Plan::where('is_active', true)->orderBy('price_monthly')->get()->toArray();
     }
 
     public function getInvoices(): array
     {
-        $tenantId = tenant('id');
+        $tenantId = auth()->user()->tenant_id;
 
-        return Tenancy::central(function () use ($tenantId) {
-            return Invoice::where('tenant_id', $tenantId)
-                ->latest()
-                ->get()
-                ->toArray();
-        });
+        return Invoice::where('tenant_id', $tenantId)
+            ->latest()
+            ->get()
+            ->toArray();
     }
 }
