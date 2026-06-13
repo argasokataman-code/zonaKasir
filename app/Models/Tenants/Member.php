@@ -2,8 +2,10 @@
 
 namespace App\Models\Tenants;
 
+use App\Models\Tenants\LoyaltyPointLog;
 use App\Models\Tenants\Receivable;
 use App\Models\Tenants\Selling;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -35,5 +37,15 @@ class Member extends Model
     public function sellings(): HasMany
     {
         return $this->hasMany(Selling::class);
+    }
+
+    public function loyaltyPointLogs(): HasMany
+    {
+        return $this->hasMany(LoyaltyPointLog::class);
+    }
+
+    public function availablePoints(): Attribute
+    {
+        return Attribute::get(fn () => (int) $this->total_points);
     }
 }

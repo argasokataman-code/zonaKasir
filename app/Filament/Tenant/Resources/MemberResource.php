@@ -75,6 +75,9 @@ class MemberResource extends Resource
                     ->label(__('Contact'))
                     ->searchable(),
 
+                TextColumn::make('total_points')
+                    ->label(__('Points'))
+                    ->sortable(),
                 TextColumn::make('identity_number')
                     ->label(__('Identity number'))
                     ->searchable()
@@ -97,6 +100,7 @@ class MemberResource extends Resource
     {
         return [
             RelationManagers\SellingsRelationManager::class,
+            RelationManagers\LoyaltyPointLogsRelationManager::class,
         ];
     }
 
