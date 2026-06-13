@@ -3,10 +3,13 @@
 namespace App\Services\Tenants;
 
 use App\Models\Tenants\About;
+use App\Models\Tenants\CartItem;
 use App\Models\Tenants\MidtransPayment;
 use App\Models\Tenants\Selling;
 use App\Models\Tenants\LedgerEntry;
 use App\Models\Tenants\IdempotencyLog;
+use App\Models\Tenants\PaymentMethod;
+use App\Services\Tenants\SellingService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
@@ -29,7 +32,69 @@ class MidtransGatewayService
     ];
 
     /**
-     * Generate Snap transaction token. QRIS also uses Snap (redirect flow).
+     * Create payment intent without a Selling model (Midtrans flow).
+     * Store cart_data and generate Snap token. Selling created later on payment confirmation.
+     */
+    public function createPaymentIntent(array $cartData, string $midtransType): array
+    {
+        $this->validateCredentials();
+
+        $orderId = $this->generateOrderId();
+        $grossAmount = (int) ($cartData['total_price'] ?? 0);
+        $serverKey = config('midtrans.server_key');
+        $memberName = $cartData['member_label'] ?? 'Guest';
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => $orderId,
+                'gross_amount' => $grossAmount,
+            ],
+            'customer_details' => [
+                'first_name' => $memberName,
+            ],
+        ];
+
+        if ($midtransType === 'credit_card') {
+            $params['credit_card'] = ['secure' => true];
+        }
+
+        $response = Http::withBasicAuth($serverKey, '')
+            ->withHeaders([
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ])
+            ->post($this->getApiUrl(), $params);
+
+        if ($response->failed()) {
+            Log::error('Midtrans Snap token failed', [
+                'order_id' => $orderId,
+                'status' => $response->status(),
+                'error' => $response->json(),
+            ]);
+            throw new \RuntimeException('Gagal membuat pembayaran Midtrans: ' . $this->getErrorMessage($response));
+        }
+
+        $data = $response->json();
+
+        $payment = MidtransPayment::create([
+            'order_id' => $orderId,
+            'gross_amount' => $grossAmount,
+            'payment_type' => $midtransType,
+            'status' => 'pending',
+            'cart_data' => $cartData,
+        ]);
+
+        return [
+            'order_id' => $orderId,
+            'token' => $data['token'],
+            'redirect_url' => $data['redirect_url'],
+            'payment_type' => $midtransType,
+            'midtrans_payment_id' => $payment->id,
+        ];
+    }
+
+    /**
+     * Generate Snap transaction token from an existing Selling model.
      */
     public function createSnapToken(Selling $selling, string $midtransType): array
     {
@@ -39,8 +104,6 @@ class MidtransGatewayService
         $grossAmount = (int) $selling->total_price;
         $serverKey = config('midtrans.server_key');
 
-        // All payment types use Snap API (including QRIS)
-        // QRIS redirect_url contains the QR code for customer to scan
         return $this->createSnapTokenForPayment($selling, $orderId, $grossAmount, $midtransType, $serverKey);
     }
 
@@ -302,6 +365,16 @@ class MidtransGatewayService
             'net_amount' => $fees['net_amount'],
         ])->save();
 
+        // If no selling yet (frontend Snap callback didn't fire or failed), create it now
+        if (! $payment->selling_id && $payment->cart_data) {
+            $this->createSellingFromCart($payment);
+        }
+
+        if (! $payment->selling) {
+            Log::warning('finalizeSettlement: no selling found', ['order_id' => $payment->order_id]);
+            return;
+        }
+
         // Update selling.fee (existing column)
         $payment->selling->update([
             'is_paid' => true,
@@ -381,6 +454,30 @@ class MidtransGatewayService
     private function getErrorMessage($response): string
     {
         return $response->json('error_messages.0') ?? 'Unknown error';
+    }
+
+    /**
+     * Create a Selling from stored cart_data when frontend callback missed or failed.
+     */
+    private function createSellingFromCart(MidtransPayment $payment): void
+    {
+        $cartData = $payment->cart_data;
+        if (! $cartData) {
+            return;
+        }
+
+        $sellingService = app(SellingService::class);
+        $data = array_merge($cartData, $sellingService->mapProductRequest($cartData));
+        $selling = $sellingService->create($data);
+
+        $payment->update(['selling_id' => $selling->id]);
+
+        CartItem::query()->cashier()->delete();
+
+        Log::info('createSellingFromCart: selling created from webhook', [
+            'order_id' => $payment->order_id,
+            'selling_id' => $selling->id,
+        ]);
     }
 
     private function validateCredentials(): void

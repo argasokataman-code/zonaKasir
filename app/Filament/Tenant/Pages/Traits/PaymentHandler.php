@@ -71,10 +71,90 @@ trait PaymentHandler
         }
 
         if ($pMethod->isMidtrans()) {
-            $request['payed_money'] = $this->total_price;
-            $request['money_changes'] = 0;
+            $this->handleMidtransPayment($request, $pMethod, $sellingService);
+            return;
         }
 
+        $this->handleCashPayment($request, $pMethod, $sellingService);
+    }
+
+    private function handleMidtransPayment(array $request, PaymentMethod $pMethod, SellingService $sellingService): void
+    {
+        $midtransType = $pMethod->midtransType();
+        if (! $midtransType) {
+            return;
+        }
+
+        $request['payed_money'] = $this->total_price;
+        $request['money_changes'] = 0;
+
+        $validator = Validator::make($request, [
+            'payment_method_id' => ['required'],
+            'total_price' => ['required_if:friend_price,true', 'numeric'],
+            'friend_price' => ['required', 'boolean'],
+            'products' => ['required', 'array'],
+            'products.*.product_id' => ['required', 'exists:products,id'],
+            'products.*.qty' => ['required', 'numeric', 'min:1', new CheckProductStock],
+        ]);
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->messages()->toArray());
+        }
+
+        $data = array_merge($request, $sellingService->mapProductRequest($request));
+
+        $gateway = app(\App\Services\Tenants\MidtransGatewayService::class);
+        $snapData = $gateway->createPaymentIntent($data, $midtransType);
+
+        $this->dispatch('close-modal', id: 'proceed-the-payment');
+        $this->dispatch('midtrans-payment', [
+            'order_id' => $snapData['order_id'],
+            'token' => $snapData['token'],
+            'redirect_url' => $snapData['redirect_url'],
+            'payment_type' => $midtransType,
+            'amount' => $this->total_price,
+        ]);
+    }
+
+    public function confirmMidtransPayment(string $orderId, SellingService $sellingService): void
+    {
+        $payment = \App\Models\Tenants\MidtransPayment::where('order_id', $orderId)
+            ->where('status', 'pending')
+            ->first();
+
+        if (! $payment) {
+            Log::warning('confirmMidtransPayment: payment not found', ['order_id' => $orderId]);
+            return;
+        }
+
+        if ($payment->selling_id) {
+            return;
+        }
+
+        $cartData = $payment->cart_data;
+        if (! $cartData) {
+            Log::error('confirmMidtransPayment: no cart_data', ['order_id' => $orderId]);
+            return;
+        }
+
+        $data = array_merge($cartData, $sellingService->mapProductRequest($cartData));
+        $selling = $sellingService->create($data);
+
+        $payment->update([
+            'selling_id' => $selling->id,
+        ]);
+
+        CartItem::query()->cashier()->delete();
+
+        Notification::make()
+            ->title(__('Transaction created'))
+            ->success()
+            ->send();
+
+        $this->mount();
+    }
+
+    private function handleCashPayment(array $request, PaymentMethod $pMethod, SellingService $sellingService): void
+    {
         $validator = Validator::make($request, [
             'fee' => ['numeric'],
             'payment_method_id' => ['required'],
@@ -99,26 +179,6 @@ trait PaymentHandler
         }
         $data = array_merge($request, $sellingService->mapProductRequest($request));
         $selling = $sellingService->create($data);
-
-        if ($pMethod->isMidtrans()) {
-            $midtransType = $pMethod->midtransType();
-            if ($midtransType) {
-                $selling->load(['member', 'paymentMethod', 'sellingDetails.product', 'user']);
-                $snapData = app(\App\Services\Tenants\MidtransGatewayService::class)
-                    ->createSnapToken($selling, $midtransType);
-
-                CartItem::query()->cashier()->delete();
-
-                $this->dispatch('close-modal', id: 'proceed-the-payment');
-                $this->dispatch('midtrans-payment', [
-                    'token' => $snapData['token'],
-                    'redirect_url' => $snapData['redirect_url'],
-                    'payment_type' => $midtransType,
-                    'amount' => $selling->total_price,
-                ]);
-                return;
-            }
-        }
 
         CartItem::query()
             ->cashier()

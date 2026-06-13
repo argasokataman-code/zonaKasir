@@ -513,15 +513,21 @@
       // Handle Midtrans payment event from Livewire
       $wire.on('midtrans-payment', (event) => {
         var data = Array.isArray(event) ? event[0] : (event.detail || event);
+        var orderId = data && data.order_id;
         var token = data && data.token;
         var redirect_url = data && data.redirect_url;
-        if (!token || !redirect_url) { console.error('Midtrans: missing data', event); return; }
+        if (!orderId || !token || !redirect_url) { console.error('Midtrans: missing data', event); return; }
 
         // Snap popup opens automatically with QR code for payment
         setTimeout(function() {
           if (window.snap) {
             window.snap.pay(token, {
-              onSuccess: function() { window.location.reload(); },
+              onSuccess: function() {
+                // Confirm payment via Livewire after successful Snap payment
+                $wire.call('confirmMidtransPayment', orderId).then(() => {
+                  window.location.reload();
+                });
+              },
               onPending: function() {},
               onError: function(e) { console.error('Snap error', e); }
             });
