@@ -270,7 +270,7 @@ class TenantPanelProvider extends PanelProvider
                     ? UploadedFile::urlFromPath($about->photo, config('filesystems.upload_disk'))
                     : asset('assets/logo/logo.svg');
 
-                $panel->brandName($about->shop_name ?? 'Your Brand')
+                $panel->brandName($about->shop_name ?? 'ZonaKasir')
                     ->brandLogo($logo);
             }
         } catch (\Throwable) {
@@ -286,7 +286,7 @@ class TenantPanelProvider extends PanelProvider
                 ? UploadedFile::urlFromPath($about->photo, config('filesystems.upload_disk'))
                 : asset('assets/logo/logo.svg');
 
-            $panel->brandName($about->shop_name ?? 'Your Brand')
+            $panel->brandName($about->shop_name ?? 'ZonaKasir')
                 ->brandLogo($logo);
         } catch (\Throwable) {
             // DB not available during build/package-discovery

@@ -95,7 +95,7 @@
           wire:target="addCart,reduceCart,deleteCart,addDiscountPricePerItem,addCartUsingScanner">
           @forelse($cartItems as $item)
             <div class="mb-2 rounded-lg border bg-white px-3 py-2 dark:border-gray-900 dark:bg-gray-900"
-              id="{{ $item->id }}" key="{{ rand() }}">
+              id="{{ $item->id }}" key="{{ $item->id }}">
               <div class="grid items-center space-x-3">
                 <div class="flex justify-between">
                   <p class="font-semibold text-sm"> {{ $item->product->name }}</p>
@@ -127,7 +127,7 @@
                 </button>
                 <x-filament::input.wrapper class="w-16" x-data="cart">
                   <x-filament::input type="text"
-                    id="{{ $item->product->name }}-{{ $item->id }}-qty-{{ rand() }}"
+                    id="{{ $item->product->name }}-{{ $item->id }}-qty"
                     data-value="{{ $item->qty }}" value="{{ $item->qty }}"
                     x-on:keyup.debounce.500ms="(e) => add('{{ $item->product_id }}', e.target.value)"
                     placeholder="{{ __('Discount') }}" class="w-1/2 text-right text-sm" inputMode="numeric" />

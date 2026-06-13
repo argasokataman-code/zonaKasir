@@ -19,7 +19,7 @@ class CashierReport extends Page implements HasActions, HasForms
 {
     use HasReportPageSidebar, HasTranslatableResource, InteractsWithFormActions, InteractsWithForms;
 
-    protected static ?string $title = '';
+    public static ?string $title = 'Cashier Report';
 
     public static ?string $label = 'Cashier Report';
 

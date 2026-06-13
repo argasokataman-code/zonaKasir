@@ -19,7 +19,7 @@ class SellingReport extends Page implements HasActions, HasForms
 {
     use HasReportPageSidebar, HasTranslatableResource, InteractsWithFormActions, InteractsWithForms;
 
-    protected static ?string $title = '';
+    public static ?string $title = 'Selling Report';
 
     public static ?string $label = 'Selling Report';
 
