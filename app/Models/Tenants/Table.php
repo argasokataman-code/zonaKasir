@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @mixin IdeHelperTable
  */
+use App\Models\Traits\HasTenant;
 class Table extends Model
 {
     use HasFactory, SoftDeletes;

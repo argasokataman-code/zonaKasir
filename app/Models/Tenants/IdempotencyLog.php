@@ -11,9 +11,10 @@ use Illuminate\Database\Eloquent\Model;
  * Tracks idempotent API requests to prevent duplicate operations
  * Used for critical operations like payments and sales transactions
  */
+use App\Models\Traits\HasTenant;
 class IdempotencyLog extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenant;
 
     protected $guarded = ['id'];
 

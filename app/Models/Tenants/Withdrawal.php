@@ -11,6 +11,7 @@ use Spatie\Activitylog\LogOptions;
 /**
  * @mixin IdeHelperWithdrawal
  */
+use App\Models\Traits\HasTenant;
 class Withdrawal extends Model
 {
     use HasFactory, LogsActivity;

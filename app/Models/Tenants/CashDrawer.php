@@ -12,6 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * @mixin IdeHelperCashDrawer
  */
+use App\Models\Traits\HasTenant;
 class CashDrawer extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;

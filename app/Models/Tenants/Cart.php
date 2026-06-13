@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @mixin IdeHelperCart
  */
+use App\Models\Traits\HasTenant;
 class Cart extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenant;
 }

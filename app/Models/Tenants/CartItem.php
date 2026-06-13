@@ -15,9 +15,10 @@ use Illuminate\Support\Str;
 /**
  * @mixin IdeHelperCartItem
  */
+use App\Models\Traits\HasTenant;
 class CartItem extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenant;
 
     protected $fillable = [
         'qty',

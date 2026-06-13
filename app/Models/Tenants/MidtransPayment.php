@@ -11,6 +11,7 @@ use Spatie\Activitylog\LogOptions;
 /**
  * @mixin IdeHelperMidtransPayment
  */
+use App\Models\Traits\HasTenant;
 class MidtransPayment extends Model
 {
     use HasFactory, LogsActivity;

@@ -12,6 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * @mixin IdeHelperMember
  */
+use App\Models\Traits\HasTenant;
 class Member extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;

@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Storage;
 /**
  * @mixin IdeHelperProductImage
  */
+use App\Models\Traits\HasTenant;
 class ProductImage extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenant;
 
     protected $guarded = [];
 

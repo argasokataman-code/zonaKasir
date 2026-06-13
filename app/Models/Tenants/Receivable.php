@@ -10,9 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @mixin IdeHelperReceivable
  */
+use App\Models\Traits\HasTenant;
 class Receivable extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenant;
 
     protected $guarded = ['id'];
 

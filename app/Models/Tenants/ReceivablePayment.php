@@ -9,9 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * @mixin IdeHelperReceivablePayment
  */
+use App\Models\Traits\HasTenant;
 class ReceivablePayment extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenant;
 
     protected $guarded = ['id'];
 

@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @mixin IdeHelperPrinter
  */
+use App\Models\Traits\HasTenant;
 class Printer extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenant;
 
     protected $guarded = ['id'];
 }

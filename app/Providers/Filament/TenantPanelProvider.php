@@ -70,10 +70,8 @@ use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Str;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Illuminate\View\View;
-use Stancl\Tenancy\Bootstrappers\DatabaseTenancyBootstrapper;
 
 class TenantPanelProvider extends PanelProvider
 {
@@ -92,11 +90,15 @@ class TenantPanelProvider extends PanelProvider
     {
         $panel = $this->configurePanel($panel);
 
-        $url = request()->getHost();
-        if ($this->isCentralDomainConfigured()) {
-            $this->initializeTenantPanel($panel, $url);
-        } else {
-            $this->initializeDefaultPanel($panel);
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('abouts')) {
+                $about = \App\Models\Tenants\About::first();
+                if ($about) {
+                    $panel->brandName($about->shop_name ?? 'Your Brand')
+                        ->brandLogo(asset('assets/logo/logo.svg'));
+                }
+            }
+        } catch (\Throwable) {
         }
 
         FilamentView::registerRenderHook(
@@ -242,63 +244,6 @@ class TenantPanelProvider extends PanelProvider
             DispatchServingFilamentEvent::class,
             LocalizationMiddleware::class,
         ];
-    }
-
-    private function isCentralDomainConfigured(): bool
-    {
-        return config('tenancy.central_domains')[0] !== null;
-    }
-
-    private function initializeTenantPanel(Panel $panel, string $url): void
-    {
-        try {
-            $tenant = Tenant::whereHas('domains', fn ($query) => $query->where('domain', $url))->first();
-
-            if ($tenant) {
-                tenancy()->initialize($tenant->id);
-                $subdomain = $tenant->domains()->where('domain', $url)->first()?->domain;
-
-                $panel->domain($subdomain);
-                config(['cache.prefix' => $subdomain.'_']);
-
-                app(DatabaseTenancyBootstrapper::class)->bootstrap($tenant);
-
-                tenant()->run(fn () => $this->configureTenantBrand($panel));
-            } else {
-                if (in_array($url, config('tenancy.central_domains'))) {
-                    return;
-                }
-                abort(404);
-            }
-        } catch (\Throwable) {
-            // DB not available during build/package-discovery
-        }
-    }
-
-    private function initializeDefaultPanel(Panel $panel): void
-    {
-        try {
-            if (Schema::hasTable('abouts')) {
-                $about = About::first();
-
-                $panel->brandName($about->shop_name ?? 'Your Brand')
-                    ->brandLogo(asset('assets/logo/logo.svg'));
-            }
-        } catch (\Throwable) {
-            // DB not available during build/package-discovery
-        }
-    }
-
-    private function configureTenantBrand(Panel $panel): void
-    {
-        try {
-            $about = About::first();
-
-            $panel->brandName($about->shop_name ?? 'Your Brand')
-                ->brandLogo(asset('assets/logo/logo.svg'));
-        } catch (\Throwable) {
-            // DB not available during build/package-discovery
-        }
     }
 
     private function isNonFnbBusiness(): bool

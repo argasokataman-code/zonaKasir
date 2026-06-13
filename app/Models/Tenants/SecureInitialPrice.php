@@ -8,9 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @mixin IdeHelperSecureInitialPrice
  */
+use App\Models\Traits\HasTenant;
 class SecureInitialPrice extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenant;
 
     protected $fillable = [
         'user_id',

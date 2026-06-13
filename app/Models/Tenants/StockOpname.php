@@ -10,9 +10,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @mixin IdeHelperStockOpname
  */
+use App\Models\Traits\HasTenant;
 class StockOpname extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenant;
 
     protected $guarded = ['id'];
 

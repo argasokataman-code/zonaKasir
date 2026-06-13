@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @mixin IdeHelperNotification
  */
+use App\Models\Traits\HasTenant;
 class Notification extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTenant;
 }

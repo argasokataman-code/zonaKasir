@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @mixin IdeHelperAbout
  */
+use App\Models\Traits\HasTenant;
 class About extends Model
 {
     use HasFactory,

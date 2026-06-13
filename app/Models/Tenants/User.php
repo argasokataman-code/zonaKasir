@@ -22,6 +22,7 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * @mixin IdeHelperUser
  */
+use App\Models\Traits\HasTenant;
 class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
 {
     use HasApiTokens, HasFactory, HasRoles, Notifiable, SoftDeletes;
