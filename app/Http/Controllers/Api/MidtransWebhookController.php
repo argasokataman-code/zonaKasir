@@ -24,13 +24,16 @@ class MidtransWebhookController extends Controller
         // Extract tenant ID from order_id prefix format: T{tenant_id}-{microtime}-{random(4)}
         $tenantId = $this->extractTenantId($orderId);
 
-        if (!$tenantId) {
-            Log::error('Midtrans webhook: invalid order_id format', ['order_id' => $orderId]);
-            return response()->json(['status' => 'ok', 'message' => 'Test notification received'], 200);
+        if ($tenantId) {
+            return $this->processWithTenantId($tenantId, $payload, $orderId);
         }
 
-        // Initialize tenant context (stancl/tenancy)
-        // Note: abouts table is per-tenant, need tenant DB to verify
+        // Legacy format: no tenant_id in order_id — try all tenants
+        return $this->processBySearchingTenants($orderId, $payload);
+    }
+
+    private function processWithTenantId(int $tenantId, array $payload, string $orderId): JsonResponse
+    {
         try {
             $tenant = \App\Tenant::find($tenantId);
             if (!$tenant) {
@@ -38,10 +41,7 @@ class MidtransWebhookController extends Controller
                 return response()->json(['error' => 'Tenant not found'], 404);
             }
 
-            // Initialize the tenant database
             tenancy()->initialize($tenant);
-
-            // Delegate to gateway service
             app(MidtransGatewayService::class)->handleWebhook($payload);
 
             return response()->json(['status' => 'ok'], 200);
@@ -55,8 +55,34 @@ class MidtransWebhookController extends Controller
         }
     }
 
+    private function processBySearchingTenants(string $orderId, array $payload): JsonResponse
+    {
+        // Search across all tenants for this order_id
+        $tenants = \App\Tenant::all();
+        foreach ($tenants as $tenant) {
+            try {
+                tenancy()->initialize($tenant);
+                $found = MidtransPayment::where('order_id', $orderId)->exists();
+                if ($found) {
+                    Log::info('Midtrans webhook: found payment in tenant', [
+                        'order_id' => $orderId,
+                        'tenant_id' => $tenant->id,
+                    ]);
+                    app(MidtransGatewayService::class)->handleWebhook($payload);
+                    return response()->json(['status' => 'ok'], 200);
+                }
+            } catch (\Throwable $e) {
+                // Continue searching next tenant
+            }
+        }
+
+        Log::error('Midtrans webhook: payment not found in any tenant', ['order_id' => $orderId]);
+        return response()->json(['status' => 'not_found'], 404);
+    }
+
     /**
      * Extract tenant ID from order_id format: T{tenant_id}-{microtime}-{random(4)}
+     * Also handles legacy format: T-{microtime}-{random(4)} (no tenant_id)
      */
     private function extractTenantId(string $orderId): ?int
     {
@@ -65,10 +91,13 @@ class MidtransWebhookController extends Controller
         }
 
         $parts = explode('-', substr($orderId, 1));
-        if (empty($parts[0]) || !is_numeric($parts[0])) {
-            return null;
+
+        // New format: T{tenant_id}-{microtime}-{random}
+        if (isset($parts[0]) && is_numeric($parts[0]) && (int) $parts[0] > 0) {
+            return (int) $parts[0];
         }
 
-        return (int) $parts[0];
+        // Legacy format: T-{microtime}-{random} — search all tenants for this payment
+        return null;
     }
 }
