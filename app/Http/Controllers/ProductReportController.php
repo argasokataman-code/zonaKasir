@@ -7,6 +7,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class ProductReportController extends Controller
 {
@@ -18,7 +19,7 @@ class ProductReportController extends Controller
                 'end_date' => 'nullable|date',
             ]);
 
-            $reportData = $sellingReportService->generate($request->all());
+            $reportData = $sellingReportService->generate($request->only(['start_date', 'end_date']));
             $reports = $reportData['reports'];
             $footer = $reportData['footer'];
             $header = $reportData['header'];
@@ -35,7 +36,11 @@ class ProductReportController extends Controller
 
             return $pdf->stream();
         } catch (Exception $e) {
-            abort(500, 'Failed to generate product report: ' . $e->getMessage());
+            Log::error('Failed to generate product report: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            abort(500, 'Failed to generate product report');
         }
     }
 }

@@ -44,12 +44,20 @@ Route::middleware([
             return redirect()->to('/member');
         });
         Route::get('/member/purchasing-report/generate', PurchasingReportController::class)
+            ->middleware('auth')
+            ->can('generate purchasing report')
             ->name('purchasing-report.generate');
         Route::get('/member/selling-report/generate', SellingReportController::class)
+            ->middleware('auth')
+            ->can('generate selling report')
             ->name('selling-report.generate');
         Route::get('/member/product-report/generate', ProductReportController::class)
+            ->middleware('auth')
+            ->can('generate product report')
             ->name('product-report.generate');
         Route::get('/member/cashier-report/generate', CashierReportController::class)
+            ->middleware('auth')
+            ->can('generate cashier report')
             ->name('cashier-report.generate');
         Route::view('/member/sellings/{selling}/print', 'filament.tenant.pages.selling.print-receipt')
             ->name('selling.print');
@@ -117,7 +125,13 @@ Route::middleware([
             });
 
             Route::group(['prefix' => 'master'], function () {
-                Route::resource('/supplier', SupplierController::class);
+                Route::group(['prefix' => '/supplier'], function () {
+                    Route::get('/', [SupplierController::class, 'index'])->can('read supplier');
+                    Route::post('/', [SupplierController::class, 'store'])->can('create supplier');
+                    Route::get('/{supplier}', [SupplierController::class, 'show'])->can('read supplier');
+                    Route::put('/{supplier}', [SupplierController::class, 'update'])->can('update supplier');
+                    Route::delete('/{supplier}', [SupplierController::class, 'destroy'])->can('delete supplier');
+                });
                 Route::group(['prefix' => '/category'], function () {
                     Route::get('/', [CategoryController::class, 'index'])->can('read category');
                     Route::post('/', [CategoryController::class, 'store'])->can('create category');

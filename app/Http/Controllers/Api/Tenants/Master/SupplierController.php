@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Lakasir\HasCrudAction\Abstracts\HasCrudActionAbstract;
 use Lakasir\HasCrudAction\Interfaces\WithSimplePagination;
@@ -36,11 +37,12 @@ class SupplierController extends HasCrudActionAbstract implements WithSimplePagi
     public function store(StoreActionResolver $resolver, Request $request): JsonResponse
     {
         Validator::make($request->all(), static::rules(null))->validate();
+        $validated = $request->only(array_keys(static::rules(null)));
 
         try {
             DB::beginTransaction();
 
-            $supplier = Supplier::create($request->all());
+            $supplier = Supplier::create($validated);
 
             DB::commit();
 
@@ -50,10 +52,13 @@ class SupplierController extends HasCrudActionAbstract implements WithSimplePagi
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error('Failed to create supplier: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
 
             return $this->buildResponse()
                 ->setCode(500)
-                ->setMessage('Failed to create supplier: ' . $e->getMessage())
+                ->setMessage('Failed to create supplier')
                 ->present();
         }
     }
@@ -73,10 +78,13 @@ class SupplierController extends HasCrudActionAbstract implements WithSimplePagi
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error('Failed to delete supplier: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
 
             return $this->buildResponse()
                 ->setCode(500)
-                ->setMessage('Failed to delete supplier: ' . $e->getMessage())
+                ->setMessage('Failed to delete supplier')
                 ->present();
         }
     }

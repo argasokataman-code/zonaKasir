@@ -7,6 +7,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class CashierReportController extends Controller
 {
@@ -18,7 +19,7 @@ class CashierReportController extends Controller
         ]);
 
         try {
-            $reportData = $cashierReportService->generate($request->all());
+            $reportData = $cashierReportService->generate($request->only(['start_date', 'end_date']));
 
             if ($request->wantsJson()) {
                 return response()->json([
@@ -41,7 +42,11 @@ class CashierReportController extends Controller
 
             return $pdf->stream();
         } catch (Exception $e) {
-            abort(500, 'Failed to generate cashier report: ' . $e->getMessage());
+            Log::error('Failed to generate cashier report: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            abort(500, 'Failed to generate cashier report');
         }
     }
 }
