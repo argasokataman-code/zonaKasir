@@ -33,3 +33,30 @@ html {
   background-color: rgba(255, 102, 0, 0.2);
   color: inherit;
 }
+
+/* Focus ring for accessibility */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #FF6600;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reduce layout shift during font load */
+@font-face {
+  font-family: 'Figtree';
+  font-display: swap;
+}
+
+/* Smooth reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

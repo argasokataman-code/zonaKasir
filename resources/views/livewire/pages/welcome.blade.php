@@ -35,7 +35,7 @@ state(['locale' => $locale]);
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-14">
         <a href="/" class="flex items-center gap-2.5">
-          <img src="{{ asset('assets/logo/logo.svg') }}" class="h-8" alt="ZonaKasir">
+          <img src="{{ asset('assets/logo/logo.svg') }}" class="h-8" alt="ZonaKasir" width="32" height="32" loading="lazy">
           <span class="text-lg font-bold tracking-tight transition-colors"
                 :class="scrolled ? 'text-gray-900' : 'text-white'">ZonaKasir</span>
         </a>
@@ -418,7 +418,7 @@ state(['locale' => $locale]);
           ['title' => __('landing.feature_report_title'), 'desc' => __('landing.feature_report_desc'), 'icon' => 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z'],
           ['title' => __('landing.feature_support_title'), 'desc' => __('landing.feature_support_desc'), 'icon' => 'M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z'],
         ] as $feature)
-        <div class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-gray-100 transition-all hover:shadow-xl hover:-translate-y-1 hover:border-orange-200">
+        <div class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-orange-200">
           <div class="w-14 h-14 bg-gradient-to-br from-zonakasir-primary to-orange-500 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-orange-500/25">
             <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ $feature['icon'] }}"/>
@@ -476,7 +476,7 @@ state(['locale' => $locale]);
           ['title' => __('landing.menu_stock_title'), 'desc' => __('landing.menu_stock_desc'), 'icon' => 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4'],
           ['title' => __('landing.menu_cashier_title'), 'desc' => __('landing.menu_cashier_desc'), 'icon' => 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z'],
         ] as $m)
-        <div class="bg-gray-50 rounded-3xl p-7 sm:p-8 border border-gray-100 transition-all hover:bg-white hover:shadow-xl">
+        <div class="bg-gray-50 rounded-3xl p-7 sm:p-8 border border-gray-100 transition-all duration-300 hover:bg-white hover:shadow-xl">
           <div class="w-14 h-14 bg-zonakasir-primary rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-orange-500/20">
             <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ $m['icon'] }}"/>
@@ -660,7 +660,7 @@ state(['locale' => $locale]);
         {{-- Brand --}}
         <div class="sm:col-span-2 lg:col-span-1">
           <div class="flex items-center gap-2.5 mb-4">
-            <img src="{{ asset('assets/logo/logo.svg') }}" class="h-8" alt="ZonaKasir">
+            <img src="{{ asset('assets/logo/logo.svg') }}" class="h-8" alt="ZonaKasir" width="32" height="32" loading="lazy">
             <span class="text-white font-bold text-lg">ZonaKasir</span>
           </div>
           <p class="text-gray-400 text-sm leading-relaxed mb-5">{{ __('landing.footer_desc') }}</p>
