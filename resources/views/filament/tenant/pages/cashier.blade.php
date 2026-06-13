@@ -314,15 +314,9 @@
   <div id="midtrans-waiting" class="hidden fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm">
     <div class="text-center max-w-md mx-auto p-8">
       <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">{{ __('Waiting for Payment') }}</h2>
-      <div id="midtrans-qr-container" class="mb-6 flex justify-center">
-        <img id="midtrans-qr-img" class="hidden" style="width:250px;height:250px;" alt="QR Code" />
-      </div>
-      <div class="mb-4">
-        <a id="midtrans-qr-link" href="#" target="_blank"
-           class="text-xs text-blue-500 break-all hover:underline" id="midtrans-qr-url"></a>
-      </div>
+      <p class="text-gray-600 dark:text-gray-400 mb-6">{{ __('Customer is completing payment on the Midtrans page...') }}</p>
       <button onclick="window.location.reload()"
-              class="mt-6 bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 font-semibold">
+              class="mt-4 bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 font-semibold">
         {{ __('Cancel & Close') }}
       </button>
     </div>
@@ -532,10 +526,6 @@
         var token = data && data.token;
         var redirect_url = data && data.redirect_url;
         if (!token || !redirect_url) { console.error('Midtrans: missing data', event); return; }
-        var qrLink = document.getElementById('midtrans-qr-link');
-        if (qrLink) { qrLink.href = redirect_url; qrLink.textContent = redirect_url; }
-        var qrImg = document.getElementById('midtrans-qr-img');
-        if (qrImg) { qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(redirect_url); qrImg.classList.remove('hidden'); }
         var waiting = document.getElementById('midtrans-waiting');
         if (waiting) { waiting.classList.remove('hidden'); waiting.classList.add('flex'); }
         setTimeout(function() {
