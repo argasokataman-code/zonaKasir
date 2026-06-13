@@ -6,6 +6,7 @@ use App\Constants\Role;
 use App\Models\Tenants\About;
 use App\Models\Tenants\User;
 use App\Notifications\DomainCreated;
+use App\Services\LicenseService;
 use App\Tenant;
 use Illuminate\Support\Facades\Artisan;
 use Stancl\Tenancy\Exceptions\TenantDatabaseAlreadyExistsException;
@@ -83,6 +84,9 @@ class RegisterTenant
                 $user->assignRole(Role::admin);
             }
         });
+
+        // Auto-create 14-day trial license
+        app(LicenseService::class)->createTrial($name);
 
         return $tenant;
     }

@@ -38,6 +38,7 @@ use App\Filament\Tenant\Resources\SupplierResource;
 use App\Filament\Tenant\Resources\TableResource;
 use App\Filament\Tenant\Resources\UserResource;
 use App\Filament\Tenant\Resources\VoucherResource;
+use App\Http\Middleware\CheckValidLicense;
 use App\Http\Middleware\LocalizationMiddleware;
 use App\Models\Tenants\About;
 use App\Models\Tenants\UploadedFile;
@@ -227,6 +228,7 @@ class TenantPanelProvider extends PanelProvider
             DisableBladeIconComponents::class,
             DispatchServingFilamentEvent::class,
             LocalizationMiddleware::class,
+            CheckValidLicense::class,
         ];
     }
 
