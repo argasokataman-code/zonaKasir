@@ -154,7 +154,7 @@ state(['locale' => $locale]);
         ] as $chip)
         <div class="flex items-center gap-3 sm:gap-2.5 bg-white/[0.05] border border-white/10 rounded-2xl px-4 sm:px-5 py-3 sm:py-3.5 transition-colors hover:bg-white/[0.08]">
           <div class="w-10 h-10 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-orange-500/30 to-orange-500/5 border border-orange-500/20 flex items-center justify-center flex-shrink-0">
-            <svg class="w-5 h-5 sm:w-4.5 sm:h-4.5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 sm:w-4 sm:h-4 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="{{ $chip['icon'] }}"/>
             </svg>
           </div>
