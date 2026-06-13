@@ -37,7 +37,7 @@ class AutoApproveWithdrawal
         }
 
         $about = About::first();
-        $autoMax = config('midtrans.withdrawal_approval.auto_approve_max', 5000000);
+        $autoMax = config('flip.withdrawal_approval.auto_approve_max', 5000000);
         $tenantAge = $about->created_at->diffInDays(now());
 
         // Auto-approve only if: amount <= 5jt AND tenant is at least 30 days old
