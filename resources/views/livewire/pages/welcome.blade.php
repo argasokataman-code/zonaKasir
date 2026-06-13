@@ -378,7 +378,7 @@ state(['locale' => $locale]);
                   </div>
                   <div class="flex items-end justify-between gap-1 h-16 sm:h-20 px-1">
                     @foreach([['day' => 'Sen', 'h' => 55, 'active' => false], ['day' => 'Sel', 'h' => 40, 'active' => false], ['day' => 'Rab', 'h' => 70, 'active' => false], ['day' => 'Kam', 'h' => 35, 'active' => false], ['day' => 'Jum', 'h' => 60, 'active' => false], ['day' => 'Sab', 'h' => 85, 'active' => true], ['day' => 'Min', 'h' => 45, 'active' => false]] as $bar)
-                    <div class="flex-1 flex flex-col items-center gap-1">
+                    <div class="flex-1 h-full flex flex-col items-center justify-end gap-1">
                       <div class="w-full rounded-t-md {{ $bar['active'] ? 'bg-gradient-to-t from-zonakasir-primary to-orange-400' : 'bg-gray-200' }}" style="height: {{ $bar['h'] }}%"></div>
                       <span class="text-[7px] sm:text-[8px] {{ $bar['active'] ? 'text-zonakasir-primary font-semibold' : 'text-gray-400' }}">{{ $bar['day'] }}</span>
                     </div>
@@ -439,14 +439,14 @@ state(['locale' => $locale]);
   </section>
 
   {{-- Trust Stats --}}
-  <section class="relative py-14 sm:py-18 bg-white reveal">
+  <section class="relative py-14 sm:py-20 bg-white reveal">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
         @foreach([
-          ['n' => '500+', 'l' => __('landing.stat_count_stores')],
+          ['n' => 'IDR 25rb', 'l' => __('landing.stat_count_stores')],
           ['n' => '99.9%', 'l' => __('landing.stat_count_uptime')],
           ['n' => '24/7', 'l' => __('landing.stat_count_support')],
-          ['n' => '10+', 'l' => __('landing.stat_count_years')],
+          ['n' => '± 5 mnt', 'l' => __('landing.stat_count_years')],
         ] as $stat)
         <div class="reveal" style="transition-delay: {{ $loop->index * 0.1 }}s">
           <div class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-zonakasir-primary to-orange-500">
