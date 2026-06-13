@@ -30,7 +30,7 @@ trait HasTenant
     public function initializeHasTenant(): void
     {
         if (! in_array('tenant_id', $this->fillable ?? [])) {
-            $this->guarded = array_diff($this->guarded ?? ['id'], ['tenant_id']);
+            $this->fillable[] = 'tenant_id';
         }
     }
 }

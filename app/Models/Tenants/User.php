@@ -25,7 +25,7 @@ use Spatie\Permission\Traits\HasRoles;
 use App\Models\Traits\HasTenant;
 class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
 {
-    use HasApiTokens, HasFactory, HasRoles, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, HasRoles, HasTenant, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -39,6 +39,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
         'email_verified_at',
         'fcm_token',
         'is_owner',
+        'tenant_id',
     ];
 
     /**
