@@ -5,6 +5,7 @@ namespace Tests;
 use App\Models\Tenants\About;
 use App\Models\Tenants\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Artisan;
 
 trait RefreshDatabaseWithTenant
 {
@@ -29,5 +30,14 @@ trait RefreshDatabaseWithTenant
             'shop_name' => 'Toko Testing',
             'business_type' => 'retail',
         ]);
+
+        try {
+            session(['tenant_id' => $tenantId]);
+            Artisan::call('db:seed', ['--class' => 'PermissionSeeder', '--force' => true]);
+            Artisan::call('db:seed', ['--class' => 'PaymentMethodSeeder', '--force' => true]);
+            Artisan::call('db:seed', ['--class' => 'DigitalPaymentMethodSeeder', '--force' => true]);
+            Artisan::call('db:seed', ['--class' => 'CategorySeeder', '--force' => true]);
+        } catch (\Throwable $e) {
+        }
     }
 }

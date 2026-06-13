@@ -72,6 +72,7 @@ class ProductObserver extends AbstractObserver implements DataAwareRule
 
             if (! $hasExistingBarcodes) {
                 $product->barcodes()->create([
+                    'tenant_id' => $product->tenant_id,
                     'code' => $this->generateBarcode($product),
                     'type' => 'primary',
                     'description' => 'Código generado automáticamente',
