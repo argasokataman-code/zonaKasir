@@ -24,10 +24,10 @@ return [
     'stat_multi_sub' => 'Platform',
 
     // Stats
-    'stat_count_stores' => 'Toko Aktif',
-    'stat_count_uptime' => 'Uptime',
+    'stat_count_stores' => 'Mulai per bulan',
+    'stat_count_uptime' => 'Target uptime',
     'stat_count_support' => 'Dukungan',
-    'stat_count_years' => 'Tahun Pengalaman',
+    'stat_count_years' => 'Daftar toko baru',
 
     // Mockup section
     'mockup_badge' => 'Tersedia di Web & Mobile',
