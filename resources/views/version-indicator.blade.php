@@ -9,7 +9,7 @@
   }
 @endphp
 
-<a href="{{ route('filament.tenant.pages.update') }}"
+<div
   class="relative mt-2 flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
   @if ($currentVersion === 'Development')
     <span class="font-mono">{{ $currentVersion }}</span>
@@ -23,4 +23,4 @@
       </span>
     </x-filament::badge>
   @endif
-</a>
+</div>
