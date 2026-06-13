@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Plan;
 use function Livewire\Volt\layout;
 use function Livewire\Volt\state;
 
@@ -46,31 +47,59 @@ $productGradients = [
     'bg-gradient-to-br from-purple-300 to-violet-400',
 ];
 
-$prices = [
-    [
-        'title' => 'Pribadi',
-        'description' => 'Gunakan zonaKasir gratis dengan server anda sendiri.',
-        'price' => 'IDR 0',
-        'button' => 'Mulai Gratis',
-        'route' => '',
-        'includes' => ['Semua fitur gratis', 'Self-hosted'],
-        'excludes' => [
-            'Maintenance', 'Dukungan 24 jam', 'Backup data', 'Pembaharuan fitur',
-        ],
-    ],
-    [
-        'title' => 'Server Kami',
-        'description' => 'Dengan server kami, dapatkan fitur lebih lengkap dan dukungan penuh.',
-        'price' => 'IDR 50.000',
+$selfHosted = [
+    'title' => 'Pribadi',
+    'description' => 'Gunakan zonaKasir gratis dengan server anda sendiri.',
+    'price' => 'IDR 0',
+    'button' => 'Mulai Gratis',
+    'is_contact' => false,
+    'populer' => false,
+    'includes' => ['Semua fitur gratis', 'Self-hosted'],
+    'excludes' => ['Maintenance', 'Dukungan 24 jam', 'Backup data', 'Pembaharuan fitur'],
+];
+
+$hostedPlans = Plan::where('is_active', true)
+    ->where('price_monthly', '>', 0)
+    ->orderBy('price_monthly')
+    ->get()
+    ->map(fn (Plan $plan) => [
+        'title' => $plan->name,
+        'description' => $plan->description ?? 'Nikmati fitur lengkap dengan server kami.',
+        'price_idr' => (int) $plan->price_monthly,
+        'price_yearly_idr' => (int) ($plan->price_yearly ?? $plan->price_monthly * 10),
+        'price' => 'IDR '.number_format($plan->price_monthly, 0, ',', '.'),
+        'price_yearly' => 'IDR '.number_format($plan->price_yearly ?? $plan->price_monthly * 10, 0, ',', '.'),
         'button' => 'Hubungi Kami',
-        'route' => '',
+        'is_contact' => true,
+        'populer' => true,
+        'max_stores' => $plan->max_stores,
+        'max_users' => $plan->max_users,
+        'features' => $plan->features ?? [],
         'includes' => [
-            'Semua fitur gratis', 'Gratis pemasangan', 'Maintenance',
-            'Dukungan 24 jam', 'Backup data', 'Pembaharuan fitur',
+            'Semua fitur gratis',
+            'Gratis pemasangan',
+            'Maintenance',
+            'Dukungan 24 jam',
+            'Backup data',
+            'Pembaharuan fitur',
         ],
         'excludes' => [],
+    ])
+    ->toArray();
+
+$prices = array_merge([$selfHosted], $hostedPlans ?: [[
+    'title' => 'Server Kami',
+    'description' => 'Dengan server kami, dapatkan fitur lebih lengkap dan dukungan penuh.',
+    'price' => 'IDR 50.000',
+    'button' => 'Hubungi Kami',
+    'is_contact' => true,
+    'populer' => true,
+    'includes' => [
+        'Semua fitur gratis', 'Gratis pemasangan', 'Maintenance',
+        'Dukungan 24 jam', 'Backup data', 'Pembaharuan fitur',
     ],
-];
+    'excludes' => [],
+]]);
 
 $mainFeatures = [
     [
@@ -101,6 +130,7 @@ state([
     'mainFeatures' => $mainFeatures,
     'navIcons' => $navIcons,
     'productGradients' => $productGradients,
+    'hostedPlans' => $hostedPlans,
 ]);
 
 ?>
@@ -1136,7 +1166,7 @@ state([
              style="transition-delay: {{ $index * 150 }}ms">
           <div class="absolute inset-0 bg-gradient-to-br from-zonakasir-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-          @if($index === 1)
+          @if(($price['populer'] ?? false) && $index === 1)
           <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-zonakasir-primary to-orange-500 text-white text-sm font-bold px-5 py-1.5 rounded-full shadow-lg shadow-orange-500/30 z-10">
             Populer
           </div>
@@ -1149,10 +1179,41 @@ state([
               <span class="text-4xl sm:text-5xl font-extrabold text-gray-900">{{ $price['price'] }}</span>
               <span class="text-gray-500">/ bulan</span>
             </div>
-            <a href="{{ route('auth.register') }}"
-               class="mt-8 block w-full py-3.5 px-6 rounded-2xl text-center font-semibold transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 {{ $index === 1 ? 'bg-gradient-to-r from-zonakasir-primary to-orange-500 text-white hover:shadow-lg hover:shadow-orange-500/30' : 'bg-gray-100 text-gray-900 hover:bg-gray-200' }}">
+            @isset($price['price_yearly_idr'])
+            <p class="text-sm text-gray-500 mt-1">
+              {{ $price['price_yearly'] }} <span class="text-xs">/ tahun</span>
+              @if($price['price_yearly_idr'] < $price['price_idr'] * 12)
+              <span class="text-green-600 font-semibold ml-1">(irit {{ 100 - round($price['price_yearly_idr'] / ($price['price_idr'] * 12) * 100) }}%)</span>
+              @endif
+            </p>
+            @endisset
+            @isset($price['max_stores'])
+            <div class="mt-4 flex gap-4 text-sm text-gray-600">
+              <span>🏪 {{ $price['max_stores'] }} stores</span>
+              <span>👥 {{ $price['max_users'] }} users</span>
+            </div>
+            @isset($price['features'])
+            @if(count($price['features']) > 0)
+            <div class="mt-2 flex flex-wrap gap-1">
+              @foreach($price['features'] as $feature)
+              <span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full">{{ $feature }}</span>
+              @endforeach
+            </div>
+            @endif
+            @endisset
+            @endisset
+
+            @if($price['is_contact'] ?? false)
+            <a href="mailto:{{ config('mail.from.address', 'hello@zonakasir.com') }}"
+               class="mt-6 block w-full py-3.5 px-6 rounded-2xl text-center font-semibold transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 bg-gradient-to-r from-zonakasir-primary to-orange-500 text-white hover:shadow-lg hover:shadow-orange-500/30">
               {{ $price['button'] }}
             </a>
+            @else
+            <a href="{{ route('auth.register') }}"
+               class="mt-6 block w-full py-3.5 px-6 rounded-2xl text-center font-semibold transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 bg-gray-100 text-gray-900 hover:bg-gray-200">
+              {{ $price['button'] }}
+            </a>
+            @endif
             <div class="mt-8">
               <p class="text-sm font-semibold text-gray-900 mb-4">Termasuk:</p>
               <ul class="space-y-3">
@@ -1166,6 +1227,10 @@ state([
                   <span class="text-gray-600">{{ $include }}</span>
                 </li>
                 @endforeach
+              </ul>
+              @if(count($price['excludes']) > 0)
+              <p class="text-sm font-semibold text-gray-400 mt-6 mb-4">Tidak Termasuk:</p>
+              <ul class="space-y-3">
                 @foreach($price['excludes'] as $exclude)
                 <li class="flex items-center gap-3">
                   <div class="w-5 h-5 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -1177,6 +1242,7 @@ state([
                 </li>
                 @endforeach
               </ul>
+              @endif
             </div>
           </div>
         </div>
@@ -1184,6 +1250,88 @@ state([
       </div>
     </div>
   </section>
+
+  {{-- Plan Comparison --}}
+  @if(count($hostedPlans) > 0)
+  <section class="py-20 sm:py-24 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900">Bandingkan Fitur</h2>
+        <p class="mt-4 text-gray-600 max-w-2xl mx-auto">Lihat perbandingan fitur lengkap antar paket.</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm bg-white rounded-2xl shadow-sm">
+          <thead>
+            <tr class="border-b">
+              <th class="p-4 text-left font-semibold text-gray-600">Fitur</th>
+              <th class="p-4 text-center font-semibold text-gray-900">Pribadi</th>
+              @foreach($hostedPlans as $plan)
+              <th class="p-4 text-center font-semibold text-zonakasir-primary">{{ $plan['title'] }}</th>
+              @endforeach
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b">
+              <td class="p-4 text-gray-600">Harga</td>
+              <td class="p-4 text-center font-bold">Gratis</td>
+              @foreach($hostedPlans as $plan)
+              <td class="p-4 text-center font-bold">{{ $plan['price'] }}/bln</td>
+              @endforeach
+            </tr>
+            <tr class="border-b bg-gray-50">
+              <td class="p-4 text-gray-600">Hosting</td>
+              <td class="p-4 text-center">Self-hosted</td>
+              @foreach($hostedPlans as $plan)
+              <td class="p-4 text-center text-green-600 font-semibold">Server Kami</td>
+              @endforeach
+            </tr>
+            <tr class="border-b">
+              <td class="p-4 text-gray-600">Max Stores</td>
+              <td class="p-4 text-center">Unlimited</td>
+              @foreach($hostedPlans as $plan)
+              <td class="p-4 text-center font-semibold">{{ $plan['max_stores'] }}</td>
+              @endforeach
+            </tr>
+            <tr class="border-b bg-gray-50">
+              <td class="p-4 text-gray-600">Max Users</td>
+              <td class="p-4 text-center">Unlimited</td>
+              @foreach($hostedPlans as $plan)
+              <td class="p-4 text-center font-semibold">{{ $plan['max_users'] }}</td>
+              @endforeach
+            </tr>
+            @php
+              $allFeatures = collect($hostedPlans)->pluck('features')->flatten()->unique()->values()->toArray();
+            @endphp
+            @foreach($allFeatures as $feature)
+            <tr class="border-b @if($loop->even) bg-gray-50 @endif">
+              <td class="p-4 text-gray-600 capitalize">{{ str_replace('_', ' ', $feature) }}</td>
+              <td class="p-4 text-center">
+                <span class="text-green-500 text-lg">✓</span>
+              </td>
+              @foreach($hostedPlans as $plan)
+              <td class="p-4 text-center">
+                @if(in_array($feature, $plan['features'] ?? []))
+                <span class="text-green-500 text-lg">✓</span>
+                @else
+                <span class="text-gray-300">—</span>
+                @endif
+              </td>
+              @endforeach
+            </tr>
+            @endforeach
+            <tr class="border-b bg-gray-50">
+              <td class="p-4 text-gray-600">Dukungan</td>
+              <td class="p-4 text-center text-gray-400">Community</td>
+              @foreach($hostedPlans as $plan)
+              <td class="p-4 text-center text-green-600 font-semibold">24/7 Premium</td>
+              @endforeach
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  @endif
 
   {{-- CTA Section --}}
   <section class="py-20 sm:py-24 lg:py-32 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">

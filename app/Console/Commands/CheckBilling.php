@@ -2,15 +2,16 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Invoice;
 use App\Models\Subscription;
-use App\Tenant;
+use App\Services\InvoiceService;
 use Illuminate\Console\Command;
 
 class CheckBilling extends Command
 {
     protected $signature = 'billing:check';
 
-    protected $description = 'Check subscription statuses and send reminders';
+    protected $description = 'Check subscription statuses, generate invoices, and send reminders';
 
     public function handle(): int
     {
@@ -25,14 +26,6 @@ class CheckBilling extends Command
         foreach ($expiredTrials as $sub) {
             $sub->update(['status' => 'expired']);
             $this->line("  Trial expired: {$sub->tenant_id}");
-            // Notify tenant users about trial expiration
-            if ($sub->tenant) {
-                $sub->tenant->users()->each(function ($user) {
-                    $user->notify(new \App\Notifications\SubscriptionExpiring(
-                        "Your trial period has ended. Please subscribe to continue using the service."
-                    ));
-                });
-            }
         }
 
         // Expire active subscriptions that have ended
@@ -44,17 +37,32 @@ class CheckBilling extends Command
         foreach ($ended as $sub) {
             $sub->update(['status' => 'expired']);
             $this->line("  Subscription ended: {$sub->tenant_id}");
-            // Notify tenant users about expiration
-            if ($sub->tenant) {
-                $sub->tenant->users()->each(function ($user) {
-                    $user->notify(new \App\Notifications\SubscriptionExpiring(
-                        "Your subscription plan has expired. Please renew at the dashboard."
-                    ));
-                });
+        }
+
+        // Generate invoices for active subscriptions that expire within 7 days
+        // Skip if already has a pending invoice created this week
+        $renewing = Subscription::where('status', 'active')
+            ->whereNotNull('plan_id')
+            ->whereNotNull('ends_at')
+            ->where('ends_at', '>', now())
+            ->where('ends_at', '<', now()->addDays(7))
+            ->whereDoesntHave('invoices', function ($q) {
+                $q->where('created_at', '>', now()->subWeek());
+            })
+            ->get();
+
+        foreach ($renewing as $sub) {
+            try {
+                $invoice = app(InvoiceService::class)->createInvoice($sub, 'midtrans');
+                $this->line("  Invoice generated: {$invoice->number} for {$sub->tenant_id}");
+            } catch (\Throwable $e) {
+                $this->error("  Failed to generate invoice for {$sub->tenant_id}: {$e->getMessage()}");
             }
         }
 
-        $this->info('Done.');
+        $count = $expiredTrials->count() + $ended->count();
+        $this->info("Done. {$count} expired, {$renewing->count()} invoices generated.");
+
         return Command::SUCCESS;
     }
 }
