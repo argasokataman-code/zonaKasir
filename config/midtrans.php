@@ -50,6 +50,7 @@ return [
             $path = storage_path('app/private-key.pem');
             return file_exists($path) ? file_get_contents($path) : null;
         }),
+        'public_key' => env('MIDTRANS_SNAPBI_PUBLIC_KEY'),
         'partner_id' => env('MIDTRANS_SNAPBI_PARTNER_ID'),
         'channel_id' => env('MIDTRANS_SNAPBI_CHANNEL_ID'),
         'merchant_id' => env('MIDTRANS_SNAPBI_MERCHANT_ID'),
