@@ -526,38 +526,22 @@
     snapScript.async = false;
     document.head.appendChild(snapScript);
 
-    // Handle Midtrans payment event from Livewire
-    $wire.on('midtrans-payment', (event) => {
-      const { token, redirect_url } = event;
-
-      // Set the redirect URL on waiting overlay
-      var qrLink = document.getElementById('midtrans-qr-link');
-      var qrUrl = document.getElementById('midtrans-qr-url');
-      if (qrLink) { qrLink.href = redirect_url; qrLink.textContent = redirect_url; }
-      if (qrUrl) qrUrl.textContent = redirect_url;
-
-      // Show QR code using Google Charts API (reliable, no JS library needed)
-      var qrImg = document.getElementById('midtrans-qr-img');
-      if (qrImg) {
-        qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(redirect_url);
-        qrImg.classList.remove('hidden');
-      }
-
-      // Show waiting overlay
-      var waiting = document.getElementById('midtrans-waiting');
-      if (waiting) { waiting.classList.remove('hidden'); waiting.classList.add('flex'); }
-
-      // Also try Snap popup as fallback
-      setTimeout(function() {
-        if (window.snap) {
-          window.snap.pay(token, {
-            onSuccess: function() { window.location.reload(); },
-            onPending: function() {},
-            onError: function() { console.error('Snap error'); }
-          });
-        }
-      }, 500);
-    });
+      // Handle Midtrans payment event from Livewire
+      $wire.on('midtrans-payment', (event) => {
+        var data = event.detail || event;
+        var token = data.token || data[0];
+        var redirect_url = data.redirect_url || data[1];
+        if (!token || !redirect_url) { console.error('Midtrans: missing data', data); return; }
+        var qrLink = document.getElementById('midtrans-qr-link');
+        if (qrLink) { qrLink.href = redirect_url; qrLink.textContent = redirect_url; }
+        var qrImg = document.getElementById('midtrans-qr-img');
+        if (qrImg) { qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(redirect_url); qrImg.classList.remove('hidden'); }
+        var waiting = document.getElementById('midtrans-waiting');
+        if (waiting) { waiting.classList.remove('hidden'); waiting.classList.add('flex'); }
+        setTimeout(function() {
+          if (window.snap) { window.snap.pay(token, { onSuccess: function() { window.location.reload(); }, onPending: function() {}, onError: function(e) { console.error('Snap error', e); } }); }
+        }, 500);
+      });
 
     $wire.on('selling-created', (event) => {
       selling = event.selling;
