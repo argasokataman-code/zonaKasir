@@ -32,18 +32,13 @@ use App\Http\Controllers\CashierReportController;
 use App\Http\Controllers\PrinterController;
 use App\Http\Controllers\ProductReportController;
 use App\Http\Controllers\SellingReportController;
-use App\Http\Middleware\InitializeTenancyByDomain;
 use App\Livewire\ResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 use \App\Http\Middleware\PlanFeatureMiddleware;
 
 Route::middleware([
     'web',
-    InitializeTenancyByDomain::class,
-    PreventAccessFromCentralDomains::class,
-    \App\Http\Middleware\CheckTenantActive::class,
     \App\Http\Middleware\CheckSubscription::class,
 ])
 ->group(function () {
@@ -73,17 +68,9 @@ Route::middleware([
 
 Route::middleware([
     'api',
-    InitializeTenancyByDomain::class,
-    PreventAccessFromCentralDomains::class,
 ])
     ->prefix('api')
     ->group(function () {
-        Route::get('check', function () {
-            return response()->json([
-                'tenant' => tenant('id'),
-                'tenant_email' => tenant()->tenancy_db_profile_email,
-            ]);
-        });
         Route::group(['prefix' => 'auth'], function () {
             Route::post('/login', [AuthenticatedSessionController::class, 'store'])
                 ->middleware('throttle:5,1')

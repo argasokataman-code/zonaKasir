@@ -52,7 +52,7 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function centralDomains(): array
     {
-        return config('tenancy.central_domains');
+        return [parse_url(config('app.url'), PHP_URL_HOST)];
     }
 
     protected function configureRateLimiting()

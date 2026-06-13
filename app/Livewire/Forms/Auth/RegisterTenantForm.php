@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Forms\Auth;
 
-use App\Rules\Domain;
 use App\Services\RegisterTenant;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -38,7 +37,6 @@ class RegisterTenantForm extends Component implements HasForms
                             TextInput::make('email')
                                 ->label(__('Email'))
                                 ->email()
-                                ->rules('unique:tenant_users,email')
                                 ->required(),
                             TextInput::make('password')
                                 ->password()
@@ -78,18 +76,14 @@ class RegisterTenantForm extends Component implements HasForms
                                 ->string(),
                         ])
                         ->icon('heroicon-o-shopping-bag'),
-                    Wizard\Step::make(__('Shop Domain'))
+                    Wizard\Step::make(__('Shop Detail'))
                         ->schema([
-                            TextInput::make('domain')
-                                ->label('Domain')
-                                ->rules(['unique:tenants,id', new Domain])
-                                ->suffix('.'.config('tenancy.central_domains')[0]),
                             TextInput::make('coupon_code')
                                 ->label('Kode Kupon (Opsional)')
                                 ->placeholder('Masukkan kode kupon jika ada')
                                 ->maxLength(50),
                         ])
-                        ->icon('heroicon-o-globe-alt'),
+                        ->icon('heroicon-o-ticket'),
                 ])
                     ->submitAction(new HtmlString(
                         Blade::render(<<<'BLADE'
@@ -107,18 +101,12 @@ class RegisterTenantForm extends Component implements HasForms
     public function create(RegisterTenant $registerTenant): void
     {
         $data = $this->form->getState();
-        $data = array_merge($data, [
-            'name' => strtolower($data['domain']),
-            'domain' => strtolower($data['domain'].'.'.config('tenancy.central_domains')[0]),
-        ]);
 
-        $tenant = $registerTenant->create($data);
-        $domain = $tenant->domains->first()->domain;
-        $scheme = request()->getScheme();
-        $port = request()->getPort();
-        $port = in_array($port, [80, 443]) ? '' : ':'.$port;
+        $tenantId = $registerTenant->create(array_merge($data, [
+            'name' => strtolower(str_replace(' ', '_', $data['full_name'])).'_'.uniqid(),
+        ]));
 
-        $this->redirect($scheme.'://'.$domain.$port);
+        $this->redirect(route('auth.register'));
     }
 
     public function render()
