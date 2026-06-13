@@ -10,7 +10,11 @@ use Filament\Tables\Table;
 
 class SettlementResource extends Resource
 {
+    use HasTranslatableResource;
+
     protected static ?string $model = Settlement::class;
+
+    protected static ?string $label = 'Settlement';
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 
