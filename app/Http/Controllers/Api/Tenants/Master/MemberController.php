@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -33,7 +34,7 @@ class MemberController extends Controller
             DB::beginTransaction();
             
             $member = new Member();
-            $member->fill($request->all());
+            $member->fill($request->only(array_keys($this->rules(new Member))));
             $member->save();
             
             DB::commit();
@@ -45,9 +46,13 @@ class MemberController extends Controller
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error('Failed to create member: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
             return $this->buildResponse()
                 ->setCode(500)
-                ->setMessage('Failed to create member: ' . $e->getMessage())
+                ->setMessage('Failed to create member')
                 ->present();
         }
     }
@@ -66,7 +71,7 @@ class MemberController extends Controller
         try {
             DB::beginTransaction();
             
-            $member->fill($request->all());
+            $member->fill($request->only(array_keys($this->rules($member))));
             $member->save();
             
             DB::commit();
@@ -77,9 +82,13 @@ class MemberController extends Controller
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error('Failed to update member: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
             return $this->buildResponse()
                 ->setCode(500)
-                ->setMessage('Failed to update member: ' . $e->getMessage())
+                ->setMessage('Failed to update member')
                 ->present();
         }
     }
@@ -96,9 +105,13 @@ class MemberController extends Controller
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error('Failed to delete member: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
             return $this->buildResponse()
                 ->setCode(500)
-                ->setMessage('Failed to delete member: ' . $e->getMessage())
+                ->setMessage('Failed to delete member')
                 ->present();
         }
     }

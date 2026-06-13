@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AboutController extends Controller
 {
@@ -35,7 +36,10 @@ class AboutController extends Controller
         try {
             DB::beginTransaction();
             
-            $aboutService->createOrUpdate($request->all());
+            $aboutService->createOrUpdate($request->only([
+                'shop_name', 'shop_location', 'business_type',
+                'other_business_type', 'owner_name', 'uploaded_file_id',
+            ]));
             Setting::set('currency', $request->currency ?? 'IDR');
             
             DB::commit();
@@ -45,9 +49,13 @@ class AboutController extends Controller
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error('Failed to update about: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
             return $this->buildResponse()
                 ->setCode(500)
-                ->setMessage('Failed to update about: ' . $e->getMessage())
+                ->setMessage('Failed to update about')
                 ->present();
         }
     }

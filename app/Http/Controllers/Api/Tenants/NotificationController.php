@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class NotificationController extends Controller
 {
@@ -73,9 +74,13 @@ class NotificationController extends Controller
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error('Failed to update notification: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
             return $this->buildResponse()
                 ->setCode(500)
-                ->setMessage('Failed to update notification: ' . $e->getMessage())
+                ->setMessage('Failed to update notification')
                 ->present();
         }
     }
@@ -92,9 +97,13 @@ class NotificationController extends Controller
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error('Failed to clear notifications: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
             return $this->buildResponse()
                 ->setCode(500)
-                ->setMessage('Failed to clear notifications: ' . $e->getMessage())
+                ->setMessage('Failed to clear notifications')
                 ->present();
         }
     }

@@ -8,6 +8,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 
 class SellingReportController extends Controller
 {
@@ -19,7 +20,7 @@ class SellingReportController extends Controller
         ]);
 
         try {
-            $reportData = $sellingReportService->generate($request->all());
+            $reportData = $sellingReportService->generate($request->only(['start_date', 'end_date']));
 
             if ($request->wantsJson()) {
                 return $this->buildResponse()
@@ -44,7 +45,11 @@ class SellingReportController extends Controller
 
             return $pdf->stream();
         } catch (Exception $e) {
-            abort(500, 'Failed to generate selling report: ' . $e->getMessage());
+            Log::error('Failed to generate selling report: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
+            abort(500, 'Failed to generate selling report');
         }
     }
 }

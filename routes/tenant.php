@@ -84,7 +84,7 @@ Route::middleware([
                 'tenant' => tenant('id'),
                 'tenant_email' => tenant()->tenancy_db_profile_email,
             ]);
-        });
+        })->middleware('auth:sanctum');
         Route::group(['prefix' => 'auth'], function () {
             Route::post('/login', [AuthenticatedSessionController::class, 'store'])
                 ->middleware('throttle:5,1')

@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -65,10 +66,13 @@ class ProfileController extends Controller
             $user->refresh();
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error('Failed to update profile: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
 
             return $this->buildResponse()
-                ->setCode($e->getCode() !== 0 ? $e->getCode() : 500)
-                ->setMessage($e->getMessage())
+                ->setCode(500)
+                ->setMessage('Failed to update profile')
                 ->present();
         }
 

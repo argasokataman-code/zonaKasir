@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -59,9 +60,13 @@ class ProductController extends Controller
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error('Failed to create product: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
             return $this->buildResponse()
                 ->setCode(500)
-                ->setMessage('Failed to create product: ' . $e->getMessage())
+                ->setMessage('Failed to create product')
                 ->present();
         }
     }
@@ -103,9 +108,13 @@ class ProductController extends Controller
                 ->present();
         } catch (Exception $e) {
             DB::rollBack();
+            Log::error('Failed to update product: ' . $e->getMessage(), [
+                'exception' => $e,
+            ]);
+
             return $this->buildResponse()
                 ->setCode(500)
-                ->setMessage('Failed to update product: ' . $e->getMessage())
+                ->setMessage('Failed to update product')
                 ->present();
         }
     }
