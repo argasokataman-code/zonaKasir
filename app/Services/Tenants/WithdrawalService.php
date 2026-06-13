@@ -42,13 +42,13 @@ class WithdrawalService
 
             if ($amount > $available) {
                 throw new InsufficientBalanceException(
-                    "Saldo tidak cukup. Tersedia: Rp " . number_format($available, 0, ',', '.')
+                    __('Insufficient balance. Available: :balance', ['balance' => 'Rp ' . number_format($available, 0, ',', '.')])
                 );
             }
 
             if ($amount > $maxAllowed) {
                 throw new InsufficientBalanceException(
-                    "Maksimal 95% dari saldo. Maks: Rp " . number_format($maxAllowed, 0, ',', '.')
+                    __('Maximum 95% of balance. Max: :max', ['max' => 'Rp ' . number_format($maxAllowed, 0, ',', '.')])
                 );
             }
 

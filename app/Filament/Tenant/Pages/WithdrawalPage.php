@@ -85,7 +85,7 @@ class WithdrawalPage extends Page implements HasActions, HasForms, HasTable
         $amount = (float) $data['amount'];
 
         try {
-            $idempotencyKey = 'wd-' . now()->timestampMicrosecond() . '-' . substr(md5(random_bytes(8)), 0, 8);
+            $idempotencyKey = 'wd-' . now()->timestamp . '-' . substr(md5(random_bytes(8)), 0, 8);
 
             app(WithdrawalService::class)->request(
                 amount: $amount,
