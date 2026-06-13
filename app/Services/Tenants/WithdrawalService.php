@@ -52,8 +52,8 @@ class WithdrawalService
                 );
             }
 
-            $autoMax = config('midtrans.withdrawal_approval.auto_approve_max', 5000000);
-            $singleAdminMax = config('midtrans.withdrawal_approval.single_admin_max', 25000000);
+            $autoMax = config('flip.withdrawal_approval.auto_approve_max', 5000000);
+            $singleAdminMax = config('flip.withdrawal_approval.single_admin_max', 25000000);
             $tenantAge = $about->created_at->diffInDays(now());
 
             if ($amount > $singleAdminMax) {
@@ -115,7 +115,7 @@ class WithdrawalService
         $withdrawal = Withdrawal::findOrFail($withdrawalId);
         abort_if($withdrawal->status !== 'pending', 400, 'Withdrawal already processed');
 
-        $singleAdminMax = config('midtrans.withdrawal_approval.single_admin_max', 25000000);
+        $singleAdminMax = config('flip.withdrawal_approval.single_admin_max', 25000000);
 
         // 2-admin approval flow for high value withdrawals
         if ($withdrawal->amount > $singleAdminMax) {

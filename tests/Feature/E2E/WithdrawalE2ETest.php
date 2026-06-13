@@ -51,7 +51,7 @@ describe('Withdrawal E2E Flow', function () {
             );
             $this->fail('Should have thrown InsufficientBalanceException');
         } catch (\App\Services\Tenants\InsufficientBalanceException $e) {
-            expect($e->getMessage())->toContain('Saldo tidak cukup');
+            expect($e->getMessage())->toContain('Insufficient balance. Available');
         }
     });
 
