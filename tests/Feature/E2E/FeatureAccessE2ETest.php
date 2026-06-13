@@ -7,7 +7,6 @@ use App\Models\Subscription;
 use App\Models\Tenants\User;
 use App\Services\PlanAccessService;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
 use Tests\RefreshDatabaseWithTenant;
 
 uses(RefreshDatabaseWithTenant::class);
@@ -15,16 +14,14 @@ uses(RefreshDatabaseWithTenant::class);
 describe('Feature Access E2E Flow', function () {
     beforeEach(function () {
         $this->admin = User::first();
-        $this->tid = tenant('id');
-        $this->cn = Config::get('tenancy.database.central_connection', 'testing');
-        Subscription::on($this->cn)->where('tenant_id', $this->tid)->update(['status' => 'expired']);
+        $this->tid = $this->admin->tenant_id;
+        Subscription::where('tenant_id', $this->tid)->delete();
     });
 
     it('GET /api/billing/features returns plan info', function () {
-        $cn = $this->cn;
         $tid = $this->tid;
 
-        $plan = Plan::on($cn)->create([
+        $plan = Plan::create([
             'name' => 'Basic',
             'slug' => 'basic-' . uniqid(),
             'price_monthly' => 50000,
@@ -32,7 +29,7 @@ describe('Feature Access E2E Flow', function () {
             'max_users' => 10,
             'features' => ['pos', 'report'],
         ]);
-        Subscription::on($cn)->create([
+        Subscription::create([
             'tenant_id' => $tid,
             'plan_id' => $plan->id,
             'status' => 'active',
@@ -41,13 +38,11 @@ describe('Feature Access E2E Flow', function () {
             'ends_at' => now()->addMonth(),
         ]);
 
-        // Verify data is readable right now before API call
         $access = new PlanAccessService();
         $p = $access->getPlan($tid);
         expect($p)->not()->toBeNull();
         expect((int) $p->max_stores)->toBe(5);
 
-        // Now call API
         $response = $this->actingAs($this->admin, 'sanctum')
             ->getJson('/api/billing/features');
 
@@ -60,16 +55,15 @@ describe('Feature Access E2E Flow', function () {
     });
 
     it('PlanAccessService.getPlan returns plan', function () {
-        $cn = $this->cn;
         $tid = $this->tid;
 
-        $plan = Plan::on($cn)->create([
+        $plan = Plan::create([
             'name' => 'Pro',
             'slug' => 'pro-' . uniqid(),
             'price_monthly' => 100000,
             'max_stores' => 7,
         ]);
-        Subscription::on($cn)->create([
+        Subscription::create([
             'tenant_id' => $tid,
             'plan_id' => $plan->id,
             'status' => 'active',
@@ -86,16 +80,15 @@ describe('Feature Access E2E Flow', function () {
     });
 
     it('PlanAccessService.hasFeature works', function () {
-        $cn = $this->cn;
         $tid = $this->tid;
 
-        $plan = Plan::on($cn)->create([
+        $plan = Plan::create([
             'name' => 'Standard',
             'slug' => 'standard-' . uniqid(),
             'price_monthly' => 50000,
             'features' => ['pos', 'report'],
         ]);
-        Subscription::on($cn)->create([
+        Subscription::create([
             'tenant_id' => $tid,
             'plan_id' => $plan->id,
             'status' => 'active',
@@ -111,16 +104,15 @@ describe('Feature Access E2E Flow', function () {
     });
 
     it('PlanAccessService.getMaxStores returns plan limit', function () {
-        $cn = $this->cn;
         $tid = $this->tid;
 
-        $plan = Plan::on($cn)->create([
+        $plan = Plan::create([
             'name' => 'Enterprise',
             'slug' => 'ent-' . uniqid(),
             'price_monthly' => 500000,
             'max_stores' => 99,
         ]);
-        Subscription::on($cn)->create([
+        Subscription::create([
             'tenant_id' => $tid,
             'plan_id' => $plan->id,
             'status' => 'active',
@@ -134,16 +126,15 @@ describe('Feature Access E2E Flow', function () {
     });
 
     it('PlanAccessService.canCreateStore respects limits', function () {
-        $cn = $this->cn;
         $tid = $this->tid;
 
-        $plan = Plan::on($cn)->create([
+        $plan = Plan::create([
             'name' => 'Small',
             'slug' => 'small-' . uniqid(),
             'price_monthly' => 25000,
             'max_stores' => 2,
         ]);
-        Subscription::on($cn)->create([
+        Subscription::create([
             'tenant_id' => $tid,
             'plan_id' => $plan->id,
             'status' => 'active',
@@ -159,16 +150,15 @@ describe('Feature Access E2E Flow', function () {
     });
 
     it('PlanAccessService.canCreateUser respects limits', function () {
-        $cn = $this->cn;
         $tid = $this->tid;
 
-        $plan = Plan::on($cn)->create([
+        $plan = Plan::create([
             'name' => 'Team',
             'slug' => 'team-' . uniqid(),
             'price_monthly' => 50000,
             'max_users' => 3,
         ]);
-        Subscription::on($cn)->create([
+        Subscription::create([
             'tenant_id' => $tid,
             'plan_id' => $plan->id,
             'status' => 'active',
@@ -189,10 +179,9 @@ describe('Feature Access E2E Flow', function () {
     });
 
     it('isOnTrial works correctly', function () {
-        $cn = $this->cn;
         $tid = $this->tid;
 
-        Subscription::on($cn)->create([
+        Subscription::create([
             'tenant_id' => $tid,
             'plan_id' => null,
             'status' => 'trialing',
@@ -206,11 +195,9 @@ describe('Feature Access E2E Flow', function () {
     });
 
     it('expired subscription shows is_subscription_active false', function () {
-        $cn = $this->cn;
         $tid = $this->tid;
 
-        // Set mockTenant subscription to expired
-        Subscription::on($cn)->where('tenant_id', $tid)->update(['status' => 'expired']);
+        Subscription::where('tenant_id', $tid)->delete();
 
         $access = new PlanAccessService();
         expect($access->isSubscriptionActive($tid))->toBeFalse();
