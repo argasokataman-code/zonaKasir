@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Models\Tenants\User;
 use App\Services\Tenants\DisbursementProvider;
-use App\Services\Tenants\SnapBiPayoutProvider;
+use App\Services\Tenants\FlipPayoutProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
@@ -21,7 +21,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(Authenticatable::class, User::class);
-        $this->app->bind(DisbursementProvider::class, SnapBiPayoutProvider::class);
+        $this->app->bind(DisbursementProvider::class, FlipPayoutProvider::class);
 
         if ($this->app->environment('local', 'development') && class_exists(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class)) {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
