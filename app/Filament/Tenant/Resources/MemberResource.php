@@ -3,6 +3,7 @@
 namespace App\Filament\Tenant\Resources;
 
 use App\Filament\Tenant\Resources\MemberResource\Pages;
+use App\Filament\Tenant\Resources\MemberResource\RelationManagers;
 use App\Models\Tenants\Member;
 use App\Traits\HasTranslatableResource;
 use Filament\Forms\Components\DatePicker;
@@ -95,7 +96,7 @@ class MemberResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\SellingsRelationManager::class,
         ];
     }
 
@@ -105,6 +106,7 @@ class MemberResource extends Resource
             'index' => Pages\ListMembers::route('/'),
             'create' => Pages\CreateMember::route('/create'),
             'edit' => Pages\EditMember::route('/{record}/edit'),
+            'view' => Pages\ViewMember::route('/{record}'),
         ];
     }
 }

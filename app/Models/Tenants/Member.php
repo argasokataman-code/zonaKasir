@@ -2,6 +2,8 @@
 
 namespace App\Models\Tenants;
 
+use App\Models\Tenants\Receivable;
+use App\Models\Tenants\Selling;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -28,5 +30,10 @@ class Member extends Model
     public function receivables(): HasMany
     {
         return $this->hasMany(Receivable::class);
+    }
+
+    public function sellings(): HasMany
+    {
+        return $this->hasMany(Selling::class);
     }
 }
