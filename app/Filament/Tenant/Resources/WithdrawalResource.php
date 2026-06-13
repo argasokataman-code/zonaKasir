@@ -111,13 +111,12 @@ class WithdrawalResource extends Resource
 
     protected static function rejectWithdrawal(Withdrawal $withdrawal): void
     {
-        \App\Services\Tenants\WithdrawalService::class;
-        $withdrawal->update([
-            'status' => 'rejected',
-            'rejected_by' => auth()->id(),
-            'rejection_reason' => 'Rejected by admin',
-        ]);
-        Notification::make()->title(__('Withdrawal rejected'))->warning()->send();
+        try {
+            app(\App\Services\Tenants\WithdrawalService::class)->reject($withdrawal->id, auth()->id(), 'Rejected by admin');
+            Notification::make()->title(__('Withdrawal rejected'))->warning()->send();
+        } catch (\Throwable $e) {
+            Notification::make()->title(__('Failed: ' . $e->getMessage()))->danger()->send();
+        }
     }
 
     public static function getPages(): array
