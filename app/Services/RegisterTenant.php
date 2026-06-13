@@ -35,6 +35,7 @@ class RegisterTenant
                 'id' => $name,
                 'tenancy_db_name' => 'lakasir_'.$name,
                 'tenancy_email' => $data['email'],
+                'create_database' => false,
             ]);
 
             $tenant->domains()->create([
