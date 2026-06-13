@@ -19,7 +19,12 @@ class SettlementResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-currency-dollar';
 
-    protected static ?string $navigationLabel = 'Settlements';
+    protected static ?string $navigationLabel = 'Settlement Reports';
+
+    public static function canAccess(): bool
+    {
+        return can('view settlements');
+    }
 
     public static function table(Table $table): Table
     {

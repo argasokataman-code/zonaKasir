@@ -1,4 +1,4 @@
-# Security & Best Practices — Lakasir
+# Security & Best Practices — zonaKasir
 
 ## NEVER Modify deploy-staging.yml
 - The deploy workflow is stable. Do NOT edit it for debugging or temporary fixes.

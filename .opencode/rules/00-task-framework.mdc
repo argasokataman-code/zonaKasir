@@ -13,6 +13,22 @@
 
 **Tanpa baca rules = TUGAS TIDAK BOLEH DIMULAI.**
 
+## 🎯 CEK ROLE: ADMIN vs TENANT — WAJIB SEBELUM FASE 1
+
+**Ini adalah ROOT CAUSE utama scope bleed.** Setiap task WAJIB jawab 2 pertanyaan ini sebelum ngoding:
+
+| Pertanyaan | Tujuan |
+|-----------|--------|
+| **Role mana yang affected?** | Admin (central/super) atau Tenant (per-cabang)? Atau keduanya? |
+| **Apa domain role-nya?** | File di `admin/` (central) atau `tenant/` (per-sekolah)? Route di `routes/api.php` atau `routes/tenant.php`? |
+
+**Cara cepet bedain:**
+- **Admin/Central:** routes `api.php`, controllers `app/Http/Controllers/Api/` (tanpa Tenants), models `app/Models/` (tanpa Tenants), Filament `app/Filament/` (tanpa Tenant)
+- **Tenant:** routes `tenant.php`, controllers `app/Http/Controllers/Api/Tenants/`, models `app/Models/Tenants/`, Filament `app/Filament/Tenant/`
+- **Shared:** Services, Events, Listeners, Notifications (bisa dipake keduanya — tapi tetap cek konteks)
+
+**Rule: JIKA ROLE BERCAMPUR, tulis eksplisit di Fase 1 output. Jangan asumsikan.**
+
 ---
 
 ## 🔄 CONTINUOUS PROMPTING — 6 Fase Per Task
@@ -24,6 +40,7 @@ Setiap kali task diberikan, WAJIB jalanin urutan ini. **No skip.**
 ### ⏸️ FASE 1: STOP & PAHAMI (Jangan langsung kode)
 - Baca task 2x dengan teliti
 - Tanya balik jika ada ambiguitas (jangan asumsi)
+- **CEK ROLE WAJIB dulu:** Admin (central) vs Tenant (per-cabang) — jangan code tanpa cek ini
 - **Output format:**
   ```
   Task: [ringkas task dalam 1 kalimat]
@@ -31,6 +48,8 @@ Setiap kali task diberikan, WAJIB jalanin urutan ini. **No skip.**
   Type: [bugfix/feature/refactor/docs/etc]
   Scope: [API/UI/DB/permission/etc]
   Affected Role(s): [admin/cashier/user/etc]
+  Target Role: [admin vs tenant atau both]
+  Role Check: [manually verified — admin vs tenant]
   ```
 
 ### 🔍 FASE 2: SOURCE DISCOVERY (Verifikasi dari source, jangan halusinasi)
@@ -155,6 +174,7 @@ Jawab pertanyaan:
 
 | Phase | Rule | Consequence |
 |-------|------|-------------|
+| 0 | **CEK ROLE: Admin vs Tenant sebelum Fase 1** | Scope bleed, code di role salah |
 | 1 | If ambiguous → **Ask, don't assume** | Scope creep, regressions |
 | 2 | Verify dari **source code**, bukan docs aja | Hallucination, wrong implementation |
 | 3 | Define scope **SEBELUM** code phase | Touch unrelated files, break things |
@@ -167,6 +187,7 @@ Jawab pertanyaan:
 ## ❌ NEVER (Anti-hallucination Checklist)
 
 - ❌ Langsung code tanpa Fase 1-3
+- ❌ **Code tanpa cek role (admin vs tenant) — root cause #1 scope bleed**
 - ❌ Asumsi behavior tanpa verifikasi source code
 - ❌ Ubah file di luar scope (dari Fase 3)
 - ❌ Skip test verification
@@ -267,6 +288,7 @@ docs/                    ← Project docs (by domain)
 ## 🎯 CHECKLIST BEFORE CLAIM "DONE"
 
 **Development Work:**
+- [ ] **CEK ROLE: Admin vs Tenant (WAJIB sebelum Fase 1)**
 - [ ] Fase 1: Task understood, no ambiguity
 - [ ] Fase 2: Source verified dari code, bukan asumsi
 - [ ] Fase 3: Scope tertulis jelas, senggolan dimapped

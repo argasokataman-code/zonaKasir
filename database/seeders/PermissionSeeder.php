@@ -268,6 +268,24 @@ class PermissionSeeder extends Seeder
                         ],
                         'guard' => ['web'],
                     ],
+                    'withdrawal' => [
+                        'permission' => [
+                            'request',
+                        ],
+                        'guard' => ['web'],
+                    ],
+                    'withdrawals' => [
+                        'permission' => [
+                            'manage',
+                        ],
+                        'guard' => ['web'],
+                    ],
+                    'settlements' => [
+                        'permission' => [
+                            'view',
+                        ],
+                        'guard' => ['web'],
+                    ],
                     'profile' => [
                         'permission' => [
                             'r', 'u',

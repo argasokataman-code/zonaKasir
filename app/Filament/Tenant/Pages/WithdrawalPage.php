@@ -149,11 +149,11 @@ class WithdrawalPage extends Page implements HasActions, HasForms, HasTable
 
     public static function canAccess(): bool
     {
-        return true;
+        return can('request withdrawal');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('Withdrawal');
+        return __('Request Withdrawal');
     }
 }
