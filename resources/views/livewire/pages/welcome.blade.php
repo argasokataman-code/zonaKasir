@@ -146,21 +146,21 @@ state(['locale' => $locale]);
       </div>
 
       {{-- Glass info chips --}}
-      <div class="reveal reveal-delay-4 mt-12 flex flex-wrap justify-center gap-3 sm:gap-4">
+      <div class="reveal reveal-delay-4 mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-2xl mx-auto">
         @foreach([
           ['t' => __('landing.stat_cloud'), 's' => __('landing.stat_cloud_sub'), 'icon' => 'M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z'],
           ['t' => __('landing.stat_realtime'), 's' => __('landing.stat_realtime_sub'), 'icon' => 'M13 10V3L4 14h7v7l9-11h-7z'],
           ['t' => __('landing.stat_multi') . ' ' . __('landing.stat_multi_sub'), 's' => 'Web · Android', 'icon' => 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z'],
         ] as $chip)
-        <div class="flex items-center gap-3 bg-white/[0.05] border border-white/10 rounded-2xl px-5 py-3 text-left">
-          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-orange-500/30 to-orange-500/5 border border-orange-500/20 flex items-center justify-center">
-            <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="flex items-center gap-3 sm:gap-2.5 bg-white/[0.05] border border-white/10 rounded-2xl px-4 sm:px-5 py-3 sm:py-3.5 transition-colors hover:bg-white/[0.08]">
+          <div class="w-10 h-10 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-br from-orange-500/30 to-orange-500/5 border border-orange-500/20 flex items-center justify-center flex-shrink-0">
+            <svg class="w-5 h-5 sm:w-4.5 sm:h-4.5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="{{ $chip['icon'] }}"/>
             </svg>
           </div>
-          <div>
-            <p class="text-white font-bold text-sm leading-tight whitespace-nowrap">{{ $chip['t'] }}</p>
-            <p class="text-gray-500 text-xs leading-tight whitespace-nowrap">{{ $chip['s'] }}</p>
+          <div class="min-w-0">
+            <p class="text-white font-bold text-sm sm:text-xs leading-tight">{{ $chip['t'] }}</p>
+            <p class="text-gray-400 text-xs sm:text-[11px] leading-tight mt-0.5">{{ $chip['s'] }}</p>
           </div>
         </div>
         @endforeach
@@ -189,7 +189,7 @@ state(['locale' => $locale]);
                     <svg class="w-2.5 h-2.5 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     <span class="text-[8px] text-gray-400">Search (SKU, name, barcode)</span>
                   </div>
-                  <div class="grid grid-cols-3 gap-1.5">
+                  <div class="grid grid-cols-3 sm:grid-cols-5 gap-1 sm:gap-1.5">
                     @foreach([
                       ['name' => 'Indomie Goreng', 'price' => 'Rp 3.500', 'bg' => 'from-yellow-300 to-orange-300', 'icon' => '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 8h18M8 8V5M16 8V5"/><line x1="7" y1="11" x2="7" y2="15"/><line x1="10" y1="11" x2="14" y2="15"/><circle cx="17" cy="13" r="2"/>'],
                       ['name' => 'Teh Botol', 'price' => 'Rp 4.000', 'bg' => 'from-green-300 to-emerald-400', 'icon' => '<rect x="7" y="2" width="10" height="18" rx="3"/><rect x="9" y="4" width="6" height="4" rx="1"/><circle cx="12" cy="11" r="3" fill="white" opacity="0.35"/>'],
