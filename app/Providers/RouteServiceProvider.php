@@ -10,28 +10,16 @@ use Illuminate\Support\Facades\Route;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    /**
-     * The path to the "home" route for your application.
-     *
-     * Typically, users are redirected here after authentication.
-     *
-     * @var string
-     */
     public const HOME = '/home';
 
-    /**
-     * Define your route model bindings, pattern filters, and other route configuration.
-     *
-     * @return void
-     */
     public function boot()
     {
         $this->configureRateLimiting();
 
         $this->routes(function () {
             $this->mapWebRoutes();
-
             $this->mapApiRoutes();
+            $this->mapStorageRoutes();
         });
     }
 
@@ -56,16 +44,17 @@ class RouteServiceProvider extends ServiceProvider
         }
     }
 
+    protected function mapStorageRoutes()
+    {
+        Route::middleware('web')
+            ->group(base_path('routes/storage.php'));
+    }
+
     protected function centralDomains(): array
     {
         return config('tenancy.central_domains');
     }
 
-    /**
-     * Configure the rate limiters for the application.
-     *
-     * @return void
-     */
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
