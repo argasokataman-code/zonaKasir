@@ -257,6 +257,8 @@ class GeneralSetting extends Page implements HasActions, HasForms
             if ($photo instanceof TemporaryUploadedFile) {
                 $this->about['uploaded_file_id'] = $this->storeAsUploadedFile($photo);
                 $this->about['photo'] = null;
+            } elseif (is_string($photo)) {
+                $this->about['photo'] = $photo;
             }
         }
 

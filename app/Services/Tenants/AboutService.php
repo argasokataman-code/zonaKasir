@@ -24,6 +24,7 @@ class AboutService
                 'bank_account_name',
                 'bank_account_number',
                 'bank_code',
+                'photo',
             ]));
 
         $owner = User::owner()->first();
