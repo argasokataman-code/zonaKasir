@@ -213,6 +213,7 @@
             <div class="mb-4">
               @include('filament.tenant.pages.cashier.total')
             </div>
+            <div x-show="paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.payment_type == 'cash' || !paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.payment_type">
             @error('payed_money')
               <span class="error text-danger-500">{{ $message }}</span>
             @enderror
@@ -252,7 +253,9 @@
                 x-on:click="append('backspace')">
                 <x-filament::icon icon="heroicon-o-backspace" class="h-4 w-4 text-gray-500 dark:text-white md:h-5 md:w-5" />
               </button>
-              <div class="col-span-3 flex gap-x-2">
+            </div>
+            </div>
+            <div class="mt-2 grid grid-cols-3 gap-2">
                 <button wire:loading.attr="disabled" type="submit"
                   class="flex w-full items-center justify-center gap-x-2 rounded-md bg-zonakasir-primary p-2 text-sm text-white hover:brightness-110 md:text-lg">
                   <div wire:loading>
@@ -265,7 +268,6 @@
                   {{ __('Close') }}
                 </button>
               </div>
-            </div>
           </div>
         </div>
         {{-- Cart items: visible on desktop, collapsible accordion on mobile --}}

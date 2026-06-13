@@ -1,8 +1,13 @@
 @php
 use function Filament\Support\format_money;
 use App\Features\{SellingTax, Discount};
-
 @endphp
+
+@php
+// Sidebar context: always show money changes (no payment method selected yet)
+$showMoneyChanges = $showMoneyChanges ?? true;
+@endphp
+
 <div class="space-y-3">
   <div class="flex justify-between">
     <p>{{ __('Sub total') }}</p>
@@ -25,9 +30,12 @@ use App\Features\{SellingTax, Discount};
     <p class="font-bold">{{ __('Total') }}</p>
     <p class="font-bold text-zonakasir-primary" x-ref="total" data-value="{{ $total_price }}">{{ price_format($total_price) }}</p>
   </div>
-  <div class="flex justify-between">
-    <p class="font-bold">{{ __('Money changes') }}</p>
-    <p class="font-bold text-zonakasir-primary" x-ref="moneyChanges"></p>
-  </div>
+  @if($showMoneyChanges)
+    <div class="flex justify-between"
+      x-show="typeof paymentMethods === 'undefined' || paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.payment_type == 'cash' || !paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.['payment_type']">
+      <p class="font-bold">{{ __('Money changes') }}</p>
+      <p class="font-bold text-zonakasir-primary" x-ref="moneyChanges"></p>
+    </div>
+  @endif
 </div>
 
