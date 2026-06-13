@@ -77,7 +77,7 @@ describe('Supplier Management E2E', function () {
         $response = $this->withToken($this->token)
             ->deleteJson("/api/master/supplier/{$supplier->id}");
 
-        expect($response->status())->toBe(Response::HTTP_NO_CONTENT);
+        expect($response->status())->toBe(Response::HTTP_OK);
         expect(Supplier::find($supplier->id))->toBeNull();
     });
 

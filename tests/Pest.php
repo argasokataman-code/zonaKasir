@@ -54,10 +54,16 @@ expect()->extend('toBeOne', function () {
 
 function mockTenant(): Tenant
 {
-    // Ensure a `tenant` DB connection is available during tests (use testing connection)
+    static $cachedTenant = null;
+
+    // Return cached tenant to avoid expensive drop/create/migrate/seed on every test.
+    // Database transactions (RefreshDatabase) provide isolation between tests.
+    if ($cachedTenant !== null && Tenant::find('toko_testing') !== null) {
+        return $cachedTenant;
+    }
+
     config()->set('database.connections.tenant', config('database.connections.testing'));
 
-    // Only attempt to drop database when using a MySQL testing connection.
     try {
         $driver = DB::getDriverName();
     } catch (\Throwable $e) {
@@ -88,6 +94,8 @@ function mockTenant(): Tenant
             ]);
         }
     }
+
+    $cachedTenant = $tenant;
 
     return $tenant;
 }

@@ -33,6 +33,10 @@ tasks/
 opencode.json
 version.txt
 
+# SQLite test databases (auto-generated during testing)
+database/*.sqlite
+database/lakasir_*
+
 # Deploy keys (gitignored locally, used by GitHub Actions)
 .deploy/
 /public/vendor
