@@ -107,7 +107,7 @@ class RegisterTenantForm extends Component implements HasForms
             'name' => strtolower(str_replace(' ', '_', $data['full_name'])).'_'.uniqid(),
         ]));
 
-        $this->redirect(route('auth.register'));
+        $this->redirect('/member/login');
     }
 
     public function render()
