@@ -15,7 +15,7 @@ return new class extends Migration
         });
 
         // Migrate existing data: set default payment_type based on flags
-        foreach (PaymentMethod::all() as $method) {
+        foreach (PaymentMethod::withoutGlobalScopes()->get() as $method) {
             $type = match (true) {
                 $method->is_cash => 'cash',
                 $method->is_credit => 'credit_card',

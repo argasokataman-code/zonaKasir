@@ -26,6 +26,15 @@ trait HasTenant
 
     public function initializeHasTenant(): void
     {
+        // If model uses $guarded (all attributes mass-assignable except guarded ones),
+        // just remove tenant_id from the guarded list.
+        if (property_exists($this, 'guarded') && ! empty($this->guarded)) {
+            $this->guarded = array_diff($this->guarded, ['tenant_id']);
+            return;
+        }
+
+        // If model uses $fillable (only listed attributes mass-assignable),
+        // add tenant_id to the fillable list.
         if (! in_array('tenant_id', $this->fillable ?? [])) {
             $this->fillable[] = 'tenant_id';
         }
