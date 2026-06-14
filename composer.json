@@ -30,6 +30,7 @@
         "spatie/laravel-activitylog": "^4.12",
         "spatie/laravel-permission": "6.9.0",
         "spatie/laravel-query-builder": "^6.0",
+        "stancl/tenancy": "^3.10",
         "tapp/filament-timezone-field": "^3.0"
     },
     "require-dev": {
