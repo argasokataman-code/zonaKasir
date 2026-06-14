@@ -125,6 +125,11 @@ class TenantPanelProvider extends PanelProvider
             fn () => view('version-indicator')
         );
 
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::BODY_END,
+            fn () => view('partials.expired-overlay')
+        );
+
         if (app()->environment('demo')) {
             FilamentView::registerRenderHook(
                 PanelsRenderHook::BODY_START,
