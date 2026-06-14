@@ -987,31 +987,33 @@ export default function App() {
 
             {/* Testimonial Copy on Right Grid (7 cols) */}
             <div className="lg:col-span-7 flex flex-col justify-between h-full space-y-6 text-left">
-              <div className="space-y-4 relative min-h-[200px]">
+              <div className="space-y-4">
                 <span className="text-[10px] font-bold text-[#666666] tracking-wider uppercase block">
                   {t('s6.label')}
                 </span>
                 
-                {TESTIMONIALS.map((testimonial, idx) => (
-                  <div 
-                    key={testimonial.id}
-                    className={`transition-all duration-700 ease-in-out ${
-                      idx === activeTestimonial 
-                        ? 'opacity-100 translate-y-0 absolute inset-0' 
-                        : 'opacity-0 translate-y-4 pointer-events-none absolute inset-0'
-                    }`}
-                  >
-                    <h3 className="font-sans font-bold text-2xl sm:text-3xl text-[#1A1A1A] leading-tight">
-                      &ldquo;{testimonial.quote.slice(0, 60)}...&rdquo;
-                    </h3>
+                <div className="relative min-h-[180px]">
+                  {TESTIMONIALS.map((testimonial, idx) => (
+                    <div 
+                      key={testimonial.id}
+                      className={`transition-all duration-700 ease-in-out ${
+                        idx === activeTestimonial 
+                          ? 'opacity-100 translate-y-0' 
+                          : 'opacity-0 translate-y-4 absolute inset-0 pointer-events-none'
+                      }`}
+                    >
+                      <h3 className="font-sans font-bold text-2xl sm:text-3xl text-[#1A1A1A] leading-tight">
+                        &ldquo;{testimonial.quote.slice(0, 60)}...&rdquo;
+                      </h3>
 
-                    <Quote className="w-10 h-10 text-gray-200 mt-3" />
-                    
-                    <p className="font-sans text-[#555555] text-sm italic leading-relaxed max-w-xl font-medium mt-2">
-                      {testimonial.quote}
-                    </p>
-                  </div>
-                ))}
+                      <Quote className="w-10 h-10 text-gray-200 mt-3" />
+                      
+                      <p className="font-sans text-[#555555] text-sm italic leading-relaxed max-w-xl font-medium mt-2">
+                        {testimonial.quote}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Owner details and auto-scroll progress dots */}
