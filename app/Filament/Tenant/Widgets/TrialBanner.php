@@ -26,7 +26,7 @@ class TrialBanner extends Widget
 
         if ($subscription && $subscription->trial_ends_at) {
             $this->isTrial = true;
-            $this->daysRemaining = max(0, now()->diffInDays($subscription->trial_ends_at, false));
+            $this->daysRemaining = (int) max(0, now()->diffInDays($subscription->trial_ends_at, false));
         }
     }
 }
