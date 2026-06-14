@@ -19,7 +19,10 @@ class RegisterTenant
 
         TenantContext::set($name);
 
-        \App\Tenant::where('id', $name)->update(['tenancy_email' => $data['email']]);
+        \App\Tenant::unguarded(fn () => \App\Tenant::create([
+            'id' => $name,
+            'tenancy_email' => $data['email'],
+        ]));
 
         $user = User::create([
             'tenant_id' => $name,
