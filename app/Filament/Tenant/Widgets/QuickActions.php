@@ -2,7 +2,7 @@
 
 namespace App\Filament\Tenant\Widgets;
 
-use App\Filament\Tenant\Pages\POS;
+use App\Filament\Tenant\Pages\Cashier;
 use App\Filament\Tenant\Resources\ProductResource;
 use App\Filament\Tenant\Resources\SellingResource;
 use App\Filament\Tenant\Resources\MemberResource;
@@ -20,7 +20,7 @@ class QuickActions extends Widget
             [
                 'label' => __('Open Cashier'),
                 'icon' => 'heroicon-o-calculator',
-                'url' => POS::getUrl(),
+                'url' => Cashier::getUrl(),
                 'color' => 'primary',
             ],
             [

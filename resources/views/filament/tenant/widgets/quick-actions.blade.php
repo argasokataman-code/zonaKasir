@@ -7,7 +7,7 @@
   </x-slot>
 
   <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-    <a href="{{ \App\Filament\Tenant\Pages\POS::getUrl() }}"
+    <a href="{{ \App\Filament\Tenant\Pages\Cashier::getUrl() }}"
        class="flex flex-col items-center gap-2 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-primary-500 hover:shadow-md transition-all duration-200 group">
       <div class="p-3 rounded-lg bg-primary-50 dark:bg-primary-900/20 group-hover:bg-primary-100 dark:group-hover:bg-primary-800/30 transition-colors">
         <x-heroicon-o-calculator class="h-6 w-6 text-primary-600 dark:text-primary-400" />
