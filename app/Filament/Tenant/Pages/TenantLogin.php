@@ -15,13 +15,24 @@ class TenantLogin extends Login
 {
     public function authenticate(): ?LoginResponse
     {
-        \Illuminate\Support\Facades\Log::debug('TenantLogin auth check', [
+        \$data = \$this->form->getState();
+        \$guard = Filament::getCurrentPanel()?->getAuthGuard();
+        \$attempt = \Illuminate\Support\Facades\Auth::guard(\$guard)->attempt(
+            ['email' => \$data['email'], 'password' => \$data['password']],
+            \$data['remember'] ?? false,
+        );
+        \Illuminate\Support\Facades\Log::debug('TenantLogin debug', [
             'panel' => Filament::getCurrentPanel()?->getId(),
-            'guard' => Filament::getCurrentPanel()?->getAuthGuard(),
+            'guard' => \$guard,
+            'email' => \$data['email'] ?? 'MISSING',
+            'attempt_result' => \$attempt ? 'true' : 'false',
         ]);
-        $loginResponse = parent::authenticate();
+        if (! \$attempt) {
+            \$this->throwFailureValidationException();
+        }
+        \$loginResponse = app(\Filament\Http\Responses\Auth\LoginResponse::class);
         /** @var \App\Models\Tenants\User|null $user */
-        $user = Filament::auth()->user();
+        \$user = Filament::auth()->user();
 
         // If authentication did not produce a user (invalid credentials),
         // let the parent class handle the validation failure. Otherwise,
