@@ -21,6 +21,9 @@ Route::post('/webhooks/subscription', [SubscriptionWebhookController::class, 'ha
 Route::post('/webhooks/flip', [App\Http\Controllers\Api\Webhooks\FlipWebhookController::class, 'handle'])
     ->name('webhooks.flip');
 
+Route::get('/pricing', [\App\Http\Controllers\Api\PlanController::class, 'index'])
+    ->name('pricing');
+
 Route::get('/test', function ()
 {
     return response()->json([

@@ -16,6 +16,7 @@ import DevicePhone from './components/DevicePhone';
 import DeviceLaptop from './components/DeviceLaptop';
 import { TESTIMONIALS } from './data';
 import { useLanguage } from './i18n';
+import { usePricing } from './hooks/usePricing';
 
 export default function App() {
   const { t } = useLanguage();
@@ -143,6 +144,9 @@ export default function App() {
   const [lastSyncTotal, setLastSyncTotal] = useState(58000);
   const [lastSyncMethod, setLastSyncMethod] = useState('QRIS');
 
+  // Dynamic pricing from backend API
+  const { plans: pricingPlans, loading: pricingLoading } = usePricing();
+
   // Billing cycle toggle state for Section 8 Pricing
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annually'>('monthly');
 
@@ -197,6 +201,13 @@ export default function App() {
     setLastSyncTotal(price);
     setLastSyncMethod(method);
     setSyncCount(prev => prev + 1);
+  };
+
+  // Format IDR pricing
+  const formatPrice = (price: number) => {
+    if (price === 0) return 'Rp 0';
+    if (price >= 1000000) return `Rp ${(price / 1000000).toFixed(1)}Jt`;
+    return `Rp ${price.toLocaleString('id-ID')}`;
   };
 
   return (
@@ -1217,7 +1228,6 @@ export default function App() {
           className="min-h-screen w-full flex flex-col justify-center bg-[#F4F4F2] relative p-6 py-20 md:py-28 overflow-hidden border-t border-[#E5E5E1]"
           id="section-pricing"
         >
-          {/* Subtle slow drift background shape for additional premium parallax depth */}
           <motion.div 
             style={{ y: smoothS8PricingDecorY }}
             className="absolute left-10 top-20 w-44 h-44 rounded-full bg-slate-300/30 blur-3xl pointer-events-none z-0" 
@@ -1236,247 +1246,142 @@ export default function App() {
           >
             <div className="max-w-3xl mx-auto space-y-2">
               <span className="text-[10px] font-bold text-[#666666] tracking-wider uppercase block">
-                SEKSI 08 • KATALOG PAKET BERLANGGANAN
+                {t('pricing.label')}
               </span>
               <h2 className="font-sans font-bold text-3xl text-[#1A1A1A] tracking-tight leading-tight">
-                Pilih Paket Sesuai Skala Bisnis Anda.
+                {t('pricing.title')}
               </h2>
               <p className="font-sans text-[#555555] text-sm leading-relaxed max-w-xl mx-auto font-medium">
-                Didesain khusus untuk menyokong efisiensi operasional UMKM retail mandiri hingga franchise besar multi-cabang di Nusantara.
+                {t('pricing.desc')}
               </p>
             </div>
 
-            {/* Premium Billing Cycle Selector Slider */}
-            <div className="flex justify-center items-center gap-3.5 pt-2 pb-6 z-10 relative">
-              <span className={`text-[11.5px] font-bold uppercase tracking-wider transition-colors duration-200 ${billingCycle === 'monthly' ? 'text-[#1A1A1A]' : 'text-[#888888]'}`}>Bulanan</span>
-              <button 
-                onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'annually' : 'monthly')}
-                className="w-12 h-6.5 rounded-full bg-slate-300/80 relative transition-colors duration-300 p-0.5 flex items-center cursor-pointer"
-                id="billing-cycle-toggle"
-              >
-                <motion.div 
-                  className="w-5.5 h-5.5 rounded-full bg-white shadow-md"
-                  animate={{ x: billingCycle === 'monthly' ? 0 : 25 }}
-                  transition={{ type: "spring", stiffness: 250, damping: 22 }}
-                />
-              </button>
-              <span className={`text-[11.5px] font-bold uppercase tracking-wider transition-colors duration-200 flex items-center gap-1.5 ${billingCycle === 'annually' ? 'text-[#1A1A1A]' : 'text-[#888888]'}`}>
-                Tahunan 
-                <span className="bg-emerald-500 text-white text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-[4px] tracking-normal normal-case">Hemat 20%</span>
-              </span>
-            </div>
-
-            {/* 3 Columns Subscriber Pricing Grid with subtle speed adjustment */}
-            <motion.div 
-              style={{ y: smoothS8PricingFloatY }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto text-left"
-            >
-              
-              {/* PLAN 1: LITE */}
-              <div 
-                className="bg-white rounded-[6px] border border-[#E5E5E1] p-6 shadow-sm flex flex-col justify-between relative overflow-hidden group min-h-[460px]"
-                id="plan-lite"
-              >
-                <div>
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">UMKM Pemula</span>
-                  <h3 className="font-sans font-bold text-lg text-[#1A1A1A]">Paket Lite</h3>
-                  <p className="text-[11px] text-[#666666] leading-relaxed mt-1 font-medium">Sempurna untuk kios kecil, warung kopi sudut, dan pedagang mandiri.</p>
-                  
-                  <div className="py-5 border-y border-gray-100 my-5 space-y-1">
-                    <span className="font-mono text-3xl font-black text-[#1A1A1A]">Rp 0</span>
-                    <span className="text-[10px] text-[#666666] font-bold block uppercase tracking-wider">Gratis Selamanya</span>
-                  </div>
-
-                  <span className="text-[10px] font-bold text-[#1A1A1A] uppercase tracking-wide block mb-3.5">Fasilitas Utama:</span>
-                  <ul className="space-y-2.5 text-[11px] text-[#555555] font-medium">
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>1 Outlet / Lokasi Toko</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>1 Akun Kasir Aktif</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>Manajemen Transaksi Dasar</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>Cetak Struk dan Nota Digital</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>Laporan Email Sederhana</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="pt-6">
-                  <button 
-                    onClick={() => setActiveModal('register')}
-                    className="w-full bg-[#F4F4F2] text-[#1A1A1A] border border-[#E5E5E1] text-[11px] font-bold uppercase tracking-wider py-3 rounded-[4px] hover:bg-slate-200/50 transition-colors cursor-pointer text-center"
-                  >
-                    Daftar Gratis
-                  </button>
-                </div>
+            {/* Premium Billing Cycle Selector */}
+            {pricingPlans.some(p => p.price_yearly) && (
+              <div className="flex justify-center items-center gap-3.5 pt-2 pb-6 z-10 relative">
+                <span className={`text-[11.5px] font-bold uppercase tracking-wider transition-colors duration-200 ${billingCycle === 'monthly' ? 'text-[#1A1A1A]' : 'text-[#888888]'}`}>{t('pricing.monthly')}</span>
+                <button 
+                  onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'annually' : 'monthly')}
+                  className="w-12 h-6.5 rounded-full bg-slate-300/80 relative transition-colors duration-300 p-0.5 flex items-center cursor-pointer"
+                  id="billing-cycle-toggle"
+                >
+                  <motion.div 
+                    className="w-5.5 h-5.5 rounded-full bg-white shadow-md"
+                    animate={{ x: billingCycle === 'monthly' ? 0 : 25 }}
+                    transition={{ type: "spring", stiffness: 250, damping: 22 }}
+                  />
+                </button>
+                <span className={`text-[11.5px] font-bold uppercase tracking-wider transition-colors duration-200 flex items-center gap-1.5 ${billingCycle === 'annually' ? 'text-[#1A1A1A]' : 'text-[#888888]'}`}>
+                  {t('pricing.yearly')}
+                  <span className="bg-emerald-500 text-white text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-[4px] tracking-normal normal-case">{t('pricing.save')}</span>
+                </span>
               </div>
+            )}
 
-              {/* PLAN 2: PRO (BEST VALUE HIGHLIGHTED) */}
-              <div 
-                className="bg-white rounded-[6px] border-2 border-[#1A1A1A] p-6 shadow-md flex flex-col justify-between relative overflow-hidden group min-h-[460px]"
-                id="plan-pro"
-              >
-                {/* Popular Corner Tag */}
-                <div className="absolute top-0 right-0 bg-[#1A1A1A] text-white text-[8px] font-mono font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-bl-[4px]">
-                  Terpopuler
-                </div>
-
-                <div>
-                  <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block mb-1">Rekomendasi Utama</span>
-                  <h3 className="font-sans font-bold text-lg text-[#1A1A1A] flex items-center gap-1.5">
-                    Paket Pro 
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
-                  </h3>
-                  <p className="text-[11px] text-[#666666] leading-relaxed mt-1 font-medium">Cocok untuk kafe, resto, outlet retail busana, dan usaha mandiri berkembang.</p>
-                  
-                  <div className="py-5 border-y border-gray-100 my-5 space-y-1">
-                    <span className="font-mono text-3xl font-black text-[#1A1A1A]">
-                      {billingCycle === 'monthly' ? 'Rp 149.000' : 'Rp 119.000'}
-                    </span>
-                    <span className="text-[10px] text-[#666666] font-bold block uppercase tracking-wider">Per Outlet / Bulan, Ditagih {billingCycle === 'monthly' ? 'Bulanan' : 'Tahunan'}</span>
+            {/* Loading skeleton */}
+            {pricingLoading && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="bg-white rounded-[6px] border border-[#E5E5E1] p-6 min-h-[460px] animate-pulse">
+                    <div className="h-3 bg-gray-100 rounded w-1/3 mb-3" />
+                    <div className="h-5 bg-gray-100 rounded w-1/2 mb-4" />
+                    <div className="h-3 bg-gray-100 rounded w-full mb-6" />
+                    <div className="h-12 bg-gray-100 rounded mb-6" />
+                    <div className="space-y-2">
+                      {[1,2,3,4].map(j => <div key={j} className="h-3 bg-gray-100 rounded w-3/4" />)}
+                    </div>
                   </div>
-
-                  <span className="text-[10px] font-bold text-[#1A1A1A] uppercase tracking-wide block mb-3.5">Semua Fitur Lite, Ditambah:</span>
-                  <ul className="space-y-2.5 text-[11px] text-[#555555] font-medium">
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span className="font-bold text-[#1A1A1A]">Transaksi & Kasir Tanpa Batas</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>Sinkronisasi Stok Gudang (Real-Time)</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>Multi-Device Autentik & Mode Offline</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>Analitik Pendapatan & Ekspor Laporan</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>Integrasi Printer, Scanner & Cashdrawer</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>WhatsApp Priority support harian</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="pt-6">
-                  <button 
-                    onClick={() => setActiveModal('register')}
-                    className="w-full bg-[#1A1A1A] text-white hover:bg-black text-[11px] font-bold uppercase tracking-wider py-3.5 rounded-[4px] transition-colors cursor-pointer text-center shadow-xs"
-                  >
-                    Coba Pro Gratis (30 Hari)
-                  </button>
-                </div>
+                ))}
               </div>
+            )}
 
-              {/* PLAN 3: ENTERPRISE */}
-              <div 
-                className="bg-white rounded-[6px] border border-[#E5E5E1] p-6 shadow-sm flex flex-col justify-between relative overflow-hidden group min-h-[460px]"
-                id="plan-enterprise"
+            {/* Dynamic Plans Grid */}
+            {!pricingLoading && (
+              <motion.div 
+                style={{ y: smoothS8PricingFloatY }}
+                className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto text-left"
               >
-                <div>
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Skala Besar & Franchise</span>
-                  <h3 className="font-sans font-bold text-lg text-[#1A1A1A]">Enterprise</h3>
-                  <p className="text-[11px] text-[#666666] leading-relaxed mt-1 font-medium">Dirancang untuk rantai toko waralaba, bisnis distribusi, & multi-cabang terpusat.</p>
-                  
-                  <div className="py-5 border-y border-gray-100 my-5 space-y-1">
-                    <span className="font-mono text-3xl font-black text-[#1A1A1A]">
-                      {billingCycle === 'monthly' ? 'Rp 299.000' : 'Rp 239.000'}
-                    </span>
-                    <span className="text-[10px] text-[#666666] font-bold block uppercase tracking-wider">Per Outlet / Bulan, Ditagih {billingCycle === 'monthly' ? 'Bulanan' : 'Tahunan'}</span>
-                  </div>
-
-                  <span className="text-[10px] font-bold text-[#1A1A1A] uppercase tracking-wide block mb-3.5">Semua Fitur Pro, Ditambah:</span>
-                  <ul className="space-y-2.5 text-[11px] text-[#555555] font-medium">
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>Konsolidasi Gudang Pusat Terpadu</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>Manajemen Akses Karyawan Khusus</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>Integrasi API Kustom & Sistem ERP</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>SLA Uptime Garansi 99.9%</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span>Dedicated Account Manager Khusus</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                      </span>
-                      <span className="font-bold text-[#1A1A1A]">Setup Mandiri & Training On-Site</span>
-                    </li>
-                  </ul>
-                </div>
-
-                <div className="pt-6">
-                  <button 
-                    onClick={() => setActiveModal('demo')}
-                    className="w-full bg-[#1A1A1A]/5 text-[#1A1A1A] border border-[#E5E5E1] text-[11px] font-bold uppercase tracking-wider py-3 rounded-[4px] hover:bg-slate-200/50 transition-colors cursor-pointer text-center"
+                {pricingPlans.map((plan, idx) => (
+                  <div 
+                    key={plan.id}
+                    className={`bg-white rounded-[6px] p-6 shadow-sm flex flex-col justify-between relative overflow-hidden group min-h-[460px] ${
+                      plan.is_popular ? 'border-2 border-[#1A1A1A] shadow-md' : 'border border-[#E5E5E1]'
+                    }`}
+                    id={`plan-${plan.slug}`}
                   >
-                    Hubungi Sales
-                  </button>
-                </div>
-              </div>
+                    {plan.is_popular && (
+                      <div className="absolute top-0 right-0 bg-[#1A1A1A] text-white text-[8px] font-mono font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-bl-[4px]">
+                        {t('pricing.popular')}
+                      </div>
+                    )}
 
-            </motion.div>
+                    <div>
+                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">
+                        {plan.max_stores > 10 ? 'Skala Besar' : plan.max_stores > 1 ? 'Rekomendasi Utama' : 'UMKM Pemula'}
+                      </span>
+                      <h3 className={`font-sans font-bold text-lg ${plan.is_popular ? 'text-[#1A1A1A]' : 'text-[#1A1A1A]'}`}>
+                        {plan.name}
+                        {plan.is_popular && <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse ml-1.5 align-middle" />}
+                      </h3>
+                      
+                      <div className="py-5 border-y border-gray-100 my-5 space-y-1">
+                        {plan.price_monthly === 0 ? (
+                          <>
+                            <span className="font-mono text-3xl font-black text-[#1A1A1A]">{t('pricing.register')}</span>
+                            <span className="text-[10px] text-[#666666] font-bold block uppercase tracking-wider">{t('pricing.free_forever')}</span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="font-mono text-3xl font-black text-[#1A1A1A]">
+                              {billingCycle === 'monthly' || !plan.price_yearly
+                                ? formatPrice(plan.price_monthly)
+                                : formatPrice(plan.price_yearly)}
+                            </span>
+                            <span className="text-[10px] text-[#666666] font-bold block uppercase tracking-wider">
+                              {t('pricing.per_month')} &bull; {t('pricing.billed')} {billingCycle === 'monthly' ? t('pricing.billed_monthly') : t('pricing.billed_yearly')}
+                            </span>
+                          </>
+                        )}
+                      </div>
+
+                      <span className="text-[10px] font-bold text-[#1A1A1A] uppercase tracking-wide block mb-3.5">
+                        {t('pricing.features')}
+                      </span>
+                      <ul className="space-y-2.5 text-[11px] text-[#555555] font-medium">
+                        {Object.entries(plan.features).slice(0, 6).map(([key, label]) => (
+                          <li key={key} className="flex items-center gap-2">
+                            <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+                              <Check className="w-2.5 h-2.5 text-emerald-600" />
+                            </span>
+                            <span>{label}</span>
+                          </li>
+                        ))}
+                        {Object.keys(plan.features).length > 6 && (
+                          <li className="text-[10px] text-gray-400 font-semibold pl-6">
+                            +{Object.keys(plan.features).length - 6} fitur lainnya
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+
+                    <div className="pt-6">
+                      <button 
+                        onClick={() => setActiveModal(plan.cta.action === 'contact' ? 'demo' : 'register')}
+                        className={`w-full text-[11px] font-bold uppercase tracking-wider py-3 rounded-[4px] transition-colors cursor-pointer text-center ${
+                          plan.is_popular
+                            ? 'bg-[#1A1A1A] text-white hover:bg-black shadow-xs'
+                            : plan.price_monthly === 0
+                              ? 'bg-[#F4F4F2] text-[#1A1A1A] border border-[#E5E5E1] hover:bg-slate-200/50'
+                              : 'bg-[#1A1A1A]/5 text-[#1A1A1A] border border-[#E5E5E1] hover:bg-slate-200/50'
+                        }`}
+                      >
+                        {plan.cta.label}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            )}
           </motion.div>
         </section>
 
