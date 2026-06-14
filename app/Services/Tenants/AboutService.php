@@ -12,13 +12,6 @@ class AboutService
 {
     public function createOrUpdate(array $data): void
     {
-        \Illuminate\Support\Facades\Log::info('AboutService::createOrUpdate', [
-            'has_photo_key' => array_key_exists('photo', $data),
-            'photo_raw' => $data['photo'] ?? 'NOT_SET',
-            'has_uploaded_file_id' => array_key_exists('uploaded_file_id', $data),
-            'uploaded_file_id' => $data['uploaded_file_id'] ?? 'NOT_SET',
-        ]);
-
         $about = About::query()
             ->updateOrCreate([
                 'id' => About::first()?->getKey() ?? null,
@@ -43,28 +36,14 @@ class AboutService
         if (array_key_exists('uploaded_file_id', $data)) {
             $tmpFile = UploadedFile::find($data['uploaded_file_id']);
 
-            \Illuminate\Support\Facades\Log::info('AboutService: uploaded_file_id handling', [
-                'uploaded_file_id' => $data['uploaded_file_id'],
-                'tmpFile_found' => $tmpFile ? 'yes' : 'no',
-                'about_photo_before' => $about->photo,
-                'tmpFile_relative_path' => $tmpFile?->relative_path,
-            ]);
-
             if ($tmpFile && $tmpFile->relative_path !== $about->photo) {
                 try {
                     $relativePath = $tmpFile->moveToPublic('profile', $about->photo ?: null);
                     $about->update([
                         'photo' => $relativePath,
                     ]);
-
-                    \Illuminate\Support\Facades\Log::info('AboutService: photo updated', [
-                        'relativePath' => $relativePath,
-                        'about_photo_after' => $about->fresh()->photo,
-                    ]);
                 } catch (\Throwable $e) {
-                    \Illuminate\Support\Facades\Log::error('AboutService: moveToPublic failed', [
-                        'error' => $e->getMessage(),
-                    ]);
+                    report($e);
                 }
             } elseif (! $tmpFile && $about->photo) {
                 $this->deletePhoto($about);
