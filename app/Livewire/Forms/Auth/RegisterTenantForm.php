@@ -4,15 +4,13 @@ namespace App\Livewire\Forms\Auth;
 
 use App\Services\RegisterTenant;
 use App\Services\TurnstileService;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Wizard;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
-use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\HtmlString;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -30,75 +28,73 @@ class RegisterTenantForm extends Component implements HasForms
     {
         return $form
             ->schema([
-                Wizard::make([
-                    Wizard\Step::make(__('Owner\'s Account'))
-                        ->schema([
-                            TextInput::make('full_name')
-                                ->label(__('Full Name'))
-                                ->string()
-                                ->required(),
-                            TextInput::make('email')
-                                ->label(__('Email'))
-                                ->email()
-                                ->required(),
-                            TextInput::make('password')
-                                ->password()
-                                ->required()
-                                ->rules(['confirmed', Password::defaults()]),
-                            TextInput::make('password_confirmation')
-                                ->label(__('Password Confirmation'))
-                                ->password(),
-                        ])
-                        ->columns(1)
-                        ->icon('heroicon-o-user'),
-                    Wizard\Step::make(__('Shop Detail'))
-                        ->schema([
-                            TextInput::make('shop_name')
-                                ->label(__('Shop Name'))
-                                ->string()
-                                ->required(),
-                            TextInput::make('shop_location')
-                                ->label(__('Shop Location'))
-                                ->string(),
-                            Select::make('business_type')
-                                ->label(__('Business Type'))
-                                ->options([
-                                    'retail' => __('Retail'),
-                                    'wholesale' => __('Wholesale'),
-                                    'fnb' => __('F&B'),
-                                    'fashion' => __('Fashion'),
-                                    'pharmacy' => __('Pharmacy'),
-                                    'other' => __('Other'),
-                                ])
-                                ->live()
-                                ->required(),
-                            TextInput::make('other_business_type')
-                                ->label('Lainnya')
-                                ->visible(fn (Get $get): bool => $get('business_type') == 'other')
-                                ->required(fn (Get $get): bool => $get('business_type') == 'other')
-                                ->string(),
-                        ])
-                        ->icon('heroicon-o-shopping-bag'),
-                    Wizard\Step::make(__('Coupon'))
-                        ->description(__('Have a coupon code? Enter it here (optional)'))
-                        ->schema([
-                            TextInput::make('coupon_code')
-                                ->label('Kode Kupon (Opsional)')
-                                ->placeholder('Masukkan kode kupon jika ada')
-                                ->maxLength(50),
-                        ])
-                        ->icon('heroicon-o-ticket'),
-                ])
-                    ->submitAction(new HtmlString(
-                        Blade::render(<<<'BLADE'
-                                    <x-filament::button
-                                        size="lg"
-                                        wire:click="create"
-                                        class="w-full !bg-[#1A1A1A] !text-white hover:!bg-black !rounded-lg !py-3 !text-sm !font-bold !shadow-sm"
-                                    >
-                                        Buat Akun Saya
-                                    </x-filament::button>
-                                  BLADE))),
+                Section::make(__('Akun Pemilik'))
+                    ->description(__('Data login untuk akses panel'))
+                    ->icon('heroicon-o-user')
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('full_name')
+                            ->label(__('Full Name'))
+                            ->string()
+                            ->required()
+                            ->columnSpan(1),
+                        TextInput::make('email')
+                            ->label(__('Email'))
+                            ->email()
+                            ->required()
+                            ->columnSpan(1),
+                        TextInput::make('password')
+                            ->password()
+                            ->required()
+                            ->rules(['confirmed', Password::defaults()])
+                            ->columnSpan(1),
+                        TextInput::make('password_confirmation')
+                            ->label(__('Password Confirmation'))
+                            ->password()
+                            ->columnSpan(1),
+                    ]),
+                Section::make(__('Data Toko'))
+                    ->description(__('Informasi usaha Anda'))
+                    ->icon('heroicon-o-shopping-bag')
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('shop_name')
+                            ->label(__('Shop Name'))
+                            ->string()
+                            ->required()
+                            ->columnSpan(1),
+                        Select::make('business_type')
+                            ->label(__('Business Type'))
+                            ->options([
+                                'retail' => __('Retail'),
+                                'wholesale' => __('Wholesale'),
+                                'fnb' => __('F&B'),
+                                'fashion' => __('Fashion'),
+                                'pharmacy' => __('Pharmacy'),
+                                'other' => __('Other'),
+                            ])
+                            ->live()
+                            ->required()
+                            ->columnSpan(1),
+                        TextInput::make('shop_location')
+                            ->label(__('Shop Location'))
+                            ->string()
+                            ->columnSpan(2),
+                        TextInput::make('other_business_type')
+                            ->label('Lainnya')
+                            ->visible(fn (Get $get): bool => $get('business_type') == 'other')
+                            ->required(fn (Get $get): bool => $get('business_type') == 'other')
+                            ->string()
+                            ->columnSpan(2),
+                    ]),
+                Section::make(__('Kupon (Opsional)'))
+                    ->icon('heroicon-o-ticket')
+                    ->schema([
+                        TextInput::make('coupon_code')
+                            ->label('Kode Kupon')
+                            ->placeholder('Masukkan kode kupon jika ada')
+                            ->maxLength(50),
+                    ]),
             ])
             ->statePath('data');
     }

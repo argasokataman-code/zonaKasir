@@ -14,19 +14,22 @@
 
     {{-- Form Card --}}
     <div class="bg-white rounded-xl shadow-sm border border-[#E5E5E1] p-6 sm:p-8">
-      <form>
+      <form class="space-y-6">
         {{ $this->form }}
 
-  </div>
-
-  @if(config('turnstile.enabled') && config('turnstile.site_key'))
-          <div class="mt-6 flex justify-center">
+        @if(config('turnstile.enabled') && config('turnstile.site_key'))
+          <div class="flex justify-center pt-2">
             <div class="cf-turnstile" data-sitekey="{{ config('turnstile.site_key') }}" data-callback="onTurnstileSuccess"></div>
           </div>
           @error('turnstile')
             <p class="mt-2 text-sm text-red-600 text-center font-medium">{{ $message }}</p>
           @enderror
         @endif
+
+        <button type="submit" wire:click="create"
+          class="w-full bg-[#1A1A1A] text-white text-sm font-bold py-3 rounded-lg hover:bg-black transition-colors shadow-sm">
+          Buat Akun Saya
+        </button>
       </form>
       <x-filament-actions::modals />
 
