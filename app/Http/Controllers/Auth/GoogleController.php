@@ -40,6 +40,20 @@ class GoogleController extends Controller
                 }
             }
 
+            // Fallback: find user directly by google_id (handles missing central record)
+            $user = User::withoutGlobalScopes()->where('google_id', $googleId)->first();
+            if ($user) {
+                TenantContext::set($user->tenant_id);
+                // Ensure central tenant record exists
+                \App\Tenant::firstOrCreate(
+                    ['id' => $user->tenant_id],
+                    ['tenancy_email' => $googleUser->getEmail()]
+                )->update(['google_id' => $googleId]);
+                Auth::login($user, true);
+                request()->session()->save();
+                return redirect()->intended('/member');
+            }
+
             // Check email in tenants table
             $tenant = \App\Tenant::where('tenancy_email', $googleUser->getEmail())->first();
             if ($tenant) {
@@ -52,6 +66,22 @@ class GoogleController extends Controller
                     request()->session()->save();
                     return redirect()->intended('/member');
                 }
+            }
+
+            // Fallback: search user across all tenants by email (handles missing central record)
+            $user = User::withoutGlobalScopes()->where('email', $googleUser->getEmail())->first();
+            if ($user) {
+                TenantContext::set($user->tenant_id);
+                // Ensure central tenant record exists
+                $tenant = \App\Tenant::firstOrCreate(
+                    ['id' => $user->tenant_id],
+                    ['tenancy_email' => $googleUser->getEmail()]
+                );
+                $user->update(['google_id' => $googleId]);
+                $tenant->update(['google_id' => $googleId]);
+                Auth::login($user, true);
+                request()->session()->save();
+                return redirect()->intended('/member');
             }
 
             // New user → create tenant + user
