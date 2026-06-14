@@ -183,7 +183,7 @@ class TenantPanelProvider extends PanelProvider
             ->middleware($this->getMiddleware())
             ->authMiddleware([
                 Authenticate::class,
-                \Illuminate\Routing\Middleware\ThrottleRequests::class . ':5,1',
+                \Illuminate\Routing\Middleware\ThrottleRequests::class . ':30,1',
             ])
             ->pages([
                 CartItem::class,
