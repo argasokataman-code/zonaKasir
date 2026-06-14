@@ -20,7 +20,7 @@ const CACHE_KEY = 'pricing_cache_v2';
 const FALLBACK_PLANS: Plan[] = [
   {
     id: 1, name: 'Paket Lite', slug: 'lite',
-    price_monthly: 0, price_yearly: null,
+    price_monthly: 69000, price_yearly: 690000,
     features: { pos: 'Point of Sale (POS)', print_selling_a5: 'Print Selling A5' },
     max_stores: 1, max_users: 1, is_popular: false,
     cta: { label: 'Daftar Gratis', action: 'register' },

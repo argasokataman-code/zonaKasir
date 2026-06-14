@@ -12,8 +12,8 @@ class PlanSeeder extends Seeder
         Plan::updateOrCreate(['slug' => 'lite'], [
             'name' => 'Paket Lite',
             'slug' => 'lite',
-            'price_monthly' => 0,
-            'price_yearly' => null,
+            'price_monthly' => 69000,
+            'price_yearly' => 690000,
             'features' => [
                 'pos',
                 'print_selling_a5',
