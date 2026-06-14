@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Models\Tenants\About;
 use App\Models\Tenants\User;
+use App\Models\Subscription;
 use App\Services\TenantContext;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
@@ -40,5 +41,14 @@ trait RefreshDatabaseWithTenant
             Artisan::call('db:seed', ['--class' => 'CategorySeeder', '--force' => true]);
         } catch (\Throwable $e) {
         }
+
+        Subscription::create([
+            'tenant_id' => $tenantId,
+            'plan_id' => null,
+            'status' => 'trialing',
+            'billing_cycle' => 'monthly',
+            'trial_ends_at' => now()->addDays(14),
+            'starts_at' => now(),
+        ]);
     }
 }
