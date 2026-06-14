@@ -147,6 +147,9 @@ export default function App() {
   // Dynamic pricing from backend API
   const { plans: pricingPlans, loading: pricingLoading } = usePricing();
 
+  // Track expanded features per plan
+  const [expandedFeatures, setExpandedFeatures] = useState<Record<number, boolean>>({});
+
   // Billing cycle toggle state for Section 8 Pricing
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'annually'>('monthly');
 
@@ -1375,7 +1378,7 @@ export default function App() {
                               <span>Update & Support Prioritas</span>
                             </li>
                           </>
-                        ) : Object.entries(plan.features).slice(0, 6).map(([key, label]) => (
+                        ) : Object.entries(plan.features).slice(0, expandedFeatures[plan.id] ? undefined : 6).map(([key, label]) => (
                           <li key={key} className="flex items-center gap-2">
                             <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
                               <Check className="w-2.5 h-2.5 text-emerald-600" />
@@ -1384,8 +1387,13 @@ export default function App() {
                           </li>
                         ))}
                         {Object.keys(plan.features).length > 6 && (
-                          <li className="text-[10px] text-gray-400 font-semibold pl-6">
-                            +{Object.keys(plan.features).length - 6} fitur lainnya
+                          <li>
+                            <button onClick={() => setExpandedFeatures(prev => ({ ...prev, [plan.id]: !prev[plan.id] }))}
+                              className="text-[10px] text-zonakasir-primary font-semibold hover:underline pl-6 cursor-pointer">
+                              {expandedFeatures[plan.id]
+                                ? '− Sembunyikan'
+                                : `+${Object.keys(plan.features).length - 6} fitur lainnya`}
+                            </button>
                           </li>
                         )}
                       </ul>
