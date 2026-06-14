@@ -14,6 +14,7 @@
 <meta name="apple-mobile-web-app-title" content="{{ $config['short_name'] }}">
 <link rel="apple-touch-icon" href="{{ data_get(end($config['icons']), 'src') }}">
 
+@if(!empty($config['splash']))
 <link href="{{ $config['splash']['440x956_landscape'] }}" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
 <link href="{{ $config['splash']['402x874_landscape'] }}" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
 <link href="{{ $config['splash']['430x932_landscape'] }}" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
@@ -56,6 +57,7 @@
 <link href="{{ $config['splash']['810x1080_portrait'] }}" media="(device-width: 744px) and (device-height: 1133px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
 <link href="{{ $config['splash']['768x1024_portrait'] }}" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
 <link href="{{ $config['splash']['744x1133_portrait'] }}" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+@endif
 
 <!-- Tile for Win8 -->
 <meta name="msapplication-TileColor" content="{{ $config['background_color'] }}">
