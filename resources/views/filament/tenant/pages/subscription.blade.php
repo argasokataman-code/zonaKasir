@@ -1,41 +1,26 @@
-<style>
-  .fi-layout, .fi-sidebar, .fi-main, .fi-topbar {
-    opacity: 0 !important;
-  }
-  .subscription-loaded .fi-layout,
-  .subscription-loaded .fi-sidebar,
-  .subscription-loaded .fi-main,
-  .subscription-loaded .fi-topbar {
-    opacity: 1 !important;
-    transition: opacity 0.15s;
-  }
-  #subscription-loader {
-    position: fixed;
-    inset: 0;
-    z-index: 99999;
-    background: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  #subscription-loader.hidden { display: none; }
-</style>
-<div id="subscription-loader">
-  <div style="text-align:center">
-    <div style="width:32px;height:32px;border:3px solid #e5e7eb;border-top-color:#111827;border-radius:50%;animation:spin 0.6s linear infinite;margin:0 auto 12px"></div>
-    <p style="font-size:12px;color:#6b7280;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">Loading...</p>
-  </div>
-</div>
-<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    document.body.classList.add('subscription-loaded');
-    var loader = document.getElementById('subscription-loader');
-    if (loader) loader.classList.add('hidden');
-  });
-</script>
-
 <x-filament-panels::page>
+    <style>
+      .fi-layout, .fi-sidebar, .fi-main, .fi-topbar { opacity: 0 !important; }
+      .subscription-loaded .fi-layout, .subscription-loaded .fi-sidebar,
+      .subscription-loaded .fi-main, .subscription-loaded .fi-topbar { opacity: 1 !important; transition: opacity 0.15s; }
+      #sub-loader { position:fixed;inset:0;z-index:99999;background:#fff;display:flex;align-items:center;justify-content:center; }
+      #sub-loader.done { display:none; }
+      @keyframes spin{to{transform:rotate(360deg)}}
+    </style>
+    <div id="sub-loader">
+      <div style="text-align:center">
+        <div style="width:32px;height:32px;border:3px solid #e5e7eb;border-top-color:#111827;border-radius:50%;animation:spin .6s linear infinite;margin:0 auto 12px"></div>
+        <p style="font-size:12px;color:#6b7280;font-weight:600;letter-spacing:.05em;text-transform:uppercase">Loading...</p>
+      </div>
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        document.body.classList.add('subscription-loaded');
+        var l = document.getElementById('sub-loader');
+        if (l) l.classList.add('done');
+      });
+    </script>
+
     @php
         $current = app(\App\Filament\Tenant\Pages\ManageSubscription::class)->getCurrentPlan();
         $plans = app(\App\Filament\Tenant\Pages\ManageSubscription::class)->getAvailablePlans();
