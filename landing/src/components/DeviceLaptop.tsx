@@ -128,21 +128,21 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
             <span className="w-1 h-1 rounded-full bg-emerald-500/80 border border-emerald-300 shadow-xs" />
           </div>
 
-          {/* Anti-reflective Glass Screen Bezel (Sleek MacBook-style thin black glass surround) */}
+          {/* Anti-reflective Glass Screen Bezel */}
           <div className="bg-zinc-950 p-[6px] md:p-[10px] pb-0 rounded-t-[10px] overflow-hidden">
-            {/* Screen Content Container with robust overflow-hidden */}
-            <div className="bg-slate-950 rounded-t-[4px] overflow-hidden flex flex-row h-[420px] md:h-[510px] text-gray-100 relative shadow-inner">
+            {/* Screen Content Container */}
+            <div className="bg-white rounded-t-[4px] overflow-hidden flex flex-row h-[420px] md:h-[510px] text-gray-800 relative shadow-inner">
               
-              {/* Laptop Left Workspace Sidebar */}
-              <div className="hidden md:flex w-[185px] bg-[#0C0C0E] border-r border-[#1B1B1F] flex-col justify-between h-full shrink-0">
+              {/* Laptop Left Workspace Sidebar — matches real Filament light mode */}
+              <div className="hidden md:flex w-[185px] bg-white border-r border-gray-200 flex-col justify-between h-full shrink-0 shadow-md">
                 <div>
                   {/* Brand Header */}
-                  <div className="p-4 border-b border-slate-850 flex items-center justify-between">
+                  <div className="p-4 border-b border-gray-200 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 rounded bg-[#FF6600] flex items-center justify-center text-white font-extrabold text-xs">
                         ZK
                       </div>
-                      <span className="font-sans font-bold text-xs tracking-wider text-white uppercase">
+                      <span className="font-sans font-bold text-xs tracking-wider text-gray-900 uppercase">
                         ZonaKasir
                       </span>
                     </div>
@@ -155,7 +155,7 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                       className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] font-bold cursor-pointer transition-all ${
                         selectedTab === 'dashboard' 
                           ? 'bg-[#FF6600] text-white shadow-sm' 
-                          : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
+                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                       }`}
                       id="laptop-tab-dashboard"
                     >
@@ -168,7 +168,7 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                       className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] font-bold cursor-pointer transition-all ${
                         selectedTab === 'inventory' 
                           ? 'bg-[#FF6600] text-white shadow-sm' 
-                          : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
+                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                       }`}
                       id="laptop-tab-inventory"
                     >
@@ -176,83 +176,83 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                       POS
                     </button>
 
-                    <a href="#analytics" className="w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] text-slate-400 font-bold cursor-pointer hover:bg-slate-900/50 hover:text-white">
-                      <Banknote className="w-3.5 h-3.5 text-slate-500" />
+                    <a href="#analytics" className="w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] text-gray-600 font-bold cursor-pointer hover:bg-gray-100 hover:text-gray-900">
+                      <Banknote className="w-3.5 h-3.5 text-gray-400" />
                       Selling History
                     </a>
 
-                    <div className="pt-3 px-3 pb-1 text-[8px] font-bold text-slate-500 tracking-wider uppercase">
+                    <div className="pt-3 px-3 pb-1 text-[8px] font-bold text-gray-400 tracking-wider uppercase">
                       Inventory
                     </div>
 
-                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-slate-400 font-bold cursor-default">
-                      <Archive className="w-3.5 h-3.5 text-slate-600" />
+                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-gray-500 font-bold cursor-default">
+                      <Archive className="w-3.5 h-3.5 text-gray-400" />
                       Product
                     </div>
-                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-slate-400 font-bold cursor-default">
-                      <Layers className="w-3.5 h-3.5 text-slate-600" />
+                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-gray-500 font-bold cursor-default">
+                      <Layers className="w-3.5 h-3.5 text-gray-400" />
                       Category
                     </div>
 
-                    <div className="pt-3 px-3 pb-1 text-[8px] font-bold text-slate-500 tracking-wider uppercase">
+                    <div className="pt-3 px-3 pb-1 text-[8px] font-bold text-gray-400 tracking-wider uppercase">
                       Lainnya
                     </div>
 
-                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-slate-500 font-bold cursor-not-allowed">
-                      <Users className="w-3.5 h-3.5 text-slate-600" />
+                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-gray-400 font-bold cursor-not-allowed">
+                      <Users className="w-3.5 h-3.5 text-gray-300" />
                       Member
                     </div>
-                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-slate-500 font-bold cursor-not-allowed">
-                      <CreditCard className="w-3.5 h-3.5 text-slate-600" />
+                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-gray-400 font-bold cursor-not-allowed">
+                      <CreditCard className="w-3.5 h-3.5 text-gray-300" />
                       Payment Method
                     </div>
-                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-slate-500 font-bold cursor-not-allowed">
-                      <FileText className="w-3.5 h-3.5 text-slate-600" />
+                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-gray-400 font-bold cursor-not-allowed">
+                      <FileText className="w-3.5 h-3.5 text-gray-300" />
                       Report
                     </div>
-                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-slate-500 font-bold cursor-not-allowed">
-                      <Settings className="w-3.5 h-3.5 text-slate-600" />
+                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-gray-400 font-bold cursor-not-allowed">
+                      <Settings className="w-3.5 h-3.5 text-gray-300" />
                       General Setting
                     </div>
                   </nav>
                 </div>
 
                 {/* Bottom staff info */}
-                <div className="p-4 border-t border-slate-850">
+                <div className="p-4 border-t border-gray-200">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-[#FF6600]/20 border border-[#FF6600]/30 flex items-center justify-center text-[10px] font-bold text-[#FF6600]">
+                    <div className="w-7 h-7 rounded-full bg-[#FF6600]/10 border border-[#FF6600]/20 flex items-center justify-center text-[10px] font-bold text-[#FF6600]">
                       AS
                     </div>
                     <div>
-                      <h5 className="text-[10px] font-bold leading-tight truncate">Amanda Setiadi</h5>
-                      <p className="text-[8px] text-[#888888]">Admin • Kopi S&S</p>
+                      <h5 className="text-[10px] font-bold leading-tight truncate text-gray-900">Amanda Setiadi</h5>
+                      <p className="text-[8px] text-gray-500">Admin • Kopi S&S</p>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Main Dashboard Panel Workspace */}
-              <div className="flex-1 bg-slate-950 flex flex-col h-full overflow-hidden text-slate-300">
+              <div className="flex-1 bg-gray-50 flex flex-col h-full overflow-hidden text-gray-800">
                 {/* Top Workspace Bar */}
-                <div className="p-4 bg-slate-900 border-b border-slate-850 flex items-center justify-between gap-4">
+                <div className="p-4 bg-white border-b border-gray-200 flex items-center justify-between gap-4">
                   <div>
-                    <h2 className="text-xs font-bold text-white tracking-widest uppercase">
+                    <h2 className="text-xs font-bold text-gray-900 tracking-widest uppercase">
                       {selectedTab === 'dashboard' ? 'Ringkasan Aktivitas Toko' : 'Kartu Kontrol Inventaris'}
                     </h2>
-                    <p className="text-[9px] text-slate-400 mt-0.5">Sistem Laporan Manajerial</p>
+                    <p className="text-[9px] text-gray-500 mt-0.5">Sistem Laporan Manajerial</p>
                   </div>
 
                   {selectedTab === 'dashboard' ? (
                     <div className="flex items-center gap-2.5">
                       <button 
                         onClick={() => setTotalSales(prev => prev + 120000)}
-                        className="bg-white/10 text-white border border-white/20 text-[10px] font-bold uppercase px-3 py-1.5 rounded-[5px] hover:bg-white/20 transition-all cursor-pointer"
+                        className="bg-white border border-gray-200 text-gray-700 text-[10px] font-bold uppercase px-3 py-1.5 rounded-[5px] hover:bg-gray-50 transition-all cursor-pointer"
                       >
                         Simulasi Transaksi
                       </button>
                     </div>
                   ) : (
-                    <span className="text-[10px] text-red-400 font-semibold bg-red-500/15 border border-red-500/25 px-2.5 py-1.5 rounded-[5px] flex items-center gap-1.5 uppercase tracking-wide">
+                    <span className="text-[10px] text-red-600 font-semibold bg-red-50 border border-red-200 px-2.5 py-1.5 rounded-[5px] flex items-center gap-1.5 uppercase tracking-wide">
                       <AlertTriangle className="w-3.5 h-3.5" />
                       Stok Menipis
                     </span>
@@ -272,37 +272,37 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                           <p className="text-sm font-mono font-bold text-[#FF6600] mt-1">
                             Rp 4.250.000
                           </p>
-                          <span className="text-[8px] text-emerald-400 font-semibold block mt-1.5 flex items-center gap-0.5">
+                          <span className="text-[8px] text-emerald-600 font-semibold block mt-1.5 flex items-center gap-0.5">
                             <ArrowUpRight className="w-2.5 h-2.5" /> +14.2% vs Kemarin
                           </span>
                         </div>
 
-                        <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px]">
-                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Today Total Revenue</span>
-                          <p className="text-sm font-mono font-bold text-white mt-1">
+                        <div className="bg-white border border-gray-200 p-3 rounded-[6px]">
+                          <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wide">Today Total Revenue</span>
+                          <p className="text-sm font-mono font-bold text-gray-900 mt-1">
                             {formatIDR(totalSales)}
                           </p>
-                          <span className="text-[8px] text-emerald-400 font-semibold block mt-1.5 flex items-center gap-0.5">
+                          <span className="text-[8px] text-emerald-600 font-semibold block mt-1.5 flex items-center gap-0.5">
                             <ArrowUpRight className="w-2.5 h-2.5" /> +8.5% jam ini
                           </span>
                         </div>
 
-                        <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px]">
-                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Sales Today</span>
-                          <p className="text-sm font-mono font-bold text-white mt-1">
+                        <div className="bg-white border border-gray-200 p-3 rounded-[6px]">
+                          <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wide">Sales Today</span>
+                          <p className="text-sm font-mono font-bold text-gray-900 mt-1">
                             284 Transaksi
                           </p>
-                          <span className="text-[8px] text-slate-400 font-semibold block mt-1.5">
+                          <span className="text-[8px] text-gray-500 font-semibold block mt-1.5">
                             Konversi stabil
                           </span>
                         </div>
 
-                        <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px]">
-                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Discount Today</span>
-                          <p className="text-sm font-mono font-bold text-white mt-1">
+                        <div className="bg-white border border-gray-200 p-3 rounded-[6px]">
+                          <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wide">Discount Today</span>
+                          <p className="text-sm font-mono font-bold text-gray-900 mt-1">
                             Rp 125.000
                           </p>
-                          <span className="text-[8px] text-slate-400 font-semibold block mt-1.5">
+                          <span className="text-[8px] text-gray-500 font-semibold block mt-1.5">
                             total discount
                           </span>
                         </div>
@@ -312,13 +312,13 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                       <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
                         
                         {/* Hourly Sales Area Chart curve */}
-                        <div className="bg-slate-900 border border-slate-850 p-3.5 rounded-[6px] lg:col-span-2">
+                        <div className="bg-white border border-gray-200 p-3.5 rounded-[6px] lg:col-span-2">
                           <div className="flex items-center justify-between mb-3">
                             <div>
-                              <h4 className="text-xs font-bold text-white">Grafik Aliran Omset Harian</h4>
-                              <p className="text-[8px] text-slate-400 mt-0.5">Laporan real-time jam ke jam</p>
+                              <h4 className="text-xs font-bold text-gray-900">Grafik Aliran Omset Harian</h4>
+                              <p className="text-[8px] text-gray-500 mt-0.5">Laporan real-time jam ke jam</p>
                             </div>
-                            <span className="text-[9px] font-semibold text-slate-400 border border-slate-800 px-2 py-0.5 rounded">
+                            <span className="text-[9px] font-semibold text-gray-500 border border-gray-200 px-2 py-0.5 rounded">
                               Hari Ini
                             </span>
                           </div>
@@ -332,12 +332,12 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                                     <stop offset="95%" stopColor="#FF6600" stopOpacity={0} />
                                   </linearGradient>
                                 </defs>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#232329" vertical={false} />
-                                <XAxis dataKey="time" stroke="#52525b" />
-                                <YAxis stroke="#52525b" tickFormatter={(v) => `${v/1000}k`} />
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                                <XAxis dataKey="time" stroke="#9ca3af" />
+                                <YAxis stroke="#9ca3af" tickFormatter={(v) => `${v/1000}k`} />
                                 <Tooltip 
-                                  contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', borderRadius: '6px' }}
-                                  labelStyle={{ color: '#a1a1aa', fontWeight: 'bold', fontSize: '9px' }}
+                                  contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', borderRadius: '6px' }}
+                                  labelStyle={{ color: '#6b7280', fontWeight: 'bold', fontSize: '9px' }}
                                 />
                                 <Area 
                                   type="monotone" 
@@ -353,20 +353,20 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                         </div>
 
                         {/* Best Selling Products bar list */}
-                        <div className="bg-slate-900 border border-slate-850 p-3.5 rounded-[6px] flex flex-col justify-between">
+                        <div className="bg-white border border-gray-200 p-3.5 rounded-[6px] flex flex-col justify-between">
                           <div>
-                            <h4 className="text-xs font-bold text-white">Menu Paling Laris</h4>
-                            <p className="text-[8px] text-slate-400 mt-0.5">Volume penjualan tertinggi hari ini</p>
+                            <h4 className="text-xs font-bold text-gray-900">Menu Paling Laris</h4>
+                            <p className="text-[8px] text-gray-500 mt-0.5">Volume penjualan tertinggi hari ini</p>
                           </div>
 
                           <div className="space-y-2 mt-4 flex-1 flex flex-col justify-center">
                             {BEST_SELLERS.map((item, idx) => (
                               <div key={item.name} className="space-y-1">
-                                <div className="flex justify-between text-[10px] text-slate-300">
+                                <div className="flex justify-between text-[10px] text-gray-600">
                                   <span className="font-semibold">{item.name}</span>
-                                  <span className="font-mono font-bold text-white">{item.sales} Pcs</span>
+                                  <span className="font-mono font-bold text-gray-900">{item.sales} Pcs</span>
                                 </div>
-                                <div className="w-full bg-[#1e1e24] h-1.5 rounded-full overflow-hidden">
+                                <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden">
                                   <div 
                                     className="bg-[#FF6600] h-full rounded-full" 
                                     style={{ width: `${(item.sales / BEST_SELLERS[0].sales) * 100}%` }}
@@ -376,9 +376,9 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                             ))}
                           </div>
 
-                          <div className="text-[9px] text-slate-500 pt-2 border-t border-slate-850 flex items-center justify-between mt-2">
+                          <div className="text-[9px] text-gray-500 pt-2 border-t border-gray-200 flex items-center justify-between mt-2">
                             <span>Stabil sejak jam sibuk siang</span>
-                            <span className="font-bold flex items-center gap-0.5 text-emerald-400">
+                            <span className="font-bold flex items-center gap-0.5 text-emerald-600">
                               98% Akurat
                             </span>
                           </div>
@@ -390,33 +390,33 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         
                         {/* Aliran Stok - Stock movement list */}
-                        <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px]">
-                          <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-850">
-                            <span className="text-[10px] font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                              <Box className="w-3.5 h-3.5 text-slate-400" /> Mutasi Inventaris
+                        <div className="bg-white border border-gray-200 p-3 rounded-[6px]">
+                          <div className="flex justify-between items-center mb-2 pb-2 border-b border-gray-200">
+                            <span className="text-[10px] font-bold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
+                              <Box className="w-3.5 h-3.5 text-gray-500" /> Mutasi Inventaris
                             </span>
-                            <span className="text-[8px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded font-mono uppercase">Gudang Utama</span>
+                            <span className="text-[8px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded font-mono uppercase">Gudang Utama</span>
                           </div>
 
                           <div className="space-y-2 h-28 overflow-y-auto no-scrollbar">
                             {movements.map((m) => (
-                              <div key={m.id} className="flex justify-between items-center text-[10px] py-1 border-b border-slate-850 last:border-b-0">
+                              <div key={m.id} className="flex justify-between items-center text-[10px] py-1 border-b border-gray-100 last:border-b-0">
                                 <div className="flex items-center gap-2">
                                   {m.type === 'IN' ? (
-                                    <ArrowDownLeft className="w-3.5 h-3.5 text-emerald-400 bg-emerald-500/10 p-0.5 rounded-sm" />
+                                    <ArrowDownLeft className="w-3.5 h-3.5 text-emerald-600 bg-emerald-50 p-0.5 rounded-sm" />
                                   ) : (
-                                    <ArrowUpRight className="w-3.5 h-3.5 text-amber-400 bg-amber-500/10 p-0.5 rounded-sm" />
+                                    <ArrowUpRight className="w-3.5 h-3.5 text-amber-600 bg-amber-50 p-0.5 rounded-sm" />
                                   )}
                                   <div>
-                                    <span className="font-semibold text-gray-200">{m.productName}</span>
-                                    <span className="text-[8px] text-slate-500 ml-1.5">SKU {m.sku}</span>
+                                    <span className="font-semibold text-gray-700">{m.productName}</span>
+                                    <span className="text-[8px] text-gray-500 ml-1.5">SKU {m.sku}</span>
                                   </div>
                                 </div>
                                 <div className="text-right">
-                                  <span className={`font-semibold ${m.type === 'IN' ? 'text-emerald-400' : 'text-amber-400'}`}>
+                                  <span className={`font-semibold ${m.type === 'IN' ? 'text-emerald-600' : 'text-amber-600'}`}>
                                     {m.type === 'IN' ? '+' : '-'}{m.quantity} Unit
                                   </span>
-                                  <span className="text-[8px] text-slate-500 block">{m.timestamp}</span>
+                                  <span className="text-[8px] text-gray-500 block">{m.timestamp}</span>
                                 </div>
                               </div>
                             ))}
@@ -424,11 +424,11 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                         </div>
 
                         {/* Stock Alert Quick Click Restock Actions */}
-                        <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px] flex flex-col justify-between">
+                        <div className="bg-white border border-gray-200 p-3 rounded-[6px] flex flex-col justify-between">
                           <div>
-                            <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-850">
-                              <span className="text-[10px] font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                                <AlertTriangle className="w-3.5 h-3.5 text-red-400 animate-pulse" /> Peringatan Reorder Cepat (Sistem Otomatis)
+                            <div className="flex justify-between items-center mb-2 pb-2 border-b border-gray-200">
+                              <span className="text-[10px] font-bold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
+                                <AlertTriangle className="w-3.5 h-3.5 text-red-500 animate-pulse" /> Peringatan Reorder Cepat (Sistem Otomatis)
                               </span>
                             </div>
 
@@ -437,10 +437,10 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                                 const isLow = p.stock <= 18;
                                 if (!isLow) return null;
                                 return (
-                                  <div key={p.id} className="flex justify-between items-center bg-slate-950 p-2 border border-slate-850 rounded-[4px]">
+                                  <div key={p.id} className="flex justify-between items-center bg-red-50 p-2 border border-red-200 rounded-[4px]">
                                     <div>
-                                      <div className="text-[10px] font-semibold text-gray-200 leading-tight">{p.name}</div>
-                                      <div className="text-[8px] text-red-400 mt-0.5">Sisa stok: {p.stock} pcs • Batas aman 18</div>
+                                      <div className="text-[10px] font-semibold text-gray-700 leading-tight">{p.name}</div>
+                                      <div className="text-[8px] text-red-600 mt-0.5">Sisa stok: {p.stock} pcs • Batas aman 18</div>
                                     </div>
                                     <button
                                       onClick={() => triggerRestock(p.id)}
@@ -459,10 +459,10 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                     </>
                   ) : (
                     /* TAB 2: FULL INVENTORY LIST WITH REAL TIME ACTIONS */
-                    <div className="bg-slate-900 border border-slate-850 rounded-[6px] overflow-hidden">
+                    <div className="bg-white border border-gray-200 rounded-[6px] overflow-hidden">
                       <table className="w-full text-left border-collapse text-[11px]">
                         <thead>
-                          <tr className="bg-slate-950 text-slate-400 border-b border-slate-850">
+                          <tr className="bg-gray-50 text-gray-500 border-b border-gray-200">
                             <th className="p-3 font-semibold text-[10px] uppercase">SKU</th>
                             <th className="p-3 font-semibold text-[10px] uppercase">Nama Menu</th>
                             <th className="p-3 font-semibold text-[10px] uppercase">Kategori</th>
@@ -472,34 +472,34 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                             <th className="p-3 font-semibold text-[10px] uppercase text-center">Aksi Cepat</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-850">
+                        <tbody className="divide-y divide-gray-100">
                           {products.map(p => {
                             const isLow = p.stock <= 18;
                             const isCritical = p.stock <= 4;
                             return (
-                              <tr key={p.id} className="hover:bg-slate-900/50">
-                                <td className="p-3 font-mono text-[10px] text-slate-400">{p.sku}</td>
-                                <td className="p-3 font-bold text-white">{p.name}</td>
-                                <td className="p-3 text-slate-400">{p.category}</td>
-                                <td className="p-3 text-right font-mono text-slate-200">
+                              <tr key={p.id} className="hover:bg-gray-50">
+                                <td className="p-3 font-mono text-[10px] text-gray-500">{p.sku}</td>
+                                <td className="p-3 font-bold text-gray-900">{p.name}</td>
+                                <td className="p-3 text-gray-500">{p.category}</td>
+                                <td className="p-3 text-right font-mono text-gray-700">
                                   Rp {p.price.toLocaleString('id-ID')}
                                 </td>
-                                <td className="p-3 text-center font-mono font-bold text-white">
+                                <td className="p-3 text-center font-mono font-bold text-gray-900">
                                   {p.stock} Pcs
                                 </td>
                                 <td className="p-3 text-center">
                                   {isCritical ? (
-                                    <span className="bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">Kritis</span>
+                                    <span className="bg-red-50 text-red-600 border border-red-200 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">Kritis</span>
                                   ) : isLow ? (
-                                    <span className="bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">Menipis</span>
+                                    <span className="bg-amber-50 text-amber-600 border border-amber-200 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">Menipis</span>
                                   ) : (
-                                    <span className="bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">Aman</span>
+                                    <span className="bg-emerald-50 text-emerald-600 border border-emerald-200 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">Aman</span>
                                   )}
                                 </td>
                                 <td className="p-3 text-center">
                                   <button
                                     onClick={() => triggerRestock(p.id)}
-                                    className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1 rounded-[4px] text-[10px] font-semibold active:scale-95 transition-all cursor-pointer"
+                                    className="bg-gray-900 hover:bg-gray-800 text-white px-3 py-1 rounded-[4px] text-[10px] font-semibold active:scale-95 transition-all cursor-pointer"
                                   >
                                     Restock +100
                                   </button>
@@ -528,11 +528,8 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
       </div>
       
       <style>{`
-        .bg-slate-850 {
-          background-color: #121215;
-        }
-        .border-slate-850 {
-          border-color: #1a1a20;
+        .bg-gray-905\\/70 {
+          background-color: rgba(18, 18, 20, 0.72);
         }
       `}</style>
     </div>
