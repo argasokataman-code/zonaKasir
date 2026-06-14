@@ -40,6 +40,48 @@
             </div>
         </x-filament::section>
 
+        {{-- Tenant Bank Info --}}
+        <x-filament::section heading="Tenant Bank Accounts">
+            <div class="p-4">
+                @if (empty($tenants))
+                    <div class="text-center text-gray-500">No tenants found</div>
+                @else
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b text-left text-gray-500">
+                                    <th class="p-2">Tenant</th>
+                                    <th class="p-2">Shop</th>
+                                    <th class="p-2">Bank</th>
+                                    <th class="p-2">Account Name</th>
+                                    <th class="p-2">Account Number</th>
+                                    <th class="p-2">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($tenants as $t)
+                                    <tr class="border-b hover:bg-gray-50">
+                                        <td class="p-2 font-medium">{{ $t['name'] }}</td>
+                                        <td class="p-2">{{ $t['shop_name'] }}</td>
+                                        <td class="p-2">{{ $t['bank_name'] }} ({{ $t['bank_code'] }})</td>
+                                        <td class="p-2">{{ $t['bank_account_name'] }}</td>
+                                        <td class="p-2 font-mono">{{ $t['bank_account_number'] }}</td>
+                                        <td class="p-2">
+                                            @if ($t['has_bank'])
+                                                <x-filament::badge color="success">Configured</x-filament::badge>
+                                            @else
+                                                <x-filament::badge color="danger">Missing</x-filament::badge>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
+            </div>
+        </x-filament::section>
+
         {{-- Withdrawal & Disbursement History --}}
         <x-filament::section heading="Withdrawal History" icon="heroicon-o-clock">
             <div class="p-4">
