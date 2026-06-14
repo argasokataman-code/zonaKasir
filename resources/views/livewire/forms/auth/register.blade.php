@@ -7,9 +7,28 @@
       <div class="w-full">
         <form>
           {{ $this->form }}
+
+          @if(config('turnstile.enabled') && config('turnstile.site_key'))
+            <div class="mt-4 flex justify-center">
+              <div class="cf-turnstile" data-sitekey="{{ config('turnstile.site_key') }}" data-callback="onTurnstileSuccess"></div>
+            </div>
+            @error('turnstile')
+              <p class="mt-1 text-sm text-red-600 text-center">{{ $message }}</p>
+            @enderror
+          @endif
+
         </form>
         <x-filament-actions::modals />
       </div>
     </div>
   </div>
+
+  @if(config('turnstile.enabled') && config('turnstile.site_key'))
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script>
+      function onTurnstileSuccess(token) {
+        Livewire.find('{{ $this->id }}').set('turnstileToken', token);
+      }
+    </script>
+  @endif
 </div>
