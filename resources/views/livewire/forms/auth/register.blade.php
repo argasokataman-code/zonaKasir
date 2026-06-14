@@ -27,7 +27,10 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script>
       function onTurnstileSuccess(token) {
-        Livewire.find('{{ $this->id }}').set('turnstileToken', token);
+        var el = document.querySelector('[wire\\\\:id]');
+        if (el) {
+          Livewire.find(el.getAttribute('wire:id')).set('turnstileToken', token);
+        }
       }
     </script>
   @endif
