@@ -113,7 +113,7 @@ class TenantPanelProvider extends PanelProvider
         );
 
         FilamentView::registerRenderHook(
-            PanelsRenderHook::SIDEBAR_NAV_END,
+            PanelsRenderHook::TOPBAR_AFTER,
             fn () => view('partials.trial-banner-sidebar')
         );
 
