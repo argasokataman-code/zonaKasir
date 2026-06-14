@@ -135,8 +135,13 @@ class TenantPanelProvider extends PanelProvider
             fn () => view('partials.expired-overlay')
         );
 
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::BODY_END,
+            fn () => view('partials.welcome-modal')
+        );
+
         if (app()->environment('demo')) {
-            FilamentView::registerRenderHook(
+        FilamentView::registerRenderHook(
                 PanelsRenderHook::BODY_START,
                 fn (): View => view('donation-banner', [
                     'link' => 'https://trakteer.id/sheenazien8/tip',
