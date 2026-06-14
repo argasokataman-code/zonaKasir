@@ -25,7 +25,7 @@ class NotificationDebugger extends Page
     public function check()
     {
         $output = [];
-        $tenants = Tenant::where('is_active', true)->get();
+        $tenants = Tenant::all();
         $output[] = "Active tenants: {$tenants->count()}";
 
         foreach ($tenants as $t) {
