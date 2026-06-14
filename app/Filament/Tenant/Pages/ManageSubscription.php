@@ -50,14 +50,14 @@ class ManageSubscription extends Page
                 throw new \RuntimeException('No active subscription found');
             }
 
-            if (($plan->price_monthly ?? 0) === 0) {
-                $subscription->update([
-                    'plan_id' => $plan->id,
-                    'billing_cycle' => 'monthly',
-                    'starts_at' => now(),
-                    'ends_at' => null,
-                ]);
+            $subscription->update([
+                'plan_id' => $plan->id,
+                'billing_cycle' => $billingCycle,
+                'starts_at' => now(),
+                'ends_at' => $billingCycle === 'yearly' ? now()->addYear() : now()->addMonth(),
+            ]);
 
+            if (($plan->price_monthly ?? 0) === 0) {
                 Notification::make()
                     ->title('Plan updated')
                     ->body('Switched to '.$plan->name.' (Free)')
@@ -68,13 +68,6 @@ class ManageSubscription extends Page
             }
 
             $invoice = app(InvoiceService::class)->createInvoice($subscription, 'midtrans');
-
-            $subscription->update([
-                'plan_id' => $plan->id,
-                'billing_cycle' => $billingCycle,
-                'starts_at' => now(),
-                'ends_at' => $billingCycle === 'yearly' ? now()->addYear() : now()->addMonth(),
-            ]);
 
             $this->snapRedirectUrl = $this->generateSnapRedirect($invoice, $subscription);
         } catch (\Throwable $e) {
