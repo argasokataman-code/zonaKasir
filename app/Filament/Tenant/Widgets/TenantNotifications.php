@@ -14,12 +14,16 @@ class TenantNotifications extends Widget
     {
         $user = auth()->user();
         if (! $user) {
-            return ['notifications' => []];
+            return ['notifications' => [], 'unreadCount' => 0, 'totalCount' => 0, 'showAll' => false];
         }
 
+        $totalUnread = $user->unreadNotifications()->count();
+
         return [
-            'notifications' => $user->notifications()->latest()->take(10)->get(),
-            'unreadCount' => $user->unreadNotifications()->count(),
+            'notifications' => $user->notifications()->latest()->take(5)->get(),
+            'unreadCount' => $totalUnread > 5 ? 5 : $totalUnread,
+            'totalCount' => $totalUnread,
+            'showAll' => $totalUnread > 5,
         ];
     }
 }
