@@ -352,5 +352,11 @@
     "Import product": "Import product",
     "Point the cursor to this input first then scan the barcode": "Point the cursor to this input first then scan the barcode",
     "Profile": "Profile",
-    "Language": "Language"
+    "Language": "Language",
+    "Trial has expired! Please subscribe.": "Trial has expired! Please subscribe.",
+    "Trial expires tomorrow! Please subscribe.": "Trial expires tomorrow! Please subscribe.",
+    "Trial version — :days days remaining": "Trial version — :days days remaining",
+    "Upgrade to a paid plan for full features.": "Upgrade to a paid plan for full features.",
+    "Subscribe Now": "Subscribe Now",
+    "View Plans": "View Plans"
 }
