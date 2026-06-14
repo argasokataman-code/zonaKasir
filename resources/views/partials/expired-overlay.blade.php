@@ -38,7 +38,7 @@
   <div class="absolute inset-0 bg-white/70 backdrop-blur-md"></div>
 
   {{-- Overlay content --}}
-  <div class="relative z-10 w-full h-full flex flex-col px-6 py-8 overflow-hidden">
+  <div class="relative z-10 w-full max-w-6xl max-h-full flex flex-col items-center justify-center px-6 py-8 overflow-hidden">
     {{-- Header --}}
     <div class="text-center mb-6 shrink-0">
       <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-red-100 mb-3">
@@ -51,8 +51,8 @@
     </div>
 
     {{-- Plans grid --}}
-    <div class="flex-1 min-h-0 overflow-y-auto">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-6xl mx-auto">
+    <div class="w-full min-h-0 overflow-y-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @foreach($plans as $plan)
         <div
           x-data="{ open: false, showBilling: false }"
