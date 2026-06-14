@@ -7,7 +7,6 @@ use App\Filament\Tenant\Widgets\BalanceWidget;
 use App\Filament\Tenant\Widgets\InventoryStats;
 use App\Filament\Tenant\Widgets\LowStockProducts;
 use App\Filament\Tenant\Widgets\PaymentMethodChart;
-use App\Filament\Tenant\Widgets\QuickActions;
 use App\Filament\Tenant\Widgets\SalesChart;
 use App\Filament\Tenant\Widgets\TenantNotifications;
 use App\Filament\Tenant\Widgets\TodaysBestSellingProduct;
@@ -23,7 +22,6 @@ class Dashboard extends BaseDashboard
     protected function getHeaderWidgets(): array
     {
         return [
-            QuickActions::class,
             SellingOverview::class,
             TransactionStats::class,
             BalanceWidget::class,
