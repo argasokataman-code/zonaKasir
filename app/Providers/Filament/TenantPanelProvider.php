@@ -281,7 +281,9 @@ class TenantPanelProvider extends PanelProvider
             $active = in_array(Route::current()->getName(), $activatedRoute);
         }
 
-        $label = $resource::getLabel();
+        $label = method_exists($resource, 'getNavigationLabel')
+            ? $resource::getNavigationLabel()
+            : (method_exists($resource, 'getLabel') ? $resource::getLabel() : class_basename($resource));
         if (! filled($label)) {
             $label = class_basename($resource);
         }
