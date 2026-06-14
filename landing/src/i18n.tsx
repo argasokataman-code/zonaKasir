@@ -74,8 +74,8 @@ const translations: TranslationDict = {
     FR: 'Connexion', ZH: '登录', JA: 'ログイン', KO: '로그인', HI: 'लॉगिन',
   },
   'nav.try_free': {
-    ID: 'Coba Gratis', EN: 'Try Free', AR: 'جرّب مجاناً', ES: 'Prueba gratis', PT: 'Experimente grátis',
-    FR: 'Essai gratuit', ZH: '免费试用', JA: '無料で試す', KO: '무료 체험', HI: 'मुफ़्त में आज़माएँ',
+    ID: 'Masuk', EN: 'Login', AR: 'تسجيل الدخول', ES: 'Iniciar sesión', PT: 'Entrar',
+    FR: 'Connexion', ZH: '登录', JA: 'ログイン', KO: '로그인', HI: 'लॉगिन',
   },
   'nav.menu': {
     ID: 'Menu Navigasi', EN: 'Navigation Menu', AR: 'القائمة', ES: 'Menú de navegación', PT: 'Menu de navegação',
@@ -86,8 +86,8 @@ const translations: TranslationDict = {
     FR: 'Portail caisse', ZH: '收银门户', JA: 'レジポータル', KO: '캐시어 포털', HI: 'कैशियर पोर्टल',
   },
   'nav.try_now': {
-    ID: 'Coba Gratis Sekarang', EN: 'Try Now', AR: 'جرّب الآن', ES: 'Prueba ahora', PT: 'Experimente agora',
-    FR: 'Essayer maintenant', ZH: '立即试用', JA: '今すぐ試す', KO: '지금 체험', HI: 'अभी आज़माएँ',
+    ID: 'Masuk', EN: 'Login', AR: 'تسجيل الدخول', ES: 'Iniciar sesión', PT: 'Entrar',
+    FR: 'Connexion', ZH: '登录', JA: 'ログイン', KO: '로그인', HI: 'लॉगिन',
   },
 
   // ==================== HERO SECTION ====================
