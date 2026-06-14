@@ -9,18 +9,7 @@ class PlanSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->resetPlans();
-        $this->createPlans();
-    }
-
-    private function resetPlans(): void
-    {
-        Plan::query()->delete();
-    }
-
-    private function createPlans(): void
-    {
-        Plan::create([
+        Plan::updateOrCreate(['slug' => 'lite'], [
             'name' => 'Paket Lite',
             'slug' => 'lite',
             'price_monthly' => 0,
