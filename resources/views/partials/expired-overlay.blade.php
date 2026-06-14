@@ -37,7 +37,7 @@
   }
 @endphp
 
-@if($isExpired && !request()->is('member/subscription*'))
+@if($isExpired && request()->is('member*') && !request()->is('member/subscription*'))
 <div
   x-data="expiredOverlay()"
   x-init="init()"
