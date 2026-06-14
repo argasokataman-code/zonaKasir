@@ -4,8 +4,11 @@ namespace App\Filament\Tenant\Pages;
 
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Component;
+use Filament\Forms\Components\View;
 use Filament\Http\Responses\Auth\LoginResponse;
 use Filament\Pages\Auth\Login;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
 
 class TenantLogin extends Login
@@ -50,5 +53,18 @@ class TenantLogin extends Login
                 'password' => 'passwordsangatrahasia'
             ]);
         }
+    }
+
+    public function form(\Filament\Forms\Form $form): \Filament\Forms\Form
+    {
+        return $form->schema([
+            ...parent::form($form)->getComponents(),
+            $this->getGoogleLoginButton(),
+        ]);
+    }
+
+    protected function getGoogleLoginButton(): Component
+    {
+        return View::make('filament.tenant.pages.google-login-button');
     }
 }
