@@ -1426,10 +1426,10 @@ const translations: TranslationDict = {
     ZH: '付款方式', JA: '請求方法', KO: '청구 방식', HI: 'बिल किया गया',
   },
   'pricing.trial': {
-    ID: 'Coba Gratis 30 Hari', EN: 'Free 30-Day Trial',
-    AR: 'تجربة مجانية لمدة 30 يومًا', ES: 'Prueba Gratis de 30 Días',
-    PT: 'Teste Grátis de 30 Dias', FR: 'Essai Gratuit de 30 Jours',
-    ZH: '免费 30 天试用', JA: '30日間無料トライアル', KO: '30일 무료 체험', HI: '30 दिन का मुफ़्त परीक्षण',
+    ID: 'Coba Gratis 7 Hari', EN: 'Free 7-Day Trial',
+    AR: 'تجربة مجانية لمدة 7 أيام', ES: 'Prueba Gratis de 7 Días',
+    PT: 'Teste Grátis de 7 Dias', FR: 'Essai Gratuit de 7 Jours',
+    ZH: '免费 7 天试用', JA: '7日間無料トライアル', KO: '7일 무료 체험', HI: '7 दिन का मुफ़्त परीक्षण',
   },
   'pricing.register': {
     ID: 'Daftar Gratis', EN: 'Register Free',

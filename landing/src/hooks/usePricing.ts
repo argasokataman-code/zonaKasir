@@ -30,7 +30,7 @@ const FALLBACK_PLANS: Plan[] = [
     price_monthly: 149000, price_yearly: 119000,
     features: { pos: 'Point of Sale (POS)', report: 'Reports & Analytics', stock_management: 'Stock Management', voucher: 'Voucher / Discount', member_management: 'Member Management' },
     max_stores: 3, max_users: 5, is_popular: true,
-    cta: { label: 'Coba Gratis 30 Hari', action: 'register' },
+    cta: { label: 'Coba Gratis 7 Hari', action: 'register' },
   },
   {
     id: 3, name: 'Enterprise', slug: 'enterprise',

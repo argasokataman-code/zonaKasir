@@ -43,7 +43,7 @@ class RegisterTenant
             $user->assignRole(Role::admin);
         }
 
-        $trialDays = $data['trial_days'] ?? 14;
+        $trialDays = $data['trial_days'] ?? 7;
         $coupon = null;
         if (! empty($data['coupon_code'])) {
             $coupon = Coupon::where('code', $data['coupon_code'])->first();
