@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   ArrowRight, ShieldCheck, Zap, Layers, RefreshCw, SmartphoneIcon, Tablet, 
   Tv, Database, ShoppingBag, BarChart3, DollarSign, TrendingUp, 
@@ -155,6 +155,30 @@ export default function App() {
 
   // Active testimonial index for story section
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [isHoveringTestimonial, setIsHoveringTestimonial] = useState(false);
+  const [testimonialProgress, setTestimonialProgress] = useState(0);
+
+  // Auto-scroll testimonials carousel
+  const nextTestimonial = useCallback(() => {
+    setActiveTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
+    setTestimonialProgress(0);
+  }, []);
+
+  useEffect(() => {
+    if (isHoveringTestimonial) return;
+
+    const progressInterval = setInterval(() => {
+      setTestimonialProgress((prev) => {
+        if (prev >= 100) {
+          nextTestimonial();
+          return 0;
+        }
+        return prev + 2; // 5s total → 50 steps × 2 = 100
+      });
+    }, 100);
+
+    return () => clearInterval(progressInterval);
+  }, [isHoveringTestimonial, nextTestimonial]);
 
   // Active FAQ index for accordion system
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
@@ -930,20 +954,29 @@ export default function App() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white rounded-[6px] border border-[#E5E5E1] p-8 shadow-sm"
+            onMouseEnter={() => setIsHoveringTestimonial(true)}
+            onMouseLeave={() => setIsHoveringTestimonial(false)}
           >
             
-            {/* Real edited photography on Left Grid (5 cols) with no illustration constraint with smooth 3D parallax depth */}
+            {/* Real edited photography on Left Grid (5 cols) with smooth 3D parallax depth */}
             <div className="lg:col-span-5 flex justify-center relative py-6">
               <motion.div 
                 style={{ y: smoothS6ImageY }}
                 className="w-full max-w-[340px] aspect-[4/3] rounded-[6px] overflow-hidden shadow-md border border-[#E5E5E1] z-10 relative"
               >
-                <img 
-                  src={TESTIMONIALS[activeTestimonial].imagePath} 
-                  alt={TESTIMONIALS[activeTestimonial].name} 
-                  className="w-full h-full object-cover grayscale-subtle hover:grayscale-0 transition-all duration-500"
-                  referrerPolicy="no-referrer"
-                />
+                {TESTIMONIALS.map((testimonial, idx) => (
+                  <img 
+                    key={testimonial.id}
+                    src={testimonial.imagePath} 
+                    alt={testimonial.name} 
+                    className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-in-out ${
+                      idx === activeTestimonial 
+                        ? 'opacity-100 scale-100 grayscale-subtle hover:grayscale-0' 
+                        : 'opacity-0 scale-105'
+                    }`}
+                    referrerPolicy="no-referrer"
+                  />
+                ))}
               </motion.div>
               {/* Visual geometric shadow card */}
               <motion.div 
@@ -954,23 +987,34 @@ export default function App() {
 
             {/* Testimonial Copy on Right Grid (7 cols) */}
             <div className="lg:col-span-7 flex flex-col justify-between h-full space-y-6 text-left">
-              <div className="space-y-4">
+              <div className="space-y-4 relative min-h-[200px]">
                 <span className="text-[10px] font-bold text-[#666666] tracking-wider uppercase block">
                   {t('s6.label')}
                 </span>
                 
-                <h3 className="font-sans font-bold text-2xl sm:text-3xl text-[#1A1A1A] leading-tight">
-                  &ldquo;Stok otomatis kami selalu ter-update secara presisi setiap malam.&rdquo;
-                </h3>
+                {TESTIMONIALS.map((testimonial, idx) => (
+                  <div 
+                    key={testimonial.id}
+                    className={`transition-all duration-700 ease-in-out ${
+                      idx === activeTestimonial 
+                        ? 'opacity-100 translate-y-0 absolute inset-0' 
+                        : 'opacity-0 translate-y-4 pointer-events-none absolute inset-0'
+                    }`}
+                  >
+                    <h3 className="font-sans font-bold text-2xl sm:text-3xl text-[#1A1A1A] leading-tight">
+                      &ldquo;{testimonial.quote.slice(0, 60)}...&rdquo;
+                    </h3>
 
-                <Quote className="w-10 h-10 text-gray-200" />
-                
-                <p className="font-sans text-[#555555] text-sm italic leading-relaxed max-w-xl font-medium">
-                  {TESTIMONIALS[activeTestimonial].quote}
-                </p>
+                    <Quote className="w-10 h-10 text-gray-200 mt-3" />
+                    
+                    <p className="font-sans text-[#555555] text-sm italic leading-relaxed max-w-xl font-medium mt-2">
+                      {testimonial.quote}
+                    </p>
+                  </div>
+                ))}
               </div>
 
-              {/* Owner details and slider controls */}
+              {/* Owner details and auto-scroll progress dots */}
               <div className="pt-6 border-t border-[#E5E5E1] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                   <h4 className="font-bold text-xs text-[#1A1A1A] font-sans">
@@ -984,19 +1028,22 @@ export default function App() {
                   </p>
                 </div>
 
-                {/* Slider switches */}
-                <div className="flex gap-2">
-                  {TESTIMONIALS.map((t, idx) => (
+                {/* Auto-scrolling progress dots */}
+                <div className="flex gap-2 items-center">
+                  {TESTIMONIALS.map((_, idx) => (
                     <button
-                      key={t.id}
-                      onClick={() => setActiveTestimonial(idx)}
-                      className={`text-[11px] font-bold px-4 py-2 rounded-[6px] border transition-all cursor-pointer active:scale-95 ${
-                        activeTestimonial === idx 
-                          ? 'bg-[#1A1A1A] text-white border-[#1A1A1A] font-bold' 
-                          : 'bg-white text-[#666666] hover:text-[#1A1A1A] border-[#D1D1CC]'
-                      }`}
+                      key={idx}
+                      onClick={() => { setActiveTestimonial(idx); setTestimonialProgress(0); }}
+                      className="relative h-2 rounded-full overflow-hidden transition-all duration-300 cursor-pointer"
+                      style={{ width: idx === activeTestimonial ? '48px' : '8px' }}
                     >
-                      {t.businessName.split(' ')[1] || t.businessName.split(' ')[0]}
+                      <div className="absolute inset-0 bg-[#D1D1CC] rounded-full" />
+                      {idx === activeTestimonial && (
+                        <div 
+                          className="absolute inset-y-0 left-0 bg-[#1A1A1A] rounded-full transition-none"
+                          style={{ width: `${testimonialProgress}%` }}
+                        />
+                      )}
                     </button>
                   ))}
                 </div>
