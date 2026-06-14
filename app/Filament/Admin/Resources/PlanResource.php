@@ -37,7 +37,6 @@ class PlanResource extends Resource
             'Customers' => array_intersect_key($all, array_flip(['member_management'])),
             'Purchasing' => array_intersect_key($all, array_flip(['purchasing', 'receivable', 'supplier'])),
             'Management' => array_intersect_key($all, array_flip(['user_management', 'role_permission', 'edit_profile', 'multi_store'])),
-            'Integration' => array_intersect_key($all, array_flip(['api_access', 'export_csv', 'custom_print'])),
         ];
     }
 
