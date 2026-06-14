@@ -5,9 +5,12 @@
     @endphp
 
     @if($snapRedirectUrl)
+    <script>
+      window.open('{{ $snapRedirectUrl }}', '_blank');
+    </script>
     <div class="bg-blue-50 border border-blue-200 rounded-[6px] p-6 text-center mb-6">
         <h3 class="text-lg font-bold text-blue-900 mb-2">Payment Required</h3>
-        <p class="text-blue-700 mb-4">Click below to complete your payment via Midtrans.</p>
+        <p class="text-blue-700 mb-4">Mengarahkan ke Midtrans...</p>
         <x-filament::button
             tag="a"
             href="{{ $snapRedirectUrl }}"
@@ -18,7 +21,7 @@
         >
             Pay Now
         </x-filament::button>
-        <p class="text-sm text-blue-600 mt-3">New window will open. Complete payment there.</p>
+        <p class="text-sm text-blue-600 mt-3">Jika tab baru tidak terbuka, klik tombol di atas.</p>
     </div>
     @endif
 
