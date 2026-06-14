@@ -14,6 +14,11 @@ class Tenant extends Model
 
     protected $keyType = 'string';
 
+    public function domains()
+    {
+        return $this->hasMany(\App\Domain::class, 'tenant_id', 'id');
+    }
+
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class, 'tenant_id', 'id');
