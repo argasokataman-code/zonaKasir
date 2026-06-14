@@ -7,7 +7,6 @@ use App\Models\Subscription;
 use App\Models\Tenants\User;
 use App\Services\CouponService;
 use Illuminate\Http\Response;
-use Stancl\Tenancy\Facades\Tenancy;
 use Tests\RefreshDatabaseWithTenant;
 
 uses(RefreshDatabaseWithTenant::class);
@@ -15,44 +14,32 @@ uses(RefreshDatabaseWithTenant::class);
 describe('Coupon E2E Flow', function () {
     beforeEach(function () {
         $this->admin = User::first();
+        $this->tenantId = $this->admin->tenant_id;
     });
 
-    // --- Model / isValid ---
-
     it('coupon is valid by default', function () {
-        $coupon = Tenancy::central(function () {
-            return Coupon::factory()->create();
-        });
+        $coupon = Coupon::factory()->create();
 
         expect($coupon->isValid())->toBeTrue();
     });
 
     it('isValid returns false when max_redemptions reached', function () {
-        $coupon = Tenancy::central(function () {
-            return Coupon::factory()->exhausted()->create();
-        });
+        $coupon = Coupon::factory()->exhausted()->create();
 
         expect($coupon->isValid())->toBeFalse();
     });
 
     it('isValid returns false when expired', function () {
-        $coupon = Tenancy::central(function () {
-            return Coupon::factory()->expired()->create();
-        });
+        $coupon = Coupon::factory()->expired()->create();
 
         expect($coupon->isValid())->toBeFalse();
     });
 
-    // --- CouponService redeem ---
-
     it('redeem percentage coupon increments used_count', function () {
-        $coupon = Tenancy::central(function () {
-            return Coupon::factory()->percentage()->create();
-        });
-        $tenantId = tenant('id');
+        $coupon = Coupon::factory()->percentage()->create();
 
         $service = new CouponService();
-        $result = $service->redeem($coupon->code, $tenantId);
+        $result = $service->redeem($coupon->code, $this->tenantId);
 
         expect($result['success'])->toBeTrue();
         expect($result['type'])->toBe('percentage');
@@ -61,13 +48,10 @@ describe('Coupon E2E Flow', function () {
     });
 
     it('redeem nominal coupon increments used_count', function () {
-        $coupon = Tenancy::central(function () {
-            return Coupon::factory()->nominal()->create();
-        });
-        $tenantId = tenant('id');
+        $coupon = Coupon::factory()->nominal()->create();
 
         $service = new CouponService();
-        $result = $service->redeem($coupon->code, $tenantId);
+        $result = $service->redeem($coupon->code, $this->tenantId);
 
         expect($result['success'])->toBeTrue();
         expect($result['type'])->toBe('nominal');
@@ -76,14 +60,10 @@ describe('Coupon E2E Flow', function () {
     });
 
     it('redeem trial_extension coupon extends trial_ends_at', function () {
-        $coupon = Tenancy::central(function () {
-            return Coupon::factory()->trialExtension()->create(['trial_days' => 7]);
-        });
-        $tenantId = tenant('id');
+        $coupon = Coupon::factory()->trialExtension()->create(['trial_days' => 7]);
+        $tenantId = $this->tenantId;
 
-        $subscription = Tenancy::central(function () use ($tenantId) {
-            return Subscription::where('tenant_id', $tenantId)->first();
-        });
+        $subscription = Subscription::where('tenant_id', $tenantId)->first();
         $originalTrialEnd = $subscription->trial_ends_at->copy();
 
         $service = new CouponService();
@@ -103,38 +83,30 @@ describe('Coupon E2E Flow', function () {
     it('redeem fails for invalid coupon code', function () {
         $service = new CouponService();
 
-        expect(fn () => $service->redeem('INVALID_CODE', tenant('id')))
+        expect(fn () => $service->redeem('INVALID_CODE', $this->tenantId))
             ->toThrow(\Exception::class, 'tidak ditemukan');
     });
 
     it('redeem fails for exhausted coupon', function () {
-        $coupon = Tenancy::central(function () {
-            return Coupon::factory()->exhausted()->create();
-        });
+        $coupon = Coupon::factory()->exhausted()->create();
 
         $service = new CouponService();
 
-        expect(fn () => $service->redeem($coupon->code, tenant('id')))
+        expect(fn () => $service->redeem($coupon->code, $this->tenantId))
             ->toThrow(\Exception::class, 'tidak valid');
     });
 
     it('redeem fails for expired coupon', function () {
-        $coupon = Tenancy::central(function () {
-            return Coupon::factory()->expired()->create();
-        });
+        $coupon = Coupon::factory()->expired()->create();
 
         $service = new CouponService();
 
-        expect(fn () => $service->redeem($coupon->code, tenant('id')))
+        expect(fn () => $service->redeem($coupon->code, $this->tenantId))
             ->toThrow(\Exception::class, 'tidak valid');
     });
 
-    // --- API endpoint ---
-
     it('POST /api/coupon/redeem returns success for valid coupon', function () {
-        $coupon = Tenancy::central(function () {
-            return Coupon::factory()->percentage()->create();
-        });
+        $coupon = Coupon::factory()->percentage()->create();
 
         $response = $this->actingAs($this->admin, 'sanctum')
             ->postJson('/api/coupon/redeem', ['code' => $coupon->code]);
@@ -155,7 +127,6 @@ describe('Coupon E2E Flow', function () {
         $response = $this->actingAs($this->admin, 'sanctum')
             ->postJson('/api/coupon/redeem', []);
 
-        // 422 when validation fails
         expect($response->status())->toBe(Response::HTTP_UNPROCESSABLE_ENTITY);
     });
 
