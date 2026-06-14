@@ -33,7 +33,7 @@
           }
       }
 
-      $plans = $isExpired ? \App\Models\Plan::where('is_active', true)->orderBy('price_monthly')->get()->toArray() : [];
+      $plans = $isExpired ? \App\Models\Plan::where('is_active', true)->where('price_monthly', '>', 0)->orderBy('price_monthly')->get()->toArray() : [];
   }
 @endphp
 

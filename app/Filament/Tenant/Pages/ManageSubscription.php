@@ -51,35 +51,12 @@ class ManageSubscription extends Page
 
             $plan = Plan::findOrFail($planId);
 
-            // Free plan: activate immediately
+            // On-Premise / price=0 plans: cannot subscribe via this page
             if (($plan->price_monthly ?? 0) === 0) {
-                $subscription = Subscription::where('tenant_id', $tenantId)
-                    ->latest()
-                    ->first();
-
-                if ($subscription) {
-                    $subscription->update([
-                        'plan_id' => $plan->id,
-                        'status' => 'active',
-                        'billing_cycle' => 'monthly',
-                        'starts_at' => now(),
-                        'ends_at' => null,
-                        'trial_ends_at' => null,
-                    ]);
-                } else {
-                    Subscription::create([
-                        'tenant_id' => $tenantId,
-                        'plan_id' => $plan->id,
-                        'status' => 'active',
-                        'billing_cycle' => 'monthly',
-                        'starts_at' => now(),
-                    ]);
-                }
-
                 Notification::make()
-                    ->title('Plan activated')
-                    ->body('Switched to '.$plan->name.' (Free)')
-                    ->success()
+                    ->title('Paket ini tidak tersedia untuk pembelian online')
+                    ->body('Hubungi admin untuk paket '.$plan->name)
+                    ->warning()
                     ->send();
 
                 return;
@@ -226,7 +203,11 @@ class ManageSubscription extends Page
 
     public function getAvailablePlans(): array
     {
-        return Plan::where('is_active', true)->orderBy('price_monthly')->get()->toArray();
+        return Plan::where('is_active', true)
+            ->where('price_monthly', '>', 0)
+            ->orderBy('price_monthly')
+            ->get()
+            ->toArray();
     }
 
     public function getInvoices(): array
