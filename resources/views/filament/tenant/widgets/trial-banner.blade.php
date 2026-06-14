@@ -54,7 +54,7 @@
         </div>
       </div>
 
-      <a href="{{ \Filament\Facades\Filament::getPanel('tenant')->getPages()['subscription']::getUrl() }}"
+      <a href="{{ \App\Filament\Tenant\Pages\ManageSubscription::getUrl() }}"
          class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-lg {{ $btnClass }}">
         {{ $daysRemaining <= 0 ? 'Berlangganan Sekarang' : 'Lihat Paket' }}
       </a>
