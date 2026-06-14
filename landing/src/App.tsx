@@ -1350,10 +1350,33 @@ export default function App() {
                       </div>
 
                       <span className="text-[10px] font-bold text-[#1A1A1A] uppercase tracking-wide block mb-3.5">
-                        {t('pricing.features')}
+                        {plan.is_on_premise ? 'Keunggulan:' : t('pricing.features')}
                       </span>
                       <ul className="space-y-2.5 text-[11px] text-[#555555] font-medium">
-                        {Object.entries(plan.features).slice(0, 6).map(([key, label]) => (
+                        {plan.is_on_premise ? (
+                          <>
+                            <li className="flex items-center gap-2">
+                              <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0"><Check className="w-2.5 h-2.5 text-emerald-600" /></span>
+                              <span>Kode Sumber Lengkap (Full Source)</span>
+                            </li>
+                            <li className="flex items-center gap-2">
+                              <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0"><Check className="w-2.5 h-2.5 text-emerald-600" /></span>
+                              <span>Tanpa Biaya Berlangganan Bulanan</span>
+                            </li>
+                            <li className="flex items-center gap-2">
+                              <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0"><Check className="w-2.5 h-2.5 text-emerald-600" /></span>
+                              <span>Data 100% di Server Anda Sendiri</span>
+                            </li>
+                            <li className="flex items-center gap-2">
+                              <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0"><Check className="w-2.5 h-2.5 text-emerald-600" /></span>
+                              <span>Domain & Branding Kustom</span>
+                            </li>
+                            <li className="flex items-center gap-2">
+                              <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0"><Check className="w-2.5 h-2.5 text-emerald-600" /></span>
+                              <span>Update & Support Prioritas</span>
+                            </li>
+                          </>
+                        ) : Object.entries(plan.features).slice(0, 6).map(([key, label]) => (
                           <li key={key} className="flex items-center gap-2">
                             <span className="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
                               <Check className="w-2.5 h-2.5 text-emerald-600" />
