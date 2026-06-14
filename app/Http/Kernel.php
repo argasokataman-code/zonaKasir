@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\DisableDebugbar;
 use App\Http\Middleware\LocalizationMiddleware;
+use App\Http\Middleware\TenantIsolationMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -25,6 +26,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         DisableDebugbar::class,
+        TenantIsolationMiddleware::class,
     ];
 
     /**
