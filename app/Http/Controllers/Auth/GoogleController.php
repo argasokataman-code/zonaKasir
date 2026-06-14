@@ -24,10 +24,11 @@ class GoogleController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
 
-            // Check if user already exists by google_id
+            // Try to find user by google_id across all tenants
             $user = User::where('google_id', $googleUser->getId())->first();
 
             if ($user) {
+                tenancy()->initialize($user->tenant_id);
                 Auth::login($user, true);
 
                 return redirect()->intended('/member');
@@ -38,6 +39,7 @@ class GoogleController extends Controller
             if ($existingUser) {
                 $existingUser->update(['google_id' => $googleUser->getId()]);
 
+                tenancy()->initialize($existingUser->tenant_id);
                 Auth::login($existingUser, true);
 
                 return redirect()->intended('/member');
@@ -58,8 +60,6 @@ class GoogleController extends Controller
                 'trial_days' => 7,
             ]);
 
-            // Set tenant context and link google_id
-            TenantContext::set($tenantId);
             $user = User::where('email', $googleUser->getEmail())->first();
             if ($user) {
                 $user->update(['google_id' => $googleUser->getId()]);
