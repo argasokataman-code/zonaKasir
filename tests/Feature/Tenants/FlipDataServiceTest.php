@@ -6,12 +6,12 @@ use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
     Config::set('flip.secret_key', 'test-secret-key');
-    Config::set('flip.base_url', 'https://big.flip.id/api/v2');
+    Config::set('flip.base_url', 'https://bigflip.id/big_sandbox_api');
 });
 
 test('flip data service returns balance', function () {
     Http::fake([
-        'big.flip.id/api/v2/balance' => Http::response([
+        'bigflip.id/big_sandbox_api/v2/general/balance' => Http::response([
             'balance' => 50000000,
             'pending_balance' => 1000000,
             'currency' => 'IDR',
@@ -27,7 +27,7 @@ test('flip data service returns balance', function () {
 
 test('flip data service returns null on failed balance fetch', function () {
     Http::fake([
-        'big.flip.id/api/v2/balance' => Http::response([], 500),
+        'bigflip.id/big_sandbox_api/v2/general/balance' => Http::response([], 500),
     ]);
 
     $balance = app(FlipDataService::class)->getBalance();
@@ -37,7 +37,7 @@ test('flip data service returns null on failed balance fetch', function () {
 
 test('flip data service returns disbursements', function () {
     Http::fake([
-        'big.flip.id/api/v2/disbursements*' => Http::response([
+        'bigflip.id/big_sandbox_api/v3/disbursement*' => Http::response([
             [
                 'id' => '123',
                 'bank_code' => 'bca',
@@ -67,7 +67,7 @@ test('flip data service returns disbursements', function () {
 
 test('flip data service returns empty array on failed disbursement fetch', function () {
     Http::fake([
-        'big.flip.id/api/v2/disbursements*' => Http::response([], 500),
+        'bigflip.id/big_sandbox_api/v3/disbursement*' => Http::response([], 500),
     ]);
 
     $disbursements = app(FlipDataService::class)->getDisbursements();

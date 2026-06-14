@@ -1,5 +1,11 @@
-<div class="min-h-screen bg-[#F4F4F2] flex items-center justify-center p-4 sm:p-6">
-  <div class="w-full max-w-lg">
+<div class="min-h-screen bg-[#F4F4F2] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
+  {{-- Background wallpaper from landing page --}}
+  <div class="absolute inset-0 z-0">
+    <img src="/images/landing/retail_hero_bg_1781378962689.jpg" alt="" class="w-full h-full object-cover opacity-[0.06] grayscale contrast-125 select-none">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#F4F4F2]/60 to-[#F4F4F2]" />
+  </div>
+
+  <div class="w-full max-w-lg relative z-10">
     {{-- Brand Header --}}
     <div class="text-center mb-8">
       <div class="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-[#1A1A1A] shadow-sm mb-4">
@@ -14,7 +20,9 @@
       <form>
         {{ $this->form }}
 
-        @if(config('turnstile.enabled') && config('turnstile.site_key'))
+  </div>
+
+  @if(config('turnstile.enabled') && config('turnstile.site_key'))
           <div class="mt-6 flex justify-center">
             <div class="cf-turnstile" data-sitekey="{{ config('turnstile.site_key') }}" data-callback="onTurnstileSuccess"></div>
           </div>
