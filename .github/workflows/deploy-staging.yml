@@ -126,9 +126,8 @@ jobs:
             php artisan migrate --force 2>/dev/null || true
             php artisan db:seed --class=AdminSeeder --force 2>/dev/null || true
 
-            composer dump-autoload --no-dev
-            php artisan filament:upgrade
-            php artisan app:version-sync
+            php artisan filament:upgrade 2>/dev/null || true
+            php artisan app:version-sync 2>/dev/null || true
             php artisan optimize:clear
             php artisan view:cache
 
