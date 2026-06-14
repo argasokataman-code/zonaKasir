@@ -4,37 +4,34 @@ namespace App\Services;
 
 use App\Models\Coupon;
 use App\Models\Subscription;
-use Illuminate\Support\Facades\DB;
 use Exception;
 
 class CouponService
 {
     public function redeem(string $code, string|int $tenantId): array
     {
-        return DB::transaction(function () use ($code, $tenantId) {
-            $coupon = Coupon::where('code', $code)->lockForUpdate()->first();
+        $coupon = Coupon::where('code', $code)->first();
 
-            if (! $coupon) {
-                throw new Exception('Kode kupon tidak ditemukan');
-            }
+        if (! $coupon) {
+            throw new Exception('Kode kupon tidak ditemukan');
+        }
 
-            if (! $coupon->isValid()) {
-                throw new Exception('Kupon sudah tidak valid atau kedaluwarsa');
-            }
+        if (! $coupon->isValid()) {
+            throw new Exception('Kupon sudah tidak valid atau kedaluwarsa');
+        }
 
-            if ($coupon->type === 'trial_extension') {
-                return $this->applyTrialExtension($coupon, $tenantId);
-            }
+        if ($coupon->type === 'trial_extension') {
+            return $this->applyTrialExtension($coupon, $tenantId);
+        }
 
-            $coupon->increment('used_count');
+        $coupon->increment('used_count');
 
-            return [
-                'success' => true,
-                'type' => $coupon->type,
-                'value' => $coupon->value,
-                'message' => 'Kupon berhasil digunakan',
-            ];
-        });
+        return [
+            'success' => true,
+            'type' => $coupon->type,
+            'value' => $coupon->value,
+            'message' => 'Kupon berhasil digunakan',
+        ];
     }
 
     private function applyTrialExtension(Coupon $coupon, string|int $tenantId): array

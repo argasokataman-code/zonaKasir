@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\GoogleController;
 use App\Livewire\Forms\Auth\RegisterTenantForm;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
@@ -15,6 +16,11 @@ Route::get('/serviceworker.js', function () {
 
 Route::get('/auth/register', RegisterTenantForm::class)
     ->name('auth.register');
+
+Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])
+    ->name('google.redirect');
+Route::get('/auth/google/callback', [GoogleController::class, 'callback'])
+    ->name('google.callback');
 
 Route::middleware([
     'web',
