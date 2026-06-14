@@ -16,8 +16,8 @@ class PlanController extends Controller
             return Plan::where('is_active', true)
                 ->orderBy('price_monthly')
                 ->get()
-                ->map(function ($plan, $idx) {
-                    $plan->is_popular = $idx === 1;
+                ->map(function ($plan) {
+                    $plan->is_popular = $plan->slug === 'pro';
                     return $plan;
                 });
         });
