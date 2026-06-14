@@ -15,6 +15,10 @@ class TenantLogin extends Login
 {
     public function authenticate(): ?LoginResponse
     {
+        \Illuminate\Support\Facades\Log::debug('TenantLogin auth check', [
+            'panel' => Filament::getCurrentPanel()?->getId(),
+            'guard' => Filament::getCurrentPanel()?->getAuthGuard(),
+        ]);
         $loginResponse = parent::authenticate();
         /** @var \App\Models\Tenants\User|null $user */
         $user = Filament::auth()->user();
