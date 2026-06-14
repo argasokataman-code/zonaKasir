@@ -8,17 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        if (! Schema::hasTable('tenants')) {
-            Schema::create('tenants', function (Blueprint $table) {
-                $table->string('id')->primary();
-                $table->string('tenancy_email')->nullable();
-                $table->timestamps();
-            });
-
-            return;
-        }
-
-        if (! Schema::hasColumn('tenants', 'tenancy_email')) {
+        if (Schema::hasTable('tenants') && ! Schema::hasColumn('tenants', 'tenancy_email')) {
             Schema::table('tenants', function (Blueprint $table) {
                 $table->string('tenancy_email')->nullable()->after('id');
             });

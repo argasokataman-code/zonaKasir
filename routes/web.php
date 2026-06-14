@@ -43,7 +43,3 @@ Route::middleware(['web', 'auth:admin'])->group(function () {
         ->name('admin.tenants.destroy');
 });
 
-// Midtrans webhook - no auth, no throttle
-Route::post('/webhooks/midtrans', [\App\Http\Controllers\Api\MidtransWebhookController::class, 'handle'])
-    ->name('webhooks.midtrans');
-
