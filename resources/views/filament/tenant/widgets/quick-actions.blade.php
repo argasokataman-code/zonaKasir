@@ -2,7 +2,7 @@
   <x-slot name="heading">
     <span class="flex items-center gap-2">
       <x-heroicon-o-bolt class="h-5 w-5" />
-      {{ __('Aksi Cepat') }}
+      {{ __('Quick Actions') }}
     </span>
   </x-slot>
 
@@ -13,7 +13,7 @@
         <x-heroicon-o-calculator class="h-6 w-6 text-primary-600 dark:text-primary-400" />
       </div>
       <span class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-        {{ __('Buka Kasir') }}
+        {{ __('Open Cashier') }}
       </span>
     </a>
 
@@ -23,7 +23,7 @@
         <x-heroicon-o-receipt-percent class="h-6 w-6 text-success-600 dark:text-success-400" />
       </div>
       <span class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-success-600 dark:group-hover:text-success-400 transition-colors">
-        {{ __('Lihat Penjualan') }}
+        {{ __('View Sales') }}
       </span>
     </a>
 
@@ -33,7 +33,7 @@
         <x-heroicon-o-cube class="h-6 w-6 text-info-600 dark:text-info-400" />
       </div>
       <span class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-info-600 dark:group-hover:text-info-400 transition-colors">
-        {{ __('Kelola Produk') }}
+        {{ __('Manage Products') }}
       </span>
     </a>
 
@@ -43,7 +43,7 @@
         <x-heroicon-o-users class="h-6 w-6 text-warning-600 dark:text-warning-400" />
       </div>
       <span class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-warning-600 dark:group-hover:text-warning-400 transition-colors">
-        {{ __('Kelola Member') }}
+        {{ __('Manage Members') }}
       </span>
     </a>
   </div>

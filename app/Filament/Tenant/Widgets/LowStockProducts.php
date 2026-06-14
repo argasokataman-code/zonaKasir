@@ -9,7 +9,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class LowStockProducts extends BaseWidget
 {
-    protected static ?string $heading = 'Stok Menipis';
+    protected static ?string $heading = 'Low Stock Products';
 
     protected int | string | array $columnSpan = 'full';
 
@@ -42,7 +42,7 @@ class LowStockProducts extends BaseWidget
                     ->translateLabel()
                     ->searchable(),
                 TextColumn::make('remaining_stock')
-                    ->label(__('Sisa Stok'))
+                    ->label(__('Remaining Stock'))
                     ->getStateUsing(function (Product $product) {
                         $stockIn = $product->stocks->where('type', 'in')->sum('stock');
                         $stockOut = $product->stocks->where('type', 'out')->sum('stock');

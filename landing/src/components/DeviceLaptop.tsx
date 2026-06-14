@@ -10,12 +10,14 @@ import {
 } from 'lucide-react';
 import { Product, StockMovement } from '../types';
 import { INITIAL_PRODUCTS, STOCK_MOVEMENTS, HOURLY_SALES, BEST_SELLERS } from '../data';
+import { useLanguage } from '../i18n';
 
 interface DeviceLaptopProps {
   interactive?: boolean;
 }
 
 export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) {
+  const { t } = useLanguage();
   const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
   const [movements, setMovements] = useState<StockMovement[]>(STOCK_MOVEMENTS);
   const [totalSales, setTotalSales] = useState<number>(12840000); // Rp 12.84M
@@ -160,7 +162,7 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                       id="laptop-tab-dashboard"
                     >
                       <LayoutDashboard className="w-3.5 h-3.5" />
-                      Dashboard
+                      {t('device.laptop.dashboard')}
                     </button>
 
                     <button
@@ -173,46 +175,46 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                       id="laptop-tab-inventory"
                     >
                       <Zap className="w-3.5 h-3.5" />
-                      POS
+                      {t('device.laptop.pos')}
                     </button>
 
                     <a href="#analytics" className="w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] text-gray-600 font-bold cursor-pointer hover:bg-gray-100 hover:text-gray-900">
                       <Banknote className="w-3.5 h-3.5 text-gray-400" />
-                      Selling History
+                      {t('device.laptop.selling_history')}
                     </a>
 
                     <div className="pt-3 px-3 pb-1 text-[8px] font-bold text-gray-400 tracking-wider uppercase">
-                      Inventory
+                      {t('device.laptop.inventory')}
                     </div>
 
                     <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-gray-500 font-bold cursor-default">
                       <Archive className="w-3.5 h-3.5 text-gray-400" />
-                      Product
+                      {t('device.laptop.product')}
                     </div>
                     <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-gray-500 font-bold cursor-default">
                       <Layers className="w-3.5 h-3.5 text-gray-400" />
-                      Category
+                      {t('device.laptop.category')}
                     </div>
 
                     <div className="pt-3 px-3 pb-1 text-[8px] font-bold text-gray-400 tracking-wider uppercase">
-                      Lainnya
+                      {t('device.laptop.other')}
                     </div>
 
                     <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-gray-400 font-bold cursor-not-allowed">
                       <Users className="w-3.5 h-3.5 text-gray-300" />
-                      Member
+                      {t('device.laptop.member')}
                     </div>
                     <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-gray-400 font-bold cursor-not-allowed">
                       <CreditCard className="w-3.5 h-3.5 text-gray-300" />
-                      Payment Method
+                      {t('device.laptop.payment_method')}
                     </div>
                     <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-gray-400 font-bold cursor-not-allowed">
                       <FileText className="w-3.5 h-3.5 text-gray-300" />
-                      Report
+                      {t('device.laptop.report')}
                     </div>
                     <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-gray-400 font-bold cursor-not-allowed">
                       <Settings className="w-3.5 h-3.5 text-gray-300" />
-                      General Setting
+                      {t('device.laptop.general_setting')}
                     </div>
                   </nav>
                 </div>
@@ -237,9 +239,9 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                 <div className="p-4 bg-white border-b border-gray-200 flex items-center justify-between gap-4">
                   <div>
                     <h2 className="text-xs font-bold text-gray-900 tracking-widest uppercase">
-                      {selectedTab === 'dashboard' ? 'Ringkasan Aktivitas Toko' : 'Kartu Kontrol Inventaris'}
+                      {selectedTab === 'dashboard' ? t('device.laptop.dashboard_title') : t('device.laptop.inventory_title')}
                     </h2>
-                    <p className="text-[9px] text-gray-500 mt-0.5">Sistem Laporan Manajerial</p>
+                    <p className="text-[9px] text-gray-500 mt-0.5">{t('device.laptop.management_system')}</p>
                   </div>
 
                   {selectedTab === 'dashboard' ? (
@@ -248,13 +250,13 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                         onClick={() => setTotalSales(prev => prev + 120000)}
                         className="bg-white border border-gray-200 text-gray-700 text-[10px] font-bold uppercase px-3 py-1.5 rounded-[5px] hover:bg-gray-50 transition-all cursor-pointer"
                       >
-                        Simulasi Transaksi
+                        {t('device.laptop.simulate_transaction')}
                       </button>
                     </div>
                   ) : (
                     <span className="text-[10px] text-red-600 font-semibold bg-red-50 border border-red-200 px-2.5 py-1.5 rounded-[5px] flex items-center gap-1.5 uppercase tracking-wide">
                       <AlertTriangle className="w-3.5 h-3.5" />
-                      Stok Menipis
+                      {t('device.laptop.stock_low')}
                     </span>
                   )}
                 </div>
@@ -268,42 +270,42 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                       {/* Realtime KPI stats blocks — matches real BalanceWidget + SellingOverview */}
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <div className="bg-[#FF6600]/10 border border-[#FF6600]/20 p-3 rounded-[6px]">
-                          <span className="text-[9px] text-[#FF6600] font-bold uppercase tracking-wide">Saldo Tersedia</span>
+                          <span className="text-[9px] text-[#FF6600] font-bold uppercase tracking-wide">{t('device.phone.balance')}</span>
                           <p className="text-sm font-mono font-bold text-[#FF6600] mt-1">
                             Rp 4.250.000
                           </p>
                           <span className="text-[8px] text-emerald-600 font-semibold block mt-1.5 flex items-center gap-0.5">
-                            <ArrowUpRight className="w-2.5 h-2.5" /> +14.2% vs Kemarin
+                            <ArrowUpRight className="w-2.5 h-2.5" /> +14.2% {t('device.laptop.vs_yesterday')}
                           </span>
                         </div>
 
                         <div className="bg-white border border-gray-200 p-3 rounded-[6px]">
-                          <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wide">Today Total Revenue</span>
+                          <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wide">{t('device.phone.today_revenue')}</span>
                           <p className="text-sm font-mono font-bold text-gray-900 mt-1">
                             {formatIDR(totalSales)}
                           </p>
                           <span className="text-[8px] text-emerald-600 font-semibold block mt-1.5 flex items-center gap-0.5">
-                            <ArrowUpRight className="w-2.5 h-2.5" /> +8.5% jam ini
+                            <ArrowUpRight className="w-2.5 h-2.5" /> +8.5% {t('device.laptop.this_hour')}
                           </span>
                         </div>
 
                         <div className="bg-white border border-gray-200 p-3 rounded-[6px]">
-                          <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wide">Sales Today</span>
+                          <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wide">{t('device.laptop.sales_today')}</span>
                           <p className="text-sm font-mono font-bold text-gray-900 mt-1">
                             284 Transaksi
                           </p>
                           <span className="text-[8px] text-gray-500 font-semibold block mt-1.5">
-                            Konversi stabil
+                            {t('device.laptop.stable')}
                           </span>
                         </div>
 
                         <div className="bg-white border border-gray-200 p-3 rounded-[6px]">
-                          <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wide">Discount Today</span>
+                          <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wide">{t('device.laptop.discount_today')}</span>
                           <p className="text-sm font-mono font-bold text-gray-900 mt-1">
                             Rp 125.000
                           </p>
                           <span className="text-[8px] text-gray-500 font-semibold block mt-1.5">
-                            total discount
+                            {t('device.laptop.total_discount')}
                           </span>
                         </div>
                       </div>
@@ -315,11 +317,11 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                         <div className="bg-white border border-gray-200 p-3.5 rounded-[6px] lg:col-span-2">
                           <div className="flex items-center justify-between mb-3">
                             <div>
-                              <h4 className="text-xs font-bold text-gray-900">Grafik Aliran Omset Harian</h4>
-                              <p className="text-[8px] text-gray-500 mt-0.5">Laporan real-time jam ke jam</p>
+                              <h4 className="text-xs font-bold text-gray-900">{t('device.laptop.sales_chart_title')}</h4>
+                              <p className="text-[8px] text-gray-500 mt-0.5">{t('device.laptop.sales_chart_sub')}</p>
                             </div>
                             <span className="text-[9px] font-semibold text-gray-500 border border-gray-200 px-2 py-0.5 rounded">
-                              Hari Ini
+                              {t('device.laptop.today')}
                             </span>
                           </div>
 
@@ -355,8 +357,8 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                         {/* Best Selling Products bar list */}
                         <div className="bg-white border border-gray-200 p-3.5 rounded-[6px] flex flex-col justify-between">
                           <div>
-                            <h4 className="text-xs font-bold text-gray-900">Menu Paling Laris</h4>
-                            <p className="text-[8px] text-gray-500 mt-0.5">Volume penjualan tertinggi hari ini</p>
+                            <h4 className="text-xs font-bold text-gray-900">{t('device.laptop.best_seller_title')}</h4>
+                            <p className="text-[8px] text-gray-500 mt-0.5">{t('device.laptop.best_seller_sub')}</p>
                           </div>
 
                           <div className="space-y-2 mt-4 flex-1 flex flex-col justify-center">
@@ -377,9 +379,9 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                           </div>
 
                           <div className="text-[9px] text-gray-500 pt-2 border-t border-gray-200 flex items-center justify-between mt-2">
-                            <span>Stabil sejak jam sibuk siang</span>
+                            <span>{t('device.laptop.stable')}</span>
                             <span className="font-bold flex items-center gap-0.5 text-emerald-600">
-                              98% Akurat
+                              98% {t('device.laptop.accuracy')}
                             </span>
                           </div>
                         </div>
@@ -393,9 +395,9 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                         <div className="bg-white border border-gray-200 p-3 rounded-[6px]">
                           <div className="flex justify-between items-center mb-2 pb-2 border-b border-gray-200">
                             <span className="text-[10px] font-bold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
-                              <Box className="w-3.5 h-3.5 text-gray-500" /> Mutasi Inventaris
+                              <Box className="w-3.5 h-3.5 text-gray-500" /> {t('device.laptop.stock_movement')}
                             </span>
-                            <span className="text-[8px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded font-mono uppercase">Gudang Utama</span>
+                            <span className="text-[8px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded font-mono uppercase">{t('device.laptop.main_warehouse')}</span>
                           </div>
 
                           <div className="space-y-2 h-28 overflow-y-auto no-scrollbar">
@@ -414,7 +416,7 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                                 </div>
                                 <div className="text-right">
                                   <span className={`font-semibold ${m.type === 'IN' ? 'text-emerald-600' : 'text-amber-600'}`}>
-                                    {m.type === 'IN' ? '+' : '-'}{m.quantity} Unit
+                                    {m.type === 'IN' ? '+' : '-'}{m.quantity} {t('device.pcs')}
                                   </span>
                                   <span className="text-[8px] text-gray-500 block">{m.timestamp}</span>
                                 </div>
@@ -428,7 +430,7 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                           <div>
                             <div className="flex justify-between items-center mb-2 pb-2 border-b border-gray-200">
                               <span className="text-[10px] font-bold text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
-                                <AlertTriangle className="w-3.5 h-3.5 text-red-500 animate-pulse" /> Peringatan Reorder Cepat (Sistem Otomatis)
+                                <AlertTriangle className="w-3.5 h-3.5 text-red-500 animate-pulse" /> {t('device.laptop.restock_alert_title')}
                               </span>
                             </div>
 
@@ -440,13 +442,13 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                                   <div key={p.id} className="flex justify-between items-center bg-red-50 p-2 border border-red-200 rounded-[4px]">
                                     <div>
                                       <div className="text-[10px] font-semibold text-gray-700 leading-tight">{p.name}</div>
-                                      <div className="text-[8px] text-red-600 mt-0.5">Sisa stok: {p.stock} pcs • Batas aman 18</div>
+                                      <div className="text-[8px] text-red-600 mt-0.5">{t('device.laptop.remaining_stock')}: {p.stock} {t('device.pcs')} • {t('device.laptop.safety_limit')} 18</div>
                                     </div>
                                     <button
                                       onClick={() => triggerRestock(p.id)}
                                       className="text-[9px] font-bold text-white bg-red-600 hover:bg-red-700 px-2.5 py-1 rounded-[4px] cursor-pointer active:scale-95 transition-all"
                                     >
-                                      Restock +100
+                                      {t('device.laptop.restock_btn')}
                                     </button>
                                   </div>
                                 );
@@ -463,13 +465,13 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                       <table className="w-full text-left border-collapse text-[11px]">
                         <thead>
                           <tr className="bg-gray-50 text-gray-500 border-b border-gray-200">
-                            <th className="p-3 font-semibold text-[10px] uppercase">SKU</th>
-                            <th className="p-3 font-semibold text-[10px] uppercase">Nama Menu</th>
-                            <th className="p-3 font-semibold text-[10px] uppercase">Kategori</th>
-                            <th className="p-3 font-semibold text-[10px] uppercase text-right">Harga Satuan</th>
-                            <th className="p-3 font-semibold text-[10px] uppercase text-center">Stok Gudang</th>
-                            <th className="p-3 font-semibold text-[10px] uppercase text-center">Status</th>
-                            <th className="p-3 font-semibold text-[10px] uppercase text-center">Aksi Cepat</th>
+                            <th className="p-3 font-semibold text-[10px] uppercase">{t('device.laptop.sku')}</th>
+                            <th className="p-3 font-semibold text-[10px] uppercase">{t('device.laptop.name')}</th>
+                            <th className="p-3 font-semibold text-[10px] uppercase">{t('device.laptop.category')}</th>
+                            <th className="p-3 font-semibold text-[10px] uppercase text-right">{t('device.laptop.price')}</th>
+                            <th className="p-3 font-semibold text-[10px] uppercase text-center">{t('device.laptop.warehouse_stock')}</th>
+                            <th className="p-3 font-semibold text-[10px] uppercase text-center">{t('device.laptop.status')}</th>
+                            <th className="p-3 font-semibold text-[10px] uppercase text-center">{t('device.laptop.action')}</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
@@ -485,15 +487,15 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                                   Rp {p.price.toLocaleString('id-ID')}
                                 </td>
                                 <td className="p-3 text-center font-mono font-bold text-gray-900">
-                                  {p.stock} Pcs
+                                  {p.stock} {t('device.pcs')}
                                 </td>
                                 <td className="p-3 text-center">
                                   {isCritical ? (
-                                    <span className="bg-red-50 text-red-600 border border-red-200 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">Kritis</span>
+                                    <span className="bg-red-50 text-red-600 border border-red-200 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">{t('device.laptop.status_critical')}</span>
                                   ) : isLow ? (
-                                    <span className="bg-amber-50 text-amber-600 border border-amber-200 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">Menipis</span>
+                                    <span className="bg-amber-50 text-amber-600 border border-amber-200 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">{t('device.laptop.status_low')}</span>
                                   ) : (
-                                    <span className="bg-emerald-50 text-emerald-600 border border-emerald-200 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">Aman</span>
+                                    <span className="bg-emerald-50 text-emerald-600 border border-emerald-200 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">{t('device.laptop.status_safe')}</span>
                                   )}
                                 </td>
                                 <td className="p-3 text-center">
@@ -501,7 +503,7 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                                     onClick={() => triggerRestock(p.id)}
                                     className="bg-gray-900 hover:bg-gray-800 text-white px-3 py-1 rounded-[4px] text-[10px] font-semibold active:scale-95 transition-all cursor-pointer"
                                   >
-                                    Restock +100
+                                    {t('device.laptop.restock_btn')}
                                   </button>
                                 </td>
                               </tr>

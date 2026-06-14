@@ -7,6 +7,7 @@ import React from 'react';
 import { Smartphone, ChevronRight, CircleUser, ShoppingBag, BellRing, TrendingUp, DollarSign } from 'lucide-react';
 import { Product } from '../types';
 import { INITIAL_PRODUCTS } from '../data';
+import { useLanguage } from '../i18n';
 
 interface DevicePhoneProps {
   lastTransactionTotal?: number;
@@ -15,6 +16,7 @@ interface DevicePhoneProps {
 }
 
 export default function DevicePhone({ lastTransactionTotal = 58000, lastPaymentMethod = 'QRIS', isSyncd = true }: DevicePhoneProps) {
+  const { t } = useLanguage();
   return (
     <div className="w-[280px] mx-auto scale-95 md:scale-100 transition-all font-sans" id="phone-pos-wrapper">
       {/* Phone Outer Shell - Pristine Minimalist Frame */}
@@ -46,12 +48,12 @@ export default function DevicePhone({ lastTransactionTotal = 58000, lastPaymentM
               </div>
               <div>
                 <h4 className="text-[10px] font-bold tracking-tight text-[#1A1A1A]">ZonaKasir</h4>
-                <p className="text-[8px] text-[#666666]">Laporan Cabang Utama</p>
+                <p className="text-[8px] text-[#666666]">{t('device.phone.branch_report')}</p>
               </div>
             </div>
             
             <span className="text-[8px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 px-1.5 py-0.5 rounded-[4px] uppercase tracking-wide">
-              Aktif
+              {t('device.phone.active')}
             </span>
           </div>
 
@@ -61,7 +63,7 @@ export default function DevicePhone({ lastTransactionTotal = 58000, lastPaymentM
             {/* Saldo Tersedia KPI Box — matches real BalanceWidget */}
             <div className="bg-white p-3 rounded-[6px] border border-[#E5E5E1] shadow-xs">
               <div className="flex items-center justify-between text-[#666666] text-[8px] font-bold uppercase tracking-wider">
-                <span>Saldo Tersedia</span>
+                <span>{t('device.phone.balance')}</span>
                 <DollarSign className="w-3.5 h-3.5 text-[#FF6600]" />
               </div>
               <div className="mt-1 flex items-baseline">
@@ -70,7 +72,7 @@ export default function DevicePhone({ lastTransactionTotal = 58000, lastPaymentM
                 </span>
               </div>
               <div className="flex items-center justify-between text-[8px] text-[#666666] mt-2.5 pt-2 border-t border-dashed border-[#E5E5E1]">
-                <span>Today Revenue: <strong className="text-[#1A1A1A] font-bold">Rp 12.840.000</strong></span>
+                <span>{t('device.phone.today_revenue')} <strong className="text-[#1A1A1A] font-bold">Rp 12.840.000</strong></span>
                 <span className="text-emerald-700 font-bold">+12%</span>
               </div>
             </div>
@@ -78,7 +80,7 @@ export default function DevicePhone({ lastTransactionTotal = 58000, lastPaymentM
             {/* Realtime sales activity logs */}
             <div className="space-y-1.5">
               <span className="text-[8px] text-[#666666] font-bold uppercase tracking-wider block px-1">
-                Laporan Penjualan Baru
+                {t('device.phone.new_sales')}
               </span>
               
               <div className="bg-white rounded-[6px] border border-[#E5E5E1] p-2 divide-y divide-gray-100 divide-dashed shadow-xs">
@@ -88,7 +90,7 @@ export default function DevicePhone({ lastTransactionTotal = 58000, lastPaymentM
                     <div>
                       <div className="text-[9px] font-bold text-[#1A1A1A] flex items-center gap-1">
                         <span>#ZK-TRX-285</span>
-                        <span className="text-[7px] text-[#888888] font-mono">Baru</span>
+                        <span className="text-[7px] text-[#888888] font-mono">{t('device.phone.new_label')}</span>
                       </div>
                       <div className="text-[8px] text-gray-400 mt-0.5">Sandi • {lastPaymentMethod}</div>
                     </div>
@@ -124,14 +126,14 @@ export default function DevicePhone({ lastTransactionTotal = 58000, lastPaymentM
             {/* In-app stock alerts display list */}
             <div className="space-y-1.5">
               <span className="text-[8px] text-[#666666] font-bold uppercase tracking-wider block px-1">
-                Pantau Stok Kritis
+                {t('device.phone.critical_stock')}
               </span>
               <div className="grid grid-cols-2 gap-2">
                 <div className="bg-red-50 border border-red-200 p-2 rounded-[6px]">
                   <div className="text-[9px] font-bold text-[#1A1A1A] truncate">Almond Croissant</div>
                   <div className="flex justify-between items-center text-[8px] text-red-700 font-semibold mt-1">
                     <span>SKU ZK-002</span>
-                    <span>18 Pcs</span>
+                    <span>18 {t('device.pcs')}</span>
                   </div>
                 </div>
 
@@ -139,7 +141,7 @@ export default function DevicePhone({ lastTransactionTotal = 58000, lastPaymentM
                   <div className="text-[9px] font-bold text-[#1A1A1A] truncate">Chocolate Cookie</div>
                   <div className="flex justify-between items-center text-[8px] text-amber-700 font-semibold mt-1">
                     <span>SKU ZK-006</span>
-                    <span>4 Pcs</span>
+                    <span>4 {t('device.pcs')}</span>
                   </div>
                 </div>
               </div>
@@ -151,20 +153,20 @@ export default function DevicePhone({ lastTransactionTotal = 58000, lastPaymentM
           <div className="h-11 bg-white border-t border-[#E5E5E1] flex items-center justify-around px-2 text-[#666666] text-[8px] select-none">
             <button className="flex flex-col items-center gap-0.5 text-[#FF6600] font-bold">
               <Smartphone className="w-3.5 h-3.5" />
-              <span>Ringkasan</span>
+              <span>{t('device.phone.summary')}</span>
             </button>
             <button className="flex flex-col items-center gap-0.5 hover:text-[#1A1A1A]">
               <ShoppingBag className="w-3.5 h-3.5" />
-              <span>Laporan</span>
+              <span>{t('device.phone.reports')}</span>
             </button>
             <button className="flex flex-col items-center gap-0.5 hover:text-[#1A1A1A] relative">
               <BellRing className="w-3.5 h-3.5" />
-              <span>Notifikasi</span>
+              <span>{t('device.phone.notifications')}</span>
               <span className="absolute top-0 right-3.5 w-1.5 h-1.5 bg-red-600 rounded-full" />
             </button>
             <button className="flex flex-col items-center gap-0.5 hover:text-[#1A1A1A]">
               <CircleUser className="w-3.5 h-3.5" />
-              <span>Profil</span>
+              <span>{t('device.phone.profile')}</span>
             </button>
           </div>
 
