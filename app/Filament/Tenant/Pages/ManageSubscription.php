@@ -7,20 +7,13 @@ use App\Models\Plan;
 use App\Models\Subscription;
 use App\Services\InvoiceService;
 use App\Services\PlanAccessService;
-use Filament\Forms\Components\Radio;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class ManageSubscription extends Page implements HasForms
+class ManageSubscription extends Page
 {
-    use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
@@ -32,49 +25,15 @@ class ManageSubscription extends Page implements HasForms
 
     protected static ?string $slug = 'subscription';
 
-    public ?array $data = [];
-
     public ?string $snapRedirectUrl = null;
 
-    public function mount(): void
+    public function subscribePlan(int $planId): void
     {
-        $this->form->fill();
+        $this->processSubscription($planId, 'monthly');
     }
 
-    public function form(Form $form): Form
+    private function processSubscription(int $planId, string $billingCycle): void
     {
-        $plans = Plan::where('is_active', true)->orderBy('price_monthly')->get();
-
-        $planOptions = $plans->mapWithKeys(fn ($p) => [
-            $p->id => "{$p->name} — Rp ".number_format($p->price_monthly, 0, ',', '.').'/bln'.($p->price_yearly ? ' (Rp '.number_format($p->price_yearly, 0, ',', '.').'/thn)' : ''),
-        ])->toArray();
-
-        return $form
-            ->schema([
-                Section::make('Pilih Paket')
-                    ->schema([
-                        Radio::make('data.plan_id')
-                            ->label('Available Plans')
-                            ->options($planOptions)
-                            ->required(),
-                        Select::make('data.billing_cycle')
-                            ->label('Billing Cycle')
-                            ->options([
-                                'monthly' => 'Monthly',
-                                'yearly' => 'Yearly',
-                            ])
-                            ->default('monthly')
-                            ->required(),
-                    ]),
-            ]);
-    }
-
-    public function subscribe(): void
-    {
-        $data = $this->form->getState()['data'];
-
-        $planId = $data['plan_id'];
-        $billingCycle = $data['billing_cycle'];
         $tenantId = auth()->user()->tenant_id;
 
         try {
@@ -89,6 +48,23 @@ class ManageSubscription extends Page implements HasForms
 
             if (! $subscription) {
                 throw new \RuntimeException('No active subscription found');
+            }
+
+            if (($plan->price_monthly ?? 0) === 0) {
+                $subscription->update([
+                    'plan_id' => $plan->id,
+                    'billing_cycle' => 'monthly',
+                    'starts_at' => now(),
+                    'ends_at' => null,
+                ]);
+
+                Notification::make()
+                    ->title('Plan updated')
+                    ->body('Switched to '.$plan->name.' (Free)')
+                    ->success()
+                    ->send();
+
+                return;
             }
 
             $invoice = app(InvoiceService::class)->createInvoice($subscription, 'midtrans');
