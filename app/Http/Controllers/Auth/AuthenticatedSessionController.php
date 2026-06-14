@@ -71,10 +71,9 @@ class AuthenticatedSessionController extends Controller
                 ->log('Logout');
         }
 
-        // Handle API (Sanctum) logout
+        // Handle API (Sanctum) logout — revoke ALL tokens
         if ($request->wantsJson()) {
-            // Revoke all tokens for the current user
-            $request->user()?->currentAccessToken()?->delete();
+            $request->user()?->tokens()->delete();
 
             return response()->json([
                 'success' => true,
@@ -82,12 +81,18 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
-        Auth::guard('web')->logout();
+        $guard = Auth::guard('web');
+        $guard->logout();
 
-        $request->session()->invalidate();
+        $session = $request->session();
+        $session->invalidate();
+        $session->regenerateToken();
 
-        $request->session()->regenerateToken();
+        // Clear session cookie
+        $sessionName = config('session.cookie', 'laravel_session');
+        $response = redirect()->route('filament.tenant.auth.login');
+        $response->headers->setCookie(cookie()->forget($sessionName));
 
-        return response()->noContent();
+        return $response;
     }
 }
