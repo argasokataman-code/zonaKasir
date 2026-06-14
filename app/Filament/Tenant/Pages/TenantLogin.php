@@ -17,6 +17,9 @@ class TenantLogin extends Login
 {
     public function authenticate(): ?LoginResponse
     {
+        \App\Services\TenantContext::reset();
+        session()->forget('tenant_id');
+
         $data = $this->form->getState();
         $guard = Filament::getCurrentPanel()?->getAuthGuard();
         $attempt = Auth::guard($guard)->attempt(
@@ -28,8 +31,6 @@ class TenantLogin extends Login
             'guard' => $guard,
             'email' => $data['email'] ?? 'MISSING',
             'attempt_result' => $attempt ? 'true' : 'false',
-            'tenant_context' => \App\Services\TenantContext::get(),
-            'session_tenant' => session('tenant_id'),
         ]);
         if (! $attempt) {
             $this->throwFailureValidationException();
