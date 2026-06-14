@@ -88,10 +88,12 @@ class PlanResource extends Resource
                     ->dateTime('d M Y')
                     ->sortable(),
                 TextColumn::make('features')
-                    ->formatStateUsing(fn ($state) => collect($state)
+                    ->formatStateUsing(fn ($state) => collect(
+                        is_string($state) ? json_decode($state, true) ?? [] : ($state ?? [])
+                    )
                         ->map(fn ($f) => config('plans.features.'.$f, $f))
                         ->take(4)
-                        ->implode(', ').(count($state) > 4 ? ' +'.(count($state) - 4).' more' : '')),
+                        ->implode(', ').((is_countable($state) ? count($state) : 0) > 4 ? ' +'.((is_countable($state) ? count($state) : 0) - 4).' more' : '')),
             ])
             ->defaultSort('price_monthly')
             ->actions([
