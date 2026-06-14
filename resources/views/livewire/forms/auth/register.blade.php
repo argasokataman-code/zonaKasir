@@ -1,9 +1,6 @@
 <div class="min-h-screen bg-[#F4F4F2] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
   {{-- Background wallpaper from landing page --}}
-  <div class="absolute inset-0 z-0">
-    <img src="/images/landing/retail_hero_bg_1781378962689.jpg" alt="" class="w-full h-full object-cover opacity-[0.06] grayscale contrast-125 select-none">
-    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#F4F4F2]/60 to-[#F4F4F2]" />
-  </div>
+  <div class="absolute inset-0 z-0" style="background: linear-gradient(to bottom, transparent 0%, rgba(244,244,242,0.6) 50%, #F4F4F2 100%), url('/images/landing/retail_hero_bg_1781378962689.jpg') center/cover no-repeat; opacity: 0.4; filter: grayscale(1) contrast(1.25);"></div>
 
   <div class="w-full max-w-lg relative z-10">
     {{-- Brand Header --}}
