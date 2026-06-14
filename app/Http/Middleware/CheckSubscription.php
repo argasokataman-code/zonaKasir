@@ -17,6 +17,16 @@ class CheckSubscription
             return $next($request);
         }
 
+        // Check for explicitly expired subscription
+        $expiredSub = Subscription::where('tenant_id', $tenantId)
+            ->where('status', 'expired')
+            ->latest()
+            ->first();
+
+        if ($expiredSub) {
+            return $this->blockIfApi($request);
+        }
+
         $subscription = Subscription::where('tenant_id', $tenantId)
             ->whereIn('status', ['trialing', 'active'])
             ->latest()
