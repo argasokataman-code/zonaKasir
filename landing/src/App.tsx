@@ -770,8 +770,6 @@ export default function App() {
 
                   {/* Metallic Laptop Keyboard Base */}
                   <div className="relative w-[348px] h-3 bg-[#E0E0E0] rounded-b-[10px] border-t border-white shadow-xl flex justify-center items-start z-20 shrink-0">
-                    {/* Hinge Connection */}
-                    <div className="absolute -top-[4px] left-1/2 -translate-x-1/2 w-32 h-[5px] bg-[#222225] rounded-t-[2px] border-b border-[#111]" />
                     {/* Trackpad */}
                     <div className="w-20 h-[6px] bg-[#CCCCCC] border border-gray-400/50 rounded-b-[3px] -mt-[0.5px] border-t-0 shadow-inner" />
                   </div>
