@@ -16,13 +16,14 @@ class GoogleController extends Controller
     {
         return Socialite::driver('google')
             ->scopes(['openid', 'profile', 'email'])
+            ->stateless()
             ->redirect();
     }
 
     public function callback(): RedirectResponse
     {
         try {
-            $googleUser = Socialite::driver('google')->user();
+            $googleUser = Socialite::driver('google')->stateless()->user();
             $googleId = $googleUser->getId();
 
             // Find tenant by google_id in central DB
