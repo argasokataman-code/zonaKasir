@@ -54,7 +54,7 @@ class TransactionStats extends BaseWidget
                 ->description($txnTrend)
                 ->descriptionIcon($txnColor === 'success' ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($txnColor),
-            Stat::make(__('Rata-rata per Transaksi'), 'Rp ' . Number::format($today->avg_transaction, 0, ',', '.'))
+            Stat::make(__('Rata-rata per Transaksi'), 'Rp ' . Number::format($today->avg_transaction, thousandsSeparator: '.'))
                 ->descriptionIcon('heroicon-m-calculator')
                 ->color('info'),
             Stat::make(__('Total Item Terjual'), number_format($today->total_items))
