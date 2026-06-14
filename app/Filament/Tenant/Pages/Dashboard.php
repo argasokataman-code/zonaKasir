@@ -12,7 +12,6 @@ use App\Filament\Tenant\Widgets\SalesChart;
 use App\Filament\Tenant\Widgets\TenantNotifications;
 use App\Filament\Tenant\Widgets\TodaysBestSellingProduct;
 use App\Filament\Tenant\Widgets\TransactionStats;
-use App\Filament\Tenant\Widgets\TrialBanner;
 use Filament\Forms\Components\DatePicker;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
@@ -24,7 +23,6 @@ class Dashboard extends BaseDashboard
     protected function getHeaderWidgets(): array
     {
         return [
-            TrialBanner::class,
             QuickActions::class,
             SellingOverview::class,
             TransactionStats::class,
