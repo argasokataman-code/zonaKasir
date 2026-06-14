@@ -1,9 +1,25 @@
 @if($isTrial && $daysRemaining !== null)
+  @php
+    if ($daysRemaining <= 2) {
+      $bgClass = 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800';
+      $textClass = 'text-red-800 dark:text-red-200';
+      $subTextClass = 'text-red-600 dark:text-red-400';
+      $btnClass = 'text-red-700 bg-red-100 hover:bg-red-200 dark:text-red-200 dark:bg-red-800 dark:hover:bg-red-700';
+    } elseif ($daysRemaining <= 5) {
+      $bgClass = 'bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800';
+      $textClass = 'text-yellow-800 dark:text-yellow-200';
+      $subTextClass = 'text-yellow-600 dark:text-yellow-400';
+      $btnClass = 'text-yellow-700 bg-yellow-100 hover:bg-yellow-200 dark:text-yellow-200 dark:bg-yellow-800 dark:hover:bg-yellow-700';
+    } else {
+      $bgClass = 'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800';
+      $textClass = 'text-blue-800 dark:text-blue-200';
+      $subTextClass = 'text-blue-600 dark:text-blue-400';
+      $btnClass = 'text-blue-700 bg-blue-100 hover:bg-blue-200 dark:text-blue-200 dark:bg-blue-800 dark:hover:bg-blue-700';
+    }
+  @endphp
+
   <div class="mb-4">
-    <div class="flex items-center justify-between p-4 rounded-lg
-      {{ $daysRemaining <= 2 ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' :
-         $daysRemaining <= 5 ? 'bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800' :
-         'bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800' }}">
+    <div class="flex items-center justify-between p-4 rounded-lg {{ $bgClass }}">
 
       <div class="flex items-center gap-3">
         <div class="flex-shrink-0">
@@ -23,10 +39,7 @@
         </div>
 
         <div>
-          <p class="text-sm font-medium
-            {{ $daysRemaining <= 2 ? 'text-red-800 dark:text-red-200' :
-               $daysRemaining <= 5 ? 'text-yellow-800 dark:text-yellow-200' :
-               'text-blue-800 dark:text-blue-200' }}">
+          <p class="text-sm font-medium {{ $textClass }}">
             @if($daysRemaining <= 0)
               Trial sudah berakhir! Silakan berlangganan.
             @elseif($daysRemaining == 1)
@@ -35,20 +48,14 @@
               Trial versi — {{ $daysRemaining }} hari lagi
             @endif
           </p>
-          <p class="text-xs
-            {{ $daysRemaining <= 2 ? 'text-red-600 dark:text-red-400' :
-               $daysRemaining <= 5 ? 'text-yellow-600 dark:text-yellow-400' :
-               'text-blue-600 dark:text-blue-400' }}">
+          <p class="text-xs {{ $subTextClass }}">
             Upgrade ke paket berbayar untuk menggunakan fitur lengkap.
           </p>
         </div>
       </div>
 
-      <a href="{{ \Filament\Facades\Filament::getPanel('tenant')-> getPageUrl('subscription') }}"
-         class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-lg
-         {{ $daysRemaining <= 2 ? 'text-red-700 bg-red-100 hover:bg-red-200 dark:text-red-200 dark:bg-red-800 dark:hover:bg-red-700' :
-            $daysRemaining <= 5 ? 'text-yellow-700 bg-yellow-100 hover:bg-yellow-200 dark:text-yellow-200 dark:bg-yellow-800 dark:hover:bg-yellow-700' :
-            'text-blue-700 bg-blue-100 hover:bg-blue-200 dark:text-blue-200 dark:bg-blue-800 dark:hover:bg-blue-700' }}">
+      <a href="{{ \Filament\Facades\Filament::getPanel('tenant')->getPages()['subscription']::getUrl() }}"
+         class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-lg {{ $btnClass }}">
         {{ $daysRemaining <= 0 ? 'Berlangganan Sekarang' : 'Lihat Paket' }}
       </a>
     </div>
