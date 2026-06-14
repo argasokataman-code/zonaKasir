@@ -1359,6 +1359,120 @@ const translations: TranslationDict = {
     AR: 'قطعة', ES: 'pz', PT: 'pç', FR: 'pièces',
     ZH: '件', JA: '個', KO: '개', HI: 'टुकड़े',
   },
+
+  // ==================== PRICING SECTION ====================
+  'pricing.label': {
+    ID: 'KATALOG PAKET BERLANGGANAN', EN: 'SUBSCRIPTION PLANS',
+    AR: 'خطط الاشتراك', ES: 'PLANES DE SUSCRIPCIÓN',
+    PT: 'PLANOS DE ASSINATURA', FR: 'PLANS D\'ABONNEMENT',
+    ZH: '订阅方案', JA: 'サブスクリプションプラン', KO: '구독 요금제', HI: 'सदस्यता योजनाएँ',
+  },
+  'pricing.title': {
+    ID: 'Pilih Paket Sesuai Skala Bisnis Anda.', EN: 'Choose a Plan That Fits Your Business.',
+    AR: 'اختر خطة تناسب عملك.', ES: 'Elija un Plan que se Adapte a su Negocio.',
+    PT: 'Escolha um Plano que se Adapte ao seu Negócio.', FR: 'Choisissez un Plan Adapté à Votre Entreprise.',
+    ZH: '选择适合您业务的方案。', JA: 'あなたのビジネスに合ったプランを選びましょう。', KO: '비즈니스에 맞는 요금제를 선택하세요.', HI: 'अपने व्यवसाय के अनुकूल योजना चुनें।',
+  },
+  'pricing.desc': {
+    ID: 'Didesain khusus untuk menyokong efisiensi operasional UMKM retail mandiri hingga franchise besar multi-cabang di Nusantara.',
+    EN: 'Designed to support operational efficiency from independent retail SMEs to large multi-branch franchises across the archipelago.',
+    AR: 'مصمم لدعم الكفاءة التشغيلية للشركات الصغيرة والمتوسطة إلى الامتيازات الكبيرة متعددة الفروع.', ES: 'Diseñado para apoyar la eficiencia operativa desde PYMEs minoristas hasta grandes franquicias multi-sucursal.',
+    PT: 'Projetado para apoiar a eficiência operacional de PMEs de varejo a grandes franquias multi-filiais.', FR: 'Conçu pour soutenir l\'efficacité opérationnelle des PME de détail aux grandes franchises multi-agences.',
+    ZH: '专为支持从独立零售中小企业到大型多分支特许经营的运营效率而设计。', JA: '独立系小売SMEから大規模多店舗フランチャイズまで、業務効率をサポートするために設計されました。', KO: '독립 소매 SME부터 대규모 다지점 프랜차이즈까지 운영 효율성을 지원하도록 설계되었습니다.', HI: 'स्वतंत्र खुदरा SMEs से लेकर बड़े मल्टी-ब्रांच फ़्रैंचाइज़ी तक परिचालन दक्षता का समर्थन करने के लिए डिज़ाइन किया गया।',
+  },
+  'pricing.monthly': {
+    ID: 'Bulanan', EN: 'Monthly',
+    AR: 'شهري', ES: 'Mensual', PT: 'Mensal', FR: 'Mensuel',
+    ZH: '按月', JA: '月額', KO: '월간', HI: 'मासिक',
+  },
+  'pricing.yearly': {
+    ID: 'Tahunan', EN: 'Yearly',
+    AR: 'سنوي', ES: 'Anual', PT: 'Anual', FR: 'Annuel',
+    ZH: '按年', JA: '年額', KO: '연간', HI: 'वार्षिक',
+  },
+  'pricing.save': {
+    ID: 'Hemat 20%', EN: 'Save 20%',
+    AR: 'وفر 20%', ES: 'Ahorra 20%', PT: 'Economize 20%', FR: 'Économisez 20%',
+    ZH: '节省 20%', JA: '20%お得', KO: '20% 할인', HI: '20% बचाएँ',
+  },
+  'pricing.per_month': {
+    ID: 'Per Outlet / Bulan', EN: 'Per Outlet / Month',
+    AR: 'Per Outlet / Bulan', ES: 'Por Local / Mes',
+    PT: 'Por Loja / Mês', FR: 'Par Point de Vente / Mois',
+    ZH: '每门店/月', JA: '店舗あたり/月', KO: '매장당/월', HI: 'प्रति आउटलेट / माह',
+  },
+  'pricing.features': {
+    ID: 'Fasilitas Utama:', EN: 'Key Features:',
+    AR: 'الميزات الرئيسية:', ES: 'Características Clave:',
+    PT: 'Recursos Principais:', FR: 'Fonctionnalités Clés:',
+    ZH: '主要功能：', JA: '主な機能：', KO: '주요 기능:', HI: 'मुख्य विशेषताएँ:',
+  },
+  'pricing.free_forever': {
+    ID: 'Gratis Selamanya', EN: 'Free Forever',
+    AR: 'مجاني للأبد', ES: 'Gratis para Siempre',
+    PT: 'Grátis para Sempre', FR: 'Gratuit à Vie',
+    ZH: '永久免费', JA: '永久無料', KO: '평생 무료', HI: 'हमेशा के लिए मुफ़्त',
+  },
+  'pricing.popular': {
+    ID: 'Terpopuler', EN: 'Most Popular',
+    AR: 'الأكثر شعبية', ES: 'Más Popular',
+    PT: 'Mais Popular', FR: 'Le Plus Populaire',
+    ZH: '最受欢迎', JA: '人気No.1', KO: '가장 인기', HI: 'सबसे लोकप्रिय',
+  },
+  'pricing.billed': {
+    ID: 'Ditagih', EN: 'Billed',
+    AR: 'مدفوع', ES: 'Facturado',
+    PT: 'Cobrado', FR: 'Facturé',
+    ZH: '付款方式', JA: '請求方法', KO: '청구 방식', HI: 'बिल किया गया',
+  },
+  'pricing.trial': {
+    ID: 'Coba Gratis 30 Hari', EN: 'Free 30-Day Trial',
+    AR: 'تجربة مجانية لمدة 30 يومًا', ES: 'Prueba Gratis de 30 Días',
+    PT: 'Teste Grátis de 30 Dias', FR: 'Essai Gratuit de 30 Jours',
+    ZH: '免费 30 天试用', JA: '30日間無料トライアル', KO: '30일 무료 체험', HI: '30 दिन का मुफ़्त परीक्षण',
+  },
+  'pricing.register': {
+    ID: 'Daftar Gratis', EN: 'Register Free',
+    AR: 'تسجيل مجاني', ES: 'Registro Gratis',
+    PT: 'Registro Grátis', FR: 'Inscription Gratuite',
+    ZH: '免费注册', JA: '無料登録', KO: '무료 등록', HI: 'मुफ़्त पंजीकरण',
+  },
+  'pricing.contact': {
+    ID: 'Hubungi Sales', EN: 'Contact Sales',
+    AR: 'اتصل بالمبيعات', ES: 'Contactar Ventas',
+    PT: 'Fale com Vendas', FR: 'Contacter le Service Commercial',
+    ZH: '联系销售', JA: '営業に問い合わせ', KO: '영업팀 문의', HI: 'सेल्स से संपर्क करें',
+  },
+  'pricing.outlet': {
+    ID: 'Outlet', EN: 'Outlet',
+    AR: 'منفذ', ES: 'Local',
+    PT: 'Loja', FR: 'Point de Vente',
+    ZH: '门店', JA: '店舗', KO: '매장', HI: 'आउटलेट',
+  },
+  'pricing.users': {
+    ID: 'Akun', EN: 'Users',
+    AR: 'مستخدمين', ES: 'Usuarios',
+    PT: 'Usuários', FR: 'Utilisateurs',
+    ZH: '用户', JA: 'ユーザー', KO: '사용자', HI: 'उपयोगकर्ता',
+  },
+  'pricing.billed_monthly': {
+    ID: 'Ditagih Bulanan', EN: 'Billed Monthly',
+    AR: 'مدفوع شهرياً', ES: 'Facturado Mensualmente',
+    PT: 'Cobrado Mensalmente', FR: 'Facturé Mensuellement',
+    ZH: '按月付费', JA: '月額請求', KO: '월별 청구', HI: 'मासिक बिल',
+  },
+  'pricing.billed_yearly': {
+    ID: 'Ditagih Tahunan', EN: 'Billed Yearly',
+    AR: 'مدفوع سنوياً', ES: 'Facturado Anualmente',
+    PT: 'Cobrado Anualmente', FR: 'Facturé Annuellement',
+    ZH: '按年付费', JA: '年額請求', KO: '연간 청구', HI: 'वार्षिक बिल',
+  },
+  'pricing.loading': {
+    ID: 'Memuat paket...', EN: 'Loading plans...',
+    AR: 'جاري تحميل الخطط...', ES: 'Cargando planes...',
+    PT: 'Carregando planos...', FR: 'Chargement des plans...',
+    ZH: '正在加载方案...', JA: 'プランを読み込み中...', KO: '요금제 로딩 중...', HI: 'योजनाएँ लोड हो रही हैं...',
+  },
 };
 
 interface LanguageContextValue {
