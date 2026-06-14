@@ -19,6 +19,14 @@ class TenantLogin extends Login
         /** @var \App\Models\Tenants\User|null $user */
         $user = Filament::auth()->user();
 
+        if ($user) {
+            \Illuminate\Support\Facades\Log::info('Tenant login success', [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'tenant_id' => $user->tenant_id,
+            ]);
+        }
+
         // If authentication did not produce a user (invalid credentials),
         // let the parent class handle the validation failure. Otherwise,
         // ensure we don't call methods on null.
