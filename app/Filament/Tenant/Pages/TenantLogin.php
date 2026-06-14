@@ -28,6 +28,8 @@ class TenantLogin extends Login
             'guard' => $guard,
             'email' => $data['email'] ?? 'MISSING',
             'attempt_result' => $attempt ? 'true' : 'false',
+            'tenant_context' => \App\Services\TenantContext::get(),
+            'session_tenant' => session('tenant_id'),
         ]);
         if (! $attempt) {
             $this->throwFailureValidationException();
