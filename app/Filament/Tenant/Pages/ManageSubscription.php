@@ -62,8 +62,31 @@ class ManageSubscription extends Page
                     ->latest()
                     ->first();
 
+                // If still nothing, create new subscription
                 if (! $subscription) {
-                    throw new \RuntimeException('No subscription found. Please contact support.');
+                    $subscription = Subscription::create([
+                        'tenant_id' => $tenantId,
+                        'plan_id' => $plan->id,
+                        'status' => 'active',
+                        'billing_cycle' => $billingCycle,
+                        'starts_at' => now(),
+                        'ends_at' => $billingCycle === 'yearly' ? now()->addYear() : now()->addMonth(),
+                    ]);
+
+                    if (($plan->price_monthly ?? 0) === 0) {
+                        Notification::make()
+                            ->title('Plan activated')
+                            ->body('Switched to '.$plan->name.' (Free)')
+                            ->success()
+                            ->send();
+
+                        return;
+                    }
+
+                    $invoice = app(InvoiceService::class)->createInvoice($subscription, 'midtrans');
+                    $this->snapRedirectUrl = $this->generateSnapRedirect($invoice, $subscription);
+
+                    return;
                 }
             }
 
