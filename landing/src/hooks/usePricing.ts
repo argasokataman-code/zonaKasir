@@ -11,6 +11,7 @@ export interface Plan {
   max_users: number;
   is_popular: boolean;
   cta: { label: string; action: string };
+  is_on_premise?: boolean;
 }
 
 const API_URL = '/api/pricing';
@@ -36,6 +37,14 @@ const FALLBACK_PLANS: Plan[] = [
     features: { pos: 'Point of Sale (POS)', report: 'Reports & Analytics', stock_management: 'Stock Management', api_access: 'API Access', multi_store: 'Multi Store' },
     max_stores: 99, max_users: 99, is_popular: false,
     cta: { label: 'Hubungi Sales', action: 'contact' },
+  },
+  {
+    id: 4, name: 'On-Premise', slug: 'on-premise',
+    price_monthly: 0, price_yearly: null,
+    features: { pos: 'Point of Sale (POS)', report: 'Reports & Analytics', stock_management: 'Stock Management', multi_store: 'Multi Store', api_access: 'API Access' },
+    max_stores: 99, max_users: 99, is_popular: false,
+    cta: { label: 'Konsultasi Sekarang', action: 'contact' },
+    is_on_premise: true,
   },
 ];
 
