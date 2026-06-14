@@ -6,7 +6,100 @@
 <div class="" x-data="{ cartOpen: false }">
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-4">
     <div class="col-span-1 lg:col-span-2 pb-24 lg:pb-0">
-      {{ $this->table }}
+      {{-- Search --}}
+      <div class="mb-4 px-1">
+        <div class="relative">
+          <x-heroicon-o-magnifying-glass class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+          <input type="text" wire:model.live.debounce.300ms="search"
+            class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-4 text-sm focus:border-zonakasir-primary focus:outline-none focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+            placeholder="{{ __('Search (SKU, name, barcode)') }}">
+        </div>
+      </div>
+
+      {{-- Categories --}}
+      <div class="mb-4 flex gap-2 overflow-x-auto px-1">
+        <button wire:click="$set('selectedCategory', null)"
+          class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors {{ is_null($selectedCategory) ? 'bg-zonakasir-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300' }}">
+          {{ __('All') }}
+        </button>
+        @foreach ($categories as $category)
+          <button wire:click="$set('selectedCategory', {{ $category->id }})"
+            class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors {{ $selectedCategory === $category->id ? 'bg-zonakasir-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300' }}">
+            {{ $category->name }}
+          </button>
+        @endforeach
+      </div>
+
+      {{-- Product Cards Grid --}}
+      <div class="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4" wire:loading.class="opacity-60">
+        @forelse ($products as $product)
+          <div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
+            {{-- Image --}}
+            <div class="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-gray-700">
+              @php $heroImage = $product->heroImage; @endphp
+              @if ($heroImage)
+                <img src="{{ $heroImage }}" alt="{{ $product->name }}" class="h-full w-full object-cover transition-transform group-hover:scale-105">
+              @else
+                <div class="flex h-full items-center justify-center text-gray-400">
+                  <x-heroicon-o-photo class="h-10 w-10" />
+                </div>
+              @endif
+
+              {{-- Stock badge --}}
+              @if (!$product->is_non_stock)
+                @php $stock = $product->stockCalculate; @endphp
+                @if ($stock <= 0)
+                  <div class="absolute inset-0 flex items-center justify-center bg-black/50">
+                    <span class="rounded-md bg-red-600 px-2 py-1 text-xs font-bold text-white">{{ __('Out of stock') }}</span>
+                  </div>
+                @elseif ($stock < Setting::get('minimum_stock_nofication', 10))
+                  <span class="absolute left-2 top-2 rounded-md bg-amber-500 px-1.5 py-0.5 text-xs font-bold text-white shadow-sm">{{ $stock }} {{ __('Stock') }}</span>
+                @endif
+              @endif
+
+              {{-- Cart quantity badge --}}
+              @php $cartQty = $cartItems->first(fn ($i) => $i->product_id === $product->id)?->qty ?? 0; @endphp
+              @if ($cartQty > 0)
+                <span class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm">{{ $cartQty }}</span>
+              @endif
+            </div>
+
+            {{-- Info --}}
+            <div class="flex flex-1 flex-col justify-between p-3">
+              <div>
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ $product->sku }}</p>
+                <h3 class="mt-0.5 text-sm font-semibold leading-tight text-gray-900 dark:text-white line-clamp-2">{{ $product->name }}</h3>
+              </div>
+              <div class="mt-2 flex items-center justify-between">
+                <span class="text-sm font-bold text-zonakasir-primary">{{ price_format($product->sellingPriceCalculate) }}</span>
+                @if ($cartQty === 0)
+                  <button wire:click="addCart({{ $product->id }})" wire:loading.attr="disabled"
+                    class="flex h-8 w-8 items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90 disabled:opacity-50">
+                    <x-heroicon-o-plus class="h-4 w-4" />
+                  </button>
+                @else
+                  <div class="flex items-center gap-1">
+                    <button wire:click="reduceCart({{ $product->id }})" wire:loading.attr="disabled"
+                      class="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
+                      <x-heroicon-o-minus-small class="h-4 w-4" />
+                    </button>
+                    <span class="w-6 text-center text-sm font-semibold text-zonakasir-primary">{{ $cartQty }}</span>
+                    <button wire:click="addCart({{ $product->id }})" wire:loading.attr="disabled"
+                      class="flex h-7 w-7 items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90 disabled:opacity-50">
+                      <x-heroicon-o-plus-small class="h-4 w-4" />
+                    </button>
+                  </div>
+                @endif
+              </div>
+            </div>
+          </div>
+        @empty
+          <div class="col-span-full flex flex-col items-center justify-center py-16 text-gray-400">
+            <x-heroicon-o-cube class="h-16 w-16" />
+            <p class="mt-2 text-lg font-medium">{{ __('Product not found') }}</p>
+          </div>
+        @endforelse
+      </div>
     </div>
 
     {{-- Mobile: cart toggle button with scan --}}
