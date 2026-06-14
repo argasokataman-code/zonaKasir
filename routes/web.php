@@ -3,9 +3,12 @@
 use App\Http\Controllers\Auth\GoogleController;
 use App\Livewire\Forms\Auth\RegisterTenantForm;
 use Illuminate\Support\Facades\Route;
-use Livewire\Volt\Volt;
 
 Route::get('/', function () {
+    return redirect('/landing');
+});
+
+Route::get('/landing', function () {
     return response()->file(public_path('landing/index.html'))
         ->header('Content-Type', 'text/html');
 });

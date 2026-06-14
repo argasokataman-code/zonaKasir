@@ -47,13 +47,14 @@ jobs:
         run: npm ci --no-audit --no-fund
 
       - name: Build frontend
-        run: npm run build
+        run: npm run build:all
 
       - name: Package artifacts
         run: |
           tar czf /tmp/deploy-artifacts.tar.gz \
             vendor \
-            public/build
+            public/build \
+            public/landing
           echo "Artifact size: $(du -sh /tmp/deploy-artifacts.tar.gz | cut -f1)"
 
       - name: Create version tag

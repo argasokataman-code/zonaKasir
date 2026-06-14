@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/tmp
+/public/landing
 /storage/*.key
 /storage/debugbar
 /vendor
@@ -13,6 +14,7 @@
 public/build/manifest.json
 public/build
 *.dmg
+landing/node_modules
 
 # Production env (never commit real .env)
 .env.production
