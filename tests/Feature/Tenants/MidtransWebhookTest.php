@@ -6,9 +6,16 @@ use App\Models\Tenants\PaymentMethod;
 use App\Models\Tenants\About;
 use App\Models\Tenants\User;
 use Illuminate\Support\Facades\Config;
+use Tests\RefreshDatabaseWithTenant;
+
+uses(RefreshDatabaseWithTenant::class);
+
+beforeEach(function () {
+    Config::set('midtrans.server_key', 'test-server-key');
+});
 
 test('webhook handler returns 200 on valid signature', function () {
-    $tenantId = 'webhook_test';
+    $tenantId = 'toko_testing';
 
     $user = User::factory()->create(['tenant_id' => $tenantId]);
     $selling = Selling::factory()->create(['tenant_id' => $tenantId]);
@@ -21,15 +28,15 @@ test('webhook handler returns 200 on valid signature', function () {
     MidtransPayment::create([
         'selling_id' => $selling->id,
         'tenant_id' => $tenantId,
-        'order_id' => 'T' . $tenantId . '-test123',
+        'order_id' => 'T1-test123',
         'gross_amount' => 100000,
         'status' => 'pending',
     ]);
 
     $about = About::first();
-    $serverKey = $about->midtrans_server_key ?? 'test-server-key';
+    $serverKey = 'test-server-key';
     $grossAmount = '100000.00';
-    $orderId = 'T' . $tenantId . '-test123';
+    $orderId = 'T1-test123';
     $statusCode = '200';
     $signatureKey = hash('sha512', $orderId . $statusCode . $grossAmount . $serverKey);
 
@@ -49,12 +56,18 @@ test('webhook handler returns 200 on valid signature', function () {
 });
 
 test('webhook handler rejects invalid IP', function () {
+    $serverKey = 'test-server-key';
+    $grossAmount = '100000.00';
+    $orderId = 'T1-test123';
+    $statusCode = '200';
+    $signatureKey = hash('sha512', $orderId . $statusCode . $grossAmount . $serverKey);
+
     $notification = [
-        'order_id' => 'invalid-order',
         'transaction_status' => 'settlement',
-        'status_code' => '200',
-        'gross_amount' => '100000.00',
-        'signature_key' => 'fake',
+        'status_code' => $statusCode,
+        'gross_amount' => $grossAmount,
+        'order_id' => $orderId,
+        'signature_key' => $signatureKey,
     ];
 
     Config::set('midtrans.webhook_ip_whitelist', ['10.0.0.1']);
