@@ -20,30 +20,7 @@ class TenantLogin extends Login
         \App\Services\TenantContext::reset();
         session()->forget('tenant_id');
 
-        $data = $this->form->getState();
-        $guard = Filament::getCurrentPanel()?->getAuthGuard();
-
-        $userQuery = \App\Models\Tenants\User::where('email', $data['email']);
-        $foundUser = $userQuery->first();
-        $pwOk = $foundUser ? \Illuminate\Support\Facades\Hash::check($data['password'], $foundUser->password) : false;
-
-        $attempt = Auth::guard($guard)->attempt(
-            ['email' => $data['email'], 'password' => $data['password']],
-            $data['remember'] ?? false,
-        );
-        Log::debug('TenantLogin debug', [
-            'panel' => Filament::getCurrentPanel()?->getId(),
-            'guard' => $guard,
-            'email' => $data['email'] ?? 'MISSING',
-            'attempt_result' => $attempt ? 'true' : 'false',
-            'user_found' => $foundUser ? "YES:{$foundUser->id}" : 'NO',
-            'pw_match' => $pwOk ? 'YES' : 'NO',
-            'db' => \Illuminate\Support\Facades\DB::connection()->getDatabaseName(),
-        ]);
-        if (! $attempt) {
-            $this->throwFailureValidationException();
-        }
-        $loginResponse = app(LoginResponse::class);
+        $loginResponse = parent::authenticate();
         /** @var \App\Models\Tenants\User|null $user */
         $user = Filament::auth()->user();
 

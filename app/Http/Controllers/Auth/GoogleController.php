@@ -26,7 +26,7 @@ class GoogleController extends Controller
             $googleId = $googleUser->getId();
 
             // Find tenant by google_id in central DB
-            $tenant = \App\Models\Tenant::where('google_id', $googleId)->first();
+            $tenant = \App\Tenant::where('google_id', $googleId)->first();
 
             if ($tenant) {
                 tenancy()->initialize($tenant);
