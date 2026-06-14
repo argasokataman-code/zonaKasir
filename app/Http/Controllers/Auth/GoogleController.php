@@ -39,7 +39,7 @@ class GoogleController extends Controller
             }
 
             // Check email in tenants table
-            $tenant = \App\Models\Tenant::where('tenancy_email', $googleUser->getEmail())->first();
+            $tenant = \App\Tenant::where('tenancy_email', $googleUser->getEmail())->first();
             if ($tenant) {
                 tenancy()->initialize($tenant);
                 $user = User::where('email', $googleUser->getEmail())->first();
@@ -71,7 +71,7 @@ class GoogleController extends Controller
             if ($user) {
                 $user->update(['google_id' => $googleId]);
             }
-            \App\Models\Tenant::where('id', $tenantId)->update(['google_id' => $googleId]);
+            \App\Tenant::where('id', $tenantId)->update(['google_id' => $googleId]);
 
             Auth::login($user, true);
             return redirect()->intended('/member');
