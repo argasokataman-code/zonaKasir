@@ -35,17 +35,18 @@ class Login extends \Filament\Pages\Auth\Login
             $this->throwFailureValidationException();
         }
 
-        // On some shared hosting (LiteSpeed/cPanel), the Livewire POST response
-        // Set-Cookie header may be stripped by WAF/ModSecurity. This causes the
-        // browser to send the old session ID on the redirect, losing the auth data.
+        // On shared hosting (LiteSpeed/cPanel/WAF), the Livewire POST response
+        // Set-Cookie header gets STRIPPED before reaching the browser.
         //
-        // Fix: save the session to disk with auth data BEFORE regenerating.
-        // This way, even if the browser uses the old session ID, it will still
-        // find the admin auth token and authentication will succeed.
+        // This means the browser never receives the new session cookie after
+        // regenerate(), so it keeps sending the OLD session ID which gets
+        // invalidated — auth data lost.
+        //
+        // Fix: Skip session()->regenerate(). Auth::attempt() already stored
+        // auth data in the CURRENT session (set by StartSession middleware on
+        // the GET /admin/login page). That session ID + cookie still work.
+        // Just save to persist the auth data to disk.
         session()->save();
-
-        // Now regenerate (sends new cookie to browser if not stripped).
-        session()->regenerate();
 
         return app(LoginResponse::class);
     }
