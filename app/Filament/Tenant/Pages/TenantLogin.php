@@ -15,9 +15,32 @@ class TenantLogin extends Login
 {
     public function authenticate(): ?LoginResponse
     {
-        $loginResponse = parent::authenticate();
+        try {
+            $this->rateLimit(5);
+        } catch (\DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException $exception) {
+            $this->getRateLimitedNotification($exception)?->send();
+
+            return null;
+        }
+
+        $data = $this->form->getState();
+
+        if (! Filament::auth()->attempt($this->getCredentialsFromFormData($data), $data['remember'] ?? false)) {
+            $this->throwFailureValidationException();
+        }
+
         /** @var \App\Models\Tenants\User|null $user */
         $user = Filament::auth()->user();
+
+        if (! $user || ! $user->can('access web app')) {
+            Filament::auth()->logout();
+
+            throw ValidationException::withMessages([
+                'data.email' => 'You do not have permission to access the web app',
+            ]);
+
+            return null;
+        }
 
         if ($user) {
             \Illuminate\Support\Facades\Log::info('Tenant login success', [
@@ -27,16 +50,6 @@ class TenantLogin extends Login
             ]);
         }
 
-        // If authentication did not produce a user (invalid credentials),
-        // let the parent class handle the validation failure. Otherwise,
-        // ensure we don't call methods on null.
-        if (! $user || ! $user->can('access web app')) {
-            throw ValidationException::withMessages([
-                'data.email' => 'You do not have permission to access the web app',
-            ]);
-
-            return null;
-        }
         $user->profile()->updateOrCreate(
             [
                 'user_id' => $user->getKey(),
@@ -46,7 +59,12 @@ class TenantLogin extends Login
             ]
         );
 
-        return $loginResponse;
+        // Skip session()->regenerate() — LiteSpeed/WAF strips Set-Cookie
+        // from Livewire POST responses, so browser never gets the new cookie.
+        // Auth::attempt() already stored auth in the current session.
+        session()->save();
+
+        return app(LoginResponse::class);
     }
 
     public function mount(): void
