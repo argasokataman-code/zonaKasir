@@ -98,14 +98,4 @@ return [
         // > 25jt requires 2 admin approvals
     ],
 
-    /*
-     * Midtrans Disbursement/Payout Configuration
-     * Used for withdrawal disbursements to bank accounts
-     */
-    'payout' => [
-        'enabled' => true,
-        'method' => 'midtrans', // 'midtrans' — use Midtrans Disbursement API
-        'url' => env('MIDTRANS_DISBURSEMENT_URL', 'https://api.midtrans.com/v2/disbursement'),
-        'sandbox_url' => env('MIDTRANS_DISBURSEMENT_SANDBOX_URL', 'https://api.sandbox.midtrans.com/v2/disbursement'),
-    ],
 ];

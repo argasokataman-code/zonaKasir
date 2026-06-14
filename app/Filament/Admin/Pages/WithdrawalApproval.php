@@ -79,7 +79,7 @@ class WithdrawalApproval extends Page implements HasForms
             $adminId = auth()->id();
             app(WithdrawalService::class)->approve($withdrawal->id, $adminId);
 
-            Notification::make()->title('Withdrawal approved & disbursed via Midtrans')->success()->send();
+            Notification::make()->title('Withdrawal approved & disbursed via Flip')->success()->send();
             $this->loadPendingWithdrawals();
         } catch (\Throwable $e) {
             Notification::make()->title('Error: ' . $e->getMessage())->danger()->send();

@@ -78,7 +78,6 @@ class GeneralSetting extends Page implements HasActions, HasForms
             'receivable' => Feature::active('receivable'),
             'stock-opname' => Feature::active('stock-opname'),
             'voucher' => Feature::active('voucher'),
-            'pos-v2' => Feature::active('pos-v2'),
             'product-import' => Feature::active('product-import')
         ];
 

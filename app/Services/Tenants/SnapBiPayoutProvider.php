@@ -5,6 +5,11 @@ namespace App\Services\Tenants;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * @deprecated Migrated to FlipPayoutProvider.
+ *             Kept as reference — not active. Binding in AppServiceProvider
+ *             uses FlipPayoutProvider instead.
+ */
 class SnapBiPayoutProvider implements DisbursementProvider
 {
     private const SNAP_BI_SANDBOX_BASE_URL = 'https://merchants.sbx.midtrans.com';
