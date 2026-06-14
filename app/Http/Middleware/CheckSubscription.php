@@ -17,6 +17,11 @@ class CheckSubscription
             return $next($request);
         }
 
+        // Check if user is on login page — skip subscription check
+        if ($request->is('member/login')) {
+            return $next($request);
+        }
+
         // Check for expired / past_due subscription
         $blockedSub = Subscription::where('tenant_id', $tenantId)
             ->whereIn('status', ['expired', 'past_due'])
@@ -63,7 +68,7 @@ class CheckSubscription
             ], 403);
         }
 
-        // For web requests, let the overlay handle it
-        return redirect('/member');
+        // For web requests, redirect to login to break loop
+        return redirect('/member/login');
     }
 }
