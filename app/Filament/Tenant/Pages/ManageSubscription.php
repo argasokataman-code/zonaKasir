@@ -100,10 +100,9 @@ class ManageSubscription extends Page
                 $subscription = Subscription::create([
                     'tenant_id' => $tenantId,
                     'plan_id' => $plan->id,
-                    'status' => 'trialing',
+                    'status' => 'expired',
                     'billing_cycle' => $billingCycle,
                     'starts_at' => now(),
-                    'trial_ends_at' => now()->addDays(7),
                 ]);
             }
 
