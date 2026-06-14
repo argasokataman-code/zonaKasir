@@ -34,6 +34,9 @@ describe('Master Data Management E2E', function () {
                     'description' => 'Electronic devices',
                 ]);
             
+            if ($response->status() === 500) {
+                dump($response->json());
+            }
             expect($response->status())->toBe(Response::HTTP_CREATED);
             expect($response->json())->toHaveKey('data');
             expect($response->json('data.name'))->toBe('Electronics');

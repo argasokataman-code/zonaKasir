@@ -38,18 +38,15 @@ class SupplierController extends HasCrudActionAbstract implements WithSimplePagi
         Validator::make($request->all(), static::rules(null))->validate();
 
         try {
-            DB::beginTransaction();
 
             $supplier = Supplier::create($request->all());
 
-            DB::commit();
 
             return $this->buildResponse()
                 ->setCode(201)
                 ->setData($supplier)
                 ->present();
         } catch (Exception $e) {
-            DB::rollBack();
 
             return $this->buildResponse()
                 ->setCode(500)
@@ -61,18 +58,16 @@ class SupplierController extends HasCrudActionAbstract implements WithSimplePagi
     public function destroy(DestroyActionResolver $resolver, $id): JsonResponse
     {
         try {
-            DB::beginTransaction();
 
             $supplier = Supplier::findOrFail($id);
             $supplier->delete();
 
-            DB::commit();
 
             return $this->buildResponse()
+                ->setCode(204)
                 ->setMessage('Supplier deleted successfully')
                 ->present();
         } catch (Exception $e) {
-            DB::rollBack();
 
             return $this->buildResponse()
                 ->setCode(500)

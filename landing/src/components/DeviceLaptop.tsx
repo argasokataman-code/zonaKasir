@@ -5,7 +5,8 @@ import {
 } from 'recharts';
 import { 
   LayoutDashboard, ClipboardList, TrendingUp, AlertTriangle, ArrowUpRight, 
-  ArrowDownLeft, Box, Download, Settings, Users, Layers, ExternalLink 
+  ArrowDownLeft, Box, Download, Settings, Users, Layers, ExternalLink,
+  Zap, Banknote, CreditCard, Archive, FileText, Printer, ChevronRight
 } from 'lucide-react';
 import { Product, StockMovement } from '../types';
 import { INITIAL_PRODUCTS, STOCK_MOVEMENTS, HOURLY_SALES, BEST_SELLERS } from '../data';
@@ -138,58 +139,80 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                   {/* Brand Header */}
                   <div className="p-4 border-b border-slate-850 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded bg-[#1A1A1A] flex items-center justify-center text-white font-extrabold text-xs">
+                      <div className="w-6 h-6 rounded bg-[#FF6600] flex items-center justify-center text-white font-extrabold text-xs">
                         ZK
                       </div>
                       <span className="font-sans font-bold text-xs tracking-wider text-white uppercase">
-                        ZonaKasir HQ
+                        ZonaKasir
                       </span>
                     </div>
                   </div>
 
-                  {/* Navigation Menu Links */}
-                  <nav className="p-2 space-y-1">
+                  {/* Navigation Menu Links — matches real Filament panel */}
+                  <nav className="p-2 space-y-0.5">
                     <button
                       onClick={() => setSelectedTab('dashboard')}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
+                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] font-bold cursor-pointer transition-all ${
                         selectedTab === 'dashboard' 
-                          ? 'bg-slate-800 text-white shadow-sm' 
+                          ? 'bg-[#FF6600] text-white shadow-sm' 
                           : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
                       }`}
                       id="laptop-tab-dashboard"
                     >
                       <LayoutDashboard className="w-3.5 h-3.5" />
-                      Ringkasan Usaha
+                      Dashboard
                     </button>
 
                     <button
                       onClick={() => setSelectedTab('inventory')}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
+                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] font-bold cursor-pointer transition-all ${
                         selectedTab === 'inventory' 
-                          ? 'bg-slate-800 text-white shadow-sm' 
+                          ? 'bg-[#FF6600] text-white shadow-sm' 
                           : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
                       }`}
                       id="laptop-tab-inventory"
                     >
-                      <ClipboardList className="w-3.5 h-3.5" />
-                      Manajemen Stok
+                      <Zap className="w-3.5 h-3.5" />
+                      POS
                     </button>
 
-                    <div className="pt-4 px-3 pb-1 text-[9px] font-bold text-slate-500 tracking-wider uppercase">
-                      Data & Laporan
+                    <a href="#analytics" className="w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] text-slate-400 font-bold cursor-pointer hover:bg-slate-900/50 hover:text-white">
+                      <Banknote className="w-3.5 h-3.5 text-slate-500" />
+                      Selling History
+                    </a>
+
+                    <div className="pt-3 px-3 pb-1 text-[8px] font-bold text-slate-500 tracking-wider uppercase">
+                      Inventory
                     </div>
 
-                    <a href="#analytics" className="w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] text-slate-400 font-bold uppercase tracking-wider cursor-pointer hover:bg-slate-900/50 hover:text-white">
-                      <TrendingUp className="w-3.5 h-3.5 text-slate-500" />
-                      Grafik Penjualan
-                    </a>
-                    <div className="w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] text-slate-500 font-bold uppercase tracking-wider cursor-not-allowed">
-                      <Users className="w-3.5 h-3.5 text-slate-600" />
-                      Pelanggan & CRM
+                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-slate-400 font-bold cursor-default">
+                      <Archive className="w-3.5 h-3.5 text-slate-600" />
+                      Product
                     </div>
-                    <div className="w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] text-slate-500 font-bold uppercase tracking-wider cursor-not-allowed">
+                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-slate-400 font-bold cursor-default">
+                      <Layers className="w-3.5 h-3.5 text-slate-600" />
+                      Category
+                    </div>
+
+                    <div className="pt-3 px-3 pb-1 text-[8px] font-bold text-slate-500 tracking-wider uppercase">
+                      Lainnya
+                    </div>
+
+                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-slate-500 font-bold cursor-not-allowed">
+                      <Users className="w-3.5 h-3.5 text-slate-600" />
+                      Member
+                    </div>
+                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-slate-500 font-bold cursor-not-allowed">
+                      <CreditCard className="w-3.5 h-3.5 text-slate-600" />
+                      Payment Method
+                    </div>
+                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-slate-500 font-bold cursor-not-allowed">
+                      <FileText className="w-3.5 h-3.5 text-slate-600" />
+                      Report
+                    </div>
+                    <div className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-[5px] text-[11px] text-slate-500 font-bold cursor-not-allowed">
                       <Settings className="w-3.5 h-3.5 text-slate-600" />
-                      Konfigurasi POS
+                      General Setting
                     </div>
                   </nav>
                 </div>
@@ -197,12 +220,12 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                 {/* Bottom staff info */}
                 <div className="p-4 border-t border-slate-850">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-300">
+                    <div className="w-7 h-7 rounded-full bg-[#FF6600]/20 border border-[#FF6600]/30 flex items-center justify-center text-[10px] font-bold text-[#FF6600]">
                       AS
                     </div>
                     <div>
                       <h5 className="text-[10px] font-bold leading-tight truncate">Amanda Setiadi</h5>
-                      <p className="text-[8px] text-[#888888]">Pemilik • Kopi S&S</p>
+                      <p className="text-[8px] text-[#888888]">Admin • Kopi S&S</p>
                     </div>
                   </div>
                 </div>
@@ -242,12 +265,12 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                   {selectedTab === 'dashboard' ? (
                     /* TAB 1: DASHBOARD REALTIME OVERVIEW */
                     <>
-                      {/* Realtime KPI stats blocks */}
+                      {/* Realtime KPI stats blocks — matches real BalanceWidget + SellingOverview */}
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px]">
-                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Omset Hari Ini</span>
-                          <p className="text-sm font-mono font-bold text-white mt-1">
-                            {formatIDR(totalSales)}
+                        <div className="bg-[#FF6600]/10 border border-[#FF6600]/20 p-3 rounded-[6px]">
+                          <span className="text-[9px] text-[#FF6600] font-bold uppercase tracking-wide">Saldo Tersedia</span>
+                          <p className="text-sm font-mono font-bold text-[#FF6600] mt-1">
+                            Rp 4.250.000
                           </p>
                           <span className="text-[8px] text-emerald-400 font-semibold block mt-1.5 flex items-center gap-0.5">
                             <ArrowUpRight className="w-2.5 h-2.5" /> +14.2% vs Kemarin
@@ -255,9 +278,9 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                         </div>
 
                         <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px]">
-                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Transaksi Berhasil</span>
+                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Today Total Revenue</span>
                           <p className="text-sm font-mono font-bold text-white mt-1">
-                            284 Transaksi
+                            {formatIDR(totalSales)}
                           </p>
                           <span className="text-[8px] text-emerald-400 font-semibold block mt-1.5 flex items-center gap-0.5">
                             <ArrowUpRight className="w-2.5 h-2.5" /> +8.5% jam ini
@@ -265,9 +288,9 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                         </div>
 
                         <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px]">
-                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Rata-rata Keranjang</span>
+                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Sales Today</span>
                           <p className="text-sm font-mono font-bold text-white mt-1">
-                            Rp 58.200
+                            284 Transaksi
                           </p>
                           <span className="text-[8px] text-slate-400 font-semibold block mt-1.5">
                             Konversi stabil
@@ -275,12 +298,12 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                         </div>
 
                         <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px]">
-                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Nilai Inventaris</span>
+                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Discount Today</span>
                           <p className="text-sm font-mono font-bold text-white mt-1">
-                            Rp 84.120.000
+                            Rp 125.000
                           </p>
-                          <span className="text-[8px] text-red-400 font-semibold block mt-1.5 flex items-center gap-0.5">
-                            <AlertTriangle className="w-2.5 h-2.5 text-red-500" /> 2 Menu kritis stok
+                          <span className="text-[8px] text-slate-400 font-semibold block mt-1.5">
+                            total discount
                           </span>
                         </div>
                       </div>
@@ -305,8 +328,8 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                               <AreaChart data={HOURLY_SALES} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                                 <defs>
                                   <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />
-                                    <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                                    <stop offset="5%" stopColor="#FF6600" stopOpacity={0.2} />
+                                    <stop offset="95%" stopColor="#FF6600" stopOpacity={0} />
                                   </linearGradient>
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#232329" vertical={false} />
@@ -319,7 +342,7 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                                 <Area 
                                   type="monotone" 
                                   dataKey="sales" 
-                                  stroke="#10b981" 
+                                  stroke="#FF6600" 
                                   strokeWidth={1.5} 
                                   fillOpacity={1} 
                                   fill="url(#salesGrad)" 
@@ -345,7 +368,7 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                                 </div>
                                 <div className="w-full bg-[#1e1e24] h-1.5 rounded-full overflow-hidden">
                                   <div 
-                                    className="bg-emerald-500 h-full rounded-full" 
+                                    className="bg-[#FF6600] h-full rounded-full" 
                                     style={{ width: `${(item.sales / BEST_SELLERS[0].sales) * 100}%` }}
                                   />
                                 </div>
@@ -497,9 +520,6 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
 
           {/* Laptop MacBook Premium Keyboard Base with sleek premium silver look */}
           <div className="relative w-[101.5%] -ml-[0.75%] h-5 bg-gradient-to-b from-[#E0E0E0] via-[#EDEDED] to-[#AEAEAE] rounded-b-[16px] border-t border-white shadow-2xl flex justify-center items-start z-20">
-            {/* Display Hinge Connection */}
-            <div className="absolute -top-[5px] left-1/2 -translate-x-1/2 w-44 h-[6px] bg-[#222225] rounded-t-[3px] border-b border-[#111]" />
-            
             {/* Trackpad Indent */}
             <div className="w-28 h-[10px] bg-gradient-to-b from-[#CCCCCC] to-[#DFDFDF] border border-gray-400/50 rounded-b-[5px] -mt-[1px] border-t-0 shadow-inner" />
           </div>

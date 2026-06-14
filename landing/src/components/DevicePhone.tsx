@@ -41,11 +41,11 @@ export default function DevicePhone({ lastTransactionTotal = 58000, lastPaymentM
           {/* Clean App Header containing identical brand elements */}
           <div className="px-4 py-2 border-b border-[#E5E5E1] flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-5 h-5 bg-[#1A1A1A] rounded-[4px] flex items-center justify-center text-white font-black text-[9px]">
+              <div className="w-5 h-5 bg-[#FF6600] rounded-[4px] flex items-center justify-center text-white font-black text-[9px]">
                 ZK
               </div>
               <div>
-                <h4 className="text-[10px] font-bold tracking-tight text-[#1A1A1A]">ZonaKasir Hub</h4>
+                <h4 className="text-[10px] font-bold tracking-tight text-[#1A1A1A]">ZonaKasir</h4>
                 <p className="text-[8px] text-[#666666]">Laporan Cabang Utama</p>
               </div>
             </div>
@@ -58,20 +58,20 @@ export default function DevicePhone({ lastTransactionTotal = 58000, lastPaymentM
           {/* Dashboard reports and feeds */}
           <div className="flex-1 overflow-y-auto p-3.5 space-y-3.5 no-scrollbar bg-[#F4F4F2]">
             
-            {/* Omset Today KPI Box */}
+            {/* Saldo Tersedia KPI Box — matches real BalanceWidget */}
             <div className="bg-white p-3 rounded-[6px] border border-[#E5E5E1] shadow-xs">
               <div className="flex items-center justify-between text-[#666666] text-[8px] font-bold uppercase tracking-wider">
-                <span>Omset Penjualan</span>
-                <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Saldo Tersedia</span>
+                <DollarSign className="w-3.5 h-3.5 text-[#FF6600]" />
               </div>
               <div className="mt-1 flex items-baseline">
-                <span className="text-[17px] font-mono font-extrabold tracking-tight text-[#1A1A1A]">
-                  Rp {(12840000 + (lastTransactionTotal > 0 ? lastTransactionTotal : 0)).toLocaleString('id-ID')}
+                <span className="text-[17px] font-mono font-extrabold tracking-tight text-[#FF6600]">
+                  Rp 4.250.000
                 </span>
               </div>
               <div className="flex items-center justify-between text-[8px] text-[#666666] mt-2.5 pt-2 border-t border-dashed border-[#E5E5E1]">
-                <span>Transaksi: <strong className="text-[#1A1A1A] font-bold">285 Sukses</strong></span>
-                <span className="text-emerald-700 font-bold">+12% Graf</span>
+                <span>Today Revenue: <strong className="text-[#1A1A1A] font-bold">Rp 12.840.000</strong></span>
+                <span className="text-emerald-700 font-bold">+12%</span>
               </div>
             </div>
 
@@ -149,7 +149,7 @@ export default function DevicePhone({ lastTransactionTotal = 58000, lastPaymentM
 
           {/* Safe humanized bottom navigation bar */}
           <div className="h-11 bg-white border-t border-[#E5E5E1] flex items-center justify-around px-2 text-[#666666] text-[8px] select-none">
-            <button className="flex flex-col items-center gap-0.5 text-[#1A1A1A] font-bold">
+            <button className="flex flex-col items-center gap-0.5 text-[#FF6600] font-bold">
               <Smartphone className="w-3.5 h-3.5" />
               <span>Ringkasan</span>
             </button>

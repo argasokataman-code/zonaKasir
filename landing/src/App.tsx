@@ -329,8 +329,8 @@ export default function App() {
                   <div className="h-full bg-white rounded-[6px] p-4 text-[#1A1A1A] font-sans text-[10px] flex flex-col justify-between border border-gray-100">
                     <div className="flex justify-between items-center pb-2 border-b border-gray-100">
                       <div className="flex items-center gap-1.5">
-                        <div className="w-3.5 h-3.5 bg-[#1A1A1A] rounded-[2px] flex items-center justify-center text-white text-[7px] font-bold">ZK</div>
-                        <span className="font-bold text-[#1A1A1A] uppercase tracking-wider text-[8px]">ZonaKasir Dashboard</span>
+                        <div className="w-3.5 h-3.5 bg-[#FF6600] rounded-[2px] flex items-center justify-center text-white text-[7px] font-bold">ZK</div>
+                        <span className="font-bold text-[#1A1A1A] uppercase tracking-wider text-[8px]">Dashboard</span>
                       </div>
                       <span className="text-[7px] font-semibold text-[#888888]">Laporan Outlet 01</span>
                     </div>
@@ -340,7 +340,7 @@ export default function App() {
                         <div className="w-6 bg-gray-100 h-[30%] rounded-[2px]" />
                         <div className="w-6 bg-gray-100 h-[50%] rounded-[2px]" />
                         <div className="w-6 bg-gray-150 h-[70%] rounded-[2px]" />
-                        <div className="w-6 bg-[#1A1A1A] h-[90%] rounded-[2px] relative">
+                        <div className="w-6 bg-[#FF6600] h-[90%] rounded-[2px] relative">
                           <span className="absolute -top-4 left-1/2 -translate-x-1/2 text-[7px] text-[#1A1A1A] font-extrabold font-mono">12.8M</span>
                         </div>
                       </div>
@@ -368,7 +368,7 @@ export default function App() {
                 <div className="bg-[#1A1A1A] rounded-[8px] p-1.5 border border-[#1A1A1A]">
                   <div className="bg-white rounded-[6px] h-[190px] p-3 flex flex-col justify-between text-gray-800">
                     <div className="flex justify-between border-b border-gray-100 pb-2">
-                      <span className="text-[8px] font-extrabold tracking-wider text-[#1A1A1A] uppercase">Mesin Kasir Utama</span>
+                      <span className="text-[8px] font-extrabold tracking-wider text-[#1A1A1A] uppercase">Terminal POS #01</span>
                       <span className="text-[7px] bg-emerald-50 text-emerald-700 font-extrabold px-1.5 py-0.5 rounded border border-emerald-150 uppercase tracking-widest">LUNAS</span>
                     </div>
                     
@@ -388,7 +388,7 @@ export default function App() {
                         <span>TOTAL TUNAI</span>
                         <span className="font-mono">Rp 79.920</span>
                       </div>
-                      <button className="w-full bg-[#1A1A1A] text-white text-[8px] py-1.5 rounded-[4px] font-bold uppercase tracking-wider">
+                      <button className="w-full bg-[#FF6600] text-white text-[8px] py-1.5 rounded-[4px] font-bold uppercase tracking-wider">
                         Selesai & Cetak Struk
                       </button>
                     </div>
@@ -404,14 +404,14 @@ export default function App() {
                 <div className="bg-[#1A1A1A] rounded-[16px] p-1.5 border border-[#1A1A1A]">
                   <div className="bg-[#F4F4F2] rounded-[10px] h-[130px] p-2.5 text-[#1A1A1A] flex flex-col justify-between border border-gray-200">
                     <div className="flex justify-between text-[7px] text-[#666666] font-bold uppercase tracking-wider">
-                      <span>Kasir Hub</span>
+                      <span>ZonaKasir</span>
                       <span className="text-[6px] bg-emerald-50 text-emerald-800 font-bold px-1 rounded">Aktif</span>
                     </div>
                     <div className="text-center py-1">
-                      <p className="text-[7px] text-[#666666] font-semibold uppercase tracking-wider">Omset Hari Ini</p>
-                      <h4 className="text-[11px] font-mono font-extrabold text-[#1A1A1A] mt-0.5">Rp 12.840.000</h4>
+                      <p className="text-[7px] text-[#666666] font-semibold uppercase tracking-wider">Saldo Tersedia</p>
+                      <h4 className="text-[11px] font-mono font-extrabold text-[#FF6600] mt-0.5">Rp 4.250.000</h4>
                     </div>
-                    <div className="bg-white rounded-[4px] p-1 text-[6px] text-center text-[#666666] border border-gray-150 font-bold uppercase tracking-wide">
+                    <div className="bg-[#FF6600]/10 rounded-[4px] p-1 text-[6px] text-center text-[#FF6600] border border-[#FF6600]/20 font-bold uppercase tracking-wide">
                       Aplikasi Owner
                     </div>
                   </div>

@@ -46,11 +46,9 @@ class ProductController extends Controller
     public function store(ProductRequest $request): JsonResponse
     {
         try {
-            DB::beginTransaction();
             $request->created();
             $product = Product::latest()->first();
             $product->load(['category', 'stocks']);
-            DB::commit();
 
             return $this->buildResponse()
                 ->setData(new ProductCollection($product))
@@ -58,7 +56,6 @@ class ProductController extends Controller
                 ->setMessage('Product created successfully')
                 ->present();
         } catch (Exception $e) {
-            DB::rollBack();
             return $this->buildResponse()
                 ->setCode(500)
                 ->setMessage('Failed to create product: ' . $e->getMessage())
@@ -91,18 +88,15 @@ class ProductController extends Controller
     public function update(ProductRequest $request): JsonResponse
     {
         try {
-            DB::beginTransaction();
             $request->updated();
             $product = Product::findorfail($request->route('product'));
             $product->load(['category', 'stocks']);
-            DB::commit();
 
             return $this->buildResponse()
                 ->setData(new ProductCollection($product))
                 ->setMessage('Product updated successfully')
                 ->present();
         } catch (Exception $e) {
-            DB::rollBack();
             return $this->buildResponse()
                 ->setCode(500)
                 ->setMessage('Failed to update product: ' . $e->getMessage())
