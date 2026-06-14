@@ -1,15 +1,15 @@
 <div class="min-h-screen bg-[#F4F4F2] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
   <div class="absolute inset-0 z-0" style="background: linear-gradient(to bottom, transparent 0%, rgba(244,244,242,0.6) 50%, #F4F4F2 100%), url('/images/landing/retail_hero_bg_1781378962689.jpg') center/cover no-repeat; opacity: 0.4; filter: grayscale(1) contrast(1.25);"></div>
 
-  <div class="w-full max-w-4xl relative z-10 grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+  <div class="w-full max-w-4xl relative z-10 grid grid-cols-1 lg:grid-cols-5 gap-4 lg:gap-8 items-center">
     {{-- Brand Side --}}
     <div class="lg:col-span-2 text-center lg:text-left lg:pr-6">
-      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#1A1A1A] shadow-md mb-5">
-        <span class="text-white font-black text-xl">ZK</span>
+      <div class="inline-flex items-center justify-center w-12 h-12 lg:w-16 lg:h-16 rounded-2xl bg-[#1A1A1A] shadow-md mb-3 lg:mb-5">
+        <span class="text-white font-black text-base lg:text-xl">ZK</span>
       </div>
-      <h1 class="text-3xl font-bold text-[#1A1A1A] tracking-tight leading-tight">Daftar ZonaKasir</h1>
-      <p class="text-sm text-[#666666] mt-2 leading-relaxed max-w-sm font-medium">
-        Mulai uji coba gratis <strong>7 hari</strong>. Nikmati fitur POS lengkap untuk usaha Anda. Tanpa kartu kredit.
+      <h1 class="text-xl lg:text-3xl font-bold text-[#1A1A1A] tracking-tight leading-tight">Daftar ZonaKasir</h1>
+      <p class="text-xs lg:text-sm text-[#666666] mt-1 lg:mt-2 leading-relaxed max-w-sm font-medium lg:mx-0 mx-auto">
+        Coba gratis <strong>7 hari</strong>. Tanpa kartu kredit.
       </p>
       <div class="hidden lg:block mt-8 space-y-3">
         <div class="flex items-center gap-3 text-sm text-[#555555]">
@@ -29,7 +29,7 @@
 
     {{-- Form Side --}}
     <div class="lg:col-span-3">
-      <div class="bg-white rounded-xl shadow-sm border border-[#E5E5E1] p-6 sm:p-8">
+      <div class="bg-white rounded-xl shadow-sm border border-[#E5E5E1] p-5 sm:p-8">
         <form class="space-y-6">
           {{ $this->form }}
 
