@@ -10,7 +10,7 @@ return new class extends Migration
     public function up(): void
     {
         // Reset platform fee to 0% for all existing tenants
-        About::where('platform_fee_percent', '>', 0)->update(['platform_fee_percent' => 0]);
+        About::withoutGlobalScopes()->where('platform_fee_percent', '>', 0)->update(['platform_fee_percent' => 0]);
 
         // Change column default to 0 for future records
         Schema::table('abouts', function (Blueprint $table) {
