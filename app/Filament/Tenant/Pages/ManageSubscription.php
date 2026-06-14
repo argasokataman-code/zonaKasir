@@ -27,6 +27,16 @@ class ManageSubscription extends Page
 
     public ?string $snapRedirectUrl = null;
 
+    public function mount(): void
+    {
+        $planId = request()->query('plan_id');
+        $billing = request()->query('billing', 'monthly');
+
+        if ($planId) {
+            $this->subscribePlan((int) $planId, $billing);
+        }
+    }
+
     public function subscribePlan(int $planId, string $billingCycle = 'monthly'): void
     {
         $this->processSubscription($planId, $billingCycle);
