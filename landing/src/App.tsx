@@ -1280,8 +1280,8 @@ export default function App() {
 
             {/* Loading skeleton */}
             {pricingLoading && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                {[1, 2, 3].map(i => (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 max-w-7xl mx-auto">
+                {[1, 2, 3, 4].map(i => (
                   <div key={i} className="bg-white rounded-[6px] border border-[#E5E5E1] p-6 min-h-[460px] animate-pulse">
                     <div className="h-3 bg-gray-100 rounded w-1/3 mb-3" />
                     <div className="h-5 bg-gray-100 rounded w-1/2 mb-4" />
@@ -1299,7 +1299,7 @@ export default function App() {
             {!pricingLoading && (
               <motion.div 
                 style={{ y: smoothS8PricingFloatY }}
-                className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto text-left"
+                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 max-w-7xl mx-auto text-left"
               >
                 {pricingPlans.map((plan, idx) => (
                   <div 
@@ -1325,7 +1325,12 @@ export default function App() {
                       </h3>
                       
                       <div className="py-5 border-y border-gray-100 my-5 space-y-1">
-                        {plan.price_monthly === 0 ? (
+                        {plan.is_on_premise ? (
+                          <>
+                            <span className="font-mono text-2xl font-black text-[#1A1A1A]">Custom</span>
+                            <span className="text-[10px] text-[#666666] font-bold block uppercase tracking-wider">Self-Hosted &bull; Satu harga tetap</span>
+                          </>
+                        ) : plan.price_monthly === 0 ? (
                           <>
                             <span className="font-mono text-3xl font-black text-[#1A1A1A]">{t('pricing.register')}</span>
                             <span className="text-[10px] text-[#666666] font-bold block uppercase tracking-wider">{t('pricing.free_forever')}</span>
