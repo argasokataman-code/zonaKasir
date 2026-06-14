@@ -66,59 +66,82 @@
 
     <div class="mb-6">
         <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Available Plans</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-            @foreach($plans as $plan)
-            <div class="bg-white rounded-[6px] p-6 shadow-sm flex flex-col justify-between relative border @if($current && $current['id'] === $plan['id']) border-2 border-gray-900 shadow-md @else border-[#E5E5E1] @endif min-h-[460px]">
-                @if(($plan['is_popular'] ?? false) && $plan['price_monthly'] > 0)
-                <div class="absolute top-0 right-0 bg-gray-900 text-white text-[8px] font-mono font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-bl-[4px]">
-                    Popular
-                </div>
-                @endif
+        <div class="overflow-x-auto -mx-6 px-6 pb-2 scrollbar-thin">
+            <div class="flex gap-4" style="min-width: min-content;">
+                @foreach($plans as $plan)
+                <div
+                    x-data="{ open: false }"
+                    class="bg-white rounded-[6px] shadow-sm flex flex-col relative border @if($current && $current['id'] === $plan['id']) border-2 border-gray-900 shadow-md @else border-[#E5E5E1] @endif"
+                    style="width: 280px; min-width: 280px; flex-shrink: 0;"
+                >
+                    @if(($plan['is_popular'] ?? false) && $plan['price_monthly'] > 0)
+                    <div class="absolute top-0 right-0 bg-gray-900 text-white text-[8px] font-mono font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-bl-[4px] rounded-tr-[5px]">
+                        Popular
+                    </div>
+                    @endif
 
-                <div>
-                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">
-                        {{ $plan['max_stores'] > 10 ? 'Enterprise' : ($plan['max_stores'] > 1 ? 'Bisnis' : 'Pemula') }}
-                    </span>
-                    <h3 class="font-sans font-bold text-lg text-gray-900">
-                        {{ $plan['name'] }}
-                    </h3>
+                    <div class="p-5 flex flex-col h-full">
+                        <div>
+                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">
+                                {{ $plan['max_stores'] > 10 ? 'Enterprise' : ($plan['max_stores'] > 1 ? 'Bisnis' : 'Pemula') }}
+                            </span>
+                            <h3 class="font-sans font-bold text-base text-gray-900">
+                                {{ $plan['name'] }}
+                            </h3>
+                        </div>
 
-                    <div class="py-5 my-5 border-y border-gray-100">
-                        @if(($plan['is_on_premise'] ?? false))
-                            <span class="font-mono text-2xl font-black text-gray-900">Custom</span>
-                            <span class="text-[10px] text-gray-500 font-bold block uppercase tracking-wider mt-1">Self-Hosted</span>
-                        @elseif(($plan['price_monthly'] ?? 0) === 0)
-                            <span class="font-mono text-3xl font-black text-gray-900">Gratis</span>
-                            <span class="text-[10px] text-gray-500 font-bold block uppercase tracking-wider mt-1">Selamanya</span>
-                        @else
-                            <span class="font-mono text-3xl font-black text-gray-900">Rp {{ number_format($plan['price_monthly'], 0, ',', '.') }}</span>
-                            <span class="text-[10px] text-gray-500 font-bold block uppercase tracking-wider mt-1">Per Bulan</span>
-                            @if($plan['price_yearly'])
-                            <span class="text-[10px] text-gray-400 block mt-1">Rp {{ number_format($plan['price_yearly'], 0, ',', '.') }}/tahun</span>
+                        <div class="py-3 my-3 border-y border-gray-100">
+                            @if(($plan['is_on_premise'] ?? false))
+                                <span class="font-mono text-xl font-black text-gray-900">Custom</span>
+                                <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">Self-Hosted</span>
+                            @elseif(($plan['price_monthly'] ?? 0) === 0)
+                                <span class="font-mono text-2xl font-black text-gray-900">Gratis</span>
+                                <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">Selamanya</span>
+                            @else
+                                <span class="font-mono text-2xl font-black text-gray-900">Rp {{ number_format($plan['price_monthly'], 0, ',', '.') }}</span>
+                                <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">Per Bulan</span>
+                                @if($plan['price_yearly'])
+                                <span class="text-[9px] text-gray-400 block mt-0.5">Rp {{ number_format($plan['price_yearly'], 0, ',', '.') }}/tahun</span>
+                                @endif
                             @endif
+                        </div>
+
+                        <div class="text-[10px] text-gray-400 font-semibold mb-2">
+                            {{ $plan['max_stores'] }} outlet / {{ $plan['max_users'] }} user
+                        </div>
+
+                        @if(!empty($plan['features']))
+                        <button
+                            type="button"
+                            x-on:click="open = !open"
+                            class="w-full flex items-center justify-between text-[10px] font-bold text-gray-900 uppercase tracking-wider py-1.5 border-t border-gray-100 cursor-pointer hover:text-gray-600 transition-colors"
+                        >
+                            <span>Fitur ({{ count($plan['features']) }})</span>
+                            <svg class="w-3 h-3 transition-transform duration-200" x-bind:class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+
+                        <div
+                            x-show="open"
+                            x-collapse
+                            x-cloak
+                            class="overflow-hidden"
+                        >
+                            <ul class="space-y-1.5 text-[11px] text-gray-600 font-medium py-2">
+                                @foreach($plan['features'] as $key => $label)
+                                <li class="flex items-start gap-2">
+                                    <span class="w-3.5 h-3.5 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mt-0.5">
+                                        <svg class="w-2 h-2 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                    </span>
+                                    <span>{{ is_string($label) ? $label : (is_string($key) ? $key : $label) }}</span>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </div>
                         @endif
                     </div>
-
-                    @if(!empty($plan['features']))
-                    <span class="text-[10px] font-bold text-gray-900 uppercase tracking-wider block mb-3.5">Fitur</span>
-                    <ul class="space-y-2.5 text-[11px] text-gray-600 font-medium">
-                        @foreach($plan['features'] as $key => $label)
-                        <li class="flex items-start gap-2">
-                            <span class="w-4 h-4 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mt-0.5">
-                                <svg class="w-2.5 h-2.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                            </span>
-                            <span>{{ is_string($label) ? $label : (is_string($key) ? $key : $label) }}</span>
-                        </li>
-                        @endforeach
-                    </ul>
-                    @endif
                 </div>
-
-                <div class="mt-auto pt-4 text-center">
-                    <span class="text-[10px] text-gray-400 font-semibold">{{ $plan['max_stores'] }} outlet / {{ $plan['max_users'] }} user</span>
-                </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
     </div>
 
