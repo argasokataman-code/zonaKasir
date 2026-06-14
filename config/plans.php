@@ -3,7 +3,6 @@
 return [
     'features' => [
         'pos' => 'Point of Sale (POS)',
-        'pos_v2' => 'POS V2 (New UI)',
         'report' => 'Reports & Analytics',
         'stock_management' => 'Stock Management',
         'stock_opname' => 'Stock Opname',

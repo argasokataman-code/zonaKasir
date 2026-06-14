@@ -180,7 +180,6 @@ class GeneralSetting extends Page implements HasActions, HasForms
                                 Checkbox::make('receivable')->inline(),
                                 Checkbox::make('stock-opname')->inline(),
                                 Checkbox::make('voucher')->inline(),
-                                Checkbox::make('pos-v2')->label("POS V2")->inline(),
                                 Checkbox::make('product-import')->inline(),
                             ]),
                             Actions::make([
