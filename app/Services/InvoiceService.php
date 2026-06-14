@@ -55,7 +55,7 @@ class InvoiceService
 
         $subscription = $invoice->subscription;
 
-        if ($subscription && $subscription->status === 'trialing') {
+        if ($subscription && in_array($subscription->status, ['trialing', 'expired'])) {
             $subscription->update([
                 'status' => 'active',
                 'trial_ends_at' => null,
