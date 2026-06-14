@@ -7,7 +7,9 @@ use Filament\Forms\Components\Component;
 use Filament\Forms\Components\View;
 use Filament\Http\Responses\Auth\LoginResponse;
 use Filament\Pages\Auth\Login;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
 
@@ -15,24 +17,24 @@ class TenantLogin extends Login
 {
     public function authenticate(): ?LoginResponse
     {
-        \$data = \$this->form->getState();
-        \$guard = Filament::getCurrentPanel()?->getAuthGuard();
-        \$attempt = \Illuminate\Support\Facades\Auth::guard(\$guard)->attempt(
-            ['email' => \$data['email'], 'password' => \$data['password']],
-            \$data['remember'] ?? false,
+        $data = $this->form->getState();
+        $guard = Filament::getCurrentPanel()?->getAuthGuard();
+        $attempt = Auth::guard($guard)->attempt(
+            ['email' => $data['email'], 'password' => $data['password']],
+            $data['remember'] ?? false,
         );
-        \Illuminate\Support\Facades\Log::debug('TenantLogin debug', [
+        Log::debug('TenantLogin debug', [
             'panel' => Filament::getCurrentPanel()?->getId(),
-            'guard' => \$guard,
-            'email' => \$data['email'] ?? 'MISSING',
-            'attempt_result' => \$attempt ? 'true' : 'false',
+            'guard' => $guard,
+            'email' => $data['email'] ?? 'MISSING',
+            'attempt_result' => $attempt ? 'true' : 'false',
         ]);
-        if (! \$attempt) {
-            \$this->throwFailureValidationException();
+        if (! $attempt) {
+            $this->throwFailureValidationException();
         }
-        \$loginResponse = app(\Filament\Http\Responses\Auth\LoginResponse::class);
+        $loginResponse = app(LoginResponse::class);
         /** @var \App\Models\Tenants\User|null $user */
-        \$user = Filament::auth()->user();
+        $user = Filament::auth()->user();
 
         // If authentication did not produce a user (invalid credentials),
         // let the parent class handle the validation failure. Otherwise,
