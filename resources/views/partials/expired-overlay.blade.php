@@ -59,7 +59,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         @foreach($plans as $plan)
         <div
-          x-data="{ open: false, showBilling: false }"
+          x-data="{ open: false }"
           class="bg-white rounded-[8px] shadow-lg flex flex-col relative border border-gray-200"
         >
           @if(($plan['is_popular'] ?? false) && $plan['price_monthly'] > 0)
@@ -123,36 +123,14 @@
               @if(($plan['price_monthly'] ?? 0) === 0)
                 <span class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-100 text-gray-500 rounded-[4px]">Gratis</span>
               @else
-                <button
-                  type="button"
-                  x-on:click="showBilling = !showBilling"
+                <a
+                  href="{{ url('/member/subscription?plan_id=' . $plan['id'] . '&billing=monthly') }}"
+                  target="_blank"
                   class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-900 text-white rounded-[4px] hover:bg-gray-700 transition-colors cursor-pointer"
+                  onclick="event.stopPropagation();"
                 >
                   Pilih Paket
-                </button>
-                <div
-                  x-show="showBilling"
-                  x-cloak
-                  x-on:click.away="showBilling = false"
-                  class="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 rounded-[6px] shadow-lg overflow-hidden z-10"
-                >
-                  <a
-                    href="{{ url('/member/subscription?plan_id=' . $plan['id'] . '&billing=monthly') }}"
-                    class="w-full text-left px-3 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer flex items-center justify-between"
-                  >
-                    <span>Bulanan</span>
-                    <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-                  </a>
-                  @if(($plan['price_yearly'] ?? 0) > 0)
-                  <a
-                    href="{{ url('/member/subscription?plan_id=' . $plan['id'] . '&billing=yearly') }}"
-                    class="w-full text-left px-3 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 border-t border-gray-100 transition-colors cursor-pointer flex items-center justify-between"
-                  >
-                    <span>Tahunan</span>
-                    <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-                  </a>
-                  @endif
-                </div>
+                </a>
               @endif
             </div>
           </div>
