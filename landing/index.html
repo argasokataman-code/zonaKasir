@@ -1,26 +1,6 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <script>
-      (function() {
-        try {
-          var originalFetch = window.fetch;
-          var fetchValue = originalFetch;
-          Object.defineProperty(window, 'fetch', {
-            get: function() {
-              return fetchValue;
-            },
-            set: function(val) {
-              fetchValue = val;
-            },
-            configurable: true,
-            enumerable: true
-          });
-        } catch (e) {
-          console.warn('Sandbox fetch-guard inactive:', e);
-        }
-      })();
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ZonaKasir POS • Sistem Kasir Pintar & Manajemen Stok Indonesia</title>
