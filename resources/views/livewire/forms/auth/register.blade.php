@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-[#F4F4F2] flex items-center justify-center p-4 sm:p-6 relative overflow-hidden">
-  <div class="absolute inset-0 z-0" style="background: linear-gradient(to bottom, transparent 0%, rgba(244,244,242,0.6) 50%, #F4F4F2 100%), url('/images/landing/retail_hero_bg_1781378962689.jpg') center/cover no-repeat; opacity: 0.4; filter: grayscale(1) contrast(1.25);"></div>
+  <div class="absolute inset-0 z-0 parallax-bg"></div>
 
-  <div class="w-full max-w-4xl relative z-10 grid grid-cols-1 lg:grid-cols-5 gap-4 lg:gap-8 items-center">
+  <div class="w-full max-w-4xl relative z-10 grid grid-cols-1 lg:grid-cols-5 gap-4 lg:gap-8 items-center parallax-content">
     {{-- Brand Side --}}
     <div class="lg:col-span-2 text-center lg:text-left lg:pr-6">
       <div class="inline-flex items-center justify-center w-12 h-12 lg:w-16 lg:h-16 rounded-2xl bg-[#1A1A1A] shadow-md mb-3 lg:mb-5">
@@ -88,6 +88,25 @@
           Livewire.find(el.getAttribute('wire:id')).set('turnstileToken', token);
         }
       }
-    </script>
-  @endif
-</div>
+      </script>
+    @endif
+  </div>
+
+<style>
+  .parallax-bg {
+    background: linear-gradient(to bottom, transparent 0%, rgba(244,244,242,0.6) 50%, #F4F4F2 100%), url('/images/landing/retail_hero_bg_1781378962689.jpg') center/cover no-repeat;
+    opacity: 0.4;
+    filter: grayscale(1) contrast(1.25);
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  .parallax-content {
+    animation: floatIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes floatIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
