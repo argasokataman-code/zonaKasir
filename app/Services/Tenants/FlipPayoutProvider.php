@@ -13,7 +13,7 @@ class FlipPayoutProvider implements DisbursementProvider
         $baseUrl = config('flip.base_url');
 
         $response = Http::withBasicAuth($secretKey, '')
-            ->post($baseUrl . '/disbursement', [
+            ->post($baseUrl . '/v2/disbursement', [
                 'bank_code'      => $this->mapBankCode($params['bank_code']),
                 'account_number' => $params['account_number'],
                 'amount'         => (int) $params['amount'],
@@ -44,7 +44,7 @@ class FlipPayoutProvider implements DisbursementProvider
         $baseUrl = config('flip.base_url');
 
         $response = Http::withBasicAuth($secretKey, '')
-            ->get($baseUrl . '/disbursement/' . $disburseId);
+            ->get($baseUrl . '/v2/disbursement/' . $disburseId);
 
         if ($response->failed()) {
             return ['id' => $disburseId, 'status' => 'unknown', 'error' => $response->json()];

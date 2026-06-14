@@ -17,7 +17,7 @@ class FlipDataService
         }
 
         $response = Http::withBasicAuth($secretKey, '')
-            ->get($baseUrl . '/balance');
+            ->get($baseUrl . '/v2/general/balance');
 
         if ($response->failed()) {
             Log::error('Flip: failed to fetch balance', [
@@ -40,9 +40,9 @@ class FlipDataService
         }
 
         $response = Http::withBasicAuth($secretKey, '')
-            ->get($baseUrl . '/disbursements', [
+            ->get($baseUrl . '/v3/disbursement', [
                 'page' => $page,
-                'per_page' => $perPage,
+                'pagination' => $perPage,
             ]);
 
         if ($response->failed()) {
@@ -66,7 +66,9 @@ class FlipDataService
         }
 
         $response = Http::withBasicAuth($secretKey, '')
-            ->get($baseUrl . '/disbursement/' . $id);
+            ->get($baseUrl . '/v3/get-disbursement', [
+                'id' => $id,
+            ]);
 
         if ($response->failed()) {
             return null;
