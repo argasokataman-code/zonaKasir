@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tenants\User;
-use App\Services\RegisterTenant;
-use App\Services\TenantContext;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -51,30 +49,8 @@ class GoogleController extends Controller
                 }
             }
 
-            // New user → create tenant + user
-            $tenantName = strtolower(
-                str_replace(' ', '_', $googleUser->getName() ?? $googleUser->getNickname() ?? 'user')
-            ).'_'.uniqid();
-
-            $registerTenant = app(RegisterTenant::class);
-            $tenantId = $registerTenant->create([
-                'name' => $tenantName,
-                'full_name' => $googleUser->getName() ?? 'My Shop',
-                'email' => $googleUser->getEmail(),
-                'password' => uniqid('ggl_', true),
-                'business_type' => 'retail',
-                'trial_days' => 7,
-            ]);
-
-            // Store google_id in both tenant user and central tenants table
-            $user = User::where('email', $googleUser->getEmail())->first();
-            if ($user) {
-                $user->update(['google_id' => $googleId]);
-            }
-            \App\Tenant::where('id', $tenantId)->update(['google_id' => $googleId]);
-
-            Auth::login($user, true);
-            return redirect()->intended('/member');
+            // No existing account → redirect to register
+            return redirect()->route('auth.register');
         } catch (\Throwable $e) {
             report($e);
             return redirect('/member/login')
