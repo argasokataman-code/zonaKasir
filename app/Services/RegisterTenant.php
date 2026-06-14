@@ -7,6 +7,7 @@ use App\Models\Coupon;
 use App\Models\Subscription;
 use App\Models\Tenants\About;
 use App\Models\Tenants\User;
+use App\Services\TenantContext;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +16,8 @@ class RegisterTenant
     public function create(array $data): string
     {
         $name = $data['name'] ?? uniqid();
+
+        TenantContext::set($name);
 
         $user = User::create([
             'tenant_id' => $name,
