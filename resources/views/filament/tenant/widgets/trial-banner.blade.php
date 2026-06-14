@@ -41,22 +41,22 @@
         <div>
           <p class="text-sm font-medium {{ $textClass }}">
             @if($daysRemaining <= 0)
-              Trial sudah berakhir! Silakan berlangganan.
+              {{ __('Trial has expired! Please subscribe.') }}
             @elseif($daysRemaining == 1)
-              Trial berakhir besok! Silakan berlangganan.
+              {{ __('Trial expires tomorrow! Please subscribe.') }}
             @else
-              Trial versi — {{ $daysRemaining }} hari lagi
+              {{ __('Trial version — :days days remaining', ['days' => $daysRemaining]) }}
             @endif
           </p>
           <p class="text-xs {{ $subTextClass }}">
-            Upgrade ke paket berbayar untuk menggunakan fitur lengkap.
+            {{ __('Upgrade to a paid plan for full features.') }}
           </p>
         </div>
       </div>
 
       <a href="{{ \App\Filament\Tenant\Pages\ManageSubscription::getUrl() }}"
          class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-lg {{ $btnClass }}">
-        {{ $daysRemaining <= 0 ? 'Berlangganan Sekarang' : 'Lihat Paket' }}
+        {{ $daysRemaining <= 0 ? __('Subscribe Now') : __('View Plans') }}
       </a>
     </div>
   </div>

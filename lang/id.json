@@ -413,5 +413,11 @@
     "Processing": "Diproses",
     "Completed": "Selesai",
     "Pending": "Tertunda",
-    "Failed": "Gagal"
+    "Failed": "Gagal",
+    "Trial has expired! Please subscribe.": "Masa uji coba telah berakhir! Silakan berlangganan.",
+    "Trial expires tomorrow! Please subscribe.": "Masa uji coba berakhir besok! Silakan berlangganan.",
+    "Trial version — :days days remaining": "Versi uji coba — :days hari lagi",
+    "Upgrade to a paid plan for full features.": "Tingkatkan ke paket berbayar untuk fitur lengkap.",
+    "Subscribe Now": "Berlangganan Sekarang",
+    "View Plans": "Lihat Paket"
 }
