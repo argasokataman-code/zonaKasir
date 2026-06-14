@@ -56,15 +56,24 @@ class ManageSubscription extends Page
                 ->latest()
                 ->first();
 
+            // If no active sub, get the latest expired one and reactivate
             if (! $subscription) {
-                throw new \RuntimeException('No active subscription found');
+                $subscription = Subscription::where('tenant_id', $tenantId)
+                    ->latest()
+                    ->first();
+
+                if (! $subscription) {
+                    throw new \RuntimeException('No subscription found. Please contact support.');
+                }
             }
 
             $subscription->update([
                 'plan_id' => $plan->id,
                 'billing_cycle' => $billingCycle,
+                'status' => 'active',
                 'starts_at' => now(),
                 'ends_at' => $billingCycle === 'yearly' ? now()->addYear() : now()->addMonth(),
+                'trial_ends_at' => null,
             ]);
 
             if (($plan->price_monthly ?? 0) === 0) {

@@ -71,7 +71,8 @@ class SubscriptionWebhookController extends Controller
             app(InvoiceService::class)->markAsPaid($invoice);
 
             $subscription->update([
-                'starts_at' => $subscription->ends_at ?? now(),
+                'status' => 'active',
+                'starts_at' => $subscription->ends_at && $subscription->ends_at->isPast() ? now() : ($subscription->starts_at ?? now()),
                 'ends_at' => $subscription->billing_cycle === 'yearly'
                     ? now()->addYear()
                     : now()->addMonth(),
