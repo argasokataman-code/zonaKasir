@@ -361,5 +361,13 @@
   "Total Products": "Total Products",
   "Out of Stock": "Out of Stock",
   "Low Stock": "Low Stock",
-  "Expiring Soon": "Expiring Soon"
+  "Expiring Soon": "Expiring Soon",
+  "Remaining Stock": "Remaining Stock",
+  "Open Cashier": "Open Cashier",
+  "View Sales": "View Sales",
+  "Manage Products": "Manage Products",
+  "Manage Members": "Manage Members",
+  "Quick Actions": "Quick Actions",
+  "Available Balance": "Available Balance",
+  "Revenue (Rp x1000)": "Revenue (Rp x1000)"
 }

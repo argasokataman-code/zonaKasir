@@ -7,12 +7,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Search, ShoppingCart, CreditCard, ScanLine, Printer, CheckCircle, RefreshCw, Layers } from 'lucide-react';
 import { Product, CartItem } from '../types';
 import { INITIAL_PRODUCTS } from '../data';
+import { useLanguage } from '../i18n';
 
 interface DeviceTabletProps {
   interactive?: boolean;
 }
 
 export default function DeviceTablet({ interactive = true }: DeviceTabletProps) {
+  const { t } = useLanguage();
   const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
   const [cart, setCart] = useState<CartItem[]>([
     { product: INITIAL_PRODUCTS[0], quantity: 2 }, // 2x Kopi Susu Aren
@@ -92,7 +94,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Categories list
-  const categories = ['Semua', 'Minuman', 'Makanan'];
+  const categories = [t('device.tablet.category_all'), t('device.tablet.category_drinks'), t('device.tablet.category_food')];
 
   // Add to cart
   const addToCart = (product: Product) => {
@@ -292,7 +294,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                   <span className="text-[10px] font-extrabold text-white">ZK</span>
                 </div>
                 <span className="font-sans text-[11px] font-bold uppercase tracking-wider text-[#1A1A1A]">
-                  Terminal POS
+                  {t('device.tablet.pos_terminal')}
                 </span>
               </div>
               
@@ -322,7 +324,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                   <Search className="absolute left-2.5 top-2.5 w-3.5 h-3.5 text-[#888888]" />
                   <input
                     type="text"
-                    placeholder="Cari menu atau kode..."
+                    placeholder={t('device.tablet.search_placeholder')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full bg-white text-xs pl-8 pr-3 py-2 border border-[#D1D1CC] rounded-[6px] focus:outline-none focus:ring-1 focus:ring-[#1A1A1A] focus:border-[#1A1A1A] placeholder-[#888888] font-medium"
@@ -349,7 +351,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                   id="tablet-pos-scan-btn"
                 >
                   <ScanLine className={`w-3.5 h-3.5 ${scanning ? 'animate-pulse text-red-500' : ''}`} />
-                  {scanning ? 'Memindai SKU...' : 'Scan SKU'}
+                  {scanning ? t('device.tablet.scanning_sku') : t('device.tablet.scan_sku')}
                 </button>
               </div>
 
@@ -382,7 +384,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                           <span className={`absolute top-2 right-2 text-[8px] font-bold px-1.5 py-0.5 rounded-[4px] shadow-sm tracking-wide z-10 ${
                             isCritical ? 'bg-red-600 text-white' : 'bg-amber-500 text-white'
                           }`}>
-                            Stok {product.stock}
+                            {t('device.tablet.stock')} {product.stock}
                           </span>
                         )}
                       </div>
@@ -421,10 +423,10 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
             <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-slate-50">
               <div className="flex items-center gap-2">
                 <ShoppingCart className="w-4 h-4 text-gray-700" />
-                <h3 className="font-sans text-xs font-bold text-gray-900">Keranjang Aktif</h3>
+                <h3 className="font-sans text-xs font-bold text-gray-900">{t('device.tablet.active_cart')}</h3>
               </div>
               <span className="bg-gray-900 text-white font-semibold font-mono text-[10px] px-2 py-0.5 rounded-full">
-                {cart.reduce((s, i) => s + i.quantity, 0)} Pcs
+                {cart.reduce((s, i) => s + i.quantity, 0)} {t('device.pcs')}
               </span>
             </div>
 
@@ -437,7 +439,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                       {item.product.name}
                     </h5>
                     <span className="font-mono text-[9px] text-gray-400">
-                      Rp {item.product.price.toLocaleString('id-ID')} / pc
+                      Rp {item.product.price.toLocaleString('id-ID')} / {t('device.pcs')}
                     </span>
                   </div>
 
@@ -471,8 +473,8 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                   <div className="p-3 bg-gray-50 rounded-full mb-2">
                     <ShoppingCart className="w-5 h-5 text-gray-300" />
                   </div>
-                  <p className="text-xs text-gray-400 font-medium">Keranjang kosong</p>
-                  <p className="text-[10px] text-gray-300">Sentuh menu di kiri untuk memesan</p>
+                  <p className="text-xs text-gray-400 font-medium">{t('device.tablet.empty_cart')}</p>
+                  <p className="text-[10px] text-gray-300">{t('device.tablet.touch_menu')}</p>
                 </div>
               )}
             </div>
@@ -480,15 +482,15 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
             {/* Checkout Pricing Details */}
             <div className="p-4 border-t border-gray-100 bg-slate-50 space-y-2">
               <div className="flex justify-between text-[11px] text-gray-400 font-semibold">
-                <span>Subtotal</span>
+                <span>{t('device.tablet.subtotal')}</span>
                 <span className="font-mono text-xs">Rp {subtotal.toLocaleString('id-ID')}</span>
               </div>
               <div className="flex justify-between text-[11px] text-gray-400 font-semibold">
-                <span>PPN (11%)</span>
+                <span>{t('device.tablet.tax')}</span>
                 <span className="font-mono text-xs">Rp {tax.toLocaleString('id-ID')}</span>
               </div>
               <div className="flex justify-between items-center text-xs text-gray-900 font-bold pt-1.5 border-t border-dashed border-gray-200">
-                <span>Total Belanja</span>
+                <span>{t('device.tablet.total')}</span>
                 <span className="font-mono text-[14px] text-red-600 font-bold">
                   Rp {total.toLocaleString('id-ID')}
                 </span>
@@ -507,7 +509,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                   id="tablet-pay-trigger"
                 >
                   <CreditCard className="w-3.5 h-3.5" />
-                  Pilih Pembayaran
+                  {t('device.tablet.select_payment')}
                 </button>
               ) : (
                 <button
@@ -516,7 +518,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                   id="tablet-reset-trigger"
                 >
                   <RefreshCw className="w-3 h-3" />
-                  Transaksi Baru
+                  {t('device.tablet.new_transaction')}
                 </button>
               )}
             </div>
@@ -530,7 +532,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                 {paymentStep === 'billing' && (
                   <div>
                     <h3 className="font-sans text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">
-                      Metode Pembayaran
+                      {t('device.tablet.payment_method')}
                     </h3>
                     <p className="font-mono text-[18px] text-gray-900 font-bold mb-5">
                       Rp {total.toLocaleString('id-ID')}
@@ -575,7 +577,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                       onClick={() => setPaymentStep('idle')}
                       className="text-xs text-gray-400 hover:text-gray-600 underline font-medium"
                     >
-                      Kembali ke Kasir
+                      {t('device.tablet.back_to_cashier')}
                     </button>
                   </div>
                 )}
@@ -585,7 +587,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                     {paymentMethod === 'QRIS' ? (
                       <div className="space-y-4">
                         <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded">
-                          QRIS DINAMIS DIPROSES
+                          {t('device.tablet.qris_processing')}
                         </span>
                         
                         {/* Dynamic aesthetic QR Box */}
@@ -609,14 +611,14 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                         </div>
 
                         <p className="text-xs text-gray-500 max-w-[280px]">
-                          Pindai kode QR menggunakan m-Banking atau dompet digital Anda untuk demo pembayaran.
+                          {t('device.tablet.scan_qr_instruction')}
                         </p>
                       </div>
                     ) : (
                       <div className="space-y-4 py-4">
                         <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-900 border-t-transparent mx-auto" />
                         <p className="text-xs font-semibold text-gray-600">
-                          Sedang Memproses Pembayaran {paymentMethod}...
+                          {t('device.tablet.processing_payment')} {paymentMethod}...
                         </p>
                       </div>
                     )}
@@ -629,17 +631,17 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                       <CheckCircle className="w-8 h-8" />
                     </div>
                     <div>
-                      <h4 className="font-sans text-sm font-bold text-gray-950">Pembayaran Berhasil!</h4>
-                      <p className="text-xs font-mono text-gray-400 mt-0.5">ID TRX: ZK-9830491823908</p>
+                      <h4 className="font-sans text-sm font-bold text-gray-950">{t('device.tablet.payment_success')}</h4>
+                      <p className="text-xs font-mono text-gray-400 mt-0.5">{t('device.tablet.transaction_id')}: ZK-9830491823908</p>
                     </div>
 
                     <div className="bg-slate-50 rounded-[8px] p-3 text-left border border-gray-100 space-y-1">
                       <div className="flex justify-between text-[11px] text-gray-500">
-                        <span>Total Dibayar</span>
+                        <span>{t('device.tablet.total_paid')}</span>
                         <span className="font-mono font-bold text-gray-900">Rp {total.toLocaleString('id-ID')}</span>
                       </div>
                       <div className="flex justify-between text-[11px] text-gray-500">
-                        <span>Metode</span>
+                        <span>{t('device.tablet.method')}</span>
                         <span className="font-semibold text-gray-900">{paymentMethod}</span>
                       </div>
                     </div>
@@ -649,7 +651,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                       className="w-full bg-gray-900 text-white font-semibold text-xs py-2.5 rounded-[6px] hover:bg-gray-800 transition-all cursor-pointer"
                       id="payment-success-close"
                     >
-                      Selesai
+                      {t('device.tablet.done')}
                     </button>
                   </div>
                 )}
@@ -673,11 +675,11 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
                 <span>#ZK983049</span>
               </div>
               <div className="flex justify-between">
-                <span>Waktu</span>
+                <span>{t('device.tablet.waktu')}</span>
                 <span>13-06-2026 10:43</span>
               </div>
               <div className="flex justify-between">
-                <span>Kasir</span>
+                <span>{t('device.tablet.cashier')}</span>
                 <span>Andini</span>
               </div>
             </div>
@@ -696,15 +698,15 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
 
             <div className="py-3 text-[10px] font-semibold space-y-1 text-gray-800">
               <div className="flex justify-between">
-                <span>Subtotal</span>
+                <span>{t('device.tablet.subtotal')}</span>
                 <span className="font-mono">Rp {subtotal.toLocaleString('id-ID')}</span>
               </div>
               <div className="flex justify-between">
-                <span>PPN 11%</span>
+                <span>{t('device.tablet.tax')}</span>
                 <span className="font-mono">Rp {tax.toLocaleString('id-ID')}</span>
               </div>
               <div className="flex justify-between text-xs font-bold text-red-600 pt-1.5 border-t border-dashed border-gray-100">
-                <span>TOTAL</span>
+                <span>{t('device.tablet.total')}</span>
                 <span className="font-mono">Rp {total.toLocaleString('id-ID')}</span>
               </div>
             </div>
@@ -713,7 +715,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
               <div className="w-16 h-16 bg-gray-50 mx-auto border border-gray-150 p-1 flex items-center justify-center rounded">
                 <Printer className="w-8 h-8 text-gray-300" />
               </div>
-              <p className="text-[8px] text-gray-400 mt-2 font-medium">Terima kasih atas kunjungan Anda!</p>
+              <p className="text-[8px] text-gray-400 mt-2 font-medium">{t('device.tablet.thanks')}</p>
               <p className="text-[7px] text-gray-300 mt-1 uppercase font-mono">powered by zonakasir</p>
             </div>
             
@@ -729,7 +731,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
 
       {interactive && (
         <p className="text-gray-400 text-center font-sans text-xs mt-3 flex items-center justify-center gap-1.5 select-none md:hidden">
-          <span>* Desain Tablet POS responsif penuh. Rotasi device / scroll untuk detail. *</span>
+          <span>* {t('device.tablet.pos_terminal')} *</span>
         </p>
       )}
 

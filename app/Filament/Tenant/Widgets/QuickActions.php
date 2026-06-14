@@ -18,25 +18,25 @@ class QuickActions extends Widget
     {
         return [
             [
-                'label' => __('Buka Kasir'),
+                'label' => __('Open Cashier'),
                 'icon' => 'heroicon-o-calculator',
                 'url' => POS::getUrl(),
                 'color' => 'primary',
             ],
             [
-                'label' => __('Lihat Penjualan'),
+                'label' => __('View Sales'),
                 'icon' => 'heroicon-o-receipt-percent',
                 'url' => SellingResource::getUrl(),
                 'color' => 'success',
             ],
             [
-                'label' => __('Kelola Produk'),
+                'label' => __('Manage Products'),
                 'icon' => 'heroicon-o-cube',
                 'url' => ProductResource::getUrl(),
                 'color' => 'info',
             ],
             [
-                'label' => __('Kelola Member'),
+                'label' => __('Manage Members'),
                 'icon' => 'heroicon-o-users',
                 'url' => MemberResource::getUrl(),
                 'color' => 'warning',

@@ -420,5 +420,12 @@
   "Total Products": "Total Produk",
   "Out of Stock": "Stok Habis",
   "Low Stock": "Stok Menipis",
-  "Expiring Soon": "Mendekati Expired"
+  "Expiring Soon": "Mendekati Expired",
+  "Remaining Stock": "Sisa Stok",
+  "Open Cashier": "Buka Kasir",
+  "View Sales": "Lihat Penjualan",
+  "Manage Products": "Kelola Produk",
+  "Manage Members": "Kelola Member",
+  "Quick Actions": "Aksi Cepat",
+  "Revenue (Rp x1000)": "Pendapatan (Rp x1000)"
 }
