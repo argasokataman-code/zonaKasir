@@ -49,6 +49,7 @@ return [
                 'purpose' => 'any',
             ],
         ],
+        'splash' => [],
         'shortcuts' => [
             [
                 'name' => 'POS',
