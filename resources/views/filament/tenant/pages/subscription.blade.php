@@ -138,26 +138,28 @@
                             </ul>
                         </div>
                         @endif
+
+                        <div class="mt-auto pt-3 border-t border-gray-100">
+                            @if($current && $current['id'] === $plan['id'])
+                                <span class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-900 text-white rounded-[4px]">Paket Aktif</span>
+                            @elseif(($plan['price_monthly'] ?? 0) === 0)
+                                <span class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-100 text-gray-500 rounded-[4px]">Gratis</span>
+                            @else
+                                <button
+                                    type="button"
+                                    wire:click="subscribePlan({{ $plan['id'] }})"
+                                    class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-900 text-white rounded-[4px] hover:bg-gray-700 transition-colors cursor-pointer"
+                                >
+                                    Upgrade Sekarang
+                                </button>
+                            @endif
+                        </div>
                     </div>
                 </div>
                 @endforeach
             </div>
         </div>
     </div>
-
-    @if(!$snapRedirectUrl)
-    <div class="bg-white border border-[#E5E5E1] rounded-[6px] p-6 shadow-sm mb-6">
-        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Upgrade / Change Plan</h2>
-        <div class="max-w-lg">
-            {{ $this->form }}
-            <div class="mt-4">
-                <x-filament::button wire:click="subscribe" color="primary">
-                    Subscribe & Pay
-                </x-filament::button>
-            </div>
-        </div>
-    </div>
-    @endif
 
     @php $invoices = app(\App\Filament\Tenant\Pages\ManageSubscription::class)->getInvoices(); @endphp
     @if(count($invoices) > 0)
