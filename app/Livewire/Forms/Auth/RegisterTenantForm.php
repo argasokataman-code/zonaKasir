@@ -92,10 +92,11 @@ class RegisterTenantForm extends Component implements HasForms
                     ->submitAction(new HtmlString(
                         Blade::render(<<<'BLADE'
                                     <x-filament::button
-                                        size="sm"
+                                        size="lg"
                                         wire:click="create"
+                                        class="w-full !bg-[#1A1A1A] !text-white hover:!bg-black !rounded-lg !py-3 !text-sm !font-bold !shadow-sm"
                                     >
-                                        Submit
+                                        Buat Akun Saya
                                     </x-filament::button>
                                   BLADE))),
             ])
