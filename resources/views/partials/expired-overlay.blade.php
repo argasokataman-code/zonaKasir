@@ -3,13 +3,13 @@
   $isExpired = false;
 
   if ($user && $user->tenant_id) {
-      // Check for explicitly expired subscription
-      $expiredSub = \App\Models\Subscription::where('tenant_id', $user->tenant_id)
-          ->where('status', 'expired')
+      // Check for expired / past_due subscription
+      $blockedSub = \App\Models\Subscription::where('tenant_id', $user->tenant_id)
+          ->whereIn('status', ['expired', 'past_due'])
           ->latest()
           ->first();
 
-      if ($expiredSub) {
+      if ($blockedSub) {
           $isExpired = true;
       } else {
           // Check for trialing subscription with past trial_ends_at

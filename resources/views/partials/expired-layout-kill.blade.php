@@ -3,12 +3,12 @@
   $isExpired = false;
 
   if ($user && $user->tenant_id) {
-      $expiredSub = \App\Models\Subscription::where('tenant_id', $user->tenant_id)
-          ->where('status', 'expired')
+      $blockedSub = \App\Models\Subscription::where('tenant_id', $user->tenant_id)
+          ->whereIn('status', ['expired', 'past_due'])
           ->latest()
           ->first();
 
-      if ($expiredSub) {
+      if ($blockedSub) {
           $isExpired = true;
       } else {
           $subscription = \App\Models\Subscription::where('tenant_id', $user->tenant_id)

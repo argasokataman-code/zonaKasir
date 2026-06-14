@@ -265,6 +265,7 @@ class TenantPanelProvider extends PanelProvider
             DisableBladeIconComponents::class,
             DispatchServingFilamentEvent::class,
             LocalizationMiddleware::class,
+            \App\Http\Middleware\CheckSubscription::class,
         ];
     }
 
