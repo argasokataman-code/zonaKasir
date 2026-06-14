@@ -44,11 +44,11 @@ class GoogleController extends Controller
             $user = User::withoutGlobalScopes()->where('google_id', $googleId)->first();
             if ($user) {
                 TenantContext::set($user->tenant_id);
-                // Ensure central tenant record exists
-                \App\Tenant::firstOrCreate(
+                // Ensure central tenant record exists (unguarded because Tenant $guarded = ['id'])
+                \App\Tenant::unguarded(fn () => \App\Tenant::firstOrCreate(
                     ['id' => $user->tenant_id],
                     ['tenancy_email' => $googleUser->getEmail()]
-                )->update(['google_id' => $googleId]);
+                ))->update(['google_id' => $googleId]);
                 Auth::login($user, true);
                 request()->session()->save();
                 return redirect()->intended('/member');
@@ -72,11 +72,11 @@ class GoogleController extends Controller
             $user = User::withoutGlobalScopes()->where('email', $googleUser->getEmail())->first();
             if ($user) {
                 TenantContext::set($user->tenant_id);
-                // Ensure central tenant record exists
-                $tenant = \App\Tenant::firstOrCreate(
+                // Ensure central tenant record exists (unguarded because Tenant $guarded = ['id'])
+                $tenant = \App\Tenant::unguarded(fn () => \App\Tenant::firstOrCreate(
                     ['id' => $user->tenant_id],
                     ['tenancy_email' => $googleUser->getEmail()]
-                );
+                ));
                 $user->update(['google_id' => $googleId]);
                 $tenant->update(['google_id' => $googleId]);
                 Auth::login($user, true);
