@@ -47,7 +47,7 @@
         </svg>
       </div>
       <h2 class="text-xl font-bold text-gray-900 mb-1">Masa Trial Telah Habis</h2>
-      <p class="text-sm text-gray-500">Pilih paket di bawah untuk melanjutkan使用 aplikasi</p>
+      <p class="text-sm text-gray-500">Pilih paket di bawah untuk melanjutkan menggunakan aplikasi</p>
     </div>
 
     {{-- Plans horizontal scroll --}}
