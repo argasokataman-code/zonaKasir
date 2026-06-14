@@ -167,6 +167,9 @@ class TenantPanelProvider extends PanelProvider
                 Js::make('custom-javascript', resource_path('js/app.js')),
                 Js::make('printer', resource_path('js/printer.js')),
                 Js::make('indexeddb', resource_path('js/indexeddb.js')),
+                Js::make('offline-manager', resource_path('js/offline-manager.js')),
+                Js::make('sync-manager', resource_path('js/sync-manager.js')),
+                Js::make('offline-indicator', resource_path('js/offline-indicator.js')),
                 Js::make('session-timeout', resource_path('js/session-timeout.js')),
                 Js::make('html5-qrcode', 'https://unpkg.com/html5-qrcode'),
             ])
@@ -183,7 +186,6 @@ class TenantPanelProvider extends PanelProvider
             ->middleware($this->getMiddleware())
             ->authMiddleware([
                 Authenticate::class,
-                \Illuminate\Routing\Middleware\ThrottleRequests::class . ':30,1',
             ])
             ->pages([
                 CartItem::class,
