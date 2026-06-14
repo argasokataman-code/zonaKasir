@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Http;
 
 beforeEach(function () {
     Config::set('flip.secret_key', 'test-secret-key');
-    Config::set('flip.base_url', 'https://big.flip.id/api/v2');
+    Config::set('flip.base_url', 'https://bigflip.id/big_sandbox_api');
 });
 
 test('flip payout sends disbursement successfully', function () {
