@@ -51,62 +51,60 @@ class ManageSubscription extends Page
 
             $plan = Plan::findOrFail($planId);
 
-            $subscription = Subscription::where('tenant_id', $tenantId)
-                ->whereIn('status', ['trialing', 'active'])
-                ->latest()
-                ->first();
-
-            // If no active sub, get the latest expired one and reactivate
-            if (! $subscription) {
+            // Free plan: activate immediately
+            if (($plan->price_monthly ?? 0) === 0) {
                 $subscription = Subscription::where('tenant_id', $tenantId)
                     ->latest()
                     ->first();
 
-                // If still nothing, create new subscription
-                if (! $subscription) {
-                    $subscription = Subscription::create([
+                if ($subscription) {
+                    $subscription->update([
+                        'plan_id' => $plan->id,
+                        'status' => 'active',
+                        'billing_cycle' => 'monthly',
+                        'starts_at' => now(),
+                        'ends_at' => null,
+                        'trial_ends_at' => null,
+                    ]);
+                } else {
+                    Subscription::create([
                         'tenant_id' => $tenantId,
                         'plan_id' => $plan->id,
                         'status' => 'active',
-                        'billing_cycle' => $billingCycle,
+                        'billing_cycle' => 'monthly',
                         'starts_at' => now(),
-                        'ends_at' => $billingCycle === 'yearly' ? now()->addYear() : now()->addMonth(),
                     ]);
-
-                    if (($plan->price_monthly ?? 0) === 0) {
-                        Notification::make()
-                            ->title('Plan activated')
-                            ->body('Switched to '.$plan->name.' (Free)')
-                            ->success()
-                            ->send();
-
-                        return;
-                    }
-
-                    $invoice = app(InvoiceService::class)->createInvoice($subscription, 'midtrans');
-                    $this->snapRedirectUrl = $this->generateSnapRedirect($invoice, $subscription);
-
-                    return;
                 }
-            }
 
-            $subscription->update([
-                'plan_id' => $plan->id,
-                'billing_cycle' => $billingCycle,
-                'status' => 'active',
-                'starts_at' => now(),
-                'ends_at' => $billingCycle === 'yearly' ? now()->addYear() : now()->addMonth(),
-                'trial_ends_at' => null,
-            ]);
-
-            if (($plan->price_monthly ?? 0) === 0) {
                 Notification::make()
-                    ->title('Plan updated')
+                    ->title('Plan activated')
                     ->body('Switched to '.$plan->name.' (Free)')
                     ->success()
                     ->send();
 
                 return;
+            }
+
+            // Paid plan: find or create subscription (status stays expired/pending)
+            $subscription = Subscription::where('tenant_id', $tenantId)
+                ->latest()
+                ->first();
+
+            if ($subscription) {
+                $subscription->update([
+                    'plan_id' => $plan->id,
+                    'billing_cycle' => $billingCycle,
+                    // Status NOT changed — webhook will set to 'active' after payment
+                ]);
+            } else {
+                $subscription = Subscription::create([
+                    'tenant_id' => $tenantId,
+                    'plan_id' => $plan->id,
+                    'status' => 'trialing',
+                    'billing_cycle' => $billingCycle,
+                    'starts_at' => now(),
+                    'trial_ends_at' => now()->addDays(7),
+                ]);
             }
 
             $invoice = app(InvoiceService::class)->createInvoice($subscription, 'midtrans');
