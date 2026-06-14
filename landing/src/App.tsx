@@ -1273,7 +1273,6 @@ export default function App() {
                 </button>
                 <span className={`text-[11.5px] font-bold uppercase tracking-wider transition-colors duration-200 flex items-center gap-1.5 ${billingCycle === 'annually' ? 'text-[#1A1A1A]' : 'text-[#888888]'}`}>
                   {t('pricing.yearly')}
-                  <span className="bg-emerald-500 text-white text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-[4px] tracking-normal normal-case">{t('pricing.save')}</span>
                 </span>
               </div>
             )}
