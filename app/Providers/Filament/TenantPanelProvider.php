@@ -41,6 +41,7 @@ use App\Filament\Tenant\Resources\UserResource;
 use App\Filament\Tenant\Resources\VoucherResource;
 use App\Filament\Tenant\Resources\WithdrawalResource;
 use App\Http\Middleware\LocalizationMiddleware;
+use App\Http\Middleware\TenantIsolationMiddleware;
 use App\Models\Tenants\About;
 use App\Models\Tenants\UploadedFile;
 use App\Tenant;
@@ -261,6 +262,7 @@ class TenantPanelProvider extends PanelProvider
             AddQueuedCookiesToResponse::class,
             StartSession::class,
             AuthenticateSession::class,
+            TenantIsolationMiddleware::class,
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
