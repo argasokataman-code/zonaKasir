@@ -106,6 +106,11 @@ class TenantPanelProvider extends PanelProvider
         );
 
         FilamentView::registerRenderHook(
+            PanelsRenderHook::BODY_END,
+            fn () => view('partials.clear-browser-on-logout')
+        );
+
+        FilamentView::registerRenderHook(
             PanelsRenderHook::SIDEBAR_NAV_START,
             fn () => view('partials.sidebar-logo-css')
         );
