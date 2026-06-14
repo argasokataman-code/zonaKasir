@@ -3,6 +3,7 @@
 namespace App\Livewire\Forms\Auth;
 
 use App\Services\RegisterTenant;
+use App\Services\TurnstileService;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Wizard;
@@ -22,6 +23,8 @@ class RegisterTenantForm extends Component implements HasForms
     use InteractsWithForms;
 
     public ?array $data = [];
+
+    public ?string $turnstileToken = null;
 
     public function form(Form $form): Form
     {
@@ -102,6 +105,21 @@ class RegisterTenantForm extends Component implements HasForms
     public function create(RegisterTenant $registerTenant): void
     {
         $data = $this->form->getState();
+
+        // Validate Turnstile if enabled
+        $turnstile = app(TurnstileService::class);
+        if ($turnstile->isEnabled()) {
+            if (empty($this->turnstileToken)) {
+                $this->addError('turnstile', 'Please complete the verification.');
+
+                return;
+            }
+            if (! $turnstile->validate($this->turnstileToken, TurnstileService::getVisitorIp())) {
+                $this->addError('turnstile', 'Verification failed. Please try again.');
+
+                return;
+            }
+        }
 
         $tenantId = $registerTenant->create(array_merge($data, [
             'name' => strtolower(str_replace(' ', '_', $data['full_name'])).'_'.uniqid(),
