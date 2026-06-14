@@ -35,7 +35,6 @@ class GoogleController extends Controller
 
                 if ($user) {
                     Auth::login($user, true);
-                    request()->session()->regenerate();
                     request()->session()->save();
                     return redirect()->intended('/member');
                 }
@@ -50,7 +49,6 @@ class GoogleController extends Controller
                     $user->update(['google_id' => $googleId]);
                     $tenant->update(['google_id' => $googleId]);
                     Auth::login($user, true);
-                    request()->session()->regenerate();
                     request()->session()->save();
                     return redirect()->intended('/member');
                 }
@@ -79,7 +77,6 @@ class GoogleController extends Controller
             \App\Tenant::where('id', $tenantId)->update(['google_id' => $googleId]);
 
             Auth::login($user, true);
-            request()->session()->regenerate();
             request()->session()->save();
             return redirect()->intended('/member');
         } catch (\Throwable $e) {
