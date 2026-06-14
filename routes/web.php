@@ -28,6 +28,8 @@ Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])
 Route::get('/auth/google/callback', [GoogleController::class, 'callback'])
     ->name('google.callback');
 
+Route::view('/auth/google/success', 'auth.google-success');
+
 Route::middleware([
     'web',
 ])
