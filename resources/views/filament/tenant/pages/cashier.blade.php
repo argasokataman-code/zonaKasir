@@ -12,12 +12,20 @@
   </div>
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-4">
     <div class="col-span-1 lg:col-span-2 pb-24 lg:pb-0">
+      {{-- Mobile back button --}}
+      <div class="mb-2 flex items-center gap-2 lg:hidden">
+        <a href="/member/sellings"
+          class="flex items-center gap-1 rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+          <x-heroicon-o-arrow-left class="h-4 w-4" />
+          <span>{{ __('Back') }}</span>
+        </a>
+      </div>
       {{-- Search --}}
       <div class="mb-4 px-1">
         <div class="relative">
           <x-heroicon-o-magnifying-glass class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
           <input type="text" wire:model.live.debounce.300ms="search"
-            class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-4 text-sm focus:border-zonakasir-primary focus:outline-none focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+            class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 focus:border-zonakasir-primary focus:outline-none focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white"
             placeholder="{{ __('Search (SKU, name, barcode)') }}">
         </div>
       </div>
@@ -37,7 +45,7 @@
       </div>
 
       {{-- Product Cards Grid --}}
-      <div class="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-4" wire:loading.class="opacity-60">
+      <div class="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" wire:loading.class="opacity-60">
         @forelse ($products as $product)
           <div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
             {{-- Image --}}
@@ -80,19 +88,19 @@
                 <span class="text-sm font-bold text-zonakasir-primary">{{ price_format($product->sellingPriceCalculate) }}</span>
                 @if ($cartQty === 0)
                   <button wire:click="addCart({{ $product->id }})" wire:loading.attr="disabled"
-                    class="flex h-8 w-8 items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90 disabled:opacity-50">
-                    <x-heroicon-o-plus class="h-4 w-4" />
+                    class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90 disabled:opacity-50">
+                    <x-heroicon-o-plus class="h-5 w-5" />
                   </button>
                 @else
                   <div class="flex items-center gap-1">
                     <button wire:click="reduceCart({{ $product->id }})" wire:loading.attr="disabled"
-                      class="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
-                      <x-heroicon-o-minus-small class="h-4 w-4" />
+                      class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
+                      <x-heroicon-o-minus-small class="h-5 w-5" />
                     </button>
-                    <span class="w-6 text-center text-sm font-semibold text-zonakasir-primary">{{ $cartQty }}</span>
+                    <span class="w-8 text-center text-sm font-semibold text-zonakasir-primary">{{ $cartQty }}</span>
                     <button wire:click="addCart({{ $product->id }})" wire:loading.attr="disabled"
-                      class="flex h-7 w-7 items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90 disabled:opacity-50">
-                      <x-heroicon-o-plus-small class="h-4 w-4" />
+                      class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90 disabled:opacity-50">
+                      <x-heroicon-o-plus-small class="h-5 w-5" />
                     </button>
                   </div>
                 @endif
@@ -109,26 +117,39 @@
     </div>
 
     {{-- Mobile: cart toggle button with scan --}}
-    <div class="fixed bottom-0 left-0 right-0 z-50 border-t bg-white p-3 shadow-lg dark:border-gray-800 dark:bg-gray-900 lg:hidden"
+    <div class="fixed bottom-0 left-0 right-0 z-50 border-t bg-white px-3 pb-[env(safe-area-inset-bottom)] pt-3 shadow-lg dark:border-gray-800 dark:bg-gray-900 lg:hidden"
       x-show="!cartOpen">
       <div class="flex gap-2">
         <button @click="cartOpen = true"
-          class="flex flex-1 items-center justify-between rounded-lg bg-zonakasir-primary px-4 py-3 text-white">
+          class="flex flex-1 items-center justify-between rounded-lg bg-zonakasir-primary px-4 py-3 min-h-[48px] text-white">
           <span class="font-semibold">{{ __('View Cart') }}</span>
           <span class="flex items-center gap-2">
             <span x-text="$wire.cartItems ? $wire.cartItems.length : 0" class="rounded-full bg-white/20 px-2 py-0.5 text-sm"></span>
             <x-heroicon-o-chevron-up class="h-5 w-5" />
           </span>
         </button>
-        <button x-on:click="$dispatch('open-modal', {id: 'qr-scanner-modal'})" type="button"
-          class="flex items-center justify-center rounded-lg bg-gray-100 px-3 py-3 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+        <button
+          x-on:click="
+            if (navigator.mediaDevices?.getUserMedia) {
+              navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                stream.getTracks().forEach(t => t.stop());
+                $dispatch('open-modal', {id: 'qr-scanner-modal'});
+              }).catch(function(err) {
+                new FilamentNotification().title('Camera permission denied: ' + err.message).danger().send();
+              });
+            } else {
+              $dispatch('open-modal', {id: 'qr-scanner-modal'});
+            }
+          "
+          type="button"
+          class="flex min-h-[48px] min-w-[48px] items-center justify-center rounded-lg bg-gray-100 px-3 py-3 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
           <x-heroicon-o-qr-code class="h-6 w-6" />
         </button>
       </div>
     </div>
 
     {{-- Sidebar: always visible on desktop, bottom sheet on mobile --}}
-    <div class="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white shadow-2xl transition-transform duration-300 dark:bg-gray-900 lg:inset-auto lg:right-0 lg:top-0 lg:h-screen lg:w-1/3 lg:rounded-none lg:shadow-none lg:translate-y-0"
+    <div class="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white shadow-2xl transition-transform duration-300 dark:bg-gray-900 lg:inset-auto lg:right-0 lg:top-0 lg:h-screen lg:w-[40%] xl:w-1/3 lg:rounded-none lg:shadow-none lg:translate-y-0"
       x-bind:class="cartOpen ? 'translate-y-0' : 'translate-y-full lg:!translate-y-0'"
       x-cloak>
       <div class="flex items-center justify-between border-b p-3 dark:border-gray-800 lg:hidden">
@@ -143,12 +164,25 @@
           <div class="flex items-center">
             <div class="flex items-center gap-x-2">
               <a href="/member/sellings"
-                class="flex items-center justify-center gap-x-1 rounded-lg bg-gray-100 px-4 py-1 text-gray-500">
-                <x-heroicon-o-arrow-left class="h-4 w-4 text-gray-500" />
-                <p class="hidden lg:block">{{ __('Back') }} </p>
+                class="flex items-center justify-center gap-x-1 rounded-lg bg-gray-100 px-4 py-1 text-gray-500 dark:bg-gray-700 dark:text-gray-300">
+                <x-heroicon-o-arrow-left class="h-4 w-4" />
+                <p class="text-sm">{{ __('Back') }} </p>
               </a>
 
-              <button x-on:click="$dispatch('open-modal', {id: 'qr-scanner-modal'})" type="button"
+              <button
+                x-on:click="
+                  if (navigator.mediaDevices?.getUserMedia) {
+                    navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                      stream.getTracks().forEach(t => t.stop());
+                      $dispatch('open-modal', {id: 'qr-scanner-modal'});
+                    }).catch(function(err) {
+                      new FilamentNotification().title('Camera permission denied: ' + err.message).danger().send();
+                    });
+                  } else {
+                    $dispatch('open-modal', {id: 'qr-scanner-modal'});
+                  }
+                "
+                type="button"
                 class="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-gray-800" aria-label="Scan with camera">
                 <x-heroicon-o-qr-code class="h-8 w-8 text-gray-900 dark:text-gray-300" />
               </button>
@@ -438,8 +472,9 @@
     </x-slot>
   </x-filament::modal>
 
-  <x-filament::modal id="qr-scanner-modal" width="lg" :close-by-clicking-away="false"
-    x-on:close-modal.window="if ($event.detail.id === 'qr-scanner-modal') { window.stopScanner(); }">
+  <x-filament::modal id="qr-scanner-modal" width="xl" :close-by-clicking-away="false"
+    x-on:close-modal.window="if ($event.detail.id === 'qr-scanner-modal') { window.stopScanner(); }"
+    class="[&_.fi-modal-content]:!max-w-[100vw] [&_.fi-modal-content]:!w-full [&_.fi-modal-content]:!h-full [&_.fi-modal-content]:!m-0 [&_.fi-modal-content]:!rounded-none lg:[&_.fi-modal-content]:!max-w-2xl lg:[&_.fi-modal-content]:!w-auto lg:[&_.fi-modal-content]:!h-auto lg:[&_.fi-modal-content]:!m-4 lg:[&_.fi-modal-content]:!rounded-xl">
     <x-slot name="heading">
       {{ __('Scan Barcode with Camera') }}
     </x-slot>
@@ -515,6 +550,7 @@
       </x-filament::button>
     </x-slot>
   </x-filament::modal>
+  <style>
     /* html5-qrcode library button & control styling */
     #qr-reader__dashboard_section_csr button,
     #qr-reader__dashboard_section_swaplink {
@@ -630,6 +666,42 @@
     }
     .fi-modal .fi-modal-content {
       z-index: 101 !important;
+    }
+  </style>
+
+  {{-- PWA touch & scroll improvements --}}
+  <style>
+    /* Prevent pull-to-refresh in PWA standalone mode */
+    html, body {
+      overscroll-behavior-y: contain;
+    }
+
+    /* Better touch scrolling for cart & product list */
+    .overflow-y-auto, .overflow-auto {
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Remove tap highlight on mobile */
+    button, a, input, select, textarea {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Safe area insets for notched devices */
+    .pb-safe {
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    .pt-safe {
+      padding-top: env(safe-area-inset-top, 0px);
+    }
+
+    /* Product card touch feedback */
+    .group:active {
+      transform: scale(0.98);
+    }
+
+    /* Bottom bar safe area */
+    .bottom-safe {
+      bottom: env(safe-area-inset-bottom, 0px);
     }
   </style>
 </div>
