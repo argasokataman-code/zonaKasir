@@ -3,6 +3,7 @@
 namespace App\Filament\Admin\Pages;
 
 use App\Models\Tenants\Withdrawal;
+use App\Models\Tenants\About;
 use App\Tenant;
 use App\Services\Tenants\FlipDataService;
 use Filament\Pages\Page;
@@ -23,6 +24,8 @@ class Disbursement extends Page
 
     public array $flipDisbursements = [];
 
+    public array $tenants = [];
+
     public array $withdrawals = [];
 
     public function mount(): void
@@ -34,6 +37,7 @@ class Disbursement extends Page
     {
         $this->loadFlipBalance();
         $this->loadFlipDisbursements();
+        $this->loadTenants();
         $this->loadWithdrawals();
     }
 
@@ -59,6 +63,32 @@ class Disbursement extends Page
         } catch (\Throwable $e) {
             $this->balanceError = $e->getMessage();
         }
+    }
+
+    public function loadTenants(): void
+    {
+        $centralTenants = Tenant::all();
+
+        $tenantAbouts = About::withoutGlobalScope('tenant')
+            ->whereIn('tenant_id', $centralTenants->pluck('id'))
+            ->get()
+            ->keyBy('tenant_id');
+
+        $this->tenants = $centralTenants->map(function ($t) use ($tenantAbouts) {
+            $data = is_string($t->data) ? json_decode($t->data, true) : $t->data;
+            $about = $tenantAbouts->get($t->id);
+
+            return [
+                'id' => $t->id,
+                'name' => $data['name'] ?? $t->id,
+                'shop_name' => $about?->shop_name ?? '-',
+                'bank_name' => $about?->bank_name ?? '-',
+                'bank_code' => $about?->bank_code ?? '-',
+                'bank_account_name' => $about?->bank_account_name ?? '-',
+                'bank_account_number' => $about?->bank_account_number ?? '-',
+                'has_bank' => !empty($about?->bank_account_number),
+            ];
+        })->toArray();
     }
 
     public function loadFlipDisbursements(): void
