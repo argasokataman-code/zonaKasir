@@ -67,7 +67,7 @@ class GoogleController extends Controller
 
             Auth::login($user, true);
 
-            return redirect()->intended('/member');
+            return redirect('/auth/google/success');
         } catch (\Throwable $e) {
             report($e);
 
