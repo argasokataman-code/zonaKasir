@@ -15,6 +15,13 @@ class NotificationDebugger extends Page
 
     protected static string $view = 'filament.admin.pages.notification-debugger';
 
+    protected static ?string $navigationGroup = 'Debug';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return app()->environment('local');
+    }
+
     public array $results = [];
 
     public function mount(): void
@@ -29,7 +36,12 @@ class NotificationDebugger extends Page
         $output[] = "Active tenants: {$tenants->count()}";
 
         foreach ($tenants as $t) {
-            $t->run(function () use ($t, &$output) {
+            $db = $t->tenancy_db_name ?? null;
+            if ($db && config("database.connections.tenant_db")) {
+                config(['database.connections.tenant_db.database' => $db]);
+                \Illuminate\Support\Facades\DB::purge('tenant_db');
+            }
+            try {
                 $userCount = \App\Models\Tenants\User::count();
                 $firstUser = \App\Models\Tenants\User::first();
                 $notifCount = 0;
@@ -42,7 +54,9 @@ class NotificationDebugger extends Page
                 if ($latestNotif) {
                     $output[] = "  Latest: " . json_encode($latestNotif->data);
                 }
-            });
+            } catch (\Throwable $e) {
+                $output[] = "Tenant {$t->id}: ERROR - " . $e->getMessage();
+            }
         }
 
         $this->results = $output;
