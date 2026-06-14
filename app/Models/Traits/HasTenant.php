@@ -2,17 +2,15 @@
 
 namespace App\Models\Traits;
 
+use App\Services\TenantContext;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 
 trait HasTenant
 {
     protected static function bootHasTenant(): void
     {
         static::addGlobalScope('tenant', function (Builder $builder) {
-            $tenantId = Auth::user()?->tenant_id
-                ?? session('tenant_id')
-                ?? request()->header('X-Tenant-ID');
+            $tenantId = TenantContext::get();
 
             if ($tenantId) {
                 $builder->where((new static)->getTable().'.tenant_id', $tenantId);
@@ -21,8 +19,7 @@ trait HasTenant
 
         static::creating(function ($model) {
             if (! $model->tenant_id) {
-                $model->tenant_id = Auth::user()?->tenant_id
-                    ?? session('tenant_id');
+                $model->tenant_id = TenantContext::get();
             }
         });
     }

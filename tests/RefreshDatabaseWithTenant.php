@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Models\Tenants\About;
 use App\Models\Tenants\User;
+use App\Services\TenantContext;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 
@@ -32,7 +33,7 @@ trait RefreshDatabaseWithTenant
         ]);
 
         try {
-            session(['tenant_id' => $tenantId]);
+            TenantContext::set($tenantId);
             Artisan::call('db:seed', ['--class' => 'PermissionSeeder', '--force' => true]);
             Artisan::call('db:seed', ['--class' => 'PaymentMethodSeeder', '--force' => true]);
             Artisan::call('db:seed', ['--class' => 'DigitalPaymentMethodSeeder', '--force' => true]);
