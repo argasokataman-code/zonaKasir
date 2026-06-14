@@ -27,9 +27,9 @@ class ManageSubscription extends Page
 
     public ?string $snapRedirectUrl = null;
 
-    public function subscribePlan(int $planId): void
+    public function subscribePlan(int $planId, string $billingCycle = 'monthly'): void
     {
-        $this->processSubscription($planId, 'monthly');
+        $this->processSubscription($planId, $billingCycle);
     }
 
     private function processSubscription(int $planId, string $billingCycle): void
