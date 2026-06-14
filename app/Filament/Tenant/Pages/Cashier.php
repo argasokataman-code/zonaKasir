@@ -12,19 +12,20 @@ use App\Filament\Tenant\Pages\Traits\VoucherHandler;
 use App\Filament\Tenant\Resources\Traits\RefreshThePage;
 use App\Models\Tenants\About;
 use App\Models\Tenants\CartItem;
+use App\Models\Tenants\Category;
 use App\Models\Tenants\Member;
 use App\Models\Tenants\PaymentMethod;
+use App\Models\Tenants\Product;
 use App\Models\Tenants\Profile;
 use App\Models\Tenants\Setting;
 use App\Models\Tenants\Table;
 use App\Traits\HasTranslatableResource;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
-use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Collection as CollectionSupport;
 
-class Cashier extends Page implements HasForms, HasTable
+class Cashier extends Page implements HasForms
 {
     use CartInteraction, HasTranslatableResource, RefreshThePage, TableProduct;
     use PriceCalculation, VoucherHandler, MemberHandler, PaymentHandler, CartForm;
@@ -61,7 +62,20 @@ class Cashier extends Page implements HasForms, HasTable
 
     public ?Collection $tableOption;
 
+    public ?Collection $products;
+
+    public ?Collection $categories;
+
+    public ?string $search = null;
+
+    public ?int $selectedCategory = null;
+
     private float $discount_price = 0;
+
+    protected $queryString = [
+        'search' => ['except' => ''],
+        'selectedCategory' => ['except' => ''],
+    ];
 
     public static function canAccess(): bool
     {
@@ -108,6 +122,54 @@ class Cashier extends Page implements HasForms, HasTable
         ]));
 
         $this->fillPaymentMethodLabel();
+
+        $this->categories = Category::all();
+        $this->loadProducts();
+    }
+
+    public function loadProducts(): void
+    {
+        $query = Product::query()
+            ->where(function ($query) {
+                $query->where('type', 'product')
+                    ->where(function ($query) {
+                        $query->whereHas('stocks', function ($query) {
+                            $query->where('is_ready', 1)
+                                ->where('type', 'in')
+                                ->where('stock', '>', 0);
+                        })
+                        ->orWhere('is_non_stock', true);
+                    })
+                ->orWhere('type', 'service');
+            })
+            ->where('show', true);
+
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('sku', 'like', "%{$this->search}%")
+                  ->orWhere('name', 'like', "%{$this->search}%")
+                  ->orWhereHas('barcodes', function ($q) {
+                      $q->where('code', 'like', "%{$this->search}%")
+                        ->where('is_active', true);
+                  });
+            });
+        }
+
+        if ($this->selectedCategory) {
+            $query->where('category_id', $this->selectedCategory);
+        }
+
+        $this->products = $query->get();
+    }
+
+    public function updatedSearch(): void
+    {
+        $this->loadProducts();
+    }
+
+    public function updatedSelectedCategory(): void
+    {
+        $this->loadProducts();
     }
 
     public function storeCart(): void
