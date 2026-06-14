@@ -1124,14 +1124,13 @@ export default function App() {
                 Belum menemukan jawaban yang Anda cari? Silakan tanyakan langsung permasalahan Anda kepada tim Customer Support kami.
               </p>
               <div>
-                <button
-                  onClick={() => setActiveModal('consultation')}
+                <a href="https://wa.me/6281234567890?text=Halo%20saya%20ada%20pertanyaan%20tentang%20ZonaKasir"
                   className="inline-flex items-center gap-2 bg-gray-900 text-white font-sans text-xs font-bold uppercase tracking-wider px-6 py-3 rounded-[4px] shadow-sm hover:bg-gray-800 transition-all cursor-pointer hover:scale-[1.02] active:scale-95"
                   id="faq-ask-admin-btn"
                 >
                   <MessageCircle className="w-4 h-4 text-white" />
                   Tanya Admin
-                </button>
+                </a>
               </div>
             </div>
           </motion.div>
@@ -1400,9 +1399,9 @@ export default function App() {
                     </div>
 
                     <div className="pt-6">
-                      <button 
-                        onClick={() => setActiveModal(plan.cta.action === 'contact' ? 'demo' : 'register')}
-                        className={`w-full text-[11px] font-bold uppercase tracking-wider py-3 rounded-[4px] transition-colors cursor-pointer text-center ${
+                      <a 
+                        href={plan.cta.action === 'contact' ? 'https://wa.me/6281234567890?text=Halo%20saya%20tertarik%20dengan%20paket%20' + plan.slug : '/auth/register'}
+                        className={`block w-full text-center text-[11px] font-bold uppercase tracking-wider py-3 rounded-[4px] transition-colors cursor-pointer ${
                           plan.is_popular
                             ? 'bg-[#1A1A1A] text-white hover:bg-black shadow-xs'
                             : plan.price_monthly === 0
@@ -1411,7 +1410,7 @@ export default function App() {
                         }`}
                       >
                         {plan.cta.label}
-                      </button>
+                      </a>
                     </div>
                   </div>
                 ))}
@@ -1453,22 +1452,20 @@ export default function App() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3.5 pt-2 max-w-md mx-auto">
-              <button 
-                onClick={() => setActiveModal('register')}
+              <a href="/auth/register"
                 className="bg-white hover:bg-[#F4F4F2] text-[#1A1A1A] font-sans text-xs font-bold px-7 py-4 rounded-[6px] shadow-md active:scale-95 cursor-pointer flex items-center justify-center gap-1.5"
                 id="cta-register"
               >
                 {t('cta.start_free')}
                 <ArrowRight className="w-4 h-4 text-[#1A1A1A]" />
-              </button>
+              </a>
               
-              <button 
-                onClick={() => setActiveModal('demo')}
+              <a href="https://wa.me/6281234567890?text=Halo%20saya%20ingin%20demo%20ZonaKasir"
                 className="bg-transparent text-white font-sans text-xs font-bold px-7 py-4 rounded-[6px] hover:bg-white/10 transition-all cursor-pointer flex items-center justify-center gap-1.5 border border-white/20 active:scale-95"
                 id="cta-demo"
               >
                 Jadwalkan Demo Privat
-              </button>
+              </a>
             </div>
 
             {/* Small fine print */}
