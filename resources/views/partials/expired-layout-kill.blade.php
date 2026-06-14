@@ -32,7 +32,7 @@
   }
 @endphp
 
-@if($isExpired)
+@if($isExpired && !request()->is('member/subscription*'))
 <style>
   .fi-layout,
   .fi-sidebar,
