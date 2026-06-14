@@ -38,23 +38,25 @@ test('flip data service returns null on failed balance fetch', function () {
 test('flip data service returns disbursements', function () {
     Http::fake([
         'bigflip.id/big_sandbox_api/v3/disbursement*' => Http::response([
-            [
-                'id' => '123',
-                'bank_code' => 'bca',
-                'account_number' => '1234567890',
-                'amount' => 100000,
-                'status' => 'DONE',
-                'remark' => 'Test payout',
-                'created_at' => '2026-06-14 10:00:00',
-            ],
-            [
-                'id' => '456',
-                'bank_code' => 'bni',
-                'account_number' => '0987654321',
-                'amount' => 200000,
-                'status' => 'PENDING',
-                'remark' => 'Another payout',
-                'created_at' => '2026-06-14 11:00:00',
+            'data' => [
+                [
+                    'id' => '123',
+                    'bank_code' => 'bca',
+                    'account_number' => '1234567890',
+                    'amount' => 100000,
+                    'status' => 'DONE',
+                    'remark' => 'Test payout',
+                    'created_at' => '2026-06-14 10:00:00',
+                ],
+                [
+                    'id' => '456',
+                    'bank_code' => 'bni',
+                    'account_number' => '0987654321',
+                    'amount' => 200000,
+                    'status' => 'PENDING',
+                    'remark' => 'Another payout',
+                    'created_at' => '2026-06-14 11:00:00',
+                ],
             ],
         ], 200),
     ]);

@@ -53,7 +53,9 @@ class FlipDataService
             return [];
         }
 
-        return $response->json();
+        $body = $response->json();
+
+        return $body['data'] ?? [];
     }
 
     public function getDisbursement(string $id): ?array
