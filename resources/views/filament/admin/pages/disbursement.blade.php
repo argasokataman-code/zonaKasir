@@ -40,61 +40,10 @@
             </div>
         </x-filament::section>
 
-        {{-- Flip Disbursement History --}}
-        <x-filament::section heading="Flip Disbursement History" icon="heroicon-o-list-bullet">
+        {{-- Withdrawal & Disbursement History --}}
+        <x-filament::section heading="Withdrawal History" icon="heroicon-o-clock">
             <div class="p-4">
-                @if (empty($flipDisbursements))
-                    <div class="text-center text-gray-500">No Flip disbursement data available</div>
-                @else
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm">
-                            <thead>
-                                <tr class="border-b text-left text-gray-500">
-                                    <th class="p-2">ID</th>
-                                    <th class="p-2">Bank</th>
-                                    <th class="p-2">Account</th>
-                                    <th class="p-2">Amount</th>
-                                    <th class="p-2">Status</th>
-                                    <th class="p-2">Remark</th>
-                                    <th class="p-2">Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($flipDisbursements as $d)
-                                    <tr class="border-b hover:bg-gray-50">
-                                        <td class="p-2 font-mono text-xs">{{ $d['id'] ?? '-' }}</td>
-                                        <td class="p-2">{{ $d['bank_code'] ?? '-' }}</td>
-                                        <td class="p-2 font-mono">{{ $d['account_number'] ?? '-' }}</td>
-                                        <td class="p-2">Rp {{ number_format(($d['amount'] ?? 0), 0, ',', '.') }}</td>
-                                        <td class="p-2">
-                                            @php
-                                                $colors = [
-                                                    'DONE' => 'success',
-                                                    'PENDING' => 'warning',
-                                                    'CANCELLED' => 'danger',
-                                                    'FAILED' => 'danger',
-                                                ];
-                                                $color = $colors[$d['status']] ?? 'gray';
-                                            @endphp
-                                            <x-filament::badge :color="$color">
-                                                {{ $d['status'] ?? '-' }}
-                                            </x-filament::badge>
-                                        </td>
-                                        <td class="p-2 max-w-xs truncate">{{ $d['remark'] ?? '-' }}</td>
-                                        <td class="p-2 whitespace-nowrap">{{ $d['created_at'] ?? '-' }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                @endif
-            </div>
-        </x-filament::section>
-
-        {{-- Local Withdrawal History --}}
-        <x-filament::section heading="Local Withdrawal History" icon="heroicon-o-clock">
-            <div class="p-4">
-                @if (empty($localWithdrawals))
+                @if (empty($withdrawals))
                     <div class="text-center text-gray-500">No withdrawals found</div>
                 @else
                     <div class="overflow-x-auto">
@@ -104,18 +53,19 @@
                                     <th class="p-2">Tenant</th>
                                     <th class="p-2">Amount</th>
                                     <th class="p-2">Bank</th>
+                                    <th class="p-2">Account</th>
                                     <th class="p-2">Status</th>
-                                    <th class="p-2">Disburse ID</th>
-                                    <th class="p-2">Requested</th>
-                                    <th class="p-2">Processed</th>
+                                    <th class="p-2">Flip ID</th>
+                                    <th class="p-2">Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($localWithdrawals as $w)
+                                @foreach ($withdrawals as $w)
                                     <tr class="border-b hover:bg-gray-50">
-                                        <td class="p-2">{{ $w['tenant_name'] }}</td>
+                                        <td class="p-2 font-medium">{{ $w['tenant_name'] }}</td>
                                         <td class="p-2">Rp {{ number_format($w['amount'], 0, ',', '.') }}</td>
-                                        <td class="p-2">{{ $w['bank_name'] }} a/n {{ $w['bank_account_name'] }}</td>
+                                        <td class="p-2">{{ $w['bank_name'] }} ({{ $w['bank_code'] ?? '-' }})</td>
+                                        <td class="p-2">{{ $w['bank_account_name'] }}<br><span class="text-xs text-gray-400">{{ $w['bank_account_number'] }}</span></td>
                                         <td class="p-2">
                                             @php
                                                 $colors = [
@@ -134,7 +84,50 @@
                                         </td>
                                         <td class="p-2 font-mono text-xs">{{ $w['disburse_id'] ?? '-' }}</td>
                                         <td class="p-2 whitespace-nowrap">{{ $w['created_at'] }}</td>
-                                        <td class="p-2 whitespace-nowrap">{{ $w['processed_at'] ?? '-' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
+            </div>
+        </x-filament::section>
+
+        {{-- Flip Disbursement History --}}
+        <x-filament::section heading="Flip Disbursement Data">
+            <div class="p-4">
+                @if (empty($flipDisbursements))
+                    <div class="text-center text-gray-500">No data from Flip API</div>
+                @else
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b text-left text-gray-500">
+                                    <th class="p-2">Flip ID</th>
+                                    <th class="p-2">Bank</th>
+                                    <th class="p-2">Account</th>
+                                    <th class="p-2">Amount</th>
+                                    <th class="p-2">Status</th>
+                                    <th class="p-2">Remark</th>
+                                    <th class="p-2">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($flipDisbursements as $d)
+                                    <tr class="border-b hover:bg-gray-50">
+                                        <td class="p-2 font-mono text-xs">{{ $d['id'] ?? '-' }}</td>
+                                        <td class="p-2">{{ $d['bank_code'] ?? '-' }}</td>
+                                        <td class="p-2 font-mono">{{ $d['account_number'] ?? '-' }}</td>
+                                        <td class="p-2">Rp {{ number_format(($d['amount'] ?? 0), 0, ',', '.') }}</td>
+                                        <td class="p-2">
+                                            @php
+                                                $colors = ['DONE' => 'success', 'PENDING' => 'warning', 'CANCELLED' => 'danger', 'FAILED' => 'danger'];
+                                                $color = $colors[$d['status']] ?? 'gray';
+                                            @endphp
+                                            <x-filament::badge :color="$color">{{ $d['status'] ?? '-' }}</x-filament::badge>
+                                        </td>
+                                        <td class="p-2 max-w-xs truncate">{{ $d['remark'] ?? '-' }}</td>
+                                        <td class="p-2 whitespace-nowrap">{{ $d['created_at'] ?? '-' }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

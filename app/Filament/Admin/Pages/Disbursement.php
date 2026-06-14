@@ -23,13 +23,29 @@ class Disbursement extends Page
 
     public array $flipDisbursements = [];
 
-    public array $localWithdrawals = [];
+    public array $withdrawals = [];
 
     public function mount(): void
     {
+        $this->load();
+    }
+
+    public function load(): void
+    {
         $this->loadFlipBalance();
         $this->loadFlipDisbursements();
-        $this->loadLocalWithdrawals();
+        $this->loadWithdrawals();
+    }
+
+    private function tenantMap(): array
+    {
+        $tenants = Tenant::all();
+        $map = [];
+        foreach ($tenants as $t) {
+            $data = is_string($t->data) ? json_decode($t->data, true) : $t->data;
+            $map[$t->id] = $data['name'] ?? $t->id;
+        }
+        return $map;
     }
 
     public function loadFlipBalance(): void
@@ -55,27 +71,23 @@ class Disbursement extends Page
         }
     }
 
-    public function loadLocalWithdrawals(): void
+    public function loadWithdrawals(): void
     {
-        $tenants = Tenant::all();
-        $tenantMap = [];
-        foreach ($tenants as $t) {
-            $data = is_string($t->data) ? json_decode($t->data, true) : $t->data;
-            $tenantMap[$t->id] = $data['name'] ?? $t->id;
-        }
+        $tenantMap = $this->tenantMap();
 
         $withdrawals = Withdrawal::withoutGlobalScope('tenant')
             ->orderBy('created_at', 'desc')
-            ->limit(30)
+            ->limit(50)
             ->get();
 
-        $this->localWithdrawals = $withdrawals->map(fn ($w) => [
+        $this->withdrawals = $withdrawals->map(fn ($w) => [
             'tenant_id' => $w->tenant_id,
             'tenant_name' => $tenantMap[$w->tenant_id] ?? $w->tenant_id,
             'id' => $w->id,
             'amount' => $w->amount,
             'status' => $w->status,
             'bank_name' => $w->bank_name,
+            'bank_code' => $w->bank_code,
             'bank_account_name' => $w->bank_account_name,
             'bank_account_number' => $w->bank_account_number,
             'disburse_id' => $w->disburse_id,
@@ -86,9 +98,7 @@ class Disbursement extends Page
 
     public function refresh(): void
     {
-        $this->loadFlipBalance();
-        $this->loadFlipDisbursements();
-        $this->loadLocalWithdrawals();
+        $this->load();
     }
 
     public static function canAccess(): bool
