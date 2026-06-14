@@ -1207,6 +1207,158 @@ const translations: TranslationDict = {
     PT: 'Limite de segurança', FR: 'Limite de sécurité',
     ZH: '安全线', JA: '安全限度', KO: '안전 한도', HI: 'सुरक्षा सीमा',
   },
+
+  // ==================== HERO LAPTOP MOCKUP ====================
+  'hero.laptop.title': {
+    ID: 'Laporan Hari Ini', EN: 'Today\'s Report',
+    AR: 'تقرير اليوم', ES: 'Informe de Hoy',
+    PT: 'Relatório de Hoje', FR: 'Rapport du Jour',
+    ZH: '今日报告', JA: '本日のレポート', KO: '오늘의 리포트', HI: 'आज की रिपोर्ट',
+  },
+  'hero.laptop.income': {
+    ID: 'Pendapatan', EN: 'Revenue',
+    AR: 'الإيرادات', ES: 'Ingresos',
+    PT: 'Receita', FR: 'Revenus',
+    ZH: '收入', JA: '収益', KO: '매출', HI: 'राजस्व',
+  },
+  'hero.laptop.transactions': {
+    ID: 'Transaksi', EN: 'Transactions',
+    AR: 'المعاملات', ES: 'Transacciones',
+    PT: 'Transações', FR: 'Transactions',
+    ZH: '交易', JA: '取引', KO: '거래', HI: 'लेनदेन',
+  },
+  'hero.laptop.income_value': {
+    ID: 'Rp 12.840.000', EN: 'Rp 12,840,000',
+    AR: 'Rp ١٢.٨٤٠.٠٠٠', ES: 'Rp 12.840.000',
+    PT: 'Rp 12.840.000', FR: 'Rp 12.840.000',
+    ZH: 'Rp 12,840,000', JA: 'Rp 12,840,000', KO: 'Rp 12,840,000', HI: 'Rp 12,840,000',
+  },
+  'hero.laptop.transaction_count': {
+    ID: '284', EN: '284',
+    AR: '٢٨٤', ES: '284',
+    PT: '284', FR: '284',
+    ZH: '284', JA: '284', KO: '284', HI: '284',
+  },
+  'hero.laptop.growth_12': {
+    ID: '↑ 12%', EN: '↑ 12%',
+    AR: '↑ ٪١٢', ES: '↑ 12%',
+    PT: '↑ 12%', FR: '↑ 12%',
+    ZH: '↑ 12%', JA: '↑ 12%', KO: '↑ 12%', HI: '↑ 12%',
+  },
+  'hero.laptop.growth_8': {
+    ID: '↑ 8%', EN: '↑ 8%',
+    AR: '↑ ٪٨', ES: '↑ 8%',
+    PT: '↑ 8%', FR: '↑ 8%',
+    ZH: '↑ 8%', JA: '↑ 8%', KO: '↑ 8%', HI: '↑ 8%',
+  },
+  'hero.laptop.chart_title': {
+    ID: 'Grafik Omset', EN: 'Revenue Chart',
+    AR: 'رسم بياني للإيرادات', ES: 'Gráfico de Ingresos',
+    PT: 'Gráfico de Receita', FR: 'Graphique des Revenus',
+    ZH: '收入图表', JA: '収益チャート', KO: '매출 차트', HI: 'राजस्व चार्ट',
+  },
+  'hero.laptop.bestseller': {
+    ID: 'Terlaris:', EN: 'Best Seller:',
+    AR: 'الأكثر مبيعاً:', ES: 'Más vendido:',
+    PT: 'Mais vendido:', FR: 'Meilleure vente:',
+    ZH: '最畅销：', JA: 'ベストセラー：', KO: '베스트셀러:', HI: 'सर्वश्रेष्ठ विक्रेता:',
+  },
+  'hero.laptop.bestseller_product': {
+    ID: 'Kopi Aren', EN: 'Ice Aren Coffee',
+    AR: 'قهوة أرينا', ES: 'Café Aren',
+    PT: 'Café Aren', FR: 'Café Aren',
+    ZH: '阿伦咖啡', JA: 'アレンコーヒー', KO: '아렌 커피', HI: 'अरेन कॉफ़ी',
+  },
+  'hero.laptop.bestseller_qty': {
+    ID: '48 pcs', EN: '48 pcs',
+    AR: '٤٨ قطعة', ES: '48 piezas',
+    PT: '48 peças', FR: '48 pièces',
+    ZH: '48 件', JA: '48 個', KO: '48 개', HI: '48 टुकड़े',
+  },
+  'hero.laptop.critical_stock': {
+    ID: 'Stok Kritis:', EN: 'Low Stock:',
+    AR: 'مخزون منخفض:', ES: 'Stock Crítico:',
+    PT: 'Estoque Crítico:', FR: 'Stock Critique:',
+    ZH: '库存紧张：', JA: '在庫不足：', KO: '재고 부족:', HI: 'कम स्टॉक:',
+  },
+  'hero.laptop.critical_count': {
+    ID: '3 produk', EN: '3 items',
+    AR: '٣ منتجات', ES: '3 productos',
+    PT: '3 produtos', FR: '3 produits',
+    ZH: '3 件商品', JA: '3 商品', KO: '3개 제품', HI: '3 आइटम',
+  },
+  'hero.laptop.hour_08': { ID: '08', EN: '08', AR: '٠٨', ES: '08', PT: '08', FR: '08', ZH: '08', JA: '08', KO: '08', HI: '08' },
+  'hero.laptop.hour_10': { ID: '10', EN: '10', AR: '١٠', ES: '10', PT: '10', FR: '10', ZH: '10', JA: '10', KO: '10', HI: '10' },
+  'hero.laptop.hour_12': { ID: '12', EN: '12', AR: '١٢', ES: '12', PT: '12', FR: '12', ZH: '12', JA: '12', KO: '12', HI: '12' },
+  'hero.laptop.hour_14': { ID: '14', EN: '14', AR: '١٤', ES: '14', PT: '14', FR: '14', ZH: '14', JA: '14', KO: '14', HI: '14' },
+  'hero.laptop.hour_16': { ID: '16', EN: '16', AR: '١٦', ES: '16', PT: '16', FR: '16', ZH: '16', JA: '16', KO: '16', HI: '16' },
+  'hero.laptop.hour_18': { ID: '18', EN: '18', AR: '١٨', ES: '18', PT: '18', FR: '18', ZH: '18', JA: '18', KO: '18', HI: '18' },
+  'hero.laptop.hour_20': { ID: '20', EN: '20', AR: '٢٠', ES: '20', PT: '20', FR: '20', ZH: '20', JA: '20', KO: '20', HI: '20' },
+
+  // ==================== SECTION 4 PC LAPTOP ====================
+  's4.laptop_title': {
+    ID: 'Inventaris Pusat', EN: 'Main Inventory',
+    AR: 'المخزون الرئيسي', ES: 'Inventario Principal',
+    PT: 'Inventário Principal', FR: 'Inventaire Principal',
+    ZH: '主库存', JA: '主要在庫', KO: '메인 재고', HI: 'मुख्य स्टॉक',
+  },
+  's4.laptop_item': {
+    ID: 'Item', EN: 'Item',
+    AR: 'صنف', ES: 'Artículo', PT: 'Item', FR: 'Article',
+    ZH: '商品', JA: 'アイテム', KO: '품목', HI: 'आइटम',
+  },
+  's4.laptop_stock': {
+    ID: 'Stok', EN: 'Stock',
+    AR: 'مخزون', ES: 'Stock', PT: 'Estoque', FR: 'Stock',
+    ZH: '库存', JA: '在庫', KO: '재고', HI: 'स्टॉक',
+  },
+  's4.laptop_status': {
+    ID: 'Status', EN: 'Status',
+    AR: 'الحالة', ES: 'Estado', PT: 'Status', FR: 'Statut',
+    ZH: '状态', JA: 'ステータス', KO: '상태', HI: 'स्थिति',
+  },
+  's4.laptop_restock': {
+    ID: 'Restock needed:', EN: 'Restock needed:',
+    AR: 'إعادة التموين مطلوبة:', ES: 'Reabastecimiento necesario:',
+    PT: 'Reabastecimento necessário:', FR: 'Réapprovisionnement nécessaire:',
+    ZH: '需要补货：', JA: '補充が必要：', KO: '재입고 필요:', HI: 'पुनःस्टॉक आवश्यक:',
+  },
+  's4.laptop_items': {
+    ID: 'item', EN: 'item',
+    AR: 'صنف', ES: 'artículo', PT: 'item', FR: 'article',
+    ZH: '个商品', JA: 'アイテム', KO: '개 품목', HI: 'आइटम',
+  },
+  's4.laptop_warehouse': {
+    ID: 'Gudang Pusat', EN: 'Main Warehouse',
+    AR: 'المستودع الرئيسي', ES: 'Almacén Principal',
+    PT: 'Armazém Principal', FR: 'Entrepôt Principal',
+    ZH: '主仓库', JA: '本倉庫', KO: '메인 창고', HI: 'मुख्य गोदाम',
+  },
+  's4.laptop_safe': {
+    ID: 'Aman', EN: 'Safe',
+    AR: 'آمن', ES: 'Seguro', PT: 'Seguro', FR: 'Sûr',
+    ZH: '安全', JA: '安全', KO: '안전', HI: 'सुरक्षित',
+  },
+  's4.laptop_low': {
+    ID: 'Alert', EN: 'Alert',
+    AR: 'تنبيه', ES: 'Alerta', PT: 'Alerta', FR: 'Alerte',
+    ZH: '提醒', JA: 'アラート', KO: '알림', HI: 'सूचना',
+  },
+  's4.laptop_critical': {
+    ID: 'Kritis', EN: 'Critical',
+    AR: 'حرج', ES: 'Crítico', PT: 'Crítico', FR: 'Critique',
+    ZH: '紧急', JA: '重要', KO: '심각', HI: 'गंभीर',
+  },
+  's4.laptop_empty': {
+    ID: 'Habis', EN: 'Empty',
+    AR: 'فارغ', ES: 'Vacío', PT: 'Vazio', FR: 'Vide',
+    ZH: '缺货', JA: '在庫切れ', KO: '품절', HI: 'खाली',
+  },
+  's4.laptop_qty': {
+    ID: 'pcs', EN: 'pcs',
+    AR: 'قطعة', ES: 'pz', PT: 'pç', FR: 'pièces',
+    ZH: '件', JA: '個', KO: '개', HI: 'टुकड़े',
+  },
 };
 
 interface LanguageContextValue {

@@ -6,7 +6,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   ArrowRight, ShieldCheck, Zap, Layers, RefreshCw, SmartphoneIcon, Tablet, 
-  Tv, Database, ShoppingBag, BarChart3, Check, Star, CheckCircle, Quote, Layout, MessageCircle
+  Tv, Database, ShoppingBag, BarChart3, DollarSign, TrendingUp, 
+  AlertTriangle, Award, Package, Check, Star, CheckCircle, Quote, Layout, MessageCircle
 } from 'lucide-react';
 import { motion, useScroll, useTransform, useSpring } from 'motion/react';
 import Header from './components/Header';
@@ -328,35 +329,75 @@ export default function App() {
                 className="absolute top-4 left-4 lg:left-8 w-[92%] max-w-[480px] z-10 transition-shadow duration-1000 select-none shadow-xl border border-[#E5E5E1] rounded-[8px]"
               >
                 <div className="bg-[#1A1A1A] rounded-[8px] p-2 overflow-hidden h-[240px] border border-[#1A1A1A]">
-                  <div className="h-full bg-white rounded-[6px] p-4 text-[#1A1A1A] font-sans text-[10px] flex flex-col justify-between border border-gray-100">
+                  <div className="h-full bg-white rounded-[6px] p-3 text-[#1A1A1A] font-sans text-[10px] flex flex-col justify-between border border-gray-100">
+                    {/* Header */}
                     <div className="flex justify-between items-center pb-2 border-b border-gray-100">
                       <div className="flex items-center gap-1.5">
                         <div className="w-3.5 h-3.5 bg-[#FF6600] rounded-[2px] flex items-center justify-center text-white text-[7px] font-bold">ZK</div>
-                        <span className="font-bold text-[#1A1A1A] uppercase tracking-wider text-[8px]">Dashboard</span>
+                        <span className="font-bold text-[#1A1A1A] uppercase tracking-wider text-[8px]">ZonaKasir</span>
                       </div>
-                      <span className="text-[7px] font-semibold text-[#888888]">Laporan Outlet 01</span>
+                      <div className="flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                        <span className="text-[7px] font-semibold text-[#888888]">{t('hero.laptop.title')}</span>
+                      </div>
                     </div>
-                    {/* Visual graph mockup */}
-                    <div className="flex-1 py-1 flex flex-col justify-end gap-1">
-                      <div className="flex items-end justify-around h-24 gap-3">
-                        <div className="w-6 bg-gray-100 h-[30%] rounded-[2px]" />
-                        <div className="w-6 bg-gray-100 h-[50%] rounded-[2px]" />
-                        <div className="w-6 bg-gray-150 h-[70%] rounded-[2px]" />
-                        <div className="w-6 bg-[#FF6600] h-[90%] rounded-[2px] relative">
-                          <span className="absolute -top-4 left-1/2 -translate-x-1/2 text-[7px] text-[#1A1A1A] font-extrabold font-mono">12.8M</span>
+
+                    {/* KPI Row */}
+                    <div className="grid grid-cols-2 gap-2 py-2">
+                      <div className="bg-[#FF6600]/5 rounded-[4px] p-2 border border-[#FF6600]/10">
+                        <div className="flex items-center gap-1 text-[#FF6600]">
+                          <DollarSign className="w-2.5 h-2.5" />
+                          <span className="text-[7px] font-bold uppercase tracking-wider">{t('hero.laptop.income')}</span>
                         </div>
+                        <p className="text-[11px] font-mono font-extrabold text-[#FF6600] mt-0.5">{t('hero.laptop.income_value')}</p>
+                        <span className="text-[7px] text-emerald-600 font-semibold">{t('hero.laptop.growth_12')} {t('device.laptop.vs_yesterday')}</span>
                       </div>
-                      <div className="flex justify-between text-[7px] text-[#888888] px-2 pt-1 border-t border-gray-100">
-                        <span>Minuman</span>
-                        <span>Makanan</span>
-                        <span>Kue Pastry</span>
-                        <span>Total Omset</span>
+                      <div className="bg-gray-50 rounded-[4px] p-2 border border-gray-100">
+                        <div className="flex items-center gap-1 text-gray-500">
+                          <ShoppingBag className="w-2.5 h-2.5" />
+                          <span className="text-[7px] font-bold uppercase tracking-wider">{t('hero.laptop.transactions')}</span>
+                        </div>
+                        <p className="text-[11px] font-mono font-extrabold text-gray-900 mt-0.5">{t('hero.laptop.transaction_count')}</p>
+                        <span className="text-[7px] text-emerald-600 font-semibold">{t('hero.laptop.growth_8')}</span>
                       </div>
                     </div>
-                    {/* Foot metrics */}
-                    <div className="flex justify-between text-[8px] border-t border-gray-100 pt-2 text-[#666666] font-bold uppercase tracking-wider">
-                      <span>Total Transaksi: 285</span>
-                      <span>Produk Populer: Kopi Aren</span>
+
+                    {/* Mini Chart */}
+                    <div className="flex-1 flex flex-col justify-center gap-1 py-1">
+                      <span className="text-[7px] font-bold text-gray-500 uppercase tracking-wider">{t('hero.laptop.chart_title')}</span>
+                      <div className="flex items-end justify-around h-10 gap-1">
+                        <div className="w-5 bg-gray-100 rounded-[2px] h-[30%]" />
+                        <div className="w-5 bg-gray-100 rounded-[2px] h-[45%]" />
+                        <div className="w-5 bg-gray-150 rounded-[2px] h-[60%]" />
+                        <div className="w-5 bg-[#FF6600]/60 rounded-[2px] h-[75%]" />
+                        <div className="w-5 bg-[#FF6600] rounded-[2px] h-[95%] relative">
+                          <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-[6px] text-[#FF6600] font-extrabold font-mono whitespace-nowrap">12,8M</span>
+                        </div>
+                        <div className="w-5 bg-[#FF6600]/80 rounded-[2px] h-[85%]" />
+                        <div className="w-5 bg-gray-150 rounded-[2px] h-[65%]" />
+                      </div>
+                      <div className="flex justify-between text-[6px] text-gray-400 px-1">
+                        <span>{t('hero.laptop.hour_08')}</span>
+                        <span>{t('hero.laptop.hour_10')}</span>
+                        <span>{t('hero.laptop.hour_12')}</span>
+                        <span>{t('hero.laptop.hour_14')}</span>
+                        <span>{t('hero.laptop.hour_16')}</span>
+                        <span>{t('hero.laptop.hour_18')}</span>
+                        <span>{t('hero.laptop.hour_20')}</span>
+                      </div>
+                    </div>
+
+                    {/* Footer Info */}
+                    <div className="flex justify-between items-center border-t border-gray-100 pt-2 mt-1 text-[7px]">
+                      <div className="flex items-center gap-1 text-gray-600 font-semibold">
+                        <Award className="w-2.5 h-2.5 text-amber-500" />
+                        <span>{t('hero.laptop.bestseller')} <strong>{t('hero.laptop.bestseller_product')}</strong></span>
+                        <span className="text-gray-400">({t('hero.laptop.bestseller_qty')})</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-red-600 font-semibold">
+                        <AlertTriangle className="w-2.5 h-2.5" />
+                        <span>{t('hero.laptop.critical_stock')} {t('hero.laptop.critical_count')}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -714,7 +755,7 @@ export default function App() {
                 className="flex flex-col items-center"
               >
                 <span className="text-[10px] font-mono font-bold text-[#666666] uppercase tracking-wider mb-2.5 flex items-center gap-1.5 bg-white border border-[#E5E5E1] px-3 py-1 rounded-full shadow-xs">
-                  <span className="text-[#1A1A1A]">🖥️</span> {t('s4.device3')}
+                  <Tv className="w-3.5 h-3.5 text-[#1A1A1A]" /> {t('s4.device3')}
                 </span>
                 <p className="text-[9px] text-[#888888] mb-3 text-center max-w-[240px] font-medium leading-normal animate-fade-in">
                   {t('s4.device3_desc')}
@@ -728,41 +769,61 @@ export default function App() {
                     {/* Web camera dot */}
                     <div className="absolute top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-slate-900 border border-slate-500 z-40" />
                     
-                    {/* Screen Viewport with Terminal theme (16:10 landscape) */}
-                    <div className="bg-slate-950 rounded-t-[6px] h-[200px] p-3 text-slate-300 font-sans text-[8.5px] flex flex-col justify-between border border-black/35 shadow-inner">
+                    {/* Screen Viewport with light POS theme */}
+                    <div className="bg-white rounded-t-[6px] h-[200px] p-3 text-gray-800 font-sans text-[8.5px] flex flex-col justify-between border border-gray-200 shadow-inner">
                       
-                      {/* Server Title */}
-                      <div className="flex justify-between border-b border-slate-900 pb-1.5 shrink-0">
-                        <span className="text-white uppercase font-bold text-[7.5px] flex items-center gap-1">
-                          <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse" /> MUTASI STOK REALTIME
-                        </span>
-                        <span className="text-slate-400 font-mono text-[7px]">ZK-SERVER-04</span>
+                      {/* Title Bar */}
+                      <div className="flex justify-between border-b border-gray-200 pb-1.5 shrink-0">
+                        <div className="flex items-center gap-1.5">
+                          <div className="w-3 h-3 bg-[#FF6600] rounded-[2px] flex items-center justify-center text-white text-[6px] font-bold">ZK</div>
+                          <span className="text-gray-900 uppercase font-bold text-[7.5px]">{t('s4.laptop_title')}</span>
+                        </div>
+                        <span className="text-gray-400 font-mono text-[6.5px]">{t('s4.laptop_warehouse')}</span>
                       </div>
 
-                      {/* Real-time sync logs terminal style */}
-                      <div className="space-y-1.5 py-2 flex-1 overflow-y-auto no-scrollbar font-medium leading-relaxed">
-                        <div className="flex justify-between text-slate-400">
-                          <span>Sinyal Webhook:</span>
-                          <span className="font-mono text-emerald-400 font-bold">Sinkronisasi OK</span>
+                      {/* Inventory mini-table */}
+                      <div className="flex-1 py-2 space-y-1 overflow-y-auto no-scrollbar">
+                        {/* Header row */}
+                        <div className="flex justify-between text-[7px] text-gray-400 font-bold uppercase tracking-wider pb-1 border-b border-gray-100">
+                          <span className="flex-1">{t('s4.laptop_item')}</span>
+                          <span className="w-12 text-right">{t('s4.laptop_stock')}</span>
+                          <span className="w-12 text-right">{t('s4.laptop_status')}</span>
                         </div>
-                        <div className="flex justify-between text-slate-400">
-                          <span>Bahan Aren Kopi:</span>
-                          <span className="font-mono text-white">-2 Pcs (Terjual)</span>
+                        {/* Product rows */}
+                        <div className="flex justify-between text-[8px] py-0.5">
+                          <span className="flex-1 font-semibold text-gray-800">Kopi Susu Aren</span>
+                          <span className="w-12 text-right font-mono text-gray-600">48</span>
+                          <span className="w-12 text-right"><span className="bg-emerald-50 text-emerald-700 font-bold px-1.5 py-0.5 rounded text-[6.5px] uppercase">{t('s4.laptop_safe')}</span></span>
                         </div>
-                        <div className="flex justify-between text-slate-400">
-                          <span>Sisa Stok Gudang:</span>
-                          <span className="font-mono text-amber-400 font-bold">45 Pcs (Aman)</span>
+                        <div className="flex justify-between text-[8px] py-0.5">
+                          <span className="flex-1 font-semibold text-gray-800">Almond Croissant</span>
+                          <span className="w-12 text-right font-mono text-gray-600">12</span>
+                          <span className="w-12 text-right"><span className="bg-amber-50 text-amber-700 font-bold px-1.5 py-0.5 rounded text-[6.5px] uppercase">{t('s4.laptop_low')}</span></span>
                         </div>
-                        <div className="flex justify-between text-red-400 bg-red-950/25 px-1.5 py-0.5 rounded border border-red-500/10">
-                          <span>Update Reorder:</span>
-                          <span className="font-bold">Chocolate Cookie sisa 4</span>
+                        <div className="flex justify-between text-[8px] py-0.5">
+                          <span className="flex-1 font-semibold text-gray-800">Cokelat Premium</span>
+                          <span className="w-12 text-right font-mono text-gray-600">27</span>
+                          <span className="w-12 text-right"><span className="bg-emerald-50 text-emerald-700 font-bold px-1.5 py-0.5 rounded text-[6.5px] uppercase">{t('s4.laptop_safe')}</span></span>
+                        </div>
+                        <div className="flex justify-between text-[8px] py-0.5">
+                          <span className="flex-1 font-semibold text-gray-800">Choco Cookie</span>
+                          <span className="w-12 text-right font-mono text-gray-600">4</span>
+                          <span className="w-12 text-right"><span className="bg-red-50 text-red-700 font-bold px-1.5 py-0.5 rounded text-[6.5px] uppercase">{t('s4.laptop_critical')}</span></span>
+                        </div>
+                        <div className="flex justify-between text-[8px] py-0.5">
+                          <span className="flex-1 font-semibold text-gray-800">Susu Fresh</span>
+                          <span className="w-12 text-right font-mono text-gray-400">0</span>
+                          <span className="w-12 text-right"><span className="bg-gray-100 text-gray-500 font-bold px-1.5 py-0.5 rounded text-[6.5px] uppercase">{t('s4.laptop_empty')}</span></span>
                         </div>
                       </div>
 
-                      {/* Metadata footer */}
-                      <div className="border-t border-slate-900 pt-1.5 flex justify-between items-center text-slate-500 text-[6.5px] shrink-0">
-                        <span>Firestore Cloud</span>
-                        <span className="font-mono text-slate-300">Total Sync: #{syncCount}</span>
+                      {/* Footer */}
+                      <div className="border-t border-gray-200 pt-1.5 flex justify-between items-center text-[7px] text-gray-500 shrink-0">
+                        <div className="flex items-center gap-1">
+                          <AlertTriangle className="w-2.5 h-2.5 text-red-500" />
+                          <span className="font-semibold text-red-600">{t('s4.laptop_restock')} 2 {t('s4.laptop_items')}</span>
+                        </div>
+                        <span className="font-mono text-gray-400">Sync: #{syncCount}</span>
                       </div>
 
                     </div>
@@ -770,7 +831,6 @@ export default function App() {
 
                   {/* Metallic Laptop Keyboard Base */}
                   <div className="relative w-[348px] h-3 bg-[#E0E0E0] rounded-b-[10px] border-t border-white shadow-xl flex justify-center items-start z-20 shrink-0">
-                    {/* Trackpad */}
                     <div className="w-20 h-[6px] bg-[#CCCCCC] border border-gray-400/50 rounded-b-[3px] -mt-[0.5px] border-t-0 shadow-inner" />
                   </div>
 
@@ -801,16 +861,8 @@ export default function App() {
             className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10"
           >
             
-            {/* Expanded Dashboard on Left Grid (7 cols) with smooth non-clamping parallax */}
-            <motion.div 
-              style={{ y: smoothS5LaptopY }}
-              className="lg:col-span-7 flex justify-center items-center"
-            >
-              <DeviceLaptop interactive={true} />
-            </motion.div>
-
-            {/* Story copy on Right Grid (5 cols) */}
-            <div className="lg:col-span-5 space-y-5 lg:pl-6 text-left">
+            {/* Story copy on Right Grid (5 cols) — first in DOM for mobile/tablet */}
+            <div className="lg:col-span-5 space-y-5 lg:pl-6 text-left lg:order-2">
               <span className="text-[10px] font-bold text-[#666666] tracking-wider uppercase block">
                 {t('s5.label')}
               </span>
@@ -844,6 +896,14 @@ export default function App() {
                 </div>
               </div>
             </div>
+
+            {/* Expanded Dashboard on Left Grid (7 cols) — second in DOM for mobile/tablet */}
+            <motion.div 
+              style={{ y: smoothS5LaptopY }}
+              className="lg:col-span-7 flex justify-center items-center lg:order-1"
+            >
+              <DeviceLaptop interactive={true} />
+            </motion.div>
 
           </motion.div>
         </section>
