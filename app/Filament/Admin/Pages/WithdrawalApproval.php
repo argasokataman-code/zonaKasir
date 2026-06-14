@@ -28,91 +28,56 @@ class WithdrawalApproval extends Page implements HasForms
 
     public function loadPendingWithdrawals(): void
     {
-        $this->withdrawals = [];
+        $tenantMap = Tenant::pluck('name', 'id')->toArray();
 
-        $tenants = Tenant::all();
-        foreach ($tenants as $tenant) {
-            try {
-                tenancy()->initialize($tenant);
+        $pending = Withdrawal::withoutGlobalScope('tenant')
+            ->where('status', 'pending')
+            ->with('requestedBy')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-                $pending = Withdrawal::where('status', 'pending')
-                    ->with('requestedBy')
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-
-                foreach ($pending as $withdrawal) {
-                    $this->withdrawals[] = [
-                        'tenant_id' => $tenant->id,
-                        'tenant_name' => $tenant->name ?? $tenant->id,
-                        'withdrawal_id' => $withdrawal->id,
-                        'amount' => $withdrawal->amount,
-                        'bank_name' => $withdrawal->bank_name,
-                        'bank_account_name' => $withdrawal->bank_account_name,
-                        'bank_account_number' => $withdrawal->bank_account_number,
-                        'requested_by' => $withdrawal->requestedBy?->name ?? 'Unknown',
-                        'created_at' => $withdrawal->created_at?->format('d M Y H:i'),
-                        'status' => $withdrawal->status,
-                    ];
-                }
-            } catch (\Throwable $e) {
-                continue;
-            }
-        }
-
-        if (tenancy()->initialized) {
-            tenancy()->end();
-        }
+        $this->withdrawals = $pending->map(fn ($w) => [
+            'tenant_id' => $w->tenant_id,
+            'tenant_name' => $tenantMap[$w->tenant_id] ?? $w->tenant_id,
+            'withdrawal_id' => $w->id,
+            'amount' => $w->amount,
+            'bank_name' => $w->bank_name,
+            'bank_account_name' => $w->bank_account_name,
+            'bank_account_number' => $w->bank_account_number,
+            'requested_by' => $w->requestedBy?->name ?? 'Unknown',
+            'created_at' => $w->created_at?->format('d M Y H:i'),
+            'status' => $w->status,
+        ])->toArray();
     }
 
     public function approve(string $tenantId, int $withdrawalId): void
     {
         try {
-            $tenant = Tenant::find($tenantId);
-            tenancy()->initialize($tenant);
-
-            $withdrawal = Withdrawal::find($withdrawalId);
-            if (!$withdrawal || $withdrawal->status !== 'pending') {
-                Notification::make()->title('Withdrawal already processed')->danger()->send();
-                return;
-            }
-
             $adminId = auth()->id();
-            app(WithdrawalService::class)->approve($withdrawal->id, $adminId);
+            app(WithdrawalService::class)->approve($withdrawalId, $adminId);
 
             Notification::make()->title('Withdrawal approved & disbursed via Flip')->success()->send();
             $this->loadPendingWithdrawals();
         } catch (\Throwable $e) {
             Notification::make()->title('Error: ' . $e->getMessage())->danger()->send();
-        } finally {
-            if (tenancy()->initialized) {
-                tenancy()->end();
-            }
         }
     }
 
     public function reject(string $tenantId, int $withdrawalId): void
     {
         try {
-            $tenant = Tenant::find($tenantId);
-            tenancy()->initialize($tenant);
-
-            $withdrawal = Withdrawal::find($withdrawalId);
-            if (!$withdrawal || $withdrawal->status !== 'pending') {
-                Notification::make()->title('Withdrawal already processed')->danger()->send();
-                return;
-            }
-
             $adminId = auth()->id();
-            app(WithdrawalService::class)->reject($withdrawal->id, $adminId, 'Rejected by admin');
+            app(WithdrawalService::class)->reject($withdrawalId, $adminId, 'Rejected by admin');
 
             Notification::make()->title('Withdrawal rejected')->warning()->send();
             $this->loadPendingWithdrawals();
         } catch (\Throwable $e) {
             Notification::make()->title('Error: ' . $e->getMessage())->danger()->send();
-        } finally {
-            if (tenancy()->initialized) {
-                tenancy()->end();
-            }
         }
+    }
+
+    public static function canAccess(): bool
+    {
+        return auth('admin')->user()?->can('manage settings') ?? false;
     }
 }
