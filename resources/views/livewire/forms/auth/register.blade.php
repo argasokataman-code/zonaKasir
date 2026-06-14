@@ -29,7 +29,7 @@
 
     {{-- Form Side --}}
     <div class="lg:col-span-3">
-      <div class="bg-white rounded-xl shadow-sm border border-[#E5E5E1] p-5 sm:p-8">
+      <div class="bg-white rounded-xl shadow-sm border border-[#E5E5E1] p-4 sm:p-8">
         <form class="space-y-6">
           {{ $this->form }}
 

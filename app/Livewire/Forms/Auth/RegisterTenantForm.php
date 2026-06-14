@@ -31,7 +31,7 @@ class RegisterTenantForm extends Component implements HasForms
                 Section::make(__('Akun Pemilik'))
                     ->description(__('Data login untuk akses panel'))
                     ->icon('heroicon-o-user')
-                    ->columns(2)
+                    ->columns(['md' => 2, 'sm' => 1])
                     ->schema([
                         TextInput::make('full_name')
                             ->label(__('Full Name'))
@@ -56,7 +56,7 @@ class RegisterTenantForm extends Component implements HasForms
                 Section::make(__('Data Toko'))
                     ->description(__('Informasi usaha Anda'))
                     ->icon('heroicon-o-shopping-bag')
-                    ->columns(2)
+                    ->columns(['md' => 2, 'sm' => 1])
                     ->schema([
                         TextInput::make('shop_name')
                             ->label(__('Shop Name'))
@@ -79,13 +79,13 @@ class RegisterTenantForm extends Component implements HasForms
                         TextInput::make('shop_location')
                             ->label(__('Shop Location'))
                             ->string()
-                            ->columnSpan(2),
+                            ->columnSpan(['md' => 2, 'sm' => 1]),
                         TextInput::make('other_business_type')
                             ->label('Lainnya')
                             ->visible(fn (Get $get): bool => $get('business_type') == 'other')
                             ->required(fn (Get $get): bool => $get('business_type') == 'other')
                             ->string()
-                            ->columnSpan(2),
+                            ->columnSpan(['md' => 2, 'sm' => 1]),
                     ]),
                 Section::make(__('Kupon (Opsional)'))
                     ->icon('heroicon-o-ticket')
