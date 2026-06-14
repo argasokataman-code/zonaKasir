@@ -42,8 +42,109 @@ if ('serviceWorker' in navigator) {
         window.offlineManager.prefetchMasterData().catch(function() {});
       }
     }
+
+    // Background sync request from SW
+    if (event.data && event.data.type === 'BACKGROUND_SYNC') {
+      console.log('[PWA] Background sync triggered by SW');
+      if (window.syncManager && navigator.onLine) {
+        window.syncManager.syncAll();
+      }
+    }
   });
 }
+
+// ─── Background Sync Registration ────────────────────────────
+(function() {
+  if (!('serviceWorker' in navigator) || !('SyncManager' in window)) return;
+
+  navigator.serviceWorker.ready.then(function(reg) {
+    // Register background sync for pending sales
+    function registerSync() {
+      if (!navigator.onLine) return;
+      reg.sync.register('sync-pending-sales').catch(function(err) {
+        console.log('[PWA] Background sync registration not supported:', err.message);
+      });
+    }
+
+    // Re-register after each sync cycle
+    document.addEventListener('sync-complete', registerSync);
+
+    // Register on pending sales count change
+    window.addEventListener('pending-sync-updated', function(e) {
+      if (e.detail && e.detail.count > 0 && navigator.onLine) {
+        reg.sync.register('sync-pending-sales').catch(function() {});
+      }
+    });
+
+    // Periodic sync (if supported)
+    if ('periodicSync' in reg) {
+      reg.periodicSync.register('sync-refresh-master', {
+        minInterval: 60 * 60 * 1000 // 1 hour
+      }).catch(function(err) {
+        console.log('[PWA] Periodic sync not supported:', err.message);
+      });
+    }
+  });
+})();
+
+// ─── Push Notification ───────────────────────────────────────
+(function() {
+  if (!('Notification' in window) || !('serviceWorker' in navigator)) return;
+
+  // Request permission on first interaction
+  function requestNotificationPermission() {
+    if (Notification.permission === 'granted') return;
+    if (Notification.permission === 'denied') return;
+
+    Notification.requestPermission().then(function(permission) {
+      if (permission === 'granted') {
+        console.log('[PWA] Notification permission granted');
+        registerFCMToken();
+      }
+    });
+  }
+
+  function registerFCMToken() {
+    // FCM registration handled by existing backend route
+    // /api/register-fcm-token — called by backend when needed
+  }
+
+  // Delayed permission request (after page loaded)
+  setTimeout(requestNotificationPermission, 10000); // 10s delay — non-intrusive
+
+  // Also on first user click
+  document.addEventListener('click', function() {
+    if (Notification.permission === 'default') {
+      requestNotificationPermission();
+    }
+  }, { once: true });
+})();
+
+// ─── Badging API ─────────────────────────────────────────────
+(function() {
+  if (!navigator.setAppBadge) return;
+
+  function updateBadge() {
+    var sm = window.syncManager;
+    if (!sm) return;
+
+    sm.getTotalPending().then(function(count) {
+      if (count > 0) {
+        navigator.setAppBadge(count).catch(function() {});
+      } else {
+        navigator.clearAppBadge().catch(function() {});
+      }
+    });
+  }
+
+  window.addEventListener('pending-sync-updated', updateBadge);
+  window.addEventListener('sync-complete', function() {
+    setTimeout(updateBadge, 1000); // wait for state to settle
+  });
+
+  // Initial update after managers init
+  setTimeout(updateBadge, 5000);
+})();
 
 /**
  * Retrieve printer settings from localStorage.

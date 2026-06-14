@@ -26,9 +26,14 @@ class SyncController extends Controller
 
     /**
      * Bulk sync — returns all master data for offline caching.
+     * Supports delta sync via ?since=ISO8601_timestamp.
+     * Delta also returns deleted_ids for records removed since last sync.
      */
-    public function data(): JsonResponse
+    public function data(Request $request): JsonResponse
     {
+        $since = $request->query('since');
+        $isDelta = ! empty($since);
+
         $products = Product::query()
             ->where(function ($query) {
                 $query->where('type', 'product')
@@ -42,21 +47,23 @@ class SyncController extends Controller
                     })
                 ->orWhere('type', 'service');
             })
-            ->where('show', true)
-            ->get()
-            ->append(['selling_price_calculate', 'stock_calculate']);
+            ->where('show', true);
 
-        $categories = Category::all();
+        if ($isDelta) {
+            $products->where('updated_at', '>', $since);
+        }
 
-        $members = Member::query()
-            ->select('id', 'name', 'code', 'phone')
-            ->get();
+        $products = $products->get()->append(['selling_price_calculate', 'stock_calculate']);
 
-        $paymentMethods = PaymentMethod::query()
-            ->select('id', 'name', 'is_credit', 'payment_type')
-            ->get();
+        $categories = Category::query();
+        $members = Member::query()->select('id', 'name', 'code', 'phone');
+        $paymentMethods = PaymentMethod::query()->select('id', 'name', 'is_credit', 'payment_type');
 
-        $about = About::first();
+        if ($isDelta) {
+            $categories->where('updated_at', '>', $since);
+            $members->where('updated_at', '>', $since);
+            $paymentMethods->where('updated_at', '>', $since);
+        }
 
         $settings = [
             'currency' => Setting::get('currency', 'IDR'),
@@ -66,18 +73,74 @@ class SyncController extends Controller
 
         $tables = Table::select('id', 'number')->get();
 
+        $response = [
+            'products' => $products,
+            'categories' => $categories->get(),
+            'members' => $members->get(),
+            'payment_methods' => $paymentMethods->get(),
+            'about' => About::first(),
+            'settings' => $settings,
+            'tables' => $tables,
+            'is_delta' => $isDelta,
+            'server_time' => now()->toIso8601String(),
+        ];
+
+        // Track deleted records for delta sync
+        if ($isDelta) {
+            $response['deleted_ids'] = $this->getDeletedIds($since);
+        }
+
         return $this->buildResponse()
-            ->setData([
-                'products' => $products,
-                'categories' => $categories,
-                'members' => $members,
-                'payment_methods' => $paymentMethods,
-                'about' => $about,
-                'settings' => $settings,
-                'tables' => $tables,
-            ])
-            ->setMessage('success sync data')
+            ->setData($response)
+            ->setMessage($isDelta ? 'success delta sync' : 'success full sync')
             ->present();
+    }
+
+    /**
+     * Get IDs of records deleted since the given timestamp.
+     * This requires soft deletes or a deleted_records log table.
+     * If not available, returns empty arrays (full sync on next refresh).
+     */
+    private function getDeletedIds(string $since): array
+    {
+        $deleted = [];
+
+        // Check for soft-deleted records
+        if ($this->usesSoftDeletes(Product::class)) {
+            $deleted['products'] = Product::onlyTrashed()
+                ->where('deleted_at', '>', $since)
+                ->pluck('id');
+        }
+
+        if ($this->usesSoftDeletes(Category::class)) {
+            $deleted['categories'] = Category::onlyTrashed()
+                ->where('deleted_at', '>', $since)
+                ->pluck('id');
+        }
+
+        if ($this->usesSoftDeletes(Member::class)) {
+            $deleted['members'] = Member::onlyTrashed()
+                ->where('deleted_at', '>', $since)
+                ->pluck('id');
+        }
+
+        return $deleted;
+    }
+
+    /**
+     * Check if a model uses the SoftDeletes trait.
+     */
+    private function usesSoftDeletes(string $modelClass): bool
+    {
+        if (! class_exists($modelClass)) return false;
+
+        try {
+            $instance = new $modelClass;
+
+            return method_exists($instance, 'runSoftDelete');
+        } catch (\Throwable) {
+            return false;
+        }
     }
 
     /**

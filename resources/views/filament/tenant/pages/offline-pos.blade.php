@@ -393,8 +393,11 @@
 
       html += '<div class="product-card" onclick="' + (outOfStock ? '' : 'addToCart(' + p.id + ')') + '">';
       html += '<div class="img">';
-      if (p.hero_images_url && typeof p.hero_images_url === 'string') {
-        html += '<img src="' + escPath(p.hero_images_url) + '" alt="' + esc(p.name) + '" loading="lazy">';
+      if (p.hero_images_url && typeof p.hero_images_url === 'string' && p.hero_images_url.length > 0) {
+        html += '<img src="' + escPath(p.hero_images_url) + '" alt="' + esc(p.name) + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';" onload="this.style.display=\'\'">';
+        html += '<div style="display:none;align-items:center;justify-content:center;width:100%;height:100%;background:#f3f4f6;color:#d1d5db;font-size:24px;position:absolute;top:0;left:0;">';
+        html += '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
+        html += '</div>';
       } else {
         html += '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
       }
@@ -656,29 +659,62 @@
   window.refreshMasterData = function() {
     if (!navigator.onLine) return;
     var csrfToken = (document.querySelector('meta[name="csrf-token"]') || {}).content || '';
+    if (!csrfToken) return;
 
-    fetch('/api/sync/data', {
-      headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': csrfToken },
-      credentials: 'same-origin',
-    }).then(function(r) { return r.ok ? r.json() : null; }).then(function(resp) {
-      if (!resp) return;
-      var data = resp.data || resp;
-      var count = 0;
+    // Try delta sync by reading last_sync_at
+    var syncUrl = '/api/sync/data';
+    try {
+      var tx = db.transaction('meta', 'readonly');
+      var req = tx.objectStore('meta').get('last_sync_at');
+      req.onsuccess = function() {
+        if (req.result && req.result.value) {
+          syncUrl += '?since=' + encodeURIComponent(req.result.value);
+        }
+        doFetch(syncUrl);
+      };
+      req.onerror = function() { doFetch(syncUrl); };
+    } catch(e) { doFetch(syncUrl); }
 
-      function syncStore(name, items) {
-        if (!Array.isArray(items) || items.length === 0) return;
-        try {
-          var tx = db.transaction(name, 'readwrite');
-          tx.objectStore(name).clear();
-          items.forEach(function(item) { tx.objectStore(name).put(item); });
-          count += items.length;
-        } catch(e) {}
+    function doFetch(url) {
+      fetch(url, {
+        headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': csrfToken },
+        credentials: 'same-origin',
+      }).then(function(r) { return r.ok ? r.json() : null; }).then(function(resp) {
+        if (!resp) return;
+        var data = resp.data || resp;
+        var isDelta = data.is_delta === true;
+        var count = 0;
+
+        function upsertStore(name, items) {
+          if (!Array.isArray(items) || items.length === 0) return;
+          try {
+            var tx = db.transaction(name, 'readwrite');
+            if (!isDelta) tx.objectStore(name).clear();
+            items.forEach(function(item) { tx.objectStore(name).put(item); });
+            count += items.length;
+          } catch(e) {}
+        }
+
+      upsertStore('products', data.products);
+      upsertStore('categories', data.categories);
+      upsertStore('members', data.members);
+      upsertStore('payment_methods', data.payment_methods);
+
+      // Handle deleted records (delta sync only)
+      if (isDelta && data.deleted_ids) {
+        for (var storeName in data.deleted_ids) {
+          var ids = data.deleted_ids[storeName];
+          if (Array.isArray(ids) && ids.length > 0) {
+            try {
+              var tx = db.transaction(storeName, 'readwrite');
+              ids.forEach(function(id) {
+                try { tx.objectStore(storeName).delete(id); } catch(e2) {}
+              });
+              count += ids.length;
+            } catch(e) {}
+          }
+        }
       }
-
-      syncStore('products', data.products);
-      syncStore('categories', data.categories);
-      syncStore('members', data.members);
-      syncStore('payment_methods', data.payment_methods);
 
       // Settings
       if (data.settings) {
@@ -699,10 +735,12 @@
         } catch(e) {}
       }
 
-      // Update last_prefetch
+      // Update timestamps
       try {
         var tx = db.transaction('meta', 'readwrite');
-        tx.objectStore('meta').put({ key: 'last_prefetch', value: new Date().toISOString() });
+        var ts = new Date().toISOString();
+        tx.objectStore('meta').put({ key: 'last_prefetch', value: ts });
+        tx.objectStore('meta').put({ key: 'last_sync_at', value: ts });
       } catch(e) {}
 
       if (count > 0) {
