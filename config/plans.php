@@ -30,5 +30,11 @@ return [
         'payment_shortcut' => 'Payment Shortcut',
         'total_revenue' => 'Total Revenue in Table',
         'edit_profile' => 'Edit Profile',
+        'unlimited_products' => 'Unlimited Products',
+        'unlimited_users' => 'Unlimited Users',
+        'reports' => 'Reports & Analytics',
+        'products' => 'Products Management',
+        'users' => 'Users Management',
+        'roles' => 'Roles & Permissions',
     ],
 ];
