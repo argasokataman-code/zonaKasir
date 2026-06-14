@@ -72,10 +72,10 @@ class AppServiceProvider extends ServiceProvider
         });
         $mainPath = database_path('migrations');
 
-        // Load 2026+ billing migrations from main path, plus all tenant migrations
-        $billingMigrations = glob($mainPath.'/2026_*.php');
-        $this->loadMigrationsFrom($billingMigrations);
+        // Load all migrations from main path (old ones are disabled via empty up())
+        $this->loadMigrationsFrom($mainPath);
 
+        // Also load tenant migrations
         if (is_dir(database_path('migrations/tenant'))) {
             $this->loadMigrationsFrom(database_path('migrations/tenant'));
         }

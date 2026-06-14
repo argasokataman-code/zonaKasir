@@ -5,7 +5,10 @@ use App\Livewire\Forms\Auth\RegisterTenantForm;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
-Volt::route('/', 'pages/welcome');
+Route::get('/', function () {
+    return response()->file(public_path('landing/index.html'))
+        ->header('Content-Type', 'text/html');
+});
 
 Route::view('/offline', 'offline');
 

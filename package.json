@@ -2,7 +2,10 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "landing:dev": "cd landing && npm run dev",
+        "landing:build": "cd landing && npm install && npm run build",
+        "build:all": "npm run build && npm run landing:build"
     },
     "dependencies": {
         "cookie": "^0.7.0",

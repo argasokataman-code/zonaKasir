@@ -1,0 +1,520 @@
+import React, { useState, useRef } from 'react';
+import { 
+  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  BarChart, Bar, Cell 
+} from 'recharts';
+import { 
+  LayoutDashboard, ClipboardList, TrendingUp, AlertTriangle, ArrowUpRight, 
+  ArrowDownLeft, Box, Download, Settings, Users, Layers, ExternalLink 
+} from 'lucide-react';
+import { Product, StockMovement } from '../types';
+import { INITIAL_PRODUCTS, STOCK_MOVEMENTS, HOURLY_SALES, BEST_SELLERS } from '../data';
+
+interface DeviceLaptopProps {
+  interactive?: boolean;
+}
+
+export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) {
+  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+  const [movements, setMovements] = useState<StockMovement[]>(STOCK_MOVEMENTS);
+  const [totalSales, setTotalSales] = useState<number>(12840000); // Rp 12.84M
+  const [selectedTab, setSelectedTab] = useState<'dashboard' | 'inventory'>('dashboard');
+
+  // Mouse Drag & Scroll Physics for Smooth Scrolling with Desktop Mouse
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const dragStartX = useRef(0);
+  const dragScrollLeft = useRef(0);
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!scrollRef.current) return;
+    if (e.button !== 0) return; // Only left click
+
+    const target = e.target as HTMLElement;
+    if (
+      target.closest('button') || 
+      target.closest('input') || 
+      target.closest('select') || 
+      target.closest('textarea') ||
+      target.closest('a')
+    ) {
+      return;
+    }
+
+    isDragging.current = true;
+    dragStartX.current = e.pageX - scrollRef.current.offsetLeft;
+    dragScrollLeft.current = scrollRef.current.scrollLeft;
+    
+    scrollRef.current.style.cursor = 'grabbing';
+    scrollRef.current.style.userSelect = 'none';
+    scrollRef.current.style.scrollBehavior = 'auto'; // Instant response
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - dragStartX.current) * 1.5; // Drag multiplier
+    scrollRef.current.scrollLeft = dragScrollLeft.current - walk;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    if (!isDragging.current || !scrollRef.current) return;
+    isDragging.current = false;
+    scrollRef.current.style.cursor = 'grab';
+    scrollRef.current.style.userSelect = '';
+    scrollRef.current.style.scrollBehavior = 'smooth';
+  };
+
+  // Maps vertical scroll to horizontal scroll ONLY when there's scrollable horizontal content
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (!scrollRef.current) return;
+    if (scrollRef.current.scrollWidth > scrollRef.current.clientWidth) {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        scrollRef.current.scrollLeft += e.deltaY * 0.95;
+      }
+    }
+  };
+
+  // Interactive action - Restock an item instantly!
+  const triggerRestock = (productId: string) => {
+    setProducts(prev => 
+      prev.map(p => {
+        if (p.id === productId) {
+          const addedAmt = 100;
+          // Create movement log
+          const newMov: StockMovement = {
+            id: 'm-restock-' + Date.now(),
+            timestamp: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+            productName: p.name,
+            sku: p.sku,
+            type: 'IN',
+            quantity: addedAmt,
+            status: 'Complete'
+          };
+          setMovements(prevM => [newMov, ...prevM]);
+          return { ...p, stock: p.stock + addedAmt };
+        }
+        return p;
+      })
+    );
+  };
+
+  // Format IDR helper
+  const formatIDR = (num: number) => {
+    if (num >= 1000000) {
+      return `Rp ${(num / 1000000).toFixed(2)}M`;
+    }
+    return `Rp ${num.toLocaleString('id-ID')}`;
+  };
+
+  return (
+    <div 
+      className="w-full max-w-4xl mx-auto font-sans animate-fade-in"
+      id="laptop-dashboard-outer"
+    >
+      <div className="w-full" id="laptop-dashboard-wrapper">
+        {/* Laptop MacBook Outer Shell - Top Display (Silver Aluminum + Slim Modern Profile) */}
+        <div className="bg-gradient-to-r from-[#DFDFDF] via-[#EDEDED] to-[#D5D5D5] rounded-t-[18px] p-2.5 pb-0 shadow-xl border border-gray-300 relative">
+          
+          {/* Hardware Detail: Glossy Front Web Camera Lens */}
+          <div className="absolute top-1 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-40">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#111] border border-gray-400/60 flex items-center justify-center">
+              <div className="w-0.5 h-0.5 rounded-full bg-blue-500/90" />
+            </div>
+            {/* Active webcam Green LED */}
+            <span className="w-1 h-1 rounded-full bg-emerald-500/80 border border-emerald-300 shadow-xs" />
+          </div>
+
+          {/* Anti-reflective Glass Screen Bezel (Sleek MacBook-style thin black glass surround) */}
+          <div className="bg-zinc-950 p-[6px] md:p-[10px] pb-0 rounded-t-[10px] overflow-hidden">
+            {/* Screen Content Container with robust overflow-hidden */}
+            <div className="bg-slate-950 rounded-t-[4px] overflow-hidden flex flex-row h-[420px] md:h-[510px] text-gray-100 relative shadow-inner">
+              
+              {/* Laptop Left Workspace Sidebar */}
+              <div className="hidden md:flex w-[185px] bg-[#0C0C0E] border-r border-[#1B1B1F] flex-col justify-between h-full shrink-0">
+                <div>
+                  {/* Brand Header */}
+                  <div className="p-4 border-b border-slate-850 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded bg-[#1A1A1A] flex items-center justify-center text-white font-extrabold text-xs">
+                        ZK
+                      </div>
+                      <span className="font-sans font-bold text-xs tracking-wider text-white uppercase">
+                        ZonaKasir HQ
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Navigation Menu Links */}
+                  <nav className="p-2 space-y-1">
+                    <button
+                      onClick={() => setSelectedTab('dashboard')}
+                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
+                        selectedTab === 'dashboard' 
+                          ? 'bg-slate-800 text-white shadow-sm' 
+                          : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
+                      }`}
+                      id="laptop-tab-dashboard"
+                    >
+                      <LayoutDashboard className="w-3.5 h-3.5" />
+                      Ringkasan Usaha
+                    </button>
+
+                    <button
+                      onClick={() => setSelectedTab('inventory')}
+                      className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-xs font-bold uppercase tracking-wider cursor-pointer transition-all ${
+                        selectedTab === 'inventory' 
+                          ? 'bg-slate-800 text-white shadow-sm' 
+                          : 'text-slate-400 hover:text-white hover:bg-slate-900/50'
+                      }`}
+                      id="laptop-tab-inventory"
+                    >
+                      <ClipboardList className="w-3.5 h-3.5" />
+                      Manajemen Stok
+                    </button>
+
+                    <div className="pt-4 px-3 pb-1 text-[9px] font-bold text-slate-500 tracking-wider uppercase">
+                      Data & Laporan
+                    </div>
+
+                    <a href="#analytics" className="w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] text-slate-400 font-bold uppercase tracking-wider cursor-pointer hover:bg-slate-900/50 hover:text-white">
+                      <TrendingUp className="w-3.5 h-3.5 text-slate-500" />
+                      Grafik Penjualan
+                    </a>
+                    <div className="w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] text-slate-500 font-bold uppercase tracking-wider cursor-not-allowed">
+                      <Users className="w-3.5 h-3.5 text-slate-600" />
+                      Pelanggan & CRM
+                    </div>
+                    <div className="w-full flex items-center gap-2.5 px-3 py-2 rounded-[5px] text-[11px] text-slate-500 font-bold uppercase tracking-wider cursor-not-allowed">
+                      <Settings className="w-3.5 h-3.5 text-slate-600" />
+                      Konfigurasi POS
+                    </div>
+                  </nav>
+                </div>
+
+                {/* Bottom staff info */}
+                <div className="p-4 border-t border-slate-850">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-300">
+                      AS
+                    </div>
+                    <div>
+                      <h5 className="text-[10px] font-bold leading-tight truncate">Amanda Setiadi</h5>
+                      <p className="text-[8px] text-[#888888]">Pemilik • Kopi S&S</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Dashboard Panel Workspace */}
+              <div className="flex-1 bg-slate-950 flex flex-col h-full overflow-hidden text-slate-300">
+                {/* Top Workspace Bar */}
+                <div className="p-4 bg-slate-900 border-b border-slate-850 flex items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-xs font-bold text-white tracking-widest uppercase">
+                      {selectedTab === 'dashboard' ? 'Ringkasan Aktivitas Toko' : 'Kartu Kontrol Inventaris'}
+                    </h2>
+                    <p className="text-[9px] text-slate-400 mt-0.5">Sistem Laporan Manajerial</p>
+                  </div>
+
+                  {selectedTab === 'dashboard' ? (
+                    <div className="flex items-center gap-2.5">
+                      <button 
+                        onClick={() => setTotalSales(prev => prev + 120000)}
+                        className="bg-white/10 text-white border border-white/20 text-[10px] font-bold uppercase px-3 py-1.5 rounded-[5px] hover:bg-white/20 transition-all cursor-pointer"
+                      >
+                        Simulasi Transaksi
+                      </button>
+                    </div>
+                  ) : (
+                    <span className="text-[10px] text-red-400 font-semibold bg-red-500/15 border border-red-500/25 px-2.5 py-1.5 rounded-[5px] flex items-center gap-1.5 uppercase tracking-wide">
+                      <AlertTriangle className="w-3.5 h-3.5" />
+                      Stok Menipis
+                    </span>
+                  )}
+                </div>
+
+                {/* Inner scrollable area */}
+                <div className="p-4 flex-1 overflow-y-auto space-y-4 no-scrollbar">
+                  
+                  {selectedTab === 'dashboard' ? (
+                    /* TAB 1: DASHBOARD REALTIME OVERVIEW */
+                    <>
+                      {/* Realtime KPI stats blocks */}
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px]">
+                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Omset Hari Ini</span>
+                          <p className="text-sm font-mono font-bold text-white mt-1">
+                            {formatIDR(totalSales)}
+                          </p>
+                          <span className="text-[8px] text-emerald-400 font-semibold block mt-1.5 flex items-center gap-0.5">
+                            <ArrowUpRight className="w-2.5 h-2.5" /> +14.2% vs Kemarin
+                          </span>
+                        </div>
+
+                        <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px]">
+                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Transaksi Berhasil</span>
+                          <p className="text-sm font-mono font-bold text-white mt-1">
+                            284 Transaksi
+                          </p>
+                          <span className="text-[8px] text-emerald-400 font-semibold block mt-1.5 flex items-center gap-0.5">
+                            <ArrowUpRight className="w-2.5 h-2.5" /> +8.5% jam ini
+                          </span>
+                        </div>
+
+                        <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px]">
+                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Rata-rata Keranjang</span>
+                          <p className="text-sm font-mono font-bold text-white mt-1">
+                            Rp 58.200
+                          </p>
+                          <span className="text-[8px] text-slate-400 font-semibold block mt-1.5">
+                            Konversi stabil
+                          </span>
+                        </div>
+
+                        <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px]">
+                          <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Nilai Inventaris</span>
+                          <p className="text-sm font-mono font-bold text-white mt-1">
+                            Rp 84.120.000
+                          </p>
+                          <span className="text-[8px] text-red-400 font-semibold block mt-1.5 flex items-center gap-0.5">
+                            <AlertTriangle className="w-2.5 h-2.5 text-red-500" /> 2 Menu kritis stok
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Main Analytics Graphs Section */}
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+                        
+                        {/* Hourly Sales Area Chart curve */}
+                        <div className="bg-slate-900 border border-slate-850 p-3.5 rounded-[6px] lg:col-span-2">
+                          <div className="flex items-center justify-between mb-3">
+                            <div>
+                              <h4 className="text-xs font-bold text-white">Grafik Aliran Omset Harian</h4>
+                              <p className="text-[8px] text-slate-400 mt-0.5">Laporan real-time jam ke jam</p>
+                            </div>
+                            <span className="text-[9px] font-semibold text-slate-400 border border-slate-800 px-2 py-0.5 rounded">
+                              Hari Ini
+                            </span>
+                          </div>
+
+                          <div className="h-44 w-full select-none text-[9px]">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <AreaChart data={HOURLY_SALES} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
+                                <defs>
+                                  <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />
+                                    <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                                  </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#232329" vertical={false} />
+                                <XAxis dataKey="time" stroke="#52525b" />
+                                <YAxis stroke="#52525b" tickFormatter={(v) => `${v/1000}k`} />
+                                <Tooltip 
+                                  contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', borderRadius: '6px' }}
+                                  labelStyle={{ color: '#a1a1aa', fontWeight: 'bold', fontSize: '9px' }}
+                                />
+                                <Area 
+                                  type="monotone" 
+                                  dataKey="sales" 
+                                  stroke="#10b981" 
+                                  strokeWidth={1.5} 
+                                  fillOpacity={1} 
+                                  fill="url(#salesGrad)" 
+                                />
+                              </AreaChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </div>
+
+                        {/* Best Selling Products bar list */}
+                        <div className="bg-slate-900 border border-slate-850 p-3.5 rounded-[6px] flex flex-col justify-between">
+                          <div>
+                            <h4 className="text-xs font-bold text-white">Menu Paling Laris</h4>
+                            <p className="text-[8px] text-slate-400 mt-0.5">Volume penjualan tertinggi hari ini</p>
+                          </div>
+
+                          <div className="space-y-2 mt-4 flex-1 flex flex-col justify-center">
+                            {BEST_SELLERS.map((item, idx) => (
+                              <div key={item.name} className="space-y-1">
+                                <div className="flex justify-between text-[10px] text-slate-300">
+                                  <span className="font-semibold">{item.name}</span>
+                                  <span className="font-mono font-bold text-white">{item.sales} Pcs</span>
+                                </div>
+                                <div className="w-full bg-[#1e1e24] h-1.5 rounded-full overflow-hidden">
+                                  <div 
+                                    className="bg-emerald-500 h-full rounded-full" 
+                                    style={{ width: `${(item.sales / BEST_SELLERS[0].sales) * 100}%` }}
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+
+                          <div className="text-[9px] text-slate-500 pt-2 border-t border-slate-850 flex items-center justify-between mt-2">
+                            <span>Stabil sejak jam sibuk siang</span>
+                            <span className="font-bold flex items-center gap-0.5 text-emerald-400">
+                              98% Akurat
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+
+                      {/* Activity and alerts footer logs */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        
+                        {/* Aliran Stok - Stock movement list */}
+                        <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px]">
+                          <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-850">
+                            <span className="text-[10px] font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                              <Box className="w-3.5 h-3.5 text-slate-400" /> Mutasi Inventaris
+                            </span>
+                            <span className="text-[8px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded font-mono uppercase">Gudang Utama</span>
+                          </div>
+
+                          <div className="space-y-2 h-28 overflow-y-auto no-scrollbar">
+                            {movements.map((m) => (
+                              <div key={m.id} className="flex justify-between items-center text-[10px] py-1 border-b border-slate-850 last:border-b-0">
+                                <div className="flex items-center gap-2">
+                                  {m.type === 'IN' ? (
+                                    <ArrowDownLeft className="w-3.5 h-3.5 text-emerald-400 bg-emerald-500/10 p-0.5 rounded-sm" />
+                                  ) : (
+                                    <ArrowUpRight className="w-3.5 h-3.5 text-amber-400 bg-amber-500/10 p-0.5 rounded-sm" />
+                                  )}
+                                  <div>
+                                    <span className="font-semibold text-gray-200">{m.productName}</span>
+                                    <span className="text-[8px] text-slate-500 ml-1.5">SKU {m.sku}</span>
+                                  </div>
+                                </div>
+                                <div className="text-right">
+                                  <span className={`font-semibold ${m.type === 'IN' ? 'text-emerald-400' : 'text-amber-400'}`}>
+                                    {m.type === 'IN' ? '+' : '-'}{m.quantity} Unit
+                                  </span>
+                                  <span className="text-[8px] text-slate-500 block">{m.timestamp}</span>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Stock Alert Quick Click Restock Actions */}
+                        <div className="bg-slate-900 border border-slate-850 p-3 rounded-[6px] flex flex-col justify-between">
+                          <div>
+                            <div className="flex justify-between items-center mb-2 pb-2 border-b border-slate-850">
+                              <span className="text-[10px] font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                                <AlertTriangle className="w-3.5 h-3.5 text-red-400 animate-pulse" /> Peringatan Reorder Cepat (Sistem Otomatis)
+                              </span>
+                            </div>
+
+                            <div className="space-y-1.5 h-28 overflow-y-auto no-scrollbar">
+                              {products.map(p => {
+                                const isLow = p.stock <= 18;
+                                if (!isLow) return null;
+                                return (
+                                  <div key={p.id} className="flex justify-between items-center bg-slate-950 p-2 border border-slate-850 rounded-[4px]">
+                                    <div>
+                                      <div className="text-[10px] font-semibold text-gray-200 leading-tight">{p.name}</div>
+                                      <div className="text-[8px] text-red-400 mt-0.5">Sisa stok: {p.stock} pcs • Batas aman 18</div>
+                                    </div>
+                                    <button
+                                      onClick={() => triggerRestock(p.id)}
+                                      className="text-[9px] font-bold text-white bg-red-600 hover:bg-red-700 px-2.5 py-1 rounded-[4px] cursor-pointer active:scale-95 transition-all"
+                                    >
+                                      Restock +100
+                                    </button>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                    </>
+                  ) : (
+                    /* TAB 2: FULL INVENTORY LIST WITH REAL TIME ACTIONS */
+                    <div className="bg-slate-900 border border-slate-850 rounded-[6px] overflow-hidden">
+                      <table className="w-full text-left border-collapse text-[11px]">
+                        <thead>
+                          <tr className="bg-slate-950 text-slate-400 border-b border-slate-850">
+                            <th className="p-3 font-semibold text-[10px] uppercase">SKU</th>
+                            <th className="p-3 font-semibold text-[10px] uppercase">Nama Menu</th>
+                            <th className="p-3 font-semibold text-[10px] uppercase">Kategori</th>
+                            <th className="p-3 font-semibold text-[10px] uppercase text-right">Harga Satuan</th>
+                            <th className="p-3 font-semibold text-[10px] uppercase text-center">Stok Gudang</th>
+                            <th className="p-3 font-semibold text-[10px] uppercase text-center">Status</th>
+                            <th className="p-3 font-semibold text-[10px] uppercase text-center">Aksi Cepat</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-850">
+                          {products.map(p => {
+                            const isLow = p.stock <= 18;
+                            const isCritical = p.stock <= 4;
+                            return (
+                              <tr key={p.id} className="hover:bg-slate-900/50">
+                                <td className="p-3 font-mono text-[10px] text-slate-400">{p.sku}</td>
+                                <td className="p-3 font-bold text-white">{p.name}</td>
+                                <td className="p-3 text-slate-400">{p.category}</td>
+                                <td className="p-3 text-right font-mono text-slate-200">
+                                  Rp {p.price.toLocaleString('id-ID')}
+                                </td>
+                                <td className="p-3 text-center font-mono font-bold text-white">
+                                  {p.stock} Pcs
+                                </td>
+                                <td className="p-3 text-center">
+                                  {isCritical ? (
+                                    <span className="bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">Kritis</span>
+                                  ) : isLow ? (
+                                    <span className="bg-amber-500/10 text-amber-500 border border-amber-500/20 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">Menipis</span>
+                                  ) : (
+                                    <span className="bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-2 py-0.5 rounded-[4px] font-bold text-[8px] uppercase">Aman</span>
+                                  )}
+                                </td>
+                                <td className="p-3 text-center">
+                                  <button
+                                    onClick={() => triggerRestock(p.id)}
+                                    className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1 rounded-[4px] text-[10px] font-semibold active:scale-95 transition-all cursor-pointer"
+                                  >
+                                    Restock +100
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Laptop MacBook Premium Keyboard Base with sleek premium silver look */}
+          <div className="relative w-[101.5%] -ml-[0.75%] h-5 bg-gradient-to-b from-[#E0E0E0] via-[#EDEDED] to-[#AEAEAE] rounded-b-[16px] border-t border-white shadow-2xl flex justify-center items-start z-20">
+            {/* Display Hinge Connection */}
+            <div className="absolute -top-[5px] left-1/2 -translate-x-1/2 w-44 h-[6px] bg-[#222225] rounded-t-[3px] border-b border-[#111]" />
+            
+            {/* Trackpad Indent */}
+            <div className="w-28 h-[10px] bg-gradient-to-b from-[#CCCCCC] to-[#DFDFDF] border border-gray-400/50 rounded-b-[5px] -mt-[1px] border-t-0 shadow-inner" />
+          </div>
+
+        </div>
+      </div>
+      
+      <style>{`
+        .bg-slate-850 {
+          background-color: #121215;
+        }
+        .border-slate-850 {
+          border-color: #1a1a20;
+        }
+      `}</style>
+    </div>
+  );
+}
