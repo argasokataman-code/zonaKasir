@@ -190,9 +190,21 @@ class OfflineManager {
     const results = {};
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
 
-    // Try bulk sync endpoint first (more efficient, single request)
+    // Try delta sync first by reading last_sync_at
+    var lastSyncUrl = this.BULK_SYNC_URL;
+    if (typeof csrfToken !== 'string' || csrfToken === '') {
+      // Missing CSRF — skip
+      console.warn('[OfflineManager] No CSRF token, skipping prefetch');
+      return results;
+    }
+
     try {
-      const bulkResp = await fetch(this.BULK_SYNC_URL, {
+      var lastSyncAt = await this.getMeta('last_sync_at');
+      if (lastSyncAt) {
+        lastSyncUrl += '?since=' + encodeURIComponent(lastSyncAt);
+      }
+
+      const bulkResp = await fetch(lastSyncUrl, {
         headers: {
           'Accept': 'application/json',
           'X-Requested-With': 'XMLHttpRequest',
@@ -204,6 +216,7 @@ class OfflineManager {
       if (bulkResp.ok) {
         const bulkData = await bulkResp.json();
         const data = bulkData.data || bulkData;
+        const isDelta = data.is_delta === true;
 
         for (const [key, storeName] of Object.entries({
           products: 'products',
@@ -213,8 +226,30 @@ class OfflineManager {
         })) {
           const items = data[key];
           if (Array.isArray(items) && items.length > 0) {
-            await this.syncStore(storeName, items);
+            if (isDelta) {
+              // Delta sync — upsert only, don't clear
+              for (const item of items) {
+                await this._put(storeName, item);
+              }
+            } else {
+              // Full sync — clear and replace
+              await this.syncStore(storeName, items);
+            }
             results[storeName] = items.length;
+          }
+        }
+
+        // Handle deleted records (delta sync only)
+        if (isDelta && data.deleted_ids) {
+          for (const [storeName, ids] of Object.entries(data.deleted_ids)) {
+            if (Array.isArray(ids)) {
+              for (const id of ids) {
+                try { await this._delete(storeName, id); } catch (e) {}
+              }
+              if (ids.length > 0) {
+                results['deleted_' + storeName] = ids.length;
+              }
+            }
           }
         }
 
@@ -233,6 +268,7 @@ class OfflineManager {
         }
 
         await this.setMeta('last_prefetch', new Date().toISOString());
+        await this.setMeta('last_sync_at', new Date().toISOString());
         await this.setMeta('prefetch_results', JSON.stringify(results));
         this.prefetchPromise = null;
         return results;
@@ -278,6 +314,7 @@ class OfflineManager {
     }
 
     await this.setMeta('last_prefetch', new Date().toISOString());
+    await this.setMeta('last_sync_at', new Date().toISOString());
     await this.setMeta('prefetch_results', JSON.stringify(results));
 
     this.prefetchPromise = null;

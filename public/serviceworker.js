@@ -3,270 +3,238 @@ const STATIC_CACHE = `zonakasir-static-${CACHE_VERSION}`;
 const PAGES_CACHE = `zonakasir-pages-${CACHE_VERSION}`;
 const API_CACHE = `zonakasir-api-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `zonakasir-dynamic-${CACHE_VERSION}`;
+const OFFLINE_PAGE = '/offline';
 
 const APP_SHELL_URLS = [
-  '/',
-  '/offline',
-  '/member/offline-pos',
-  '/favicon.ico',
-  '/images/icons/icon-48x48.png',
-  '/images/icons/icon-72x72.png',
-  '/images/icons/icon-96x96.png',
-  '/images/icons/icon-128x128.png',
-  '/images/icons/icon-144x144.png',
-  '/images/icons/icon-152x152.png',
-  '/images/icons/icon-192x192.png',
-  '/images/icons/icon-512x512.png',
+  '/', '/offline', '/member/offline-pos', '/favicon.ico',
+  '/images/icons/icon-48x48.png', '/images/icons/icon-72x72.png',
+  '/images/icons/icon-96x96.png', '/images/icons/icon-128x128.png',
+  '/images/icons/icon-144x144.png', '/images/icons/icon-152x152.png',
+  '/images/icons/icon-192x192.png', '/images/icons/icon-512x512.png',
 ];
 
 const API_ROUTES_TO_CACHE = [
-  '/api/master/product',
-  '/api/master/category',
-  '/api/master/member',
-  '/api/master/payment-method',
-  '/api/about',
+  '/api/master/product', '/api/master/category', '/api/master/member',
+  '/api/master/payment-method', '/api/about',
 ];
 
+// ─── Route Matchers ──────────────────────────────────────────
+
 function isApiRoute(url) {
-  try {
-    const parsed = new URL(url, self.location.origin);
-    return parsed.pathname.startsWith('/api/');
-  } catch {
-    return false;
-  }
+  try { return new URL(url, self.location.origin).pathname.startsWith('/api/'); }
+  catch { return false; }
 }
 
 function isMasterDataApi(url) {
   try {
-    const parsed = new URL(url, self.location.origin);
-    return API_ROUTES_TO_CACHE.some(route => parsed.pathname.startsWith(route));
-  } catch {
-    return false;
-  }
+    const path = new URL(url, self.location.origin).pathname;
+    return API_ROUTES_TO_CACHE.some(r => path.startsWith(r));
+  } catch { return false; }
 }
 
 function isStaticAsset(url) {
   try {
-    const parsed = new URL(url, self.location.origin);
-    const path = parsed.pathname;
-    return (
-      path.startsWith('/build/') ||
-      path.startsWith('/js/') ||
-      path.startsWith('/css/') ||
-      path.startsWith('/images/') ||
-      path.startsWith('/assets/') ||
-      path.endsWith('.css') ||
-      path.endsWith('.js') ||
-      path.endsWith('.woff') ||
-      path.endsWith('.woff2') ||
-      path.endsWith('.ttf') ||
-      path.endsWith('.svg') ||
-      path.endsWith('.png') ||
-      path.endsWith('.ico')
-    );
-  } catch {
-    return false;
-  }
+    const path = new URL(url, self.location.origin).pathname;
+    return /^\/(build|js|css|images|assets)\//.test(path) || /\.(css|js|woff2?|ttf|svg|png|ico)$/.test(path);
+  } catch { return false; }
 }
 
 function isNavigationRequest(event) {
   return event.request.mode === 'navigate' ||
-    (event.request.method === 'GET' &&
-      event.request.headers.get('accept')?.includes('text/html'));
+    (event.request.method === 'GET' && event.request.headers.get('accept')?.includes('text/html'));
 }
 
 function isLivewireUpdate(event) {
-  return event.request.method === 'POST' &&
-    event.request.url.includes('/livewire/update');
+  return event.request.method === 'POST' && event.request.url.includes('/livewire/update');
 }
+
+// ─── Cache Helpers ───────────────────────────────────────────
+
+async function trimCache(cacheName, max) {
+  const cache = await caches.open(cacheName);
+  const keys = await cache.keys();
+  if (keys.length > max) {
+    await Promise.all(keys.slice(0, keys.length - max).map(k => cache.delete(k)));
+  }
+}
+
+// ─── Install / Activate ──────────────────────────────────────
 
 async function cacheStaticAssets() {
   const cache = await caches.open(STATIC_CACHE);
+  await Promise.all(APP_SHELL_URLS.map(u => cache.add(u).catch(() => {})));
 
-  await Promise.all(
-    APP_SHELL_URLS.map(url =>
-      cache.add(url).catch(err => console.warn(`[SW] Failed to cache ${url}:`, err))
-    )
-  );
-
+  // Vite manifest assets
   try {
-    const resp = await fetch('/build/manifest.json');
-    if (resp.ok) {
-      const manifest = await resp.json();
-      const assetUrls = Object.values(manifest)
-        .map(entry => `/build/${entry.file}`)
-        .filter(url => !url.endsWith('.map'));
+    const m = await (await fetch('/build/manifest.json')).json();
+    await Promise.all(Object.values(m).map(e => cache.add(`/build/${e.file}`).catch(() => {})));
+  } catch {}
 
-      await Promise.all(
-        assetUrls.map(url =>
-          cache.add(url).catch(err => console.warn(`[SW] Failed to cache asset ${url}:`, err))
-        )
-      );
-    }
-  } catch (err) {
-    console.warn('[SW] Failed to load manifest:', err);
-  }
+  // Custom JS
+  const js = ['custom-javascript', 'printer', 'indexeddb', 'offline-manager', 'sync-manager', 'offline-indicator', 'session-timeout'];
+  await Promise.all(js.map(n => cache.add(`/js/app/${n}.js`).catch(() => {})));
 
-  try {
-    const jsDirResp = await fetch('/js/app/');
-    if (jsDirResp.ok) {
-      const jsFiles = ['/js/app/custom-javascript.js', '/js/app/printer.js', '/js/app/indexeddb.js', '/js/app/offline-manager.js', '/js/app/sync-manager.js', '/js/app/offline-indicator.js', '/js/app/session-timeout.js'];
-      await Promise.all(
-        jsFiles.map(url =>
-          cache.add(url).catch(err => console.warn(`[SW] Failed to cache JS ${url}:`, err))
-        )
-      );
-    }
-  } catch (err) {
-    console.warn('[SW] Failed to cache JS files:', err);
-  }
-
-  try {
-    const filamentJs = [
-      '/js/filament/filament/app.js',
-      '/js/filament/support/support.js',
-      '/js/filament/notifications/notifications.js',
-    ];
-    const filamentCss = [
-      '/css/filament/filament/app.css',
-      '/css/filament/support/support.css',
-    ];
-    await Promise.all(
-      [...filamentJs, ...filamentCss].map(url =>
-        cache.add(url).catch(err => console.warn(`[SW] Failed to cache Filament ${url}:`, err))
-      )
-    );
-  } catch (err) {
-    console.warn('[SW] Failed to cache Filament assets:', err);
-  }
+  // Filament assets
+  const fJs = ['/js/filament/filament/app.js', '/js/filament/support/support.js', '/js/filament/notifications/notifications.js'];
+  const fCss = ['/css/filament/filament/app.css', '/css/filament/support/support.css'];
+  await Promise.all([...fJs, ...fCss].map(u => cache.add(u).catch(() => {})));
 }
 
-async function trimCache(cacheName, maxItems) {
-  const cache = await caches.open(cacheName);
-  const keys = await cache.keys();
-  if (keys.length > maxItems) {
-    await Promise.all(
-      keys.slice(0, keys.length - maxItems).map(key => cache.delete(key))
-    );
-  }
-}
+// ─── Fetch Handlers ──────────────────────────────────────────
 
 async function handleApiRequest(event) {
-  const url = event.request.url;
-  const networkFirst = event.request.method === 'GET';
-
-  if (!networkFirst) {
-    try {
-      const response = await fetch(event.request);
-      return response;
-    } catch {
-      return new Response(JSON.stringify({ error: 'offline', message: 'No network connection' }), {
-        status: 503,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
+  const isGet = event.request.method === 'GET';
+  if (!isGet) {
+    try { return await fetch(event.request); }
+    catch { return new Response(JSON.stringify({ error: 'offline' }), { status: 503, headers: { 'Content-Type': 'application/json' } }); }
   }
 
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-    const response = await fetch(event.request, { signal: controller.signal });
-    clearTimeout(timeoutId);
-
-    if (response.ok && isMasterDataApi(url)) {
-      const cloned = response.clone();
-      const cache = await caches.open(API_CACHE);
-      cache.put(event.request, cloned);
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), 8000);
+    const resp = await fetch(event.request, { signal: ctrl.signal });
+    clearTimeout(tid);
+    if (resp.ok && isMasterDataApi(event.request.url)) {
+      const clone = resp.clone();
+      (await caches.open(API_CACHE)).put(event.request, clone);
     }
-
-    return response;
+    return resp;
   } catch {
-    if (isMasterDataApi(url)) {
+    if (isMasterDataApi(event.request.url)) {
       const cached = await caches.match(event.request);
       if (cached) return cached;
     }
-
-    return new Response(JSON.stringify({ error: 'offline', message: 'No network connection' }), {
-      status: 503,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return new Response(JSON.stringify({ error: 'offline' }), { status: 503, headers: { 'Content-Type': 'application/json' } });
   }
 }
 
 async function handlePageRequest(event) {
-  const url = event.request.url;
-
   if (isLivewireUpdate(event)) {
-    try {
-      const response = await fetch(event.request);
-      return response;
-    } catch {
-      // Return minimal Livewire-compatible error response
-      return new Response(JSON.stringify({
-        message: 'Offline',
-        errors: { server: ['No network connection. Changes not saved.'] },
-      }), {
-        status: 419, // Session expired status — Livewire handles this gracefully
-        headers: { 'Content-Type': 'application/json' },
+    try { return await fetch(event.request); }
+    catch {
+      return new Response(JSON.stringify({ message: 'Offline', errors: { server: ['No network'] } }), {
+        status: 419, headers: { 'Content-Type': 'application/json' },
       });
     }
   }
 
   try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
-
-    const response = await fetch(event.request, { signal: controller.signal });
-    clearTimeout(timeoutId);
-
-    if (response.ok) {
+    const ctrl = new AbortController();
+    const tid = setTimeout(() => ctrl.abort(), 10000);
+    const resp = await fetch(event.request, { signal: ctrl.signal });
+    clearTimeout(tid);
+    if (resp.ok) {
       const cache = await caches.open(PAGES_CACHE);
-      cache.put(event.request, response.clone());
+      cache.put(event.request, resp.clone());
       trimCache(PAGES_CACHE, 50);
     }
-
-    return response;
+    return resp;
   } catch {
     const cached = await caches.match(event.request);
-    if (cached) return cached;
-
-    return caches.match('/offline');
+    return cached || caches.match(OFFLINE_PAGE);
   }
 }
 
 async function handleStaticRequest(event) {
   const cached = await caches.match(event.request);
   if (cached) return cached;
-
   try {
-    const response = await fetch(event.request);
-    if (response.ok) {
-      const cache = await caches.open(STATIC_CACHE);
-      cache.put(event.request, response.clone());
-    }
-    return response;
-  } catch {
-    return new Response('', { status: 408, statusText: 'Offline' });
-  }
+    const resp = await fetch(event.request);
+    if (resp.ok) (await caches.open(STATIC_CACHE)).put(event.request, resp.clone());
+    return resp;
+  } catch { return new Response('', { status: 408, statusText: 'Offline' }); }
 }
 
 async function handleDynamicRequest(event) {
   const cached = await caches.match(event.request);
   if (cached) return cached;
-
   try {
-    const response = await fetch(event.request);
-    if (response.ok) {
+    const resp = await fetch(event.request);
+    if (resp.ok) {
       const cache = await caches.open(DYNAMIC_CACHE);
-      cache.put(event.request, response.clone());
+      cache.put(event.request, resp.clone());
       trimCache(DYNAMIC_CACHE, 100);
     }
-    return response;
-  } catch {
-    return new Response('', { status: 408, statusText: 'Offline' });
+    return resp;
+  } catch { return new Response('', { status: 408, statusText: 'Offline' }); }
+}
+
+// ─── Sync Pending Sales (from IndexedDB) ─────────────────────
+
+async function syncPendingSales(event) {
+  try {
+    // SW can't access IndexedDB "zonakasir_offline" directly (different DB scope).
+    // Instead, message all clients to trigger sync.
+    const clients = await self.clients.matchAll();
+    if (clients.length > 0) {
+      clients.forEach(c => c.postMessage({ type: 'BACKGROUND_SYNC' }));
+    } else {
+      // No open clients — try direct API call for each pending sale.
+      // This requires storing pending sales in Cache API as fallback.
+      // For now, rely on SyncManager polling when client reopens.
+      console.log('[SW] Background sync: no active clients, waiting for next poll');
+    }
+  } catch (err) {
+    console.error('[SW] Background sync error:', err);
   }
 }
+
+// ─── Push Notification ──────────────────────────────────────
+
+async function handlePushEvent(event) {
+  let data = { title: 'zonaKasir', body: '', icon: '/images/icons/icon-192x192.png', badge: '/images/icons/icon-72x72.png', tag: 'zonakasir-notification', data: {} };
+
+  if (event.data) {
+    try {
+      const payload = event.data.json();
+      data = { ...data, ...payload };
+    } catch {
+      data.body = event.data.text() || data.body;
+    }
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: data.icon,
+      badge: data.badge,
+      tag: data.tag || 'zonakasir-notification',
+      data: data.data || {},
+      vibrate: [200, 100, 200],
+      actions: data.actions || [
+        { action: 'open', title: 'Open App' },
+        { action: 'sync', title: 'Sync Now' },
+      ],
+    })
+  );
+}
+
+async function handleNotificationClick(event) {
+  event.notification.close();
+
+  const action = event.action;
+  const urlToOpen = new URL('/member', self.location.origin).href;
+
+  if (action === 'sync') {
+    // Notify clients to sync
+    const clients = await self.clients.matchAll();
+    clients.forEach(c => c.postMessage({ type: 'BACKGROUND_SYNC' }));
+  }
+
+  // Focus or open app window
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
+      for (const client of windowClients) {
+        if (client.url.includes(self.location.origin) && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) return clients.openWindow(urlToOpen);
+    })
+  );
+}
+
+// ─── Event Listeners ─────────────────────────────────────────
 
 self.addEventListener('install', event => {
   self.skipWaiting();
@@ -275,67 +243,59 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys => {
-      return Promise.all(
-        keys
-          .filter(key => key.startsWith('zonakasir-'))
-          .filter(key => !key.includes(CACHE_VERSION))
-          .map(key => caches.delete(key))
-      );
-    })
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k.startsWith('zonakasir-') && !k.includes(CACHE_VERSION)).map(k => caches.delete(k)))
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
+// Fetch
 self.addEventListener('fetch', event => {
   const url = event.request.url;
+  if (url.includes('/member/login') || url.includes('/admin/login')) return;
 
-  if (url.includes('/member/login') || url.includes('/admin/login')) {
-    return;
+  if (isApiRoute(url)) event.respondWith(handleApiRequest(event));
+  else if (isNavigationRequest(event)) event.respondWith(handlePageRequest(event));
+  else if (isStaticAsset(url)) event.respondWith(handleStaticRequest(event));
+  else event.respondWith(handleDynamicRequest(event));
+});
+
+// Background Sync — fired by OS even when tab closed (if registered)
+self.addEventListener('sync', event => {
+  if (event.tag === 'sync-pending-sales') {
+    event.waitUntil(syncPendingSales(event));
   }
-
-  if (isApiRoute(url)) {
-    event.respondWith(handleApiRequest(event));
-  } else if (isNavigationRequest(event)) {
-    event.respondWith(handlePageRequest(event));
-  } else if (isStaticAsset(url)) {
-    event.respondWith(handleStaticRequest(event));
-  } else {
-    event.respondWith(handleDynamicRequest(event));
+  if (event.tag === 'sync-master-data') {
+    event.waitUntil(syncPendingSales(event)); // same logic — msg clients
   }
 });
 
+// Periodic Background Sync — Chrome 80+, fired periodically by browser
 self.addEventListener('periodicsync', event => {
   if (event.tag === 'sync-data') {
-    event.waitUntil(syncMasterData());
+    event.waitUntil(syncPendingSales(event));
+  }
+  if (event.tag === 'sync-refresh-master') {
+    event.waitUntil(syncPendingSales(event));
   }
 });
 
-async function syncMasterData() {
-  const clients = await self.clients.matchAll();
-  clients.forEach(client => {
-    client.postMessage({ type: 'SYNC_MASTER_DATA' });
-  });
-}
+// Push Notification
+self.addEventListener('push', handlePushEvent);
+self.addEventListener('notificationclick', handleNotificationClick);
 
+// Message from clients
 self.addEventListener('message', event => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    self.skipWaiting();
-  }
+  const d = event.data;
+  if (!d || !d.type) return;
 
-  if (event.data && event.data.type === 'CACHE_URLS') {
+  if (d.type === 'SKIP_WAITING') self.skipWaiting();
+  if (d.type === 'CACHE_URLS') {
     event.waitUntil(
-      caches.open(STATIC_CACHE).then(cache => {
-        return Promise.all(
-          event.data.urls.map(url =>
-            cache.add(url).catch(err => console.warn(`[SW] Failed to cache ${url}:`, err))
-          )
-        );
-      })
+      caches.open(STATIC_CACHE).then(cache =>
+        Promise.all(d.urls.map(u => cache.add(u).catch(() => {})))
+      )
     );
   }
-
-  if (event.data && event.data.type === 'CLEAR_PAGES_CACHE') {
-    event.waitUntil(caches.delete(PAGES_CACHE));
-  }
+  if (d.type === 'CLEAR_PAGES_CACHE') event.waitUntil(caches.delete(PAGES_CACHE));
 });
