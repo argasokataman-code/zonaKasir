@@ -45,24 +45,26 @@ class TransactionStats extends BaseWidget
         $txnColor = 'success';
         if ($yesterday->total_transactions > 0) {
             $pct = (($today->total_transactions - $yesterday->total_transactions) / $yesterday->total_transactions) * 100;
-            $txnTrend = ($pct >= 0 ? '+' : '') . round($pct) . '% ' . __('vs kemarin');
+            $txnTrend = ($pct >= 0 ? '+' : '') . round($pct) . '% ' . __('vs yesterday');
             $txnColor = $pct >= 0 ? 'success' : 'danger';
         }
 
         return [
-            Stat::make(__('Transaksi Hari Ini'), $today->total_transactions)
+            Stat::make(__('Today Transactions'), $today->total_transactions)
                 ->description($txnTrend)
+
                 ->descriptionIcon($txnColor === 'success' ? 'heroicon-m-arrow-trending-up' : 'heroicon-m-arrow-trending-down')
                 ->color($txnColor),
-            Stat::make(__('Rata-rata per Transaksi'), 'Rp ' . number_format($today->avg_transaction))
+            Stat::make(__('Average per Transaction'), 'Rp ' . number_format($today->avg_transaction))
                 ->descriptionIcon('heroicon-m-calculator')
                 ->color('info'),
-            Stat::make(__('Total Item Terjual'), number_format($today->total_items))
+            Stat::make(__('Total Items Sold'), number_format($today->total_items))
                 ->descriptionIcon('heroicon-m-shopping-bag')
                 ->color('primary'),
-            Stat::make(__('Member Baru Hari Ini'), $todayMembers)
+            Stat::make(__('New Members Today'), $todayMembers)
                 ->descriptionIcon('heroicon-m-user-plus')
                 ->color('warning'),
         ];
     }
 }
+
