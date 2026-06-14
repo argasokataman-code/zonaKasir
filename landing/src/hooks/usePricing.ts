@@ -15,6 +15,7 @@ export interface Plan {
 }
 
 const API_URL = '/api/pricing';
+const CACHE_KEY = 'pricing_cache_v2';
 
 const FALLBACK_PLANS: Plan[] = [
   {
@@ -55,7 +56,7 @@ export function usePricing() {
   useEffect(() => {
     let cancelled = false;
 
-    const cached = localStorage.getItem('pricing_cache');
+    const cached = localStorage.getItem(CACHE_KEY);
     if (cached) {
       try {
         const parsed = JSON.parse(cached);

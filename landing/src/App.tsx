@@ -1343,7 +1343,7 @@ export default function App() {
                                 : formatPrice(plan.price_yearly)}
                             </span>
                             <span className="text-[10px] text-[#666666] font-bold block uppercase tracking-wider">
-                              {t('pricing.per_month')} &bull; {t('pricing.billed')} {billingCycle === 'monthly' ? t('pricing.billed_monthly') : t('pricing.billed_yearly')}
+                              {t('pricing.per_month')} &bull; {billingCycle === 'monthly' ? t('pricing.billed_monthly') : t('pricing.billed_yearly')}
                             </span>
                           </>
                         )}
