@@ -3,7 +3,13 @@
   use App\Features\{PaymentShortcutButton, SellingTax, Discount};
 
 @endphp
-<div class="" x-data="{ cartOpen: false }">
+<div class="" x-data="{ cartOpen: false, isOffline: !navigator.onLine }" x-init="window.addEventListener('online', () => isOffline = false); window.addEventListener('offline', () => isOffline = true);">
+  {{-- Offline Banner --}}
+  <div x-show="isOffline" x-cloak
+    class="fixed top-0 left-0 right-0 z-[9999] flex items-center justify-between bg-amber-500 px-4 py-2 text-sm font-medium text-white shadow-md">
+    <span>{{ __('⚠️ Offline mode — Switch to') }} <a href="/member/offline-pos" class="font-bold underline">{{ __('Offline POS') }}</a></span>
+    <button onclick="if(window.syncManager) window.syncManager.syncAll()" class="rounded bg-white/20 px-3 py-1 text-xs hover:bg-white/30">{{ __('Retry') }}</button>
+  </div>
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-4">
     <div class="col-span-1 lg:col-span-2 pb-24 lg:pb-0">
       {{-- Search --}}
@@ -263,7 +269,7 @@
           </div>
         </div>
         <button class="w-full rounded-lg bg-zonakasir-primary px-2 py-3 text-sm font-semibold text-white"
-          x-on:mousedown="cartOpen = false; $dispatch('open-modal', {id: 'proceed-the-payment'})">{{ __('Proceed to payment') }}</button>
+          x-on:mousedown="if(isOffline) { $dispatch('open-modal', {id: 'offline-payment-confirm'}); } else { cartOpen = false; $dispatch('open-modal', {id: 'proceed-the-payment'}); }">{{ __('Proceed to payment') }}</button>
       </div>
     </div>
   </div>
@@ -470,7 +476,45 @@
     </x-slot>
   </x-filament::modal>
 
-  <style>
+  {{-- Offline Payment Confirmation --}}
+  <x-filament::modal id="offline-payment-confirm" width="md">
+    <x-slot name="heading">
+      ⚠️ {{ __('You are offline') }}
+    </x-slot>
+
+    <div class="space-y-4 py-2">
+      <p class="text-sm text-gray-600 dark:text-gray-300">
+        {{ __('No internet connection. The transaction will be saved locally and synced when you are back online.') }}
+      </p>
+      <div class="rounded-lg bg-amber-50 p-3 text-sm text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
+        <strong>{{ __('Pending transactions:') }}</strong>
+        <span id="offline-pending-count">0</span>
+      </div>
+    </div>
+
+    <x-slot name="footer">
+      <x-filament::button color="gray" x-on:click="$dispatch('close-modal', {id: 'offline-payment-confirm'})">
+        {{ __('Cancel') }}
+      </x-filament::button>
+      <x-filament::button color="warning" id="offline-save-btn"
+        x-on:click="
+          $dispatch('close-modal', {id: 'offline-payment-confirm'});
+          if(window.offlineManager && window.offlineManager.db) {
+            var data = { items: $wire.cartItems.map(function(i) { return { product_id: i.product_id, qty: i.qty, price: i.price, discount_price: i.discount_price }; }), total_price: $wire.total_price, payed_money: $wire.total_price };
+            window.offlineManager.addPendingSale(data).then(function() {
+              $wire.clearCart();
+              var pendingEl = document.getElementById('offline-pending-count');
+              if(pendingEl) window.offlineManager.getPendingCount().then(function(c) { pendingEl.textContent = c; });
+              new FilamentNotification().title('Transaction saved offline').success().send();
+            });
+          } else {
+            new FilamentNotification().title('Offline storage not available').danger().send();
+          }
+        ">
+        {{ __('Save for later sync') }}
+      </x-filament::button>
+    </x-slot>
+  </x-filament::modal>
     /* html5-qrcode library button & control styling */
     #qr-reader__dashboard_section_csr button,
     #qr-reader__dashboard_section_swaplink {

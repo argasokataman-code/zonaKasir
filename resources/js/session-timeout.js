@@ -55,8 +55,9 @@
     });
   }
 
-  // --- Keep-alive ---
+  // --- Keep-alive (skipped when offline) ---
   function sendKeepAlive() {
+    if (!navigator.onLine) return;
     fetch(window.location.pathname, {
       method: 'HEAD',
       credentials: 'same-origin',
@@ -66,6 +67,9 @@
 
   function startKeepAlive() {
     keepAliveTimer = setInterval(sendKeepAlive, KEEPALIVE_INTERVAL_MS);
+    window.addEventListener('online', function() {
+      sendKeepAlive();
+    });
   }
 
   // --- Warning modal ---

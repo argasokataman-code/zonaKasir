@@ -243,6 +243,11 @@ Route::middleware([
                 Route::get('/features', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'features']);
             });
 
+            Route::group(['prefix' => 'sync'], function () {
+                Route::get('/data', [\App\Http\Controllers\Api\Tenants\SyncController::class, 'data']);
+                Route::post('/submit', [\App\Http\Controllers\Api\Tenants\SyncController::class, 'submit']);
+            });
+
             Route::get('/user', function (Request $request) {
                 return $request->user();
             });
