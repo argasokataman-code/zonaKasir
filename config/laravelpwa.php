@@ -9,8 +9,12 @@ return [
         'background_color' => '#FF6600',
         'theme_color' => '#FF6600',
         'display' => 'standalone',
+        'display_override' => ['window-controls-overlay', 'standalone', 'minimal-ui'],
         'orientation' => 'any',
         'status_bar' => '#FF6600',
+        'scope' => '/',
+        'categories' => ['business', 'finance', 'point_of_sale'],
+        'prefer_related_applications' => false,
         'icons' => [
             '48x48' => [
                 'path' => '/images/icons/icon-48x48.png',

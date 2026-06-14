@@ -15,6 +15,10 @@ Route::get('/landing', function () {
 
 Route::view('/offline', 'offline');
 
+Route::get('/member/offline-pos', function () {
+    return view('filament.tenant.pages.offline-pos');
+});
+
 Route::get('/serviceworker.js', function () {
     return response()->file(public_path('serviceworker.js'))
         ->header('Content-Type', 'application/javascript');
