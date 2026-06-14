@@ -17,6 +17,8 @@ class POS extends Page
 
     public static ?string $label = 'POS V2';
 
+    protected static ?string $slug = 'pos';
+
     protected static ?string $navigationIcon = 'heroicon-o-bolt';
 
     protected static string $view = 'filament.tenant.pages.pos.index';
