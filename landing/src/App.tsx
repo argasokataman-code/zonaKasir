@@ -14,8 +14,10 @@ import DeviceTablet from './components/DeviceTablet';
 import DevicePhone from './components/DevicePhone';
 import DeviceLaptop from './components/DeviceLaptop';
 import { TESTIMONIALS } from './data';
+import { useLanguage } from './i18n';
 
 export default function App() {
+  const { t } = useLanguage();
   const [activeSection, setActiveSection] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -260,17 +262,17 @@ export default function App() {
             {/* Hero Copy */}
             <div className="lg:col-span-5 space-y-6 text-left">
               <div className="inline-block px-3 py-1 bg-[#1A1A1A]/5 rounded-[4px] text-[11px] font-bold text-[#1A1A1A] uppercase tracking-[0.2em] mb-4">
-                Point of Sale Indonesia
+                {t('hero.badge')}
               </div>
               
               <h1 className="font-sans font-bold text-4xl sm:text-5xl lg:text-[54px] text-[#1A1A1A] leading-[1.05] tracking-tight mb-6">
-                Kasir Cepat.<br />
-                Stok Otomatis.<br />
-                <span className="text-[#666666]">Laporan Langsung Jadi.</span>
+                {t('hero.title1')}<br />
+                {t('hero.title2')}<br />
+                <span className="text-[#666666]">{t('hero.title3')}</span>
               </h1>
 
               <p className="font-sans text-[#555555] text-sm sm:text-base leading-relaxed max-w-lg font-medium">
-                Kelola transaksi, stok, pelanggan, dan laporan usaha dalam satu sistem yang dirancang untuk presisi bisnis retail dan F&B Indonesia.
+                {t('hero.desc')}
               </p>
 
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
@@ -279,7 +281,7 @@ export default function App() {
                   className="bg-[#1A1A1A] text-white font-sans text-xs font-bold px-8 py-4 rounded-[6px] hover:bg-[#1A1A1A]/90 transition-all shadow-sm active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
                   id="hero-free-trial-btn"
                 >
-                  Mulai Sekarang
+                  {t('hero.start')}
                   <ArrowRight className="w-4 h-4" />
                 </button>
                 <button 
@@ -287,23 +289,23 @@ export default function App() {
                   className="border border-[#D1D1CC] bg-white text-[#1A1A1A] font-sans text-xs font-bold px-8 py-4 rounded-[6px] hover:bg-[#F4F4F2] hover:border-[#1A1A1A]/30 transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm active:scale-95"
                   id="hero-demo-trigger"
                 >
-                  Jadwalkan Demo
+                  {t('hero.demo')}
                 </button>
               </div>
 
               {/* Compliance Trust Tags */}
               <div className="pt-6 border-t border-[#E5E5E1] grid grid-cols-3 gap-4 text-left">
                 <div>
-                  <h4 className="font-mono text-xs font-bold text-[#1A1A1A]">100% cloud</h4>
-                  <p className="text-[10px] text-[#888888] mt-0.5">Real-time backup</p>
+                  <h4 className="font-mono text-xs font-bold text-[#1A1A1A]">{t('hero.cloud')}</h4>
+                  <p className="text-[10px] text-[#888888] mt-0.5">{t('hero.cloud_sub')}</p>
                 </div>
                 <div>
-                  <h4 className="font-mono text-xs font-bold text-[#1A1A1A]">QRIS dinamis</h4>
-                  <p className="text-[10px] text-[#888888] mt-0.5">Satu kode scan</p>
+                  <h4 className="font-mono text-xs font-bold text-[#1A1A1A]">{t('hero.qris')}</h4>
+                  <p className="text-[10px] text-[#888888] mt-0.5">{t('hero.qris_sub')}</p>
                 </div>
                 <div>
-                  <h4 className="font-mono text-xs font-bold text-[#1A1A1A]">Offline-safe</h4>
-                  <p className="text-[10px] text-[#888888] mt-0.5">Transaksi lancar</p>
+                  <h4 className="font-mono text-xs font-bold text-[#1A1A1A]">{t('hero.offline')}</h4>
+                  <p className="text-[10px] text-[#888888] mt-0.5">{t('hero.offline_sub')}</p>
                 </div>
               </div>
             </div>
@@ -444,14 +446,13 @@ export default function App() {
             {/* Story copy on TOP (Centered for clean, elegant layout) */}
             <div className="w-full max-w-2xl space-y-4 text-center">
               <span className="text-[10px] font-bold text-[#666666] tracking-wider uppercase block">
-                SEKSI 02 • ALIRAN TRANSAKSI NYATA
+                {t('s2.label')}
               </span>
               <h2 className="font-sans font-bold text-3xl sm:text-4xl text-[#1A1A1A] leading-tight">
-                Aliran Transaksi Nyata.<br />
-                Bukan Sekadar Gambar.
+                {t('s2.title')}
               </h2>
               <p className="font-sans text-[#555555] text-sm sm:text-base leading-relaxed font-medium">
-                Uji coba terminal POS kami secara langsung di bawah. Rasakan betapa cepatnya mengumpulkan pesanan menu, memicu scanner SKU otomatis, memilih rincian pembayaran, hingga mencetak struk thermal modern.
+                {t('s2.desc')}
               </p>
             </div>
 
@@ -471,8 +472,8 @@ export default function App() {
                   <Check className="w-3 h-3" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-[#1A1A1A]">Simulasi QRIS Dinamis</h4>
-                  <p className="text-[11px] text-[#666666] font-medium">Pindai QR langsung dari terminal, status lunas dalam 2 detik.</p>
+                  <h4 className="text-xs font-bold text-[#1A1A1A]">{t('s2.qris')}</h4>
+                  <p className="text-[11px] text-[#666666] font-medium">{t('s2.qris_desc')}</p>
                 </div>
               </div>
 
@@ -481,14 +482,14 @@ export default function App() {
                   <Check className="w-3 h-3" />
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-[#1A1A1A]">Rollout Kertas Struk 3D</h4>
-                  <p className="text-[11px] text-[#666666] font-medium">Printer virtual langsung merespons setiap transaksi lunas untuk demo.</p>
+                  <h4 className="text-xs font-bold text-[#1A1A1A]">{t('s2.receipt')}</h4>
+                  <p className="text-[11px] text-[#666666] font-medium">{t('s2.receipt_desc')}</p>
                 </div>
               </div>
             </div>
 
             <div className="text-[10px] font-semibold text-[#888888] text-center pt-2">
-              * Sentuh tombol <strong className="text-[#1A1A1A] font-bold">Cari menu</strong>, <strong className="text-[#1A1A1A] font-bold">Scan SKU</strong>, atau <strong className="text-[#1A1A1A] font-bold">Bayar</strong> di dalam tablet untuk berinteraksi langsung.
+              {t('s2.hint')}
             </div>
 
           </motion.div>
@@ -517,14 +518,13 @@ export default function App() {
             {/* Story copy on Left Grid (5 cols) */}
             <div className="lg:col-span-5 space-y-5 text-left order-2 lg:order-1">
               <span className="text-[10px] font-bold text-[#666666] tracking-wider uppercase block">
-                SEKSI 03 • KONTROL STOK OTOMATIS
+                {t('s3.label')}
               </span>
               <h2 className="font-sans font-bold text-3xl text-[#1A1A1A] leading-tight">
-                Peringatan Stok Real-Time.<br />
-                Sisa 18 Croissant, Amankan Sekarang.
+                {t('s3.title')}
               </h2>
               <p className="font-sans text-[#555555] text-sm leading-relaxed font-medium">
-                Setiap kali transaksi kasir memotong sediaan barang, sistem cerdas kami langsung memperbarui volume stok gudang pusat Anda secara live.
+                {t('s3.desc')}
               </p>
 
               <div className="space-y-3 bg-[#F4F4F2] p-4 rounded-[6px] border border-[#E5E5E1]">
@@ -533,21 +533,21 @@ export default function App() {
                     <h4 className="text-xs font-bold text-[#1A1A1A]">Almond Croissant (SKU-002)</h4>
                     <p className="text-[10px] text-red-600 font-semibold">Tinggal 18 pcs di rak</p>
                   </div>
-                  <span className="bg-red-50 text-red-700 font-bold text-[9px] px-2 py-0.5 rounded-[4px] uppercase tracking-wide">Restock Alert</span>
+                  <span className="bg-red-50 text-red-700 font-bold text-[9px] px-2 py-0.5 rounded-[4px] uppercase tracking-wide">{t('s3.restock_alert')}</span>
                 </div>
                 <p className="text-[11px] text-[#666666] leading-relaxed pt-1.5 border-t border-dashed border-[#D1D1CC] font-medium">
-                  Coba tekan tombol <strong className="text-[#1A1A1A]">Restock +100</strong> pada menu Manajemen Stok di dashboard laptop kanan untuk melacak inventaris pulih menjadi 118 pcs seketika.
+                  {t('s3.restock_desc')}
                 </p>
               </div>
 
               <div className="flex items-center gap-3 pt-2">
                 <div className="text-center p-3 bg-[#F4F4F2] rounded-[6px] border border-[#E5E5E1] flex-1">
                   <div className="font-mono text-lg font-bold text-[#1A1A1A]">0%</div>
-                  <p className="text-[10px] text-[#666666] mt-0.5 font-semibold">Suku Bunga Selisih</p>
+                  <p className="text-[10px] text-[#666666] mt-0.5 font-semibold">{t('s3.zero')}</p>
                 </div>
                 <div className="text-center p-3 bg-[#F4F4F2] rounded-[6px] border border-[#E5E5E1] flex-1">
                   <div className="font-mono text-lg font-bold text-[#1A1A1A]">1-Klik</div>
-                  <p className="text-[10px] text-[#666666] mt-0.5 font-semibold">Restock Supplier</p>
+                  <p className="text-[10px] text-[#666666] mt-0.5 font-semibold">{t('s3.oneclick')}</p>
                 </div>
               </div>
             </div>
@@ -584,21 +584,21 @@ export default function App() {
           >
             <div className="max-w-3xl mx-auto space-y-2">
               <span className="text-[10px] font-bold text-[#666666] tracking-wider uppercase block">
-                SEKSI 04 • CLOUD SYNCHRONIZATION
+                {t('s4.label')}
               </span>
               <h2 className="font-sans font-bold text-2xl sm:text-3xl text-[#1A1A1A] tracking-tight">
-                Tiga Device. Satu Data Real-Time.
+                {t('s4.title')}
               </h2>
               <p className="font-sans text-[#555555] text-xs sm:text-sm leading-relaxed font-medium">
-                Setiap transaksi yang dibuat kasir di Tablet, langsung memotong stok di konsol Laptop admin, dan merilis notifikasi laporan omset terbaru di genggaman Handphone Anda secara instan.
+                {t('s4.desc')}
               </p>
             </div>
 
             {/* Central Master Controller Bar - Elegant Horizontal Panel */}
             <div className="max-w-xl mx-auto bg-white border border-[#E5E5E1] p-3 px-5 rounded-[12px] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
               <div>
-                <h4 className="text-[10px] font-bold text-[#1A1A1A] uppercase tracking-wide">Picu Simulasi Transaksi</h4>
-                <p className="text-[9px] text-[#666666] font-medium leading-normal">Klik salah satu nilai pesanan untuk melihat pembaruan sinkronisasi otomatis:</p>
+                <h4 className="text-[10px] font-bold text-[#1A1A1A] uppercase tracking-wide">{t('s4.simulate')}</h4>
+                <p className="text-[9px] text-[#666666] font-medium leading-normal">{t('s4.simulate_desc')}</p>
               </div>
 
               <div className="flex gap-2 shrink-0">
@@ -619,7 +619,7 @@ export default function App() {
 
               <div className="hidden sm:flex flex-col items-end shrink-0 border-l border-dashed border-[#E5E5E1] pl-4 text-right">
                 <span className="text-[8px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-100 flex items-center gap-1 animate-pulse uppercase tracking-wider">
-                  Connected
+                  {t('s4.connected')}
                 </span>
                 <span className="text-[8px] text-[#888888] font-mono mt-0.5">Sync Count: #{syncCount}</span>
               </div>
@@ -634,10 +634,10 @@ export default function App() {
                 className="flex flex-col items-center"
               >
                 <span className="text-[10px] font-mono font-bold text-[#666666] uppercase tracking-wider mb-2.5 flex items-center gap-1.5 bg-white border border-[#E5E5E1] px-3 py-1 rounded-full shadow-xs">
-                  <SmartphoneIcon className="w-3.5 h-3.5 text-[#1A1A1A]" /> Device 1: Handphone
+                  <SmartphoneIcon className="w-3.5 h-3.5 text-[#1A1A1A]" /> {t('s4.device1')}
                 </span>
                 <p className="text-[9px] text-[#888888] mb-3 text-center max-w-[240px] font-medium leading-normal">
-                  Pemilik usaha menerima laporan omset dan update kasir kapan saja.
+                  {t('s4.device1_desc')}
                 </p>
                 <div className="scale-[0.95] origin-bottom animate-fade-in">
                   <DevicePhone lastTransactionTotal={lastSyncTotal} lastPaymentMethod={lastSyncMethod} />
@@ -650,10 +650,10 @@ export default function App() {
                 className="flex flex-col items-center"
               >
                 <span className="text-[10px] font-mono font-bold text-[#666666] uppercase tracking-wider mb-2.5 flex items-center gap-1.5 bg-white border border-[#E5E5E1] px-3 py-1 rounded-full shadow-xs">
-                  <Tablet className="w-3.5 h-3.5 text-[#1A1A1A]" /> Device 2: Tablet POS
+                  <Tablet className="w-3.5 h-3.5 text-[#1A1A1A]" /> {t('s4.device2')}
                 </span>
                 <p className="text-[9px] text-[#888888] mb-3 text-center max-w-[240px] font-medium leading-normal animate-fade-in">
-                  Mesin kasir outlet memproses transaksi pelanggan sehari-hari.
+                  {t('s4.device2_desc')}
                 </p>
                 
                 {/* Genuine Landscape Tablet Mockup - iPad style bezel frame */}
@@ -714,10 +714,10 @@ export default function App() {
                 className="flex flex-col items-center"
               >
                 <span className="text-[10px] font-mono font-bold text-[#666666] uppercase tracking-wider mb-2.5 flex items-center gap-1.5 bg-white border border-[#E5E5E1] px-3 py-1 rounded-full shadow-xs">
-                  <span className="text-[#1A1A1A]">🖥️</span> Device 3: PC Laptop
+                  <span className="text-[#1A1A1A]">🖥️</span> {t('s4.device3')}
                 </span>
                 <p className="text-[9px] text-[#888888] mb-3 text-center max-w-[240px] font-medium leading-normal animate-fade-in">
-                  Konsol gudang memotong sisa stok bahan otomatis tanpa rekap manual.
+                  {t('s4.device3_desc')}
                 </p>
 
                 {/* Genuine Wide Display PC Laptop Mockup */}
@@ -812,36 +812,35 @@ export default function App() {
             {/* Story copy on Right Grid (5 cols) */}
             <div className="lg:col-span-5 space-y-5 lg:pl-6 text-left">
               <span className="text-[10px] font-bold text-[#666666] tracking-wider uppercase block">
-                SEKSI 05 • LAPORAN LANGSUNG JADI
+                {t('s5.label')}
               </span>
               <h2 className="font-sans font-bold text-3xl text-[#1A1A1A] leading-tight">
-                Laporan Penjualan Otomatis.<br />
-                Selesai Tanpa Rekap Manual.
+                {t('s5.title')}
               </h2>
               <p className="font-sans text-[#555555] text-sm leading-relaxed font-medium">
-                Di akhir hari, Anda tidak perlu lagi berkutat dengan kalkulator dan struk menumpuk. Dashboard ZonaKasir langsung menghimpun grafik omset, transaksi, rata-rata belanja, hingga menu paling laris secara instan.
+                {t('s5.desc')}
               </p>
 
               <div className="grid grid-cols-2 gap-3 pt-1">
                 <div className="border border-[#E5E5E1] p-4 rounded-[6px] bg-[#F4F4F2]/50 text-left">
-                  <h4 className="text-xs font-bold text-[#1A1A1A]">Hourly Performance</h4>
-                  <p className="text-[10px] text-[#666666] mt-1 leading-normal font-medium">Lihat jam tersibuk outlet Anda untuk persiapan shift kasir.</p>
+                  <h4 className="text-xs font-bold text-[#1A1A1A]">{t('s5.hourly')}</h4>
+                  <p className="text-[10px] text-[#666666] mt-1 leading-normal font-medium">{t('s5.hourly_desc')}</p>
                 </div>
                 
                 <div className="border border-[#E5E5E1] p-4 rounded-[6px] bg-[#F4F4F2]/50 text-left">
-                  <h4 className="text-xs font-bold text-[#1A1A1A]">Bestseller Ranks</h4>
-                  <p className="text-[10px] text-[#666666] mt-1 leading-normal font-medium">Data volume menu terlaris untuk kontrol belanja bahan pokok.</p>
+                  <h4 className="text-xs font-bold text-[#1A1A1A]">{t('s5.bestseller')}</h4>
+                  <p className="text-[10px] text-[#666666] mt-1 leading-normal font-medium">{t('s5.bestseller_desc')}</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 pt-3">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-4.5 h-4.5 text-[#1A1A1A]" />
-                  <span className="text-xs font-bold text-[#555555]">Export Laporan Excel & PDF</span>
+                  <span className="text-xs font-bold text-[#555555]">{t('s5.export')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-4.5 h-4.5 text-[#1A1A1A]" />
-                  <span className="text-xs font-bold text-[#555555]">Multi-outlet consolidations</span>
+                  <span className="text-xs font-bold text-[#555555]">{t('s5.multi')}</span>
                 </div>
               </div>
             </div>
@@ -887,7 +886,7 @@ export default function App() {
             <div className="lg:col-span-7 flex flex-col justify-between h-full space-y-6 text-left">
               <div className="space-y-4">
                 <span className="text-[10px] font-bold text-[#666666] tracking-wider uppercase block">
-                  KISAH MITRA ZONAKASIR
+                  {t('s6.label')}
                 </span>
                 
                 <h3 className="font-sans font-bold text-2xl sm:text-3xl text-[#1A1A1A] leading-tight">
@@ -1459,7 +1458,7 @@ export default function App() {
                 className="bg-white hover:bg-[#F4F4F2] text-[#1A1A1A] font-sans text-xs font-bold px-7 py-4 rounded-[6px] shadow-md active:scale-95 cursor-pointer flex items-center justify-center gap-1.5"
                 id="cta-register"
               >
-                Coba Gratis Sekarang
+                {t('cta.start_free')}
                 <ArrowRight className="w-4 h-4 text-[#1A1A1A]" />
               </button>
               
@@ -1474,7 +1473,7 @@ export default function App() {
 
             {/* Small fine print */}
             <p className="text-[10px] text-gray-400 font-medium">
-              Tidak perlu kartu kredit untuk uji coba. Pembatalan sewaktu-waktu didukung. Setup dibantu 100% oleh tim Customer Success kami.
+              {t('cta.no_credit')}
             </p>
           </motion.div>
 

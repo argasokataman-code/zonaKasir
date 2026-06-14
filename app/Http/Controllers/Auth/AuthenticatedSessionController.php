@@ -8,6 +8,8 @@ use Filament\Facades\Filament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Pennant\Feature;
+use Spatie\Activitylog\Facades\LogName;
+use Spatie\Activitylog\Facades\Activitylog;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -17,6 +19,16 @@ class AuthenticatedSessionController extends Controller
 
         /** @var \App\Models\Tenants\User $user */
         $user = $request->user();
+
+        // Log successful login
+        activity()
+            ->performedOn($user)
+            ->event('login')
+            ->withProperties([
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ])
+            ->log('Login successful');
 
         // If the client expects JSON (API clients), return token + data.
         if ($request->wantsJson()) {
@@ -48,6 +60,17 @@ class AuthenticatedSessionController extends Controller
 
     public function destroy(Request $request)
     {
+        // Log logout
+        if ($user = $request->user()) {
+            activity()
+                ->performedOn($user)
+                ->event('logout')
+                ->withProperties([
+                    'ip' => $request->ip(),
+                ])
+                ->log('Logout');
+        }
+
         // Handle API (Sanctum) logout
         if ($request->wantsJson()) {
             // Revoke all tokens for the current user
