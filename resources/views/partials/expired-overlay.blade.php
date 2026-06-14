@@ -65,12 +65,12 @@
     </div>
 
     {{-- Plans grid --}}
-    <div class="w-full min-h-0 overflow-y-auto">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+    <div class="w-full min-h-0 overflow-y-auto flex justify-center">
+      <div class="grid gap-4 justify-items-center" style="grid-template-columns: repeat(auto-fit, minmax(240px, 280px)); max-width: 1200px;">
         @foreach($plans as $plan)
         <div
           x-data="{ open: false }"
-          class="bg-white rounded-[8px] shadow-lg flex flex-col relative border border-gray-200"
+          class="bg-white rounded-[8px] shadow-lg flex flex-col relative border border-gray-200 w-full"
         >
           @if(($plan['is_popular'] ?? false) && $plan['price_monthly'] > 0)
           <div class="absolute top-0 right-0 bg-gray-900 text-white text-[8px] font-mono font-bold uppercase tracking-widest px-3 py-1 rounded-bl-[4px] rounded-tr-[7px]">
