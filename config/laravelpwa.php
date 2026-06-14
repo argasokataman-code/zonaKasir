@@ -107,6 +107,10 @@ return [
                 'name' => 'Product',
                 'description' => 'Product List',
                 'url' => '/member/products',
+                'icons' => [
+                    'src' => '/images/icons/icon-72x72.png',
+                    'purpose' => 'any',
+                ],
             ],
         ],
         'custom' => [],
