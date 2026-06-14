@@ -117,6 +117,11 @@ class TenantPanelProvider extends PanelProvider
 
         FilamentView::registerRenderHook(
             PanelsRenderHook::BODY_START,
+            fn () => view('partials.expired-layout-kill')
+        );
+
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::BODY_START,
             fn () => view('partials.shop-wallpaper')
         );
 
