@@ -7,9 +7,7 @@ use Filament\Forms\Components\Component;
 use Filament\Forms\Components\View;
 use Filament\Http\Responses\Auth\LoginResponse;
 use Filament\Pages\Auth\Login;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
 
@@ -17,9 +15,6 @@ class TenantLogin extends Login
 {
     public function authenticate(): ?LoginResponse
     {
-        \App\Services\TenantContext::reset();
-        session()->forget('tenant_id');
-
         $loginResponse = parent::authenticate();
         /** @var \App\Models\Tenants\User|null $user */
         $user = Filament::auth()->user();

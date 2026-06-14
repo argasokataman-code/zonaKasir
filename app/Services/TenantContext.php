@@ -13,11 +13,7 @@ class TenantContext
 
     public static function get(): ?string
     {
-        if (self::$currentTenantId) {
-            return self::$currentTenantId;
-        }
-
-        return session('tenant_id');
+        return self::$currentTenantId;
     }
 
     public static function reset(): void
