@@ -14,6 +14,7 @@ class PlanController extends Controller
     {
         $plans = Cache::remember('pricing_plans', 3600, function () {
             return Plan::where('is_active', true)
+                ->orderByRaw("CASE WHEN slug = 'on-premise' THEN 1 ELSE 0 END")
                 ->orderBy('price_monthly')
                 ->get()
                 ->map(function ($plan) {
