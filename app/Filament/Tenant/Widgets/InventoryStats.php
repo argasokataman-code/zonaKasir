@@ -35,18 +35,19 @@ class InventoryStats extends BaseWidget
         }
 
         return [
-            Stat::make(__('Total Produk'), $totalProducts)
+            Stat::make(__('Total Products'), $totalProducts)
                 ->descriptionIcon('heroicon-m-cube')
                 ->color('primary'),
-            Stat::make(__('Stok Habis'), $outOfStock)
+            Stat::make(__('Out of Stock'), $outOfStock)
                 ->descriptionIcon('heroicon-m-exclamation-triangle')
                 ->color($outOfStock > 0 ? 'danger' : 'success'),
-            Stat::make(__('Stok Menipis'), $lowStock)
+            Stat::make(__('Low Stock'), $lowStock)
                 ->descriptionIcon('heroicon-m-arrow-down')
                 ->color($lowStock > 0 ? 'warning' : 'success'),
-            Stat::make(__('Mendekati Expired'), $expiredSoon)
+            Stat::make(__('Expiring Soon'), $expiredSoon)
                 ->descriptionIcon('heroicon-m-clock')
                 ->color($expiredSoon > 0 ? 'danger' : 'success'),
         ];
     }
 }
+
