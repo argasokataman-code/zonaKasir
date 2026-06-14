@@ -18,13 +18,15 @@ class InvoiceController extends Controller
         private PlanAccessService $planAccessService
     ) {}
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $tenantId = auth()->user()->tenant_id;
 
+        $perPage = min((int) ($request->get('per_page', 15)), 100);
+
         $invoices = Invoice::where('tenant_id', $tenantId)
             ->latest()
-            ->get();
+            ->paginate($perPage);
 
         return $this->buildResponse()
             ->setData($invoices)
