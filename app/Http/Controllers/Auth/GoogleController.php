@@ -4,15 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Tenants\User;
+use App\Services\RegisterTenant;
+use App\Services\TenantContext;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
 {
-    /**
-     * Redirect user to Google for authentication.
-     */
     public function redirect(): RedirectResponse
     {
         return Socialite::driver('google')
@@ -20,37 +19,49 @@ class GoogleController extends Controller
             ->redirect();
     }
 
-    /**
-     * Handle Google callback after authentication.
-     */
     public function callback(): RedirectResponse
     {
         try {
             $googleUser = Socialite::driver('google')->user();
 
-            // Find user by google_id or email
-            $user = User::where('google_id', $googleUser->getId())
-                ->orWhere('email', $googleUser->getEmail())
-                ->first();
+            // Check if user already exists by google_id
+            $user = User::where('google_id', $googleUser->getId())->first();
 
             if ($user) {
-                // Link google_id if not set yet
-                if (! $user->google_id) {
-                    $user->update(['google_id' => $googleUser->getId()]);
-                }
-            } else {
-                // Create new user
-                $user = User::create([
-                    'name' => $googleUser->getName() ?? $googleUser->getNickname() ?? 'Google User',
-                    'email' => $googleUser->getEmail(),
-                    'google_id' => $googleUser->getId(),
-                    'email_verified_at' => now(),
-                ]);
+                Auth::login($user, true);
 
-                // Assign admin role to first user (owner)
-                if (User::count() === 1) {
-                    $user->assignRole('admin');
-                }
+                return redirect()->intended('/member');
+            }
+
+            // Check if email already exists
+            $existingUser = User::where('email', $googleUser->getEmail())->first();
+            if ($existingUser) {
+                $existingUser->update(['google_id' => $googleUser->getId()]);
+
+                Auth::login($existingUser, true);
+
+                return redirect()->intended('/member');
+            }
+
+            // New user → auto-create tenant with defaults
+            $tenantName = strtolower(
+                str_replace(' ', '_', $googleUser->getName() ?? $googleUser->getNickname() ?? 'user')
+            ).'_'.uniqid();
+
+            $registerTenant = app(RegisterTenant::class);
+            $tenantId = $registerTenant->create([
+                'name' => $tenantName,
+                'full_name' => $googleUser->getName() ?? 'My Shop',
+                'email' => $googleUser->getEmail(),
+                'password' => uniqid('ggl_', true),
+                'business_type' => 'retail',
+            ]);
+
+            // Set tenant context and link google_id
+            TenantContext::set($tenantId);
+            $user = User::where('email', $googleUser->getEmail())->first();
+            if ($user) {
+                $user->update(['google_id' => $googleUser->getId()]);
             }
 
             Auth::login($user, true);
