@@ -122,7 +122,8 @@ class RegisterTenantForm extends Component implements HasForms
             'name' => strtolower(str_replace(' ', '_', $data['full_name'])).'_'.uniqid(),
         ]));
 
-        Auth::login($user = \App\Models\Tenants\User::where('email', $data['email'])->first());
+        tenancy()->initialize($tenantId);
+        Auth::login(\App\Models\Tenants\User::where('email', $data['email'])->first());
 
         $this->redirect('/member');
     }
