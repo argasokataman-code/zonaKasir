@@ -25,6 +25,8 @@ class MidtransWebhookController extends Controller
                 app(MidtransGatewayService::class)->handleWebhook($payload);
 
                 return response()->json(['status' => 'ok'], 200);
+            } catch (\Symfony\Component\HttpKernel\Exception\HttpException $e) {
+                return response()->json(['error' => $e->getMessage()], $e->getStatusCode());
             } catch (\Throwable $e) {
                 Log::error('Midtrans webhook processing failed', [
                     'order_id' => $orderId,
