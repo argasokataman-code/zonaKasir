@@ -85,16 +85,21 @@ class ManageSubscription extends Page
                 return;
             }
 
-            // Paid plan: find or create subscription (status stays expired/pending)
+            // Paid plan: find subscription
             $subscription = Subscription::where('tenant_id', $tenantId)
                 ->latest()
                 ->first();
 
             if ($subscription) {
+                // If trial expired, mark as expired explicitly
+                if ($subscription->status === 'trialing' && $subscription->trial_ends_at && $subscription->trial_ends_at->isPast()) {
+                    $subscription->update(['status' => 'expired']);
+                }
+
                 $subscription->update([
                     'plan_id' => $plan->id,
                     'billing_cycle' => $billingCycle,
-                    // Status NOT changed — webhook will set to 'active' after payment
+                    // Status stays expired — webhook sets 'active' after payment
                 ]);
             } else {
                 $subscription = Subscription::create([

@@ -3,23 +3,33 @@
   $isExpired = false;
 
   if ($user && $user->tenant_id) {
-      $subscription = \App\Models\Subscription::where('tenant_id', $user->tenant_id)
-          ->whereIn('status', ['trialing', 'active'])
+      // Check for explicitly expired subscription
+      $expiredSub = \App\Models\Subscription::where('tenant_id', $user->tenant_id)
+          ->where('status', 'expired')
           ->latest()
           ->first();
 
-      // Check if expired (trial past or active past)
-      if ($subscription) {
-          if ($subscription->status === 'trialing' && $subscription->trial_ends_at && $subscription->trial_ends_at->isPast()) {
-              $isExpired = true;
-          } elseif ($subscription->status === 'active' && $subscription->ends_at && $subscription->ends_at->isPast()) {
-              $isExpired = true;
-          }
+      if ($expiredSub) {
+          $isExpired = true;
       } else {
-          // No subscription at all
-          $hasAny = \App\Models\Subscription::where('tenant_id', $user->tenant_id)->exists();
-          if (!$hasAny) {
-              $isExpired = true;
+          // Check for trialing subscription with past trial_ends_at
+          $subscription = \App\Models\Subscription::where('tenant_id', $user->tenant_id)
+              ->whereIn('status', ['trialing', 'active'])
+              ->latest()
+              ->first();
+
+          if ($subscription) {
+              if ($subscription->status === 'trialing' && $subscription->trial_ends_at && $subscription->trial_ends_at->isPast()) {
+                  $isExpired = true;
+              } elseif ($subscription->status === 'active' && $subscription->ends_at && $subscription->ends_at->isPast()) {
+                  $isExpired = true;
+              }
+          } else {
+              // No subscription at all
+              $hasAny = \App\Models\Subscription::where('tenant_id', $user->tenant_id)->exists();
+              if (!$hasAny) {
+                  $isExpired = true;
+              }
           }
       }
 
