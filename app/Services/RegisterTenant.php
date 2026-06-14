@@ -19,6 +19,8 @@ class RegisterTenant
 
         TenantContext::set($name);
 
+        \App\Models\Tenant::where('id', $name)->update(['tenancy_email' => $data['email']]);
+
         $user = User::create([
             'tenant_id' => $name,
             'email' => $data['email'],

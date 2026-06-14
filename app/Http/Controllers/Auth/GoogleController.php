@@ -23,29 +23,35 @@ class GoogleController extends Controller
     {
         try {
             $googleUser = Socialite::driver('google')->user();
+            $googleId = $googleUser->getId();
 
-            // Try to find user by google_id across all tenants
-            $user = User::where('google_id', $googleUser->getId())->first();
+            // Find tenant by google_id in central DB
+            $tenant = \App\Models\Tenant::where('google_id', $googleId)->first();
 
-            if ($user) {
-                tenancy()->initialize($user->tenant_id);
-                Auth::login($user, true);
+            if ($tenant) {
+                tenancy()->initialize($tenant);
+                $user = User::where('google_id', $googleId)->first();
 
-                return redirect()->intended('/member');
+                if ($user) {
+                    Auth::login($user, true);
+                    return redirect()->intended('/member');
+                }
             }
 
-            // Check if email already exists
-            $existingUser = User::where('email', $googleUser->getEmail())->first();
-            if ($existingUser) {
-                $existingUser->update(['google_id' => $googleUser->getId()]);
-
-                tenancy()->initialize($existingUser->tenant_id);
-                Auth::login($existingUser, true);
-
-                return redirect()->intended('/member');
+            // Check email in tenants table
+            $tenant = \App\Models\Tenant::where('tenancy_email', $googleUser->getEmail())->first();
+            if ($tenant) {
+                tenancy()->initialize($tenant);
+                $user = User::where('email', $googleUser->getEmail())->first();
+                if ($user) {
+                    $user->update(['google_id' => $googleId]);
+                    $tenant->update(['google_id' => $googleId]);
+                    Auth::login($user, true);
+                    return redirect()->intended('/member');
+                }
             }
 
-            // New user → auto-create tenant with defaults
+            // New user → create tenant + user
             $tenantName = strtolower(
                 str_replace(' ', '_', $googleUser->getName() ?? $googleUser->getNickname() ?? 'user')
             ).'_'.uniqid();
@@ -60,17 +66,17 @@ class GoogleController extends Controller
                 'trial_days' => 7,
             ]);
 
+            // Store google_id in both tenant user and central tenants table
             $user = User::where('email', $googleUser->getEmail())->first();
             if ($user) {
-                $user->update(['google_id' => $googleUser->getId()]);
+                $user->update(['google_id' => $googleId]);
             }
+            \App\Models\Tenant::where('id', $tenantId)->update(['google_id' => $googleId]);
 
             Auth::login($user, true);
-
             return redirect()->intended('/member');
         } catch (\Throwable $e) {
             report($e);
-
             return redirect('/member/login')
                 ->withErrors(['google' => 'Google authentication failed. Please try again.']);
         }
