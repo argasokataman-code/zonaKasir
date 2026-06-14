@@ -3,7 +3,7 @@
  *
  * - Keep-alive: pings server every 15 min to prevent session expiry
  * - Idle detection: tracks user activity, shows warning at 115 min
- * - Auto-logout: at 120 min, calls logout endpoint + redirects to login
+ * - Auto-logout: at 120 min, redirects to login (session expires via GC)
  * - Injects modal HTML via JS (works in both Filament panels)
  */
 (function () {
@@ -123,24 +123,15 @@
     if (keepAliveTimer) clearInterval(keepAliveTimer);
     if (checkTimer) clearInterval(checkTimer);
 
-    fetch('/api/auth/logout', {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-CSRF-TOKEN': getCsrfToken(),
-        Accept: 'application/json',
-      },
-    }).finally(function () {
-      // Determine redirect path based on current panel
-      var path = window.location.pathname;
-      var loginUrl = '/member/login';
-      if (path.indexOf('/admin') === 0) {
-        loginUrl = '/admin/login';
-      }
-      window.location.href = loginUrl;
-    });
+    // For web users (Filament): just redirect to login.
+    // Session will expire naturally via garbage collection (config/session.php lifetime=120).
+    // Calling /api/auth/logout requires auth:sanctum middleware which web users don't have.
+    var path = window.location.pathname;
+    var loginUrl = '/member/login';
+    if (path.indexOf('/admin') === 0) {
+      loginUrl = '/admin/login';
+    }
+    window.location.href = loginUrl;
   }
 
   function getCsrfToken() {
