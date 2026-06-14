@@ -57,7 +57,12 @@ class Disbursement extends Page
 
     public function loadLocalWithdrawals(): void
     {
-        $tenantMap = Tenant::pluck('name', 'id')->toArray();
+        $tenants = Tenant::all();
+        $tenantMap = [];
+        foreach ($tenants as $t) {
+            $data = is_string($t->data) ? json_decode($t->data, true) : $t->data;
+            $tenantMap[$t->id] = $data['name'] ?? $t->id;
+        }
 
         $withdrawals = Withdrawal::withoutGlobalScope('tenant')
             ->orderBy('created_at', 'desc')
