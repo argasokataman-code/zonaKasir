@@ -6,9 +6,10 @@ use App\Models\Plan;
 use App\Models\Subscription;
 use App\Services\SubscriptionService;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-uses(TestCase::class)->in('Feature/E2E/PlanE2ETest.php');
+uses(TestCase::class, RefreshDatabase::class)->in('Feature/E2E/PlanE2ETest.php');
 
 describe('Plan E2E Flow', function () {
     beforeEach(function () {

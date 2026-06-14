@@ -55,6 +55,7 @@ class GoogleController extends Controller
                 'email' => $googleUser->getEmail(),
                 'password' => uniqid('ggl_', true),
                 'business_type' => 'retail',
+                'trial_days' => 7,
             ]);
 
             // Set tenant context and link google_id
