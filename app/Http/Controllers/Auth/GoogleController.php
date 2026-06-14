@@ -106,6 +106,10 @@ class GoogleController extends Controller
             }
             \App\Tenant::where('id', $tenantId)->update(['google_id' => $googleId]);
 
+            // Set welcome session for new users
+            session(['welcome_type' => 'trial']);
+            session(['welcome_data' => []]);
+
             Auth::login($user, true);
             request()->session()->save();
             return redirect()->intended('/member');

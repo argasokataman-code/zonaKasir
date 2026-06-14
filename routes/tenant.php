@@ -64,6 +64,16 @@ Route::middleware([
         Route::post('/member/login', [AuthenticatedSessionController::class, 'store'])
             ->middleware('guest')
             ->name('filament.tenant.auth.login.post');
+
+        // Welcome modal dismiss (marks welcomed_at)
+        Route::post('/welcome/dismiss', function () {
+            $user = auth()->user();
+            if ($user && ! $user->welcomed_at) {
+                $user->update(['welcomed_at' => now()]);
+            }
+            session()->forget(['welcome_type', 'welcome_data']);
+            return response()->json(['status' => 'ok']);
+        })->middleware('auth')->name('welcome.dismiss');
     });
 
 Route::middleware([
