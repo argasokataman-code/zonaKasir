@@ -95,11 +95,15 @@
       background: linear-gradient(to bottom, transparent 0%, rgba(244,244,242,0.6) 50%, #F4F4F2 100%), url('/images/landing/retail_hero_bg_1781378962689.jpg') center/cover no-repeat;
       opacity: 0.4;
       filter: grayscale(1) contrast(1.25);
-      transform: translateZ(0);
-      will-change: transform;
+      animation: slowZoom 20s ease-in-out infinite alternate;
+      transform-origin: center;
     }
     .parallax-content {
       animation: floatIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes slowZoom {
+      from { transform: scale(1) translate(0, 0); }
+      to { transform: scale(1.08) translate(-2%, -1%); }
     }
     @keyframes floatIn {
       from { opacity: 0; transform: translateY(20px); }
