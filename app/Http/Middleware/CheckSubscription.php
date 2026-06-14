@@ -22,6 +22,12 @@ class CheckSubscription
             return $next($request);
         }
 
+        // For API/JSON requests only — check subscription status
+        // Web requests pass through and let expired-layout-kill/expired-overlay handle UI
+        if (! $request->expectsJson() && ! $request->is('api/*')) {
+            return $next($request);
+        }
+
         // Check for expired / past_due subscription
         $blockedSub = Subscription::where('tenant_id', $tenantId)
             ->whereIn('status', ['expired', 'past_due'])
@@ -29,7 +35,11 @@ class CheckSubscription
             ->first();
 
         if ($blockedSub) {
-            return $this->blockIfApi($request);
+            return response()->json([
+                'error' => 'Subscription expired',
+                'message' => 'Your subscription has expired. Please upgrade to continue.',
+                'redirect' => '/member/subscription',
+            ], 403);
         }
 
         $subscription = Subscription::where('tenant_id', $tenantId)
@@ -38,29 +48,6 @@ class CheckSubscription
             ->first();
 
         if (! $subscription) {
-            return $this->blockIfApi($request);
-        }
-
-        // Expire trial if past due
-        if ($subscription->status === 'trialing' && $subscription->trial_ends_at && $subscription->trial_ends_at->isPast()) {
-            $subscription->update(['status' => 'expired']);
-
-            return $this->blockIfApi($request);
-        }
-
-        // Expire active subscription if past due
-        if ($subscription->status === 'active' && $subscription->ends_at && $subscription->ends_at->isPast()) {
-            $subscription->update(['status' => 'expired']);
-
-            return $this->blockIfApi($request);
-        }
-
-        return $next($request);
-    }
-
-    private function blockIfApi(Request $request): Response
-    {
-        if ($request->expectsJson() || $request->is('api/*')) {
             return response()->json([
                 'error' => 'Subscription expired',
                 'message' => 'Your subscription has expired. Please upgrade to continue.',
@@ -68,7 +55,28 @@ class CheckSubscription
             ], 403);
         }
 
-        // For web requests, redirect to login to break loop
-        return redirect('/member/login');
+        // Expire trial if past due
+        if ($subscription->status === 'trialing' && $subscription->trial_ends_at && $subscription->trial_ends_at->isPast()) {
+            $subscription->update(['status' => 'expired']);
+
+            return response()->json([
+                'error' => 'Subscription expired',
+                'message' => 'Your subscription has expired. Please upgrade to continue.',
+                'redirect' => '/member/subscription',
+            ], 403);
+        }
+
+        // Expire active subscription if past due
+        if ($subscription->status === 'active' && $subscription->ends_at && $subscription->ends_at->isPast()) {
+            $subscription->update(['status' => 'expired']);
+
+            return response()->json([
+                'error' => 'Subscription expired',
+                'message' => 'Your subscription has expired. Please upgrade to continue.',
+                'redirect' => '/member/subscription',
+            ], 403);
+        }
+
+        return $next($request);
     }
 }
