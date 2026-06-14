@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Tenants\User;
 use App\Services\RegisterTenant;
+use App\Services\TenantContext;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -28,7 +29,7 @@ class GoogleController extends Controller
             $tenant = \App\Tenant::where('google_id', $googleId)->first();
 
             if ($tenant) {
-                tenancy()->initialize($tenant);
+                TenantContext::set($tenant->id);
                 $user = User::where('google_id', $googleId)->first();
 
                 if ($user) {
@@ -40,7 +41,7 @@ class GoogleController extends Controller
             // Check email in tenants table
             $tenant = \App\Tenant::where('tenancy_email', $googleUser->getEmail())->first();
             if ($tenant) {
-                tenancy()->initialize($tenant);
+                TenantContext::set($tenant->id);
                 $user = User::where('email', $googleUser->getEmail())->first();
                 if ($user) {
                     $user->update(['google_id' => $googleId]);
