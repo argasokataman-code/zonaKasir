@@ -2,7 +2,6 @@
 /public/hot
 /public/storage
 /public/tmp
-/public/landing
 /storage/*.key
 /storage/debugbar
 /vendor

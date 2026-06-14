@@ -16,7 +16,7 @@ return [
      * Comma-separated list of allowed IPs from Midtrans.
      * Update via .env: MIDTRANS_WEBHOOK_IPS="52.76.155.198,52.76.156.139,..."
      */
-    'webhook_ip_whitelist' => explode(',', env('MIDTRANS_WEBHOOK_IPS', '')),
+    'webhook_ip_whitelist' => env('MIDTRANS_WEBHOOK_IPS') ? explode(',', env('MIDTRANS_WEBHOOK_IPS')) : [],
 
     /*
      * Midtrans Merchant ID (Production/Sandbox)
