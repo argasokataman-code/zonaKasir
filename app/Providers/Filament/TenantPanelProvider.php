@@ -5,7 +5,6 @@ namespace App\Providers\Filament;
 use App\Features\Member;
 use App\Features\PaymentMethod;
 use App\Features\Permission;
-use App\Features\PosV2;
 use App\Features\Purchasing;
 use App\Features\Receivable;
 use App\Features\Role;
@@ -17,7 +16,6 @@ use App\Filament\Tenant\Pages\CartItem;
 use App\Filament\Tenant\Pages\Cashier;
 use App\Filament\Tenant\Pages\CashierReport;
 use App\Filament\Tenant\Pages\GeneralSetting;
-use App\Filament\Tenant\Pages\POS;
 use App\Filament\Tenant\Pages\Printer;
 use App\Filament\Tenant\Pages\ProductReport;
 use App\Filament\Tenant\Pages\PurchasingReport;
@@ -191,7 +189,6 @@ class TenantPanelProvider extends PanelProvider
         return [
             ...Pages\Dashboard::getNavigationItems(),
             $this->generateNavigationItem(Cashier::class),
-            $this->generateNavigationItem(POS::class, PosV2::class),
             $this->generateNavigationItem(SellingResource::class),
             $this->generateNavigationItem(SupplierResource::class, Supplier::class),
             $this->generateNavigationItem(MemberResource::class, Member::class),

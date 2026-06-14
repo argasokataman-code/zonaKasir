@@ -16,7 +16,6 @@ class PlanSeeder extends Seeder
             'price_yearly' => null,
             'features' => [
                 'pos',
-                'pos_v2',
                 'print_selling_a5',
                 'print_product_label',
                 'payment_shortcut',
@@ -35,7 +34,6 @@ class PlanSeeder extends Seeder
             'price_yearly' => 1190000,
             'features' => [
                 'pos',
-                'pos_v2',
                 'report',
                 'stock_management',
                 'member_management',
@@ -70,11 +68,9 @@ class PlanSeeder extends Seeder
             'price_yearly' => 2390000,
             'features' => [
                 'pos',
-                'pos_v2',
                 'report',
                 'stock_management',
                 'stock_opname',
-                'member_management',
                 'multi_store',
                 'api_access',
                 'export_csv',
@@ -110,11 +106,9 @@ class PlanSeeder extends Seeder
             'price_yearly' => null,
             'features' => [
                 'pos',
-                'pos_v2',
                 'report',
                 'stock_management',
                 'stock_opname',
-                'member_management',
                 'multi_store',
                 'api_access',
                 'export_csv',
