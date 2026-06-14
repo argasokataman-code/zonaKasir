@@ -31,16 +31,16 @@
 <div
   x-data="expiredOverlay()"
   x-init="init()"
-  class="fixed inset-0 z-[9999] flex items-center justify-center"
+  class="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
   style="display: none;"
 >
   {{-- Backdrop blur --}}
   <div class="absolute inset-0 bg-white/70 backdrop-blur-md"></div>
 
   {{-- Overlay content --}}
-  <div class="relative z-10 w-full max-w-4xl mx-auto px-4 py-8 max-h-[90vh] overflow-y-auto">
+  <div class="relative z-10 w-full h-full flex flex-col px-6 py-8 overflow-hidden">
     {{-- Header --}}
-    <div class="text-center mb-6">
+    <div class="text-center mb-6 shrink-0">
       <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-red-100 mb-3">
         <svg class="w-7 h-7 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
@@ -50,14 +50,13 @@
       <p class="text-sm text-gray-500">Pilih paket di bawah untuk melanjutkan menggunakan aplikasi</p>
     </div>
 
-    {{-- Plans horizontal scroll --}}
-    <div class="overflow-x-auto -mx-4 px-4 pb-4">
-      <div class="flex gap-4" style="min-width: min-content;">
+    {{-- Plans grid --}}
+    <div class="flex-1 min-h-0 overflow-y-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-w-6xl mx-auto">
         @foreach($plans as $plan)
         <div
           x-data="{ open: false, showBilling: false }"
           class="bg-white rounded-[8px] shadow-lg flex flex-col relative border border-gray-200"
-          style="width: 260px; min-width: 260px; flex-shrink: 0;"
         >
           @if(($plan['is_popular'] ?? false) && $plan['price_monthly'] > 0)
           <div class="absolute top-0 right-0 bg-gray-900 text-white text-[8px] font-mono font-bold uppercase tracking-widest px-3 py-1 rounded-bl-[4px] rounded-tr-[7px]">
@@ -166,6 +165,9 @@ function expiredOverlay() {
     init() {
       this.$el.style.display = 'flex';
       document.body.style.overflow = 'hidden';
+      document.body.style.overflowX = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      document.documentElement.style.overflowX = 'hidden';
 
       // Block all clicks outside overlay
       document.addEventListener('click', this.blockClicks, true);
@@ -187,6 +189,9 @@ function expiredOverlay() {
     },
     destroy() {
       document.body.style.overflow = '';
+      document.body.style.overflowX = '';
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.overflowX = '';
       document.removeEventListener('click', this.blockClicks, true);
       document.removeEventListener('keydown', this.blockKeys, true);
     }
