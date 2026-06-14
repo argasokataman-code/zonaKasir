@@ -267,7 +267,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
 
   return (
     <div 
-      className="w-full max-w-4xl mx-auto font-sans animate-fade-in" 
+      className="w-full max-w-4xl mx-auto font-sans animate-fade-in overflow-visible" 
       id="tablet-pos-wrapper"
     >
       {/* Outer Shell - Sleek modern landscape tablet device bezel with aluminum design details */}
@@ -281,18 +281,18 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
         <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-1 h-8 bg-gray-700/80 rounded-l-xs" />
         
         {/* Anti-reflective Glass Screen Outer Frame */}
-        <div className="bg-slate-50 rounded-[12px] overflow-hidden flex flex-col md:flex-row h-[500px] md:h-[560px] font-sans text-gray-800 relative border border-black/15 shadow-inner">
+        <div className="bg-slate-50 rounded-[12px] overflow-hidden flex flex-col md:flex-row h-[620px] md:h-[560px] font-sans text-gray-800 relative border border-black/15 shadow-inner">
           
           {/* Main POS Interface Grid */}
-          <div className="flex-1 flex flex-col h-[60%] md:h-full bg-slate-50 overflow-hidden">
+          <div className="flex-1 flex flex-col h-[55%] md:h-full bg-slate-50 overflow-hidden">
             {/* Header / Search Controls */}
             <div className="p-4 bg-white border-b border-[#E5E5E1] flex items-center justify-between gap-4">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 bg-[#1A1A1A] rounded-[4px] flex items-center justify-center">
+                <div className="w-6 h-6 bg-[#FF6600] rounded-[4px] flex items-center justify-center">
                   <span className="text-[10px] font-extrabold text-white">ZK</span>
                 </div>
                 <span className="font-sans text-[11px] font-bold uppercase tracking-wider text-[#1A1A1A]">
-                  Mesin Kasir Utama
+                  Terminal POS
                 </span>
               </div>
               
@@ -661,7 +661,7 @@ export default function DeviceTablet({ interactive = true }: DeviceTabletProps) 
 
         {/* Cinematic Receipt Rollout - Section 2 Hero Component */}
         {showReceipt && (
-          <div className="absolute md:-right-48 right-4 -bottom-48 z-30 w-52 md:w-56 bg-white shadow-2xl border border-gray-200 p-4 rounded-b-[4px] border-t-4 border-t-gray-900 animate-receipt-roll font-sans text-gray-900 [transform-origin:top_center]">
+          <div className="hidden md:block absolute -right-48 -bottom-48 z-30 w-56 bg-white shadow-2xl border border-gray-200 p-4 rounded-b-[4px] border-t-4 border-t-gray-900 animate-receipt-roll font-sans text-gray-900 [transform-origin:top_center]">
             <div className="border-b border-dashed border-gray-200 pb-3 text-center">
               <h4 className="font-bold text-xs uppercase tracking-wide">KOPI SANA-SINI</h4>
               <p className="text-[9px] text-gray-400 leading-tight mt-0.5">Senopati, Jakarta Selatan</p>

@@ -32,13 +32,9 @@ class CategoryController extends Controller
         ]);
         
         try {
-            DB::beginTransaction();
-            
             $category = new Category();
             $category->fill($request->only('name'));
             $category->save();
-            
-            DB::commit();
             
             return $this->buildResponse()
                 ->setData(new CategoryCollection($category))
@@ -46,7 +42,6 @@ class CategoryController extends Controller
                 ->setMessage('Category created successfully')
                 ->present();
         } catch (Exception $e) {
-            DB::rollBack();
             return $this->buildResponse()
                 ->setCode(500)
                 ->setMessage('Failed to create category: ' . $e->getMessage())
@@ -68,19 +63,16 @@ class CategoryController extends Controller
         ]);
         
         try {
-            DB::beginTransaction();
             
             $category->fill($request->only('name'));
             $category->save();
             
-            DB::commit();
             
             return $this->buildResponse()
                 ->setData(new CategoryCollection($category))
                 ->setMessage('Category updated successfully')
                 ->present();
         } catch (Exception $e) {
-            DB::rollBack();
             return $this->buildResponse()
                 ->setCode(500)
                 ->setMessage('Failed to update category: ' . $e->getMessage())
@@ -98,15 +90,12 @@ class CategoryController extends Controller
         }
         
         try {
-            DB::beginTransaction();
             $category->delete();
-            DB::commit();
 
             return $this->buildResponse()
                 ->setMessage('Category deleted successfully')
                 ->present();
         } catch (Exception $e) {
-            DB::rollBack();
             return $this->buildResponse()
                 ->setCode(500)
                 ->setMessage('Failed to delete category: ' . $e->getMessage())

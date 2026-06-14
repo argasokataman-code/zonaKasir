@@ -26,7 +26,6 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         DisableDebugbar::class,
-        TenantIsolationMiddleware::class,
     ];
 
     /**
@@ -44,6 +43,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             LocalizationMiddleware::class,
             \App\Http\Middleware\LogSqlQueries::class,
+            TenantIsolationMiddleware::class,
         ],
 
         'api' => [
@@ -51,6 +51,7 @@ class Kernel extends HttpKernel
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             LocalizationMiddleware::class,
+            TenantIsolationMiddleware::class,
         ],
         'universal' => [
             // UniversalRoutes::class,

@@ -30,13 +30,11 @@ class MemberController extends Controller
         $this->validate($request, $this->rules(new Member));
         
         try {
-            DB::beginTransaction();
             
             $member = new Member();
             $member->fill($request->all());
             $member->save();
             
-            DB::commit();
             
             return $this->buildResponse()
                 ->setData($member)
@@ -44,7 +42,6 @@ class MemberController extends Controller
                 ->setMessage('Member created successfully')
                 ->present();
         } catch (Exception $e) {
-            DB::rollBack();
             return $this->buildResponse()
                 ->setCode(500)
                 ->setMessage('Failed to create member: ' . $e->getMessage())
@@ -64,19 +61,16 @@ class MemberController extends Controller
         $this->validate($request, $this->rules($member));
         
         try {
-            DB::beginTransaction();
             
             $member->fill($request->all());
             $member->save();
             
-            DB::commit();
             
             return $this->buildResponse()
                 ->setData($member)
                 ->setMessage('Member updated successfully')
                 ->present();
         } catch (Exception $e) {
-            DB::rollBack();
             return $this->buildResponse()
                 ->setCode(500)
                 ->setMessage('Failed to update member: ' . $e->getMessage())
@@ -87,15 +81,12 @@ class MemberController extends Controller
     public function destroy(Member $member): JsonResponse
     {
         try {
-            DB::beginTransaction();
             $member->forceDelete();
-            DB::commit();
             
             return $this->buildResponse()
                 ->setMessage('Member deleted successfully')
                 ->present();
         } catch (Exception $e) {
-            DB::rollBack();
             return $this->buildResponse()
                 ->setCode(500)
                 ->setMessage('Failed to delete member: ' . $e->getMessage())
