@@ -138,9 +138,73 @@
                         </div>
                         @endif
 
-                        <div class="mt-auto pt-3 border-t border-gray-100 relative" x-data="{ showBilling: false, showConfirm: false, confirmPlan: null, confirmBilling: '' }">
-                            @if($current && $current['id'] === $plan['id'])
-                                <span class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-900 text-white rounded-[4px]">Paket Aktif</span>
+                            <div class="mt-auto pt-3 border-t border-gray-100 relative" x-data="{ showBilling: false, showConfirm: false, confirmPlan: null, confirmBilling: '' }">
+                                @if($current && $current['id'] === $plan['id'])
+                                    @if($current['is_on_trial'])
+                                        <button
+                                            type="button"
+                                            x-on:click="showBilling = !showBilling"
+                                            class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-green-600 text-white rounded-[4px] hover:bg-green-500 transition-colors cursor-pointer"
+                                        >
+                                            Bayar Sekarang
+                                        </button>
+
+                                        <div
+                                            x-show="showBilling"
+                                            x-cloak
+                                            x-on:click.away="showBilling = false"
+                                            class="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 rounded-[6px] shadow-lg overflow-hidden z-10"
+                                        >
+                                            <button
+                                                type="button"
+                                                x-on:click="showConfirm = true; confirmPlan = {{ $plan['id'] }}; confirmBilling = 'monthly'; showBilling = false"
+                                                class="w-full text-left px-3 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer flex items-center justify-between"
+                                            >
+                                                <span>Bulanan</span>
+                                                <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                                            </button>
+                                            @if(($plan['price_yearly'] ?? 0) > 0)
+                                            <button
+                                                type="button"
+                                                x-on:click="showConfirm = true; confirmPlan = {{ $plan['id'] }}; confirmBilling = 'yearly'; showBilling = false"
+                                                class="w-full text-left px-3 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 border-t border-gray-100 transition-colors cursor-pointer flex items-center justify-between"
+                                            >
+                                                <span>Tahunan</span>
+                                                <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                                            </button>
+                                            @endif
+
+                                            <div
+                                                x-show="showConfirm"
+                                                x-cloak
+                                                class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                                            >
+                                                <div class="absolute inset-0 bg-black/50" x-on:click="showConfirm = false"></div>
+                                                <div class="relative bg-white rounded-[8px] shadow-xl w-full max-w-sm p-6">
+                                                    <h3 class="text-sm font-bold text-gray-900 mb-1">Konfirmasi Pembayaran</h3>
+                                                    <p class="text-xs text-gray-500 mb-4">Anda akan melanjutkan pembayaran paket <span class="font-bold" x-text="confirmBilling === 'yearly' ? 'Tahunan' : 'Bulanan'"></span>. Lanjutkan?</p>
+                                                    <div class="flex gap-2">
+                                                        <button
+                                                            type="button"
+                                                            x-on:click="showConfirm = false"
+                                                            class="flex-1 text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-100 text-gray-600 rounded-[4px] hover:bg-gray-200 transition-colors cursor-pointer"
+                                                        >
+                                                            Batal
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            x-on:click="$wire.subscribePlan(confirmPlan, confirmBilling); showConfirm = false"
+                                                            class="flex-1 text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-green-600 text-white rounded-[4px] hover:bg-green-500 transition-colors cursor-pointer"
+                                                        >
+                                                            Ya, Bayar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-900 text-white rounded-[4px]">Paket Aktif</span>
+                                    @endif
                             @elseif(($plan['price_monthly'] ?? 0) === 0)
                                 <span class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-100 text-gray-500 rounded-[4px]">Gratis</span>
                             @else
