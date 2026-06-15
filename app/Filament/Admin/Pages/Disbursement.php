@@ -30,7 +30,32 @@ class Disbursement extends Page
 
     public array $tenants = [];
 
+    public array $filteredTenants = [];
+
     public array $withdrawals = [];
+
+    public array $filteredWithdrawals = [];
+
+    // ── Search & Filter Properties ──
+    public ?string $tenantSearch = '';
+
+    public ?string $withdrawalSearch = '';
+
+    public ?string $withdrawalStatusFilter = '';
+
+    public ?string $withdrawalTypeFilter = '';
+
+    public int $tenantPage = 1;
+
+    public int $tenantPerPage = 20;
+
+    public int $withdrawalPage = 1;
+
+    public int $withdrawalPerPage = 20;
+
+    public int $tenantTotalCount = 0;
+
+    public int $withdrawalTotalCount = 0;
 
     // ── Transfer Form Properties ──
     public ?string $selectedTenantId = null;
@@ -49,6 +74,12 @@ class Disbursement extends Page
 
     public ?int $calculatedNet = null;
 
+    public bool $isTransferring = false;
+
+    public ?string $lastTransferStatus = null;
+
+    public ?string $lastTransferMessage = null;
+
     public function mount(): void
     {
         $this->load();
@@ -60,6 +91,8 @@ class Disbursement extends Page
         $this->loadFlipDisbursements();
         $this->loadTenants();
         $this->loadWithdrawals();
+        $this->applyTenantFilter();
+        $this->applyWithdrawalFilter();
     }
 
     private function tenantMap(): array
@@ -110,6 +143,8 @@ class Disbursement extends Page
                 'has_bank' => !empty($about?->bank_account_number),
             ];
         })->toArray();
+
+        $this->tenantTotalCount = count($this->tenants);
     }
 
     public function loadFlipDisbursements(): void
@@ -128,7 +163,7 @@ class Disbursement extends Page
 
         $withdrawals = Withdrawal::withoutGlobalScope('tenant')
             ->orderBy('created_at', 'desc')
-            ->limit(50)
+            ->limit(200)
             ->get();
 
         $this->withdrawals = $withdrawals->map(fn ($w) => [
@@ -147,6 +182,122 @@ class Disbursement extends Page
             'created_at' => $w->created_at?->format('d M Y H:i'),
             'processed_at' => $w->processed_at?->format('d M Y H:i'),
         ])->toArray();
+
+        $this->withdrawalTotalCount = count($this->withdrawals);
+    }
+
+    // ── Search & Filter Methods ──
+
+    public function applyTenantFilter(): void
+    {
+        $search = strtolower($this->tenantSearch ?? '');
+
+        $filtered = $this->tenants;
+
+        if ($search !== '') {
+            $filtered = array_filter($filtered, function ($t) use ($search) {
+                return str_contains(strtolower($t['name']), $search)
+                    || str_contains(strtolower($t['shop_name']), $search)
+                    || str_contains(strtolower($t['bank_account_name']), $search)
+                    || str_contains($t['bank_account_number'], $search);
+            });
+        }
+
+        $this->tenantTotalCount = count($filtered);
+
+        // Paginate
+        $offset = ($this->tenantPage - 1) * $this->tenantPerPage;
+        $this->filteredTenants = array_slice($filtered, $offset, $this->tenantPerPage);
+    }
+
+    public function applyWithdrawalFilter(): void
+    {
+        $search = strtolower($this->withdrawalSearch ?? '');
+        $status = $this->withdrawalStatusFilter ?? '';
+        $type = $this->withdrawalTypeFilter ?? '';
+
+        $filtered = $this->withdrawals;
+
+        if ($search !== '') {
+            $filtered = array_filter($filtered, function ($w) use ($search) {
+                return str_contains(strtolower($w['tenant_name']), $search)
+                    || str_contains(strtolower($w['bank_account_name']), $search)
+                    || str_contains($w['bank_account_number'], $search)
+                    || str_contains($w['disburse_id'] ?? '', $search);
+            });
+        }
+
+        if ($status !== '') {
+            $filtered = array_filter($filtered, fn ($w) => $w['status'] === $status);
+        }
+
+        if ($type !== '') {
+            $filtered = array_filter($filtered, fn ($w) => $w['type'] === $type);
+        }
+
+        $this->withdrawalTotalCount = count($filtered);
+
+        // Paginate
+        $offset = ($this->withdrawalPage - 1) * $this->withdrawalPerPage;
+        $this->filteredWithdrawals = array_slice($filtered, $offset, $this->withdrawalPerPage);
+    }
+
+    public function updatedTenantSearch(): void
+    {
+        $this->tenantPage = 1;
+        $this->applyTenantFilter();
+    }
+
+    public function updatedWithdrawalSearch(): void
+    {
+        $this->withdrawalPage = 1;
+        $this->applyWithdrawalFilter();
+    }
+
+    public function updatedWithdrawalStatusFilter(): void
+    {
+        $this->withdrawalPage = 1;
+        $this->applyWithdrawalFilter();
+    }
+
+    public function updatedWithdrawalTypeFilter(): void
+    {
+        $this->withdrawalPage = 1;
+        $this->applyWithdrawalFilter();
+    }
+
+    public function tenantNextPage(): void
+    {
+        $totalPages = ceil($this->tenantTotalCount / $this->tenantPerPage);
+        if ($this->tenantPage < $totalPages) {
+            $this->tenantPage++;
+            $this->applyTenantFilter();
+        }
+    }
+
+    public function tenantPrevPage(): void
+    {
+        if ($this->tenantPage > 1) {
+            $this->tenantPage--;
+            $this->applyTenantFilter();
+        }
+    }
+
+    public function withdrawalNextPage(): void
+    {
+        $totalPages = ceil($this->withdrawalTotalCount / $this->withdrawalPerPage);
+        if ($this->withdrawalPage < $totalPages) {
+            $this->withdrawalPage++;
+            $this->applyWithdrawalFilter();
+        }
+    }
+
+    public function withdrawalPrevPage(): void
+    {
+        if ($this->withdrawalPage > 1) {
+            $this->withdrawalPage--;
+            $this->applyWithdrawalFilter();
+        }
     }
 
     // ── Transfer Form Methods ──
@@ -161,12 +312,16 @@ class Disbursement extends Page
         $this->selectedTenantInfo = null;
         $this->calculatedFee = null;
         $this->calculatedNet = null;
+        $this->lastTransferStatus = null;
+        $this->lastTransferMessage = null;
     }
 
     public function closeTransferForm(): void
     {
         $this->showTransferForm = false;
         $this->showConfirmation = false;
+        $this->lastTransferStatus = null;
+        $this->lastTransferMessage = null;
     }
 
     public function updatedSelectedTenantId(): void
@@ -225,6 +380,9 @@ class Disbursement extends Page
     public function executeTransfer(): void
     {
         $this->showConfirmation = false;
+        $this->isTransferring = true;
+        $this->lastTransferStatus = null;
+        $this->lastTransferMessage = null;
 
         try {
             $service = app(DirectTransferService::class);
@@ -234,9 +392,12 @@ class Disbursement extends Page
                 notes: $this->transferNotes ?? '',
             );
 
+            $this->lastTransferStatus = 'success';
+            $this->lastTransferMessage = "Transfer Rp " . number_format($this->calculatedNet, 0, ',', '.') . " berhasil dikirim ke rekening tenant.";
+
             Notification::make()
                 ->title('Transfer berhasil!')
-                ->body("Rp " . number_format($this->calculatedNet, 0, ',', '.') . " akan dikirim ke rekening tenant.")
+                ->body($this->lastTransferMessage)
                 ->success()
                 ->send();
 
@@ -244,29 +405,43 @@ class Disbursement extends Page
             $this->load();
 
         } catch (InsufficientBalanceException $e) {
+            $this->lastTransferStatus = 'error';
+            $this->lastTransferMessage = $e->getMessage();
+
             Notification::make()
                 ->title('Saldo tidak mencukupi')
                 ->body($e->getMessage())
                 ->danger()
                 ->send();
         } catch (DisbursementFailedException $e) {
+            $this->lastTransferStatus = 'error';
+            $this->lastTransferMessage = $e->getMessage();
+
             Notification::make()
                 ->title('Transfer gagal')
                 ->body($e->getMessage())
                 ->danger()
                 ->send();
         } catch (\InvalidArgumentException $e) {
+            $this->lastTransferStatus = 'error';
+            $this->lastTransferMessage = $e->getMessage();
+
             Notification::make()
                 ->title('Validasi gagal')
                 ->body($e->getMessage())
                 ->danger()
                 ->send();
         } catch (\Throwable $e) {
+            $this->lastTransferStatus = 'error';
+            $this->lastTransferMessage = 'Terjadi kesalahan: ' . $e->getMessage();
+
             Notification::make()
                 ->title('Error')
-                ->body('Terjadi kesalahan: ' . $e->getMessage())
+                ->body($this->lastTransferMessage)
                 ->danger()
                 ->send();
+        } finally {
+            $this->isTransferring = false;
         }
     }
 

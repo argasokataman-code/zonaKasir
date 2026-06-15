@@ -122,6 +122,11 @@ jobs:
             tar xzf /tmp/deploy-artifacts.tar.gz
             rm -f /tmp/deploy-artifacts.tar.gz
 
+            # Auto-bump PWA cache version so all devices force-update
+            SW_VERSION="${{ steps.tag.outputs.tag }}"
+            sed -i "s/const CACHE_VERSION = '.*'/const CACHE_VERSION = '${SW_VERSION}'/" public/serviceworker.js
+            echo "PWA CACHE_VERSION set to ${SW_VERSION}"
+
             # Run central migrations (tenant migrations added by tenancy package)
             php artisan migrate --force 2>/dev/null || true
             php artisan db:seed --class=AdminSeeder --force 2>/dev/null || true
