@@ -64,22 +64,36 @@ class ManageSubscription extends Page
                 return;
             }
 
-            // Paid plan: find subscription
-            $subscription = Subscription::where('tenant_id', $tenantId)
-                ->latest()
-                ->first();
+            // Check if already has a pending invoice for this plan — prevent duplicate
+            $existingSub = Subscription::where('tenant_id', $tenantId)->latest()->first();
+            if ($existingSub) {
+                $pendingInvoice = Invoice::where('subscription_id', $existingSub->id)
+                    ->where('status', 'pending')
+                    ->where('target_plan_id', $plan->id)
+                    ->latest()
+                    ->first();
+
+                if ($pendingInvoice && $pendingInvoice->midtrans_redirect_url) {
+                    // Already has a pending payment for this exact plan — reuse
+                    $this->snapRedirectUrl = $pendingInvoice->midtrans_redirect_url;
+                    return;
+                }
+
+                // Cancel stale pending invoices for different plans
+                Invoice::where('subscription_id', $existingSub->id)
+                    ->where('status', 'pending')
+                    ->update(['status' => 'cancelled']);
+            }
+
+            // Find or create subscription — DO NOT change plan_id yet
+            $subscription = $existingSub;
 
             if ($subscription) {
                 // If trial expired, mark as expired explicitly
                 if ($subscription->status === 'trialing' && $subscription->trial_ends_at && $subscription->trial_ends_at->isPast()) {
                     $subscription->update(['status' => 'expired']);
                 }
-
-                $subscription->update([
-                    'plan_id' => $plan->id,
-                    'billing_cycle' => $billingCycle,
-                    // Status stays expired — webhook sets 'active' after payment
-                ]);
+                // ⚠️ DO NOT update plan_id here — wait for webhook confirmation
             } else {
                 $subscription = Subscription::create([
                     'tenant_id' => $tenantId,
@@ -90,7 +104,8 @@ class ManageSubscription extends Page
                 ]);
             }
 
-            $invoice = app(InvoiceService::class)->createInvoice($subscription, 'midtrans');
+            // Pass target plan to invoice (not the subscription's current plan)
+            $invoice = app(InvoiceService::class)->createInvoice($subscription, 'midtrans', null, $plan);
 
             $this->snapRedirectUrl = $this->generateSnapRedirect($invoice, $subscription);
         } catch (\Throwable $e) {

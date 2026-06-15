@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Invoice;
+use App\Models\Plan;
 use App\Models\Subscription;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -13,11 +14,14 @@ class InvoiceService
     public function createInvoice(
         Subscription $subscription,
         string $paymentMethod = 'manual',
-        ?string $notes = null
+        ?string $notes = null,
+        ?Plan $targetPlan = null
     ): Invoice {
-        return DB::transaction(function () use ($subscription, $paymentMethod, $notes) {
+        return DB::transaction(function () use ($subscription, $paymentMethod, $notes, $targetPlan) {
             $subscription->refresh();
-            $plan = $subscription->plan;
+
+            // Use target plan if provided (for plan upgrades), otherwise use current plan
+            $plan = $targetPlan ?? $subscription->plan;
 
             if (! $plan) {
                 throw new Exception('Subscription has no associated plan');
@@ -31,6 +35,7 @@ class InvoiceService
             $invoice = Invoice::create([
                 'tenant_id' => $subscription->tenant_id,
                 'subscription_id' => $subscription->id,
+                'target_plan_id' => $plan->id,
                 'number' => 'INV-' . Str::upper(Str::random(10)),
                 'amount' => $amount,
                 'status' => 'pending',

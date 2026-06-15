@@ -70,13 +70,20 @@ class SubscriptionWebhookController extends Controller
         if (in_array($transactionStatus, ['settlement', 'capture'])) {
             app(InvoiceService::class)->markAsPaid($invoice);
 
-            $subscription->update([
+            // Update plan_id from invoice's target_plan (the plan user actually paid for)
+            $updateData = [
                 'status' => 'active',
                 'starts_at' => $subscription->ends_at && $subscription->ends_at->isPast() ? now() : ($subscription->starts_at ?? now()),
                 'ends_at' => $subscription->billing_cycle === 'yearly'
                     ? now()->addYear()
                     : now()->addMonth(),
-            ]);
+            ];
+
+            if ($invoice->target_plan_id) {
+                $updateData['plan_id'] = $invoice->target_plan_id;
+            }
+
+            $subscription->update($updateData);
 
             Log::info('Subscription invoice paid, subscription extended', [
                 'invoice_id' => $invoice->id,
