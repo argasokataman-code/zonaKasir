@@ -27,7 +27,7 @@ class GoogleController extends Controller
             $googleUser = Socialite::driver('google')->stateless()->user();
             $googleId = $googleUser->getId();
 
-            // Find tenant by google_id in central DB
+            // Find tenant by google_id
             $tenant = \App\Tenant::where('google_id', $googleId)->first();
 
             if ($tenant) {
@@ -41,11 +41,11 @@ class GoogleController extends Controller
                 }
             }
 
-            // Fallback: find user directly by google_id (handles missing central record)
+            // Fallback: find user directly by google_id
             $user = User::withoutGlobalScopes()->where('google_id', $googleId)->first();
             if ($user) {
                 TenantContext::set($user->tenant_id);
-                // Ensure central tenant record exists (unguarded because Tenant $guarded = ['id'])
+                // Ensure tenant record exists
                 \App\Tenant::unguarded(fn () => \App\Tenant::firstOrCreate(
                     ['id' => $user->tenant_id],
                     ['tenancy_email' => $googleUser->getEmail()]
@@ -69,11 +69,11 @@ class GoogleController extends Controller
                 }
             }
 
-            // Fallback: search user across all tenants by email (handles missing central record)
+            // Fallback: search user across all tenants by email
             $user = User::withoutGlobalScopes()->where('email', $googleUser->getEmail())->first();
             if ($user) {
                 TenantContext::set($user->tenant_id);
-                // Ensure central tenant record exists (unguarded because Tenant $guarded = ['id'])
+                // Ensure tenant record exists
                 $tenant = \App\Tenant::unguarded(fn () => \App\Tenant::firstOrCreate(
                     ['id' => $user->tenant_id],
                     ['tenancy_email' => $googleUser->getEmail()]
@@ -100,7 +100,7 @@ class GoogleController extends Controller
                 'trial_days' => 7,
             ]);
 
-            // Store google_id in both tenant user and central tenants table
+            // Store google_id in both tenant user and tenants table
             $user = User::where('email', $googleUser->getEmail())->first();
             if ($user) {
                 $user->update(['google_id' => $googleId]);

@@ -36,11 +36,6 @@ class NotificationDebugger extends Page
         $output[] = "Active tenants: {$tenants->count()}";
 
         foreach ($tenants as $t) {
-            $db = $t->tenancy_db_name ?? null;
-            if ($db && config("database.connections.tenant_db")) {
-                config(['database.connections.tenant_db.database' => $db]);
-                \Illuminate\Support\Facades\DB::purge('tenant_db');
-            }
             try {
                 $userCount = \App\Models\Tenants\User::count();
                 $firstUser = \App\Models\Tenants\User::first();
