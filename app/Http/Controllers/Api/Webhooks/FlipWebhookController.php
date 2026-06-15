@@ -21,6 +21,11 @@ class FlipWebhookController extends Controller
     {
         $payload = $request->all();
 
+        Log::debug('Flip webhook received', [
+            'headers' => $request->headers->all(),
+            'payload' => $payload,
+        ]);
+
         // ── Verify HMAC signature (if Flip provides it) ──
         $signature = $request->header('X-Flip-Signature');
         $webhookSecret = config('flip.webhook_secret');
@@ -34,10 +39,14 @@ class FlipWebhookController extends Controller
         } else {
             // ── Fallback: verify token in body ──
             $webhookToken = config('flip.webhook_token');
-            $incomingToken = $payload['token'] ?? null;
+            $incomingToken = $payload['token'] ?? $payload['secret'] ?? null;
 
             if (! $webhookToken || $incomingToken !== $webhookToken) {
-                Log::warning('Flip webhook: Invalid token');
+                Log::warning('Flip webhook: Invalid token', [
+                    'expected_token' => $webhookToken ? substr($webhookToken, 0, 8).'...' : '(none)',
+                    'incoming_token' => $incomingToken ? substr((string) $incomingToken, 0, 8).'...' : '(none)',
+                    'payload_keys' => array_keys($payload),
+                ]);
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
         }
