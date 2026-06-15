@@ -257,7 +257,7 @@
                                         <h3 class="text-sm font-bold text-gray-900 mb-1">{{ __('Confirm Plan Change') }}</h3>
                                         <p class="text-xs text-gray-500 mb-1">
                                             {{ __('Your current plan is') }} <span class="font-bold text-gray-900">{{ $current['name'] ?? '—' }}</span>
-                                            ({{ __($current['billing_cycle'] === 'yearly' ? 'Yearly' : 'Monthly') }}).
+                                            ({{ __(($current['billing_cycle'] ?? 'monthly') === 'yearly' ? 'Yearly' : 'Monthly') }}).
                                         </p>
                                         <p class="text-xs text-gray-500 mb-4">
                                             {{ __('Switch to') }} <span class="font-bold text-gray-900" x-text="confirmPlanName"></span>
