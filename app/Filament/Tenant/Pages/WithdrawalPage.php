@@ -23,6 +23,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Log;
 
 class WithdrawalPage extends Page implements HasActions, HasForms, HasTable
 {
@@ -83,14 +84,22 @@ class WithdrawalPage extends Page implements HasActions, HasForms, HasTable
     {
         $data = $this->form->getState();
         $amount = (float) $data['amount'];
+        $userId = auth()->id();
 
         try {
             $idempotencyKey = 'wd-' . now()->timestamp . '-' . substr(md5(random_bytes(8)), 0, 8);
 
-            app(WithdrawalService::class)->request(
+            $withdrawal = app(WithdrawalService::class)->request(
                 amount: $amount,
                 idempotencyKey: $idempotencyKey,
             );
+
+            Log::info('Withdrawal requested', [
+                'user_id' => $userId,
+                'amount' => $amount,
+                'withdrawal_id' => $withdrawal->id,
+                'status' => $withdrawal->status,
+            ]);
 
             Notification::make()
                 ->title(__('Withdrawal requested successfully'))
@@ -99,11 +108,21 @@ class WithdrawalPage extends Page implements HasActions, HasForms, HasTable
 
             $this->form->fill(['amount' => '']);
         } catch (InsufficientBalanceException $e) {
+            Log::warning('Withdrawal insufficient balance', [
+                'user_id' => $userId,
+                'amount' => $amount,
+                'error' => $e->getMessage(),
+            ]);
             Notification::make()
                 ->title(__($e->getMessage()))
                 ->danger()
                 ->send();
         } catch (\Throwable $e) {
+            Log::error('Withdrawal request failed', [
+                'user_id' => $userId,
+                'amount' => $amount,
+                'error' => $e->getMessage(),
+            ]);
             Notification::make()
                 ->title(__('Error'))
                 ->body($e->getMessage())
