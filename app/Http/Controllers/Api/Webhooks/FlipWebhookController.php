@@ -40,7 +40,7 @@ class FlipWebhookController extends Controller
         } else {
             // ── Fallback: verify token in body ──
             $webhookToken = config('flip.webhook_token');
-            $incomingToken = $payload['token'] ?? $payload['secret'] ?? null;
+            $incomingToken = $payload['token'] ?? $payload['secret'] ?? $request->query('token') ?? null;
 
             if (! $webhookToken || $incomingToken !== $webhookToken) {
                 Log::warning('Flip webhook: Invalid token', [
