@@ -56,6 +56,7 @@ class TenantLogin extends Login
             ],
             [
                 'timezone' => 'Asia/Jakarta',
+                'locale' => 'en',
             ]
         );
 
