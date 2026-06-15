@@ -101,7 +101,7 @@ class PaymentSubscriptions extends Page
             ->sum('amount');
 
         // Revenue by plan
-        $this->revenueByPlan = Invoice::where('status', 'paid')
+        $this->revenueByPlan = Invoice::where('invoices.status', 'paid')
             ->join('subscriptions', 'invoices.subscription_id', '=', 'subscriptions.id')
             ->join('plans', 'subscriptions.plan_id', '=', 'plans.id')
             ->select('plans.name as plan_name', DB::raw('SUM(invoices.amount) as total_amount'), DB::raw('COUNT(*) as invoice_count'))
@@ -110,11 +110,11 @@ class PaymentSubscriptions extends Page
             ->toArray();
 
         // Monthly trend (last 6 months)
-        $this->monthlyTrend = Invoice::where('status', 'paid')
-            ->where('paid_at', '>=', now()->subMonths(6))
+        $this->monthlyTrend = Invoice::where('invoices.status', 'paid')
+            ->where('invoices.paid_at', '>=', now()->subMonths(6))
             ->select(
-                DB::raw("DATE_FORMAT(paid_at, '%Y-%m') as month"),
-                DB::raw('SUM(amount) as total_amount'),
+                DB::raw("DATE_FORMAT(invoices.paid_at, '%Y-%m') as month"),
+                DB::raw('SUM(invoices.amount) as total_amount'),
                 DB::raw('COUNT(*) as invoice_count')
             )
             ->groupBy('month')
