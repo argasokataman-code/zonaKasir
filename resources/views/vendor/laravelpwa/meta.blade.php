@@ -177,9 +177,12 @@
     deferredPrompt = null;
   });
 
-  // Service Worker lifecycle
+  // ─── Service Worker: Auto-Update ──────────────────────────
+  // Always up-to-date: check frequently, auto-reload on new version.
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/serviceworker.js', { scope: '/' })
+    var swUpdating = false;
+
+    navigator.serviceWorker.register('/serviceworker.js?v=' + Date.now(), { scope: '/' })
       .then(function(registration) {
         console.log('[PWA] SW registered, scope:', registration.scope);
 
@@ -188,9 +191,14 @@
           if (!newWorker) return;
 
           newWorker.addEventListener('statechange', function() {
+            // New SW installed + old SW still controlling → update ready
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-              var updateBanner = document.getElementById('pwa-update-banner');
-              if (updateBanner) updateBanner.classList.add('show');
+              console.log('[PWA] New version ready, auto-reloading...');
+              // Tell new SW to take over immediately
+              newWorker.postMessage({ type: 'SKIP_WAITING' });
+              // Reload after short delay to let claim() finish
+              swUpdating = true;
+              setTimeout(function() { window.location.reload(); }, 500);
             }
           });
         });
@@ -199,12 +207,21 @@
         console.error('[PWA] SW registration failed:', err);
       });
 
-    // Check for updates every 60 minutes
+    // Check for updates every 5 minutes
     setInterval(function() {
       navigator.serviceWorker.ready.then(function(registration) {
         registration.update();
       });
-    }, 60 * 60 * 1000);
+    }, 5 * 60 * 1000);
+
+    // Check update when user switches back to tab (visibility change)
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'visible' && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.ready.then(function(registration) {
+          registration.update();
+        });
+      }
+    });
   }
 })();
 </script>
