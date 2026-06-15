@@ -1,9 +1,9 @@
 # Single Database Architecture Migration
 
-> **Version:** 3.0
-> **Status:** Planning (verified against local + staging runtime)
+> **Version:** 4.0
+> **Status:** ✅ COMPLETE (Phase 1 + Phase 2 done)
 > **Date:** 2026-06-15
-> **Scope:** Local first → Staging next
+> **Scope:** Local + Staging — both done
 
 ---
 
@@ -542,20 +542,21 @@ php artisan test
 ### Execution Checklist
 
 ```
-Phase 1: Local
-  [ ] Step 1.1 — Config → verify
-  [ ] Step 1.2 — Models → verify
-  [ ] Step 1.3 — Migrations → verify
-  [ ] Step 1.4 — App code → verify
-  [ ] Step 1.5 — Tests → verify
-  [ ] Step 1.6 — DB rename → verify
-  [ ] Step 1.7 — Final verify → ALL PASS
+Phase 1: Local ✅ COMPLETE
+  [x] Step 1.1 — Config → verify
+  [x] Step 1.2 — Models → verify
+  [x] Step 1.3 — Migrations → verify
+  [x] Step 1.4 — App code → verify
+  [x] Step 1.5 — Tests → verify
+  [x] Step 1.6 — DB rename → verify
+  [x] Step 1.7 — Final verify → ALL PASS
 
-Phase 2: Staging (separate task)
-  [ ] Step 2.1 — Backup → merge → verify
-  [ ] Step 2.2 — Deploy → verify
-  [ ] Step 2.3 — Post-deploy → verify
-  [ ] Step 2.4 — Cleanup (after 7 days)
+Phase 2: Staging ✅ COMPLETE
+  [x] Step 2.1 — Backup → schema align → data merge → verify
+  [x] Step 2.2 — Deploy → verify
+  [x] Step 2.3 — Post-deploy (.env + migrate) → verify
+  [x] Step 2.4 — Backup cleanup → DONE
+  [x] Bonus: Fix welcomed_at migration hasColumn guard
 ```
 
 ### Blockers (DO NOT proceed if any of these fail)
@@ -567,3 +568,34 @@ Phase 2: Staging (separate task)
 | Domains query | `php artisan tinker` → `DB::select("SHOW TABLES LIKE 'domains'")` | Fix migration #13 |
 | Admin panel | Open `/admin` → Tenants menu | Check Filament error log |
 | No central refs | `grep -rn "connection.*central" app/ database/ config/` | Find and remove remaining refs |
+
+---
+
+## Changelog
+
+| Version | Date | Change |
+|---------|------|--------|
+| v1.0 | 2026-06-15 | Initial planning doc |
+| v2.0 | 2026-06-15 | Fix 7 anomalies (APP_CENTRAL_DOMAIN, Domain model, etc.) |
+| v3.0 | 2026-06-15 | Dual-path migration strategy (fresh DB + existing DB) |
+| v4.0 | 2026-06-15 | **COMPLETE** — Phase 1 (local) + Phase 2 (staging) done. Bonus: welcomed_at guard fix. |
+
+### Files Changed (15 total)
+
+| # | File | Change |
+|---|------|--------|
+| 1 | `.env.example` | `DB_DATABASE=zonakasir`, `DB_USERNAME=zonakasir` |
+| 2 | `docker-compose.yml` | `DB_DATABASE:-zonakasir`, `DB_USERNAME:-zonakasir` |
+| 3 | `config/database.php` | Removed `central` connection block |
+| 4 | `app/Tenant.php` | Removed `$connection = 'central'` |
+| 5 | `app/Domain.php` | Removed `$connection = 'central'`, `$incrementing`, `$keyType` |
+| 6 | `database/migrations/2019_09_15_000010_create_tenants_table.php` | Filled with full schema |
+| 7 | `database/migrations/2019_09_15_000020_create_domains_table.php` | Filled with domains schema |
+| 8 | `database/migrations/2026_06_14_040000_add_google_id_to_tenants_table.php` | Removed `Schema::connection('central')` |
+| 9 | **NEW:** `database/migrations/2026_06_15_150000_add_missing_tenant_columns_and_create_domains.php` | Existing DB path |
+| 10 | `database/migrations/tenant/2026_06_15_000001_add_welcomed_at_to_users_table.php` | Added `hasColumn` guard |
+| 11 | `app/Filament/Admin/Resources/SubscriptionResource.php` | Removed central config query |
+| 12 | `app/Filament/Admin/Pages/NotificationDebugger.php` | Removed dead `tenant_db` block |
+| 13 | `app/Http/Controllers/Auth/GoogleController.php` | Cleaned comments |
+| 14 | `tests/Feature/Http/Controllers/Auth/RegisteredUserControllerTest.php` | Fixed 2 test failures + removed dead config |
+| 15 | `docs/planning/SINGLE_DB_ARCHITECTURE.md` | This doc |

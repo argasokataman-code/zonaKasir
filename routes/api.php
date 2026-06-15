@@ -19,6 +19,7 @@ Route::post('/webhooks/subscription', [SubscriptionWebhookController::class, 'ha
     ->name('webhooks.subscription');
 
 Route::post('/webhooks/flip', [App\Http\Controllers\Api\Webhooks\FlipWebhookController::class, 'handle'])
+    ->middleware('throttle:100,1')
     ->name('webhooks.flip');
 
 Route::get('/pricing', [\App\Http\Controllers\Api\PlanController::class, 'index'])
