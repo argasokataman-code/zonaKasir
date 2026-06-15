@@ -12,15 +12,8 @@ return [
     'withdrawal_approval' => [
         'auto_approve_max' => env('FLIP_WITHDRAWAL_AUTO_APPROVE_MAX', 5000000),      // < 5jt auto-approve (trusted)
         'single_admin_max' => env('FLIP_WITHDRAWAL_SINGLE_ADMIN_MAX', 25000000),     // 5-25jt single admin
+        'fee_amount'       => env('FLIP_WITHDRAWAL_FEE', 2500),                      // Rp 2.500/transfer, ditanggung tenant
         // > 25jt requires 2 admin approvals
     ],
 
-    /*
-     * Direct transfer config (admin-initiated)
-     */
-    'direct_transfer' => [
-        'enabled' => env('FLIP_DIRECT_TRANSFER_ENABLED', true),
-        'min_amount' => env('FLIP_DIRECT_TRANSFER_MIN', 50000),   // Rp 50.000
-        'fee_amount' => env('FLIP_DIRECT_TRANSFER_FEE', 2500),    // Rp 2.500
-    ],
 ];

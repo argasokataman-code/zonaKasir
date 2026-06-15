@@ -29,7 +29,7 @@ class WithdrawalController extends Controller
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'amount'           => 'required|numeric|min:50000',
+            'amount'           => 'required|integer|min:50000',
             'idempotency_key'  => 'required|string|max:100',
         ]);
 

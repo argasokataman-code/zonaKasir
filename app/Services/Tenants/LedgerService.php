@@ -17,12 +17,12 @@ class LedgerService
         string $ledgerableType,  // Selling::class, Withdrawal::class
         int $ledgerableId,
         string $entryType,       // 'credit' | 'debit'
-        float $amount,           // double
+        int $amount,             // whole Rupiah, no decimals
         string $description,
         string $referenceType,
         int $referenceId,
         ?string $feeRateType = null,
-        ?float $feeRateValue = null,
+        ?int $feeRateValue = null,
     ): LedgerEntry
     {
         $lockName = 'ledger_' . Str::slug($ledgerableType) . '_' . $ledgerableId;
@@ -67,15 +67,15 @@ class LedgerService
         }
     }
 
-    public function getCurrentBalance(): float
+    public function getCurrentBalance(): int
     {
-        return LedgerEntry::sum(DB::raw("CASE WHEN entry_type = 'credit' THEN amount ELSE -amount END"));
+        return (int) LedgerEntry::sum(DB::raw("CASE WHEN entry_type = 'credit' THEN amount ELSE -amount END"));
     }
 
     /**
      * Get current balance with MySQL GET_LOCK to prevent concurrent reads.
      */
-    public function getCurrentBalanceWithLock(): float
+    public function getCurrentBalanceWithLock(): int
     {
         $lockName = 'ledger_balance_lock';
         DB::select("SELECT GET_LOCK(?, 10) AS lock_acquired", [$lockName]);

@@ -16,9 +16,6 @@
                                     <div class="text-lg font-semibold">
                                         Rp {{ number_format($wd['amount'], 0, ',', '.') }}
                                     </div>
-                                    @if (($wd['type'] ?? 'tenant_request') === 'admin_direct')
-                                        <x-filament::badge color="info">Direct Transfer</x-filament::badge>
-                                    @endif
                                 </div>
                                 <div class="text-sm text-gray-600 mt-1">
                                     <strong>{{ $wd['tenant_name'] }}</strong> - 
