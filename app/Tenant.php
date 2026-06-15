@@ -8,8 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class Tenant extends Model
 {
-    protected $connection = 'central';
-
     protected $guarded = ['id'];
 
     public $incrementing = false;

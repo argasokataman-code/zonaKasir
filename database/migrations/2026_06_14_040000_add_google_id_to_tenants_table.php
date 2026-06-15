@@ -9,8 +9,8 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::connection('central')->table('tenants', function (Blueprint $table) {
-            if (!Schema::connection('central')->hasColumn('tenants', 'google_id')) {
+        Schema::table('tenants', function (Blueprint $table) {
+            if (!Schema::hasColumn('tenants', 'google_id')) {
                 $table->string('google_id')->nullable()->unique()->after('id');
             }
         });
@@ -18,7 +18,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::connection('central')->table('tenants', function (Blueprint $table) {
+        Schema::table('tenants', function (Blueprint $table) {
             $table->dropColumn('google_id');
         });
     }

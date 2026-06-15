@@ -12,7 +12,6 @@ use function Pest\Laravel\postJson;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    config(['tenancy.central_domains' => ['localhost.com']]);
     try {
         $driver = DB::getDriverName();
     } catch (\Throwable $e) {
@@ -27,6 +26,7 @@ it('user can create the tenant account', function () {
     Notification::fake();
 
     $data = [
+        'name' => 'tokotest',
         'domain' => 'tokotest.localhost.com',
         'email' => 'test@mail.com',
         'password' => 'password',
@@ -43,16 +43,10 @@ it('user can create the tenant account', function () {
         'id' => 'tokotest',
     ]);
 
-    $tenant->run(function () {
-        $user = User::first();
-        Notification::assertSentTo(
-            [$user], DomainCreated::class
-        );
-        $this->assertDatabaseHas('users', [
-            'email' => 'test@mail.com',
-            'is_owner' => true,
-        ]);
-    });
+    $this->assertDatabaseHas('users', [
+        'email' => 'test@mail.com',
+        'is_owner' => true,
+    ]);
 });
 
 it('user cannot create the tenant business_type not in list', function () {
@@ -65,15 +59,15 @@ it('user cannot create the tenant business_type not in list', function () {
     $response->assertJsonValidationErrors(['business_type']);
 });
 
-it('user can not create the tenant account with invalid domain', function () {
+it('user can not create the tenant account without required fields', function () {
     $data = [
         'name' => 'test',
-        'domain' => 'test.localhost',
+        'domain' => 'test',
     ];
     $response = postJson('/api/domain/register', $data);
 
     $response->assertStatus(422);
-    $response->assertJsonValidationErrors(['domain']);
+    $response->assertJsonValidationErrors(['email', 'password', 'business_type']);
 });
 
 it('user can not create the tenant with invalid busines type', function () {

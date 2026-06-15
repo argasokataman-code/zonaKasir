@@ -11,7 +11,6 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Config;
 
 class SubscriptionResource extends Resource
 {
@@ -27,8 +26,7 @@ class SubscriptionResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $cn = Config::get('tenancy.database.central_connection', 'mysql');
-        $plans = Plan::on($cn)->pluck('name', 'id')->toArray();
+        $plans = Plan::pluck('name', 'id')->toArray();
 
         return $form
             ->schema([
