@@ -11,6 +11,7 @@ use App\Models\Tenants\Product;
 use App\Models\Tenants\Profile;
 use App\Models\Tenants\Setting;
 use App\Models\Tenants\Table;
+use App\Models\Tenants\Voucher;
 use App\Services\Tenants\SellingService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -73,11 +74,17 @@ class SyncController extends Controller
 
         $tables = Table::select('id', 'number')->get();
 
+        $vouchers = Voucher::select('id', 'name', 'code', 'type', 'nominal', 'kuota', 'start_date', 'expired', 'minimal_buying')
+            ->where('expired', '>=', now())
+            ->whereColumn('kuota', '>', DB::raw('used'))
+            ->get();
+
         $response = [
             'products' => $products,
             'categories' => $categories->get(),
             'members' => $members->get(),
             'payment_methods' => $paymentMethods->get(),
+            'vouchers' => $vouchers,
             'about' => About::first(),
             'settings' => $settings,
             'tables' => $tables,

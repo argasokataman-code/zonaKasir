@@ -341,3 +341,22 @@ window.buildReceiptPreviewHtml = function(selling, about, printerData) {
   return h;
 }
 
+// ─── Logout: Clear SW session cache for account switching ────
+document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('submit', function(e) {
+    var form = e.target;
+    if (form.method && form.method.toUpperCase() === 'POST') {
+      var action = form.action || window.location.href;
+      if (action.includes('/logout')) {
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_SESSION' });
+        }
+        // Also clear IndexedDB session data
+        if (window.offlineManager && window.offlineManager.db) {
+          window.offlineManager.clearAll().catch(function() {});
+        }
+      }
+    }
+  });
+});
+

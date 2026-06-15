@@ -17,7 +17,7 @@ Route::view('/offline', 'offline');
 
 Route::get('/member/offline-pos', function () {
     return view('filament.tenant.pages.offline-pos');
-});
+})->middleware('auth');
 
 Route::get('/serviceworker.js', function () {
     return response()->file(public_path('serviceworker.js'))
