@@ -15,7 +15,7 @@ export interface Plan {
 }
 
 const API_URL = '/api/pricing';
-const CACHE_KEY = 'pricing_cache_v2';
+const CACHE_KEY = 'pricing_cache_v3';
 
 const FALLBACK_PLANS: Plan[] = [
   {
@@ -37,7 +37,7 @@ const FALLBACK_PLANS: Plan[] = [
     price_monthly: 299000, price_yearly: 239000,
     features: { pos: 'Point of Sale (POS)', report: 'Reports & Analytics', stock_management: 'Stock Management', api_access: 'API Access', multi_store: 'Multi Store' },
     max_stores: 99, max_users: 99, is_popular: false,
-    cta: { label: 'Hubungi Sales', action: 'contact' },
+    cta: { label: 'Coba Gratis 7 Hari', action: 'register' },
   },
   {
     id: 4, name: 'On-Premise', slug: 'on-premise',
@@ -74,7 +74,7 @@ export function usePricing() {
         if (cancelled) return;
         if (json.success && Array.isArray(json.data) && json.data.length > 0) {
           setPlans(json.data);
-          localStorage.setItem('pricing_cache', JSON.stringify({ data: json.data, ts: Date.now() }));
+          localStorage.setItem(CACHE_KEY, JSON.stringify({ data: json.data, ts: Date.now() }));
         }
       })
       .catch(() => { /* use fallback */ })
