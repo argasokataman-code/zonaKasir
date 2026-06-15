@@ -12,6 +12,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -125,6 +126,7 @@ class RegisterTenantForm extends Component implements HasForms
 
         TenantContext::set($tenantId);
         Auth::login(\App\Models\Tenants\User::where('email', $data['email'])->first());
+        session()->save();
 
         $this->redirect('/member');
     }

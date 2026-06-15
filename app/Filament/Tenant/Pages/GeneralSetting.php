@@ -122,7 +122,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
             'email' => $user->email,
             'phone' => $profile?->phone,
             'address' => $profile?->address,
-            'locale' => $profile?->locale,
+            'locale' => $profile?->locale ?? 'en',
             'timezone' => $profile?->timezone,
             'photo' => $photoState,
         ];
@@ -157,9 +157,17 @@ class GeneralSetting extends Page implements HasActions, HasForms
                                     50 => 50,
                                 ])
                                 ->translateLabel(),
-                            TextInput::make('default_tax')
-                                ->numeric()
-                                ->suffix('%')
+                            Select::make('default_tax')
+                                ->options([
+                                    0 => '0%',
+                                    1 => '1%',
+                                    2 => '2%',
+                                    3 => '3%',
+                                    5 => '5%',
+                                    10 => '10%',
+                                    11 => '11%',
+                                    12 => '12%',
+                                ])
                                 ->translateLabel(),
                             Actions::make([
                                 Action::make('Save')

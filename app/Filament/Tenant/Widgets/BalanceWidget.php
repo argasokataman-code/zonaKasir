@@ -10,6 +10,11 @@ class BalanceWidget extends BaseWidget
 {
     protected static ?string $pollingInterval = '60s';
 
+    protected function getColumns(): int
+    {
+        return 1;
+    }
+
     protected function getStats(): array
     {
         $ledger = app(LedgerService::class);

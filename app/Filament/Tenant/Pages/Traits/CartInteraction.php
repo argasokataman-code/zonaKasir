@@ -109,7 +109,7 @@ trait CartInteraction
             return;
         }
         $value = $value != '' ? $value : 0;
-        if ($cartItem->product->qty <= $value) {
+        if (! $cartItem->product->is_non_stock && $cartItem->product->stock_calculate <= $value) {
             Notification::make()
                 ->title(__('Stock is out'))
                 ->danger()

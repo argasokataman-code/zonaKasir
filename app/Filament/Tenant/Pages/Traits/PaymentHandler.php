@@ -37,6 +37,12 @@ trait PaymentHandler
             'total_price' => $this->total_price,
         ]);
 
+        // Must select a payment method first
+        if (empty($this->cartDetail['payment_method_id'])) {
+            $this->dispatch('payment-method-missing');
+            return;
+        }
+
         $request = array_merge($this->cartDetail, [
             'discount_price' => floatval(str_replace(',', '', $this->cartDetail['discount_price'])),
             'products' => $this->cartItems->map(function (CartItem $cartItem) {
@@ -60,14 +66,13 @@ trait PaymentHandler
         ]);
 
         if (! $pMethod) {
-            $pMethod = PaymentMethod::create([
-                'name' => 'Cash',
-                'is_cash' => true,
-                'is_debit' => false,
-                'is_credit' => false,
-                'is_wallet' => false,
-                'icon' => 'assets/images/payment-methods/cash.png',
-            ]);
+            Notification::make()
+                ->title(__('Payment method not found'))
+                ->body(__('Please select a valid payment method.'))
+                ->warning()
+                ->send();
+
+            return;
         }
 
         if ($pMethod->isMidtrans()) {
@@ -167,6 +172,7 @@ trait PaymentHandler
             'payed_money' => [
                 ! $pMethod->is_credit ? 'gte:total_price' : null,
                 Rule::requiredIf(fn () => ! $pMethod->is_credit),
+                ! $pMethod->is_credit ? 'lte:999999999' : null,
             ],
             'total_price' => ['required_if:friend_price,true', 'numeric'],
             'total_qty' => ['required_if:friend_price,true', 'numeric', new ShouldSameWithSellingDetail('qty', $request['products'])],

@@ -41,7 +41,7 @@ class CheckProductStock implements DataAwareRule, ValidationRule
         if (isset($dataProduct['price_unit_id']) && $dataProduct['price_unit_id'] != null) {
             $value = PriceUnit::query()->find($dataProduct['price_unit_id'])->stock * $dataProduct['qty'];
         }
-        $bool = $product?->stock < $value;
+        $bool = $product->stock_calculate < $value;
 
         if ($bool) {
             $fail($this->message());

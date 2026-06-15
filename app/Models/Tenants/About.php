@@ -80,9 +80,33 @@ class About extends Model
             \Filament\Forms\Components\Section::make('Bank Account')
                 ->description(__('Rekening bank untuk pencairan dana dari ZonaKasir'))
                 ->schema([
-                    \Filament\Forms\Components\TextInput::make('bank_name')
+                    \Filament\Forms\Components\Select::make('bank_name')
                         ->label('Bank Name')
-                        ->placeholder('BCA, Mandiri, BNI, BRI, etc.')
+                        ->placeholder('Pilih bank')
+                        ->options([
+                            'BCA' => 'BCA',
+                            'BNI' => 'BNI',
+                            'BRI' => 'BRI',
+                            'Mandiri' => 'Mandiri',
+                            'CIMB Niaga' => 'CIMB Niaga',
+                            'BSI' => 'BSI (Bank Syariah Indonesia)',
+                            'BTN' => 'BTN',
+                            'Danamon' => 'Danamon',
+                            'Maybank' => 'Maybank',
+                            'Permata' => 'Permata',
+                            'OCBC NISP' => 'OCBC NISP',
+                            'Panin' => 'Panin',
+                            'Bank Mega' => 'Bank Mega',
+                            'Bank Jatim' => 'Bank Jatim',
+                            'Bank Jateng' => 'Bank Jateng',
+                            'Bank Jabar Banten' => 'Bank Jabar Banten (BJB)',
+                            'Bank Sumut' => 'Bank Sumut',
+                            'GoPay' => 'GoPay',
+                            'OVO' => 'OVO',
+                            'DANA' => 'DANA',
+                            'LinkAja' => 'LinkAja',
+                        ])
+                        ->searchable()
                         ->required()
                         ->translateLabel(),
                     \Filament\Forms\Components\TextInput::make('bank_account_name')
@@ -93,10 +117,29 @@ class About extends Model
                         ->label('Account Number')
                         ->required()
                         ->translateLabel(),
-                    \Filament\Forms\Components\TextInput::make('bank_code')
+                    \Filament\Forms\Components\Select::make('bank_code')
                         ->label('Bank Code')
-                        ->placeholder('014 for BCA, 008 for Mandiri, etc.')
-                        ->maxLength(10)
+                        ->placeholder('Pilih kode bank')
+                        ->options([
+                            '014' => '014 - BCA',
+                            '009' => '009 - BNI',
+                            '002' => '002 - BRI',
+                            '008' => '008 - Mandiri',
+                            '022' => '022 - CIMB Niaga',
+                            '451' => '451 - BSI',
+                            '200' => '200 - BTN',
+                            '011' => '011 - Danamon',
+                            '016' => '016 - Maybank',
+                            '013' => '013 - Permata',
+                            '028' => '028 - OCBC NISP',
+                            '019' => '019 - Panin',
+                            '426' => '426 - Bank Mega',
+                            '004' => '004 - Bank Jatim',
+                            '006' => '006 - Bank Jateng',
+                            '425' => '425 - BJB',
+                            '046' => '046 - Bank Sumut',
+                        ])
+                        ->searchable()
                         ->required()
                         ->translateLabel(),
                 ]),

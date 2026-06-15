@@ -30,7 +30,7 @@
     {{-- Form Side --}}
     <div class="lg:col-span-3">
       <div class="bg-white rounded-xl shadow-sm border border-[#E5E5E1] p-4 sm:p-8">
-        <form class="space-y-6">
+        <form wire:submit.prevent="create" class="space-y-6">
           {{ $this->form }}
 
           @if(config('turnstile.enabled') && config('turnstile.site_key'))
@@ -42,7 +42,7 @@
             @enderror
           @endif
 
-          <button type="submit" wire:click="create"
+          <button type="submit"
             class="w-full bg-[#1A1A1A] text-white text-sm font-bold py-3 rounded-lg hover:bg-black transition-colors shadow-sm">
             Buat Akun Saya
           </button>

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Constants\Role;
 use App\Models\Coupon;
+use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\Tenants\About;
 use App\Models\Tenants\User;
@@ -57,9 +58,14 @@ class RegisterTenant
             }
         }
 
+        $cheapestPlan = Plan::where('is_active', true)
+            ->where('price_monthly', '>', 0)
+            ->orderBy('price_monthly')
+            ->first() ?? Plan::first();
+
         Subscription::create([
             'tenant_id' => $name,
-            'plan_id' => null,
+            'plan_id' => $cheapestPlan?->id ?? 1,
             'status' => 'trialing',
             'billing_cycle' => 'monthly',
             'trial_ends_at' => now()->addDays($trialDays),

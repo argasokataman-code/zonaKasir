@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cache;
  * @mixin IdeHelperSetting
  */
 use App\Models\Traits\HasTenant;
+use App\Services\TenantContext;
 class Setting extends Model
 {
     use HasTenant;
@@ -38,7 +39,7 @@ class Setting extends Model
     {
         // Update the value in the database
         self::updateOrCreate(
-            ['key' => $key],
+            ['key' => $key, 'tenant_id' => TenantContext::get()],
             ['value' => $value]
         );
 

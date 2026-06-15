@@ -19,6 +19,8 @@ class Dashboard extends BaseDashboard
 {
     use HasFiltersForm;
 
+    protected static string $view = 'filament.tenant.pages.dashboard';
+
     protected function getHeaderWidgets(): array
     {
         return [

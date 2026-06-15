@@ -18,13 +18,18 @@ class SellingOverview extends BaseWidget
 
     protected static ?string $pollingInterval = null;
 
+    protected function getColumns(): int
+    {
+        return count($this->getCachedStats());
+    }
+
     protected function getStats(): array
     {
         $totalRevenue = $this->getTotalRevenue();
         $todaySales = $this->getSalesToday();
         $discountToday = $this->getDiscountToday();
 
-        return [
+        return array_filter([
             can('read revenue overview') ? Stat::make(__('Today total revenue'), $totalRevenue['total_revenue'])
                 ->descriptionIcon($totalRevenue['icon'])
                 ->description($totalRevenue['description'])
@@ -32,7 +37,7 @@ class SellingOverview extends BaseWidget
                 ->color($totalRevenue['color']) : null,
             can('read sales overview') ? Stat::make(__('Sales today'), $todaySales) : null,
             can('read sales overview') ? Stat::make(__('Discount today'), $discountToday) : null,
-        ];
+        ]);
     }
 
     private function getDiscountToday()
