@@ -9,6 +9,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Facades\Log;
 
 class WithdrawalApproval extends Page implements HasForms
 {
@@ -23,10 +24,10 @@ class WithdrawalApproval extends Page implements HasForms
 
     public function mount(): void
     {
-        $this->loadPendingWithdrawals();
+        $this->loadWithdrawals();
     }
 
-    public function loadPendingWithdrawals(): void
+    public function loadWithdrawals(): void
     {
         $tenants = Tenant::all();
         $tenantMap = [];
@@ -35,13 +36,12 @@ class WithdrawalApproval extends Page implements HasForms
             $tenantMap[$t->id] = $data['name'] ?? $t->id;
         }
 
-        $pending = Withdrawal::withoutGlobalScope('tenant')
-            ->where('status', 'pending')
+        $all = Withdrawal::withoutGlobalScope('tenant')
             ->with('requestedBy')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $this->withdrawals = $pending->map(fn ($w) => [
+        $this->withdrawals = $all->map(fn ($w) => [
             'tenant_id' => $w->tenant_id,
             'tenant_name' => $tenantMap[$w->tenant_id] ?? $w->tenant_id,
             'withdrawal_id' => $w->id,
@@ -64,9 +64,14 @@ class WithdrawalApproval extends Page implements HasForms
             app(WithdrawalService::class)->approve($withdrawalId, $adminId);
 
             Notification::make()->title('Withdrawal approved & disbursed via Flip')->success()->send();
-            $this->loadPendingWithdrawals();
+            $this->loadWithdrawals();
         } catch (\Throwable $e) {
+            Log::error('Withdrawal approval failed', [
+                'withdrawal_id' => $withdrawalId,
+                'error' => $e->getMessage(),
+            ]);
             Notification::make()->title('Error: ' . $e->getMessage())->danger()->send();
+            $this->loadWithdrawals();
         }
     }
 
@@ -77,9 +82,14 @@ class WithdrawalApproval extends Page implements HasForms
             app(WithdrawalService::class)->reject($withdrawalId, $adminId, 'Rejected by admin');
 
             Notification::make()->title('Withdrawal rejected')->warning()->send();
-            $this->loadPendingWithdrawals();
+            $this->loadWithdrawals();
         } catch (\Throwable $e) {
+            Log::error('Withdrawal rejection failed', [
+                'withdrawal_id' => $withdrawalId,
+                'error' => $e->getMessage(),
+            ]);
             Notification::make()->title('Error: ' . $e->getMessage())->danger()->send();
+            $this->loadWithdrawals();
         }
     }
 

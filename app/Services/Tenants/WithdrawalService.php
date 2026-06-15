@@ -44,7 +44,13 @@ class WithdrawalService
             throw new \InvalidArgumentException('Informasi bank tidak lengkap');
         }
 
-        return DB::transaction(function () use ($amount, $idempotencyKey, $about) {
+        $autoMax = config('flip.withdrawal_approval.auto_approve_max', 5000000);
+        $singleAdminMax = config('flip.withdrawal_approval.single_admin_max', 25000000);
+        $tenantAge = $about->created_at->diffInDays(now());
+
+        $isAutoApprove = $amount <= $autoMax && $tenantAge >= 30 && $amount <= $singleAdminMax;
+
+        $withdrawal = DB::transaction(function () use ($amount, $idempotencyKey, $about, $isAutoApprove) {
             $available = $this->ledger->getCurrentBalance();
             $maxAllowed = $available * 0.95;
 
@@ -60,20 +66,8 @@ class WithdrawalService
                 );
             }
 
-            $autoMax = config('flip.withdrawal_approval.auto_approve_max', 5000000);
-            $singleAdminMax = config('flip.withdrawal_approval.single_admin_max', 25000000);
-            $tenantAge = $about->created_at->diffInDays(now());
-
-            if ($amount > $singleAdminMax) {
-                $status = 'pending';
-                $approvedBy = null;
-            } elseif ($amount <= $autoMax && $tenantAge >= 30) {
-                $status = 'approved';
-                $approvedBy = auth()->id();
-            } else {
-                $status = 'pending';
-                $approvedBy = null;
-            }
+            $status = $isAutoApprove ? 'approved' : 'pending';
+            $approvedBy = $isAutoApprove ? auth()->id() : null;
 
             $withdrawal = Withdrawal::create([
                 'amount'              => $amount,
@@ -85,7 +79,7 @@ class WithdrawalService
                 'idempotency_key'     => $idempotencyKey,
                 'requested_by'        => auth()->id(),
                 'approved_by'         => $approvedBy,
-                'processed_at'        => $status === 'approved' ? now() : null,
+                'processed_at'        => $isAutoApprove ? now() : null,
             ]);
 
             $this->ledger->entry(
@@ -108,6 +102,60 @@ class WithdrawalService
 
             return $withdrawal;
         });
+
+        if ($isAutoApprove) {
+            try {
+                $feeAmount = (int) config('flip.withdrawal_approval.fee_amount', 2500);
+                $netAmount = $withdrawal->amount - $feeAmount;
+
+                if ($netAmount > 0) {
+                    $result = $this->disbursement->send([
+                        'bank_code'         => $withdrawal->bank_code,
+                        'account_number'    => $withdrawal->bank_account_number,
+                        'account_name'      => $withdrawal->bank_account_name,
+                        'amount'            => $netAmount,
+                        'remark'            => "Zonakasir WD #{$withdrawal->id}",
+                        'idempotency_key'   => $withdrawal->idempotency_key,
+                    ]);
+
+                    $newStatus = match ($result['status'] ?? 'pending') {
+                        'DONE'    => 'completed',
+                        'PENDING' => 'processing',
+                        'FAILED', 'CANCELLED' => 'failed',
+                        default   => 'processing',
+                    };
+
+                    $withdrawal->update([
+                        'status'            => $newStatus,
+                        'disburse_id'       => $result['id'] ?? null,
+                        'disburse_response' => $result,
+                        'fee_amount'        => $feeAmount,
+                    ]);
+                }
+            } catch (\Throwable $e) {
+                Log::error('Auto-approve disbursement failed', [
+                    'withdrawal_id' => $withdrawal->id,
+                    'error' => $e->getMessage(),
+                ]);
+
+                $withdrawal->update([
+                    'status'            => 'failed',
+                    'disburse_response' => ['error' => $e->getMessage()],
+                ]);
+
+                $this->ledger->entry(
+                    ledgerableType: Withdrawal::class,
+                    ledgerableId: $withdrawal->id,
+                    entryType: 'credit',
+                    amount: $withdrawal->amount,
+                    description: "Withdrawal rollback #{$withdrawal->id}: auto-approve failed",
+                    referenceType: 'withdrawal_rollback',
+                    referenceId: $withdrawal->id,
+                );
+            }
+        }
+
+        return $withdrawal->fresh();
     }
 
     /**
