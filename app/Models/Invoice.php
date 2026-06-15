@@ -14,6 +14,7 @@ class Invoice extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
+        'amount' => 'float',
         'paid_at' => 'datetime',
     ];
 

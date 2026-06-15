@@ -13,6 +13,8 @@ class Plan extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
+        'price_monthly' => 'float',
+        'price_yearly' => 'float',
         'features' => 'array',
     ];
 
