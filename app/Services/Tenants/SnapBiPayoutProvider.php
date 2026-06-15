@@ -103,7 +103,7 @@ class SnapBiPayoutProvider implements DisbursementProvider
             'beneficiaryAccountNo' => $params['account_number'],
             'beneficiaryBankCode' => $params['bank_code'],
             'beneficiaryName' => $params['account_name'],
-            'remark' => $params['remark'] ?? 'Zonakasir Disbursement',
+            'remark' => $params['remark'] ?? 'ZK Disbursement',
         ];
 
         $signature = $this->generateSymmetricSignature(

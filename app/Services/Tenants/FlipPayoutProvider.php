@@ -18,7 +18,7 @@ class FlipPayoutProvider implements DisbursementProvider
                 'bank_code'      => $this->mapBankCode($params['bank_code']),
                 'account_number' => $params['account_number'],
                 'amount'         => (int) round($params['amount']), // Round instead of truncate
-                'remark'         => $params['remark'] ?? 'ZonaKasir Disbursement',
+                'remark'         => $params['remark'] ?? 'ZK Disbursement',
             ]);
 
         if ($response->failed()) {
