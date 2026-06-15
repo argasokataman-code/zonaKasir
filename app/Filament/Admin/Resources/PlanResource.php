@@ -30,13 +30,10 @@ class PlanResource extends Resource
         $all = config('plans.features', []);
 
         return [
-            'Point of Sale' => array_intersect_key($all, array_flip(['pos', 'report', 'total_revenue', 'payment_shortcut'])),
-            'Products' => array_intersect_key($all, array_flip(['product_barcode', 'product_sku', 'product_type', 'product_expired', 'product_initial_price', 'product_import', 'selling_tax'])),
-            'Inventory' => array_intersect_key($all, array_flip(['stock_management', 'stock_opname'])),
-            'Transactions' => array_intersect_key($all, array_flip(['print_selling_a5', 'print_product_label', 'voucher'])),
-            'Customers' => array_intersect_key($all, array_flip(['member_management'])),
-            'Purchasing' => array_intersect_key($all, array_flip(['purchasing', 'receivable', 'supplier'])),
-            'Management' => array_intersect_key($all, array_flip(['user_management', 'role_permission', 'edit_profile', 'multi_store'])),
+            'Product' => array_intersect_key($all, array_flip(['product_stock', 'product_sku', 'product_barcode', 'product_type', 'product_expired', 'product_initial_price', 'product_import'])),
+            'Selling' => array_intersect_key($all, array_flip(['print_selling_a5', 'print_product_label', 'selling_tax', 'payment_shortcut_button', 'total_revenue_in_selling_table', 'discount'])),
+            'Modules' => array_intersect_key($all, array_flip(['supplier', 'purchasing', 'receivable', 'stock_opname', 'voucher', 'member', 'payment_method'])),
+            'Access' => array_intersect_key($all, array_flip(['user', 'role', 'permission', 'edit_profile'])),
         ];
     }
 
