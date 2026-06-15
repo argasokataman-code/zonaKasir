@@ -25,15 +25,15 @@
           target="_blank"
           class="inline-flex items-center gap-1.5 text-sm font-semibold text-white bg-green-600 hover:bg-green-500 px-6 py-3 rounded-lg transition-colors"
         >
-          Pay Now
+          {{ __('Pay Now') }}
         </a>
-        <p class="text-sm text-blue-600 mt-3">Jika tidak teralihkan, klik tombol di atas.</p>
+        <p class="text-sm text-blue-600 mt-3">{{ __('If not redirected, click the button above.') }}</p>
     </div>
     @endif
 
     @if($current)
     <div class="bg-white border border-[#E5E5E1] rounded-[6px] p-6 mb-6 shadow-sm">
-        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Current Plan</h2>
+        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">{{ __('Current Plan') }}</h2>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div>
                 <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Plan</p>
@@ -56,13 +56,13 @@
                 <p class="text-lg font-bold text-gray-900 mt-1">{{ ucfirst($current['billing_cycle']) }}</p>
             </div>
             <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Limits</p>
+                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Limits') }}</p>
                 <p class="text-lg font-bold text-gray-900 mt-1">{{ $current['max_stores'] }} stores / {{ $current['max_users'] }} users</p>
             </div>
         </div>
         @if(count($current['features']) > 0)
         <div class="mt-4 pt-4 border-t border-gray-100">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Features</p>
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">{{ __('Features') }}</p>
             <div class="flex flex-wrap gap-1.5">
                 @foreach($current['features'] as $feature)
                 <span class="px-2 py-0.5 bg-green-50 text-green-700 text-[10px] font-medium rounded-full border border-green-200">{{ $feature }}</span>
@@ -74,7 +74,7 @@
     @endif
 
     <div class="mb-6">
-        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Available Plans</h2>
+        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">{{ __('Available Plans') }}</h2>
         <div class="grid gap-4 pb-2 sm:overflow-x-auto sm:-mx-6 sm:px-6 sm:flex sm:flex-nowrap sm:scrollbar-thin" style="grid-template-columns: 1fr;">
             @foreach($plans as $plan)
             <div
@@ -83,14 +83,14 @@
             >
                     @if(($plan['is_popular'] ?? false) && $plan['price_monthly'] > 0)
                     <div class="absolute top-0 right-0 bg-gray-900 text-white text-[8px] font-mono font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-bl-[4px] rounded-tr-[5px]">
-                        Popular
+                        {{ __('Popular') }}
                     </div>
                     @endif
 
                     <div class="p-5 flex flex-col h-full">
                         <div>
                             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">
-                                {{ $plan['max_stores'] > 10 ? 'Enterprise' : ($plan['max_stores'] > 1 ? 'Bisnis' : 'Pemula') }}
+                                {{ $plan['max_stores'] > 10 ? __('Enterprise') : ($plan['max_stores'] > 1 ? __('Business') : __('Starter')) }}
                             </span>
                             <h3 class="font-sans font-bold text-base text-gray-900">
                                 {{ $plan['name'] }}
@@ -99,22 +99,22 @@
 
                         <div class="py-3 my-3 border-y border-gray-100">
                             @if(($plan['is_on_premise'] ?? false))
-                                <span class="font-mono text-xl font-black text-gray-900">Custom</span>
-                                <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">Self-Hosted</span>
+                                <span class="font-mono text-xl font-black text-gray-900">{{ __('Custom') }}</span>
+                                <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">{{ __('Self-Hosted') }}</span>
                             @elseif(($plan['price_monthly'] ?? 0) === 0)
-                                <span class="font-mono text-2xl font-black text-gray-900">Gratis</span>
-                                <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">Selamanya</span>
+                                <span class="font-mono text-2xl font-black text-gray-900">{{ __('Free') }}</span>
+                                <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">{{ __('Forever') }}</span>
                             @else
                                 <span class="font-mono text-2xl font-black text-gray-900">Rp {{ number_format($plan['price_monthly'], 0, ',', '.') }}</span>
-                                <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">Per Bulan</span>
+                                <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">{{ __('Per Month') }}</span>
                                 @if($plan['price_yearly'])
-                                <span class="text-[9px] text-gray-400 block mt-0.5">Rp {{ number_format($plan['price_yearly'], 0, ',', '.') }}/tahun</span>
+                                <span class="text-[9px] text-gray-400 block mt-0.5">Rp {{ number_format($plan['price_yearly'], 0, ',', '.') }}/{{ __('year') }}</span>
                                 @endif
                             @endif
                         </div>
 
                         <div class="text-[10px] text-gray-400 font-semibold mb-2">
-                            {{ $plan['max_stores'] }} outlet / {{ $plan['max_users'] }} user
+                            {{ $plan['max_stores'] }} {{ __('outlets') }} / {{ $plan['max_users'] }} {{ __('users') }}
                         </div>
 
                         @if(!empty($plan['features']))
@@ -123,7 +123,7 @@
                             x-on:click="open = !open"
                             class="w-full flex items-center justify-between text-[10px] font-bold text-gray-900 uppercase tracking-wider py-1.5 border-t border-gray-100 cursor-pointer hover:text-gray-600 transition-colors"
                         >
-                            <span>Fitur ({{ count($plan['features']) }})</span>
+                            <span>{{ __('Features') }} ({{ count($plan['features']) }})</span>
                             <svg class="w-3 h-3 transition-transform duration-200" x-bind:class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
 
@@ -154,9 +154,9 @@
                                             x-on:click="if (selectedBilling) { $wire.subscribePlan({{ $plan['id'] }}, selectedBilling) } else { showBilling = !showBilling }"
                                             class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-green-600 text-white rounded-[4px] hover:bg-green-500 transition-colors cursor-pointer"
                                         >
-                                            <span x-show="!selectedBilling">Bayar Sekarang</span>
-                                            <span x-show="selectedBilling === 'monthly'">Bayar Sekarang - Bulanan</span>
-                                            <span x-show="selectedBilling === 'yearly'">Bayar Sekarang - Tahunan</span>
+                                            <span x-show="!selectedBilling">{{ __('Pay Now') }}</span>
+                                            <span x-show="selectedBilling === 'monthly'">{{ __('Pay Now') }} - {{ __('Monthly') }}</span>
+                                            <span x-show="selectedBilling === 'yearly'">{{ __('Pay Now') }} - {{ __('Yearly') }}</span>
                                         </button>
 
                                         <div
@@ -170,7 +170,7 @@
                                                 x-on:click="selectedBilling = 'monthly'; showBilling = false"
                                                 class="w-full text-left px-3 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer flex items-center justify-between"
                                             >
-                                                <span>Bulanan</span>
+                                                <span>{{ __('Monthly') }}</span>
                                                 <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                                             </button>
                                             @if(($plan['price_yearly'] ?? 0) > 0)
@@ -179,23 +179,23 @@
                                                 x-on:click="selectedBilling = 'yearly'; showBilling = false"
                                                 class="w-full text-left px-3 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 border-t border-gray-100 transition-colors cursor-pointer flex items-center justify-between"
                                             >
-                                                <span>Tahunan</span>
+                                                <span>{{ __('Yearly') }}</span>
                                                 <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                                             </button>
                                             @endif
                                         </div>
                                     @else
-                                        <span class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-900 text-white rounded-[4px]">Paket Aktif</span>
+                                        <span class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-900 text-white rounded-[4px]">{{ __('Active Plan') }}</span>
                                     @endif
                             @elseif(($plan['price_monthly'] ?? 0) === 0)
-                                <span class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-100 text-gray-500 rounded-[4px]">Gratis</span>
+                                <span class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-100 text-gray-500 rounded-[4px]">{{ __('Free') }}</span>
                             @else
                                 <button
                                     type="button"
                                     x-on:click="showBilling = !showBilling"
                                     class="block w-full text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-900 text-white rounded-[4px] hover:bg-gray-700 transition-colors cursor-pointer"
                                 >
-                                    {{ $current ? 'Ganti Paket' : 'Upgrade Sekarang' }}
+                                    {{ $current ? __('Switch Plan') : __('Upgrade Now') }}
                                 </button>
 
                                 <div
@@ -207,19 +207,19 @@
                                     @if($current)
                                     <button
                                         type="button"
-                                        x-on:click="showConfirm = true; confirmPlan = {{ $plan['id'] }}; confirmBilling = 'monthly'; showBilling = false"
+                                        x-on:click="showConfirm = true; confirmPlan = {{ $plan['id'] }}; confirmBilling = 'monthly'; confirmPlanName = '{{ $plan['name'] }}'; showBilling = false"
                                         class="w-full text-left px-3 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer flex items-center justify-between"
                                     >
-                                        <span>Bulanan</span>
+                                        <span>{{ __('Monthly') }}</span>
                                         <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                                     </button>
                                     @if(($plan['price_yearly'] ?? 0) > 0)
                                     <button
                                         type="button"
-                                        x-on:click="showConfirm = true; confirmPlan = {{ $plan['id'] }}; confirmBilling = 'yearly'; showBilling = false"
+                                        x-on:click="showConfirm = true; confirmPlan = {{ $plan['id'] }}; confirmBilling = 'yearly'; confirmPlanName = '{{ $plan['name'] }}'; showBilling = false"
                                         class="w-full text-left px-3 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 border-t border-gray-100 transition-colors cursor-pointer flex items-center justify-between"
                                     >
-                                        <span>Tahunan</span>
+                                        <span>{{ __('Yearly') }}</span>
                                         <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                                     </button>
                                     @endif
@@ -229,7 +229,7 @@
                                         wire:click="subscribePlan({{ $plan['id'] }}, 'monthly')"
                                         class="w-full text-left px-3 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer flex items-center justify-between"
                                     >
-                                        <span>Bulanan</span>
+                                        <span>{{ __('Monthly') }}</span>
                                         <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                                     </button>
                                     @if(($plan['price_yearly'] ?? 0) > 0)
@@ -238,7 +238,7 @@
                                         wire:click="subscribePlan({{ $plan['id'] }}, 'yearly')"
                                         class="w-full text-left px-3 py-2.5 text-xs font-semibold text-gray-700 hover:bg-gray-50 border-t border-gray-100 transition-colors cursor-pointer flex items-center justify-between"
                                     >
-                                        <span>Tahunan</span>
+                                        <span>{{ __('Yearly') }}</span>
                                         <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                                     </button>
                                     @endif
@@ -252,22 +252,28 @@
                                 >
                                     <div class="absolute inset-0 bg-black/50" x-on:click="showConfirm = false"></div>
                                     <div class="relative bg-white rounded-[8px] shadow-xl w-full max-w-sm p-6">
-                                        <h3 class="text-sm font-bold text-gray-900 mb-1">Konfirmasi Ganti Paket</h3>
-                                        <p class="text-xs text-gray-500 mb-4">Anda akan mengganti paket ke <span class="font-bold" x-text="confirmBilling === 'yearly' ? 'Tahunan' : 'Bulanan'"></span>. Lanjutkan?</p>
+                                        <h3 class="text-sm font-bold text-gray-900 mb-1">{{ __('Confirm Plan Change') }}</h3>
+                                        <p class="text-xs text-gray-500 mb-1">
+                                            {{ __('Your current plan is') }} <span class="font-bold text-gray-900">{{ $current['name'] ?? '—' }}</span>.
+                                        </p>
+                                        <p class="text-xs text-gray-500 mb-4">
+                                            {{ __('Switch to') }} <span class="font-bold text-gray-900" x-text="confirmPlanName"></span>
+                                            (<span x-text="confirmBilling === 'yearly' ? '{{ __("Yearly") }}' : '{{ __("Monthly") }}'"></span>)?
+                                        </p>
                                         <div class="flex gap-2">
                                             <button
                                                 type="button"
                                                 x-on:click="showConfirm = false"
                                                 class="flex-1 text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-100 text-gray-600 rounded-[4px] hover:bg-gray-200 transition-colors cursor-pointer"
                                             >
-                                                Batal
+                                                {{ __('Cancel') }}
                                             </button>
                                             <button
                                                 type="button"
                                                 x-on:click="$wire.subscribePlan(confirmPlan, confirmBilling); showConfirm = false"
                                                 class="flex-1 text-center text-[10px] font-bold uppercase tracking-widest py-2 bg-gray-900 text-white rounded-[4px] hover:bg-gray-700 transition-colors cursor-pointer"
                                             >
-                                                Ya, Ganti
+                                                {{ __('Yes, Switch') }}
                                             </button>
                                         </div>
                                     </div>
@@ -284,16 +290,16 @@
     @php $invoices = app(\App\Filament\Tenant\Pages\ManageSubscription::class)->getInvoices(); @endphp
     @if(count($invoices) > 0)
     <div class="bg-white border border-[#E5E5E1] rounded-[6px] p-6 shadow-sm">
-        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Invoice History</h2>
+        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">{{ __('Invoice History') }}</h2>
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead>
                     <tr class="border-b border-gray-200 text-left">
-                        <th class="py-2 pr-4 font-bold text-gray-500 text-[10px] uppercase tracking-widest">Invoice</th>
-                        <th class="py-2 pr-4 font-bold text-gray-500 text-[10px] uppercase tracking-widest">Amount</th>
-                        <th class="py-2 pr-4 font-bold text-gray-500 text-[10px] uppercase tracking-widest">Status</th>
-                        <th class="py-2 pr-4 font-bold text-gray-500 text-[10px] uppercase tracking-widest">Date</th>
-                        <th class="py-2 font-bold text-gray-500 text-[10px] uppercase tracking-widest">Payment</th>
+                        <th class="py-2 pr-4 font-bold text-gray-500 text-[10px] uppercase tracking-widest">{{ __('Invoice') }}</th>
+                        <th class="py-2 pr-4 font-bold text-gray-500 text-[10px] uppercase tracking-widest">{{ __('Amount') }}</th>
+                        <th class="py-2 pr-4 font-bold text-gray-500 text-[10px] uppercase tracking-widest">{{ __('Status') }}</th>
+                        <th class="py-2 pr-4 font-bold text-gray-500 text-[10px] uppercase tracking-widest">{{ __('Date') }}</th>
+                        <th class="py-2 font-bold text-gray-500 text-[10px] uppercase tracking-widest">{{ __('Payment') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -303,9 +309,9 @@
                         <td class="py-3 pr-4 font-medium text-sm">Rp {{ number_format($inv['amount'], 0, ',', '.') }}</td>
                         <td class="py-3 pr-4">
                             @if($inv['status'] === 'paid')
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-800">Paid</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-800">{{ __('Paid') }}</span>
                             @elseif($inv['status'] === 'pending')
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-800">Pending</span>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-800">{{ __('Pending') }}</span>
                             @else
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800">{{ ucfirst($inv['status']) }}</span>
                             @endif
