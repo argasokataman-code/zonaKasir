@@ -4,7 +4,7 @@ namespace App\Filament\Admin\Pages;
 
 use App\Models\Invoice;
 use App\Models\Subscription;
-use App\Models\Tenant;
+use App\Tenant;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\DB;
 
