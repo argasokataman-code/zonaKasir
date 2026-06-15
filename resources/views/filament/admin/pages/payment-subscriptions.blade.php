@@ -153,6 +153,81 @@
             </x-filament::section>
         </div>
 
+        {{-- Row 5: Charts --}}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <x-filament::section heading="Monthly Revenue Trend">
+                <div class="p-2">
+                    <canvas id="revenueChart" style="height:250px"></canvas>
+                </div>
+            </x-filament::section>
+            <x-filament::section heading="Revenue Breakdown">
+                <div class="p-2">
+                    <canvas id="breakdownChart" style="height:250px"></canvas>
+                </div>
+            </x-filament::section>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Monthly trend
+                var months = @json(array_column($monthlyTrend, 'month'));
+                var amounts = @json(array_map(fn($m) => (int) $m['total_amount'], $monthlyTrend));
+
+                if (months.length && document.getElementById('revenueChart')) {
+                    new Chart(document.getElementById('revenueChart'), {
+                        type: 'bar',
+                        data: {
+                            labels: months,
+                            datasets: [{
+                                label: 'Revenue',
+                                data: amounts,
+                                backgroundColor: 'rgba(34, 197, 94, 0.7)',
+                                borderColor: 'rgb(34, 197, 94)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: { callback: function(v) { return 'Rp ' + v.toLocaleString('id-ID'); } }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Breakdown by plan
+                var plans = @json(array_column($revenueByPlan, 'plan_name'));
+                var planAmounts = @json(array_map(fn($p) => (int) $p['total_amount'], $revenueByPlan));
+
+                if (plans.length && document.getElementById('breakdownChart')) {
+                    var colors = ['#22c55e', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'];
+                    new Chart(document.getElementById('breakdownChart'), {
+                        type: 'doughnut',
+                        data: {
+                            labels: plans,
+                            datasets: [{
+                                data: planAmounts,
+                                backgroundColor: colors.slice(0, plans.length),
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { position: 'bottom' }
+                            }
+                        }
+                    });
+                }
+            });
+        </script>
+
         {{-- Row 4: Payment Health --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <x-filament::section>

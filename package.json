@@ -9,6 +9,7 @@
         "build:all": "npm run build && npm run landing:build"
     },
     "dependencies": {
+        "chart.js": "^4.5.1",
         "cookie": "^0.7.0",
         "html5-qrcode": "^2.3.8",
         "idb": "^8.0.0"
