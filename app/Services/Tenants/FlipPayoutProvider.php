@@ -36,6 +36,13 @@ class FlipPayoutProvider implements DisbursementProvider
 
         $data = $response->json();
 
+        Log::info('Flip disbursement success', [
+            'id' => $data['id'] ?? $params['idempotency_key'],
+            'status' => $data['status'] ?? 'unknown',
+            'bank_code' => $params['bank_code'] ?? '?',
+            'amount' => $params['amount'] ?? 0,
+        ]);
+
         return [
             'id' => $data['id'] ?? $params['idempotency_key'],
             'status' => $data['status'] ?? 'pending',
