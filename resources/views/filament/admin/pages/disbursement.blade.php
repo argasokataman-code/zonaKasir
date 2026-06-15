@@ -128,11 +128,11 @@
                                             {{-- Amount Input --}}
                                             <div>
                                                 <label class="block text-sm font-medium text-gray-700 mb-1">Nominal (Total Debit dari Flip)</label>
-                                                <div class="relative">
-                                                    <span class="absolute left-3 top-2 text-gray-500">Rp</span>
+                                                <div class="flex items-center border border-gray-300 rounded-lg shadow-sm focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
+                                                    <span class="pl-3 pr-1 py-2 text-gray-500 text-sm bg-gray-50 border-r border-gray-300 rounded-l-lg">Rp</span>
                                                     <input type="number" wire:model="transferAmount" min="50000" step="1000"
-                                                        class="w-full pl-10 border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                                                        placeholder="Min. Rp 50.000">
+                                                        class="flex-1 border-0 py-2 px-3 text-sm focus:ring-0 focus:outline-none"
+                                                        placeholder="50.000">
                                                 </div>
                                             </div>
 
