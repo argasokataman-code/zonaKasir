@@ -77,10 +77,15 @@
                                 <select wire:model="selectedTenantId" class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                     <option value="">Pilih tenant...</option>
                                     @foreach ($tenants as $t)
-                                        <option value="{{ $t['id'] }}" {{ $t['has_bank'] ? '' : 'disabled' }}>
-                                            {{ $t['name'] }} ({{ $t['shop_name'] }})
-                                            @if (! $t['has_bank']) - Tidak ada bank@endif
-                                        </option>
+                                        @if ($t['has_bank'])
+                                            <option value="{{ $t['id'] }}">
+                                                {{ $t['name'] }} ({{ $t['shop_name'] }})
+                                            </option>
+                                        @else
+                                            <option value="{{ $t['id'] }}" disabled>
+                                                {{ $t['name'] }} ({{ $t['shop_name'] }}) - Tidak ada bank
+                                            </option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
