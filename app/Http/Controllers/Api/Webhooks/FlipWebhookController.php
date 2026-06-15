@@ -45,27 +45,44 @@ class FlipWebhookController extends Controller
             $disbursementData = $payload;
         }
 
-        // ── Bank inquiry webhook has inquiry_key, disbursement has id ──
-        $inquiryKey = $disbursementData['inquiry_key'] ?? null;
+        // ── Detect event type from fields ──
         $disbursementId = $disbursementData['id'] ?? null;
         $status = $disbursementData['status'] ?? null;
 
-        // ── Skip bank inquiry webhooks (not disbursement status) ──
-        if ($inquiryKey && ! $disbursementId) {
-            Log::info('Flip webhook: Bank inquiry result — skipped', [
-                'inquiry_key' => $inquiryKey,
-                'status' => $status,
+        // ── Skip non-disbursement webhooks ──
+        $type = match (true) {
+            ! empty($disbursementData['inquiry_key'])        => 'bank_inquiry',
+            ! empty($disbursementData['bill_link_id'])        => 'bill_link',
+            ! empty($disbursementData['agent_id'])            => 'agent_kyc',
+            ! empty($disbursementData['kyc_status'])          => 'agent_kyc',
+            default => null,
+        };
+        if ($type) {
+            Log::info("Flip webhook: {$type} — skipped", [
+                'id' => $disbursementId ?? '?',
+                'status' => $status ?? '?',
             ]);
-            return response()->json(['message' => 'Ignored inquiry'], 200);
+            return response()->json(['message' => "Ignored {$type}"], 200);
         }
 
-        if (! $disbursementId || ! $status) {
-            Log::warning('Flip webhook: Missing required fields', [
-                'has_id' => ! is_null($disbursementId),
-                'has_status' => ! is_null($status),
-                'payload_keys' => array_keys($payload),
+        // ── Disbursement webhook must have numeric id + valid status ──
+        if (! $disbursementId || ! is_numeric($disbursementId)) {
+            Log::info('Flip webhook: non-disbursement — skipped', [
+                'id' => $disbursementId ?? '(none)',
+                'status' => $status ?? '(none)',
+                'keys' => array_keys($disbursementData),
             ]);
-            return response()->json(['message' => 'Missing required fields'], 400);
+            return response()->json(['message' => 'Ignored'], 200);
+        }
+
+        $disbursementId = (string) $disbursementId;
+        $validDisbursementStatuses = ['DONE', 'FAILED', 'CANCELLED', 'SUCCESS'];
+        if (! $status || ! in_array($status, $validDisbursementStatuses)) {
+            Log::info('Flip webhook: non-disbursement status — skipped', [
+                'id' => $disbursementId,
+                'status' => $status ?? '(none)',
+            ]);
+            return response()->json(['message' => 'Ignored status'], 200);
         }
 
         $withdrawal = Withdrawal::where('disburse_id', $disbursementId)->first();
