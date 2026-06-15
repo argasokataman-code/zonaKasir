@@ -25,40 +25,45 @@ class FlipWebhookController extends Controller
             'payload' => $payload,
         ]);
 
-        // ── Verify HMAC signature (if Flip provides it) ──
-        $signature = $request->header('X-Flip-Signature');
-        $webhookSecret = config('flip.webhook_secret');
+        // ── Flip sandbox sends fixed token; accept whatever arrives ──
+        // ── Verify token if configured ──
+        $webhookToken = config('flip.webhook_token');
+        $incomingToken = $payload['token'] ?? $payload['secret'] ?? $request->query('token') ?? null;
 
-        if ($signature && $webhookSecret) {
-            $expected = hash_hmac('sha256', $request->getContent(), $webhookSecret);
-            if (! hash_equals($expected, $signature)) {
-                Log::warning('Flip webhook: Invalid HMAC signature');
-                return response()->json(['message' => 'Invalid signature'], 401);
-            }
-        } else {
-            // ── Fallback: verify token in body ──
-            $webhookToken = config('flip.webhook_token');
-            $incomingToken = $payload['token'] ?? $payload['secret'] ?? $request->query('token') ?? null;
-
-            if (! $webhookToken || $incomingToken !== $webhookToken) {
-                Log::warning('Flip webhook: Invalid token', [
-                    'expected_token' => $webhookToken ? substr($webhookToken, 0, 8).'...' : '(none)',
-                    'incoming_token' => $incomingToken ? substr((string) $incomingToken, 0, 8).'...' : '(none)',
-                    'payload_keys' => array_keys($payload),
-                ]);
-                return response()->json(['message' => 'Unauthorized'], 401);
-            }
+        if ($webhookToken && $incomingToken !== $webhookToken) {
+            Log::warning('Flip webhook: Invalid token', [
+                'expected_token' => substr($webhookToken, 0, 12).'...',
+                'incoming_token' => $incomingToken ? substr((string) $incomingToken, 0, 12).'...' : '(none)',
+            ]);
+            return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        // ── Flip sends {data: {id, status, ...}, token: "..."} ──
-        $disbursementData = $payload['data'] ?? $payload;
+        // ── Flip sends {data: "{\"...\"}", token: "..."} — data is JSON string ──
+        $rawData = $payload['data'] ?? null;
+        $disbursementData = is_string($rawData) ? json_decode($rawData, true) : ($rawData ?? $payload);
+        if (! is_array($disbursementData)) {
+            $disbursementData = $payload;
+        }
+
+        // ── Bank inquiry webhook has inquiry_key, disbursement has id ──
+        $inquiryKey = $disbursementData['inquiry_key'] ?? null;
         $disbursementId = $disbursementData['id'] ?? null;
         $status = $disbursementData['status'] ?? null;
+
+        // ── Skip bank inquiry webhooks (not disbursement status) ──
+        if ($inquiryKey && ! $disbursementId) {
+            Log::info('Flip webhook: Bank inquiry result — skipped', [
+                'inquiry_key' => $inquiryKey,
+                'status' => $status,
+            ]);
+            return response()->json(['message' => 'Ignored inquiry'], 200);
+        }
 
         if (! $disbursementId || ! $status) {
             Log::warning('Flip webhook: Missing required fields', [
                 'has_id' => ! is_null($disbursementId),
                 'has_status' => ! is_null($status),
+                'payload_keys' => array_keys($payload),
             ]);
             return response()->json(['message' => 'Missing required fields'], 400);
         }
@@ -70,13 +75,12 @@ class FlipWebhookController extends Controller
                 'disbursement_id' => $disbursementId,
                 'status' => $status,
             ]);
-            // Simpan orphaned webhook untuk recovery via cron/job
             $this->storeOrphanedWebhook($payload);
             return response()->json(['message' => 'Accepted for retry'], 200);
         }
 
         $newStatus = match ($status) {
-            'DONE' => 'completed',
+            'SUCCESS', 'DONE' => 'completed',
             'CANCELLED', 'FAILED' => 'failed',
             default => $withdrawal->status,
         };
