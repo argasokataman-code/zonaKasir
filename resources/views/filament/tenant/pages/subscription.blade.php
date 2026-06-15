@@ -89,14 +89,12 @@
 
     <div class="mb-6">
         <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Available Plans</h2>
-        <div class="overflow-x-auto -mx-6 px-6 pb-2 scrollbar-thin">
-            <div class="flex gap-4" style="min-width: min-content;">
-                @foreach($plans as $plan)
-                <div
-                    x-data="{ open: false }"
-                    class="bg-white rounded-[6px] shadow-sm flex flex-col relative border @if($current && $current['id'] === $plan['id']) border-2 border-gray-900 shadow-md @else border-[#E5E5E1] @endif"
-                    style="width: 280px; min-width: 280px; flex-shrink: 0;"
-                >
+        <div class="grid gap-4 pb-2 sm:overflow-x-auto sm:-mx-6 sm:px-6 sm:flex sm:flex-nowrap sm:scrollbar-thin" style="grid-template-columns: 1fr;">
+            @foreach($plans as $plan)
+            <div
+                x-data="{ open: false }"
+                class="bg-white rounded-[6px] shadow-sm flex flex-col relative border @if($current && $current['id'] === $plan['id']) border-2 border-gray-900 shadow-md @else border-[#E5E5E1] @endif w-full sm:flex-shrink-0 sm:w-[280px] sm:min-w-[280px]"
+            >
                     @if(($plan['is_popular'] ?? false) && $plan['price_monthly'] > 0)
                     <div class="absolute top-0 right-0 bg-gray-900 text-white text-[8px] font-mono font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-bl-[4px] rounded-tr-[5px]">
                         Popular

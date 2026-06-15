@@ -20,7 +20,7 @@ class Role extends ModelsRole
      */
     public const PERMISSION_GROUPS = [
         'kasir' => [
-            'label' => 'Kasir (POS)',
+            'label' => 'Sales',
             'icon' => 'heroicon-o-banknotes',
             'web' => [
                 'create selling', 'read selling', 'update selling', 'delete selling',
@@ -58,7 +58,7 @@ class Role extends ModelsRole
             ],
         ],
         'pelanggan' => [
-            'label' => 'Pelanggan',
+            'label' => 'Members',
             'icon' => 'heroicon-o-users',
             'web' => [
                 'create member', 'read member', 'update member', 'delete member',
@@ -72,7 +72,7 @@ class Role extends ModelsRole
             ],
         ],
         'user' => [
-            'label' => 'User & Akses',
+            'label' => 'User',
             'icon' => 'heroicon-o-key',
             'web' => [
                 'create user', 'read user', 'update user', 'delete user',
@@ -82,7 +82,7 @@ class Role extends ModelsRole
             'sanctum' => [],
         ],
         'laporan' => [
-            'label' => 'Laporan',
+            'label' => 'Report',
             'icon' => 'heroicon-o-chart-bar',
             'web' => [
                 'generate cashier report',
@@ -99,7 +99,7 @@ class Role extends ModelsRole
             ],
         ],
         'promo' => [
-            'label' => 'Promo & Keuangan',
+            'label' => 'General',
             'icon' => 'heroicon-o-ticket',
             'web' => [
                 'create voucher', 'read voucher', 'update voucher', 'delete voucher',
@@ -112,7 +112,7 @@ class Role extends ModelsRole
             ],
         ],
         'setting' => [
-            'label' => 'Setting & Lainnya',
+            'label' => 'Setting',
             'icon' => 'heroicon-o-cog-6-tooth',
             'web' => [
                 'access general setting',

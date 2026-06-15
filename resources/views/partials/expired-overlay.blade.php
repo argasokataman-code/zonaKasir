@@ -41,23 +41,23 @@
 <div
   x-data="expiredOverlay()"
   x-init="init()"
-  class="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
+  class="fixed inset-0 z-[9999] flex items-center justify-center"
   style="display: none;"
 >
   {{-- Backdrop blur --}}
   <div class="absolute inset-0 bg-white/70 backdrop-blur-md"></div>
 
-  {{-- Overlay content --}}
-  <div class="relative z-10 w-full max-w-6xl max-h-full flex flex-col items-center justify-center px-6 py-8 overflow-hidden">
+  {{-- Overlay content — scrollable on all devices --}}
+  <div class="relative z-10 w-full h-full flex flex-col items-center px-4 py-6 sm:px-6 md:px-8 overflow-y-auto overflow-x-hidden overscroll-contain">
     {{-- Header --}}
-    <div class="text-center mb-6 shrink-0">
+    <div class="text-center mb-4 sm:mb-6 shrink-0">
       <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-red-100 mb-3">
         <svg class="w-7 h-7 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
         </svg>
       </div>
-      <h2 class="text-xl font-bold text-gray-900 mb-1">Masa Trial Telah Habis</h2>
-      <p class="text-sm text-gray-500 mb-3">Pilih paket di bawah untuk melanjutkan menggunakan aplikasi</p>
+      <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-1">Masa Trial Telah Habis</h2>
+      <p class="text-xs sm:text-sm text-gray-500 mb-3">Pilih paket di bawah untuk melanjutkan menggunakan aplikasi</p>
       <div class="flex items-center justify-center gap-3">
         <a href="{{ config('app.url') }}" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-600 hover:text-gray-900 transition-colors">
           <span>Kunjungi Website</span>
@@ -74,13 +74,15 @@
       </div>
     </div>
 
-    {{-- Plans grid --}}
-    <div class="w-full min-h-0 overflow-y-auto flex justify-center">
-      <div class="grid gap-4 justify-items-center" style="grid-template-columns: repeat(auto-fit, minmax(240px, 280px)); max-width: 1200px;">
+    {{-- Plans grid — fully responsive --}}
+    <div class="w-full shrink-0 pb-8">
+      <div class="grid gap-3 sm:gap-4 justify-items-center mx-auto"
+           style="grid-template-columns: 1fr; max-width: 1200px;"
+           @media (min-width: 640px) { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); } >
         @foreach($plans as $plan)
         <div
           x-data="{ open: false }"
-          class="bg-white rounded-[8px] shadow-lg flex flex-col relative border border-gray-200 w-full"
+          class="bg-white rounded-[8px] shadow-lg flex flex-col relative border border-gray-200 w-full max-w-[360px]"
         >
           @if(($plan['is_popular'] ?? false) && $plan['price_monthly'] > 0)
           <div class="absolute top-0 right-0 bg-gray-900 text-white text-[8px] font-mono font-bold uppercase tracking-widest px-3 py-1 rounded-bl-[4px] rounded-tr-[7px]">
@@ -88,12 +90,12 @@
           </div>
           @endif
 
-          <div class="p-5 flex flex-col h-full">
+          <div class="p-4 sm:p-5 flex flex-col h-full">
             <div>
               <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">
                 {{ $plan['max_stores'] > 10 ? 'Enterprise' : ($plan['max_stores'] > 1 ? 'Bisnis' : 'Pemula') }}
               </span>
-              <h3 class="font-sans font-bold text-base text-gray-900">{{ $plan['name'] }}</h3>
+              <h3 class="font-sans font-bold text-sm sm:text-base text-gray-900">{{ $plan['name'] }}</h3>
             </div>
 
             <div class="py-3 my-3 border-y border-gray-100">
@@ -104,7 +106,7 @@
                 <span class="font-mono text-2xl font-black text-gray-900">Gratis</span>
                 <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">Selamanya</span>
               @else
-                <span class="font-mono text-2xl font-black text-gray-900">Rp {{ number_format($plan['price_monthly'], 0, ',', '.') }}</span>
+                <span class="font-mono text-xl sm:text-2xl font-black text-gray-900">Rp {{ number_format($plan['price_monthly'], 0, ',', '.') }}</span>
                 <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">Per Bulan</span>
                 @if($plan['price_yearly'])
                 <span class="text-[9px] text-gray-400 block mt-0.5">Rp {{ number_format($plan['price_yearly'], 0, ',', '.') }}/tahun</span>
