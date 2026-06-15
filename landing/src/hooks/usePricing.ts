@@ -15,7 +15,7 @@ export interface Plan {
 }
 
 const API_URL = '/api/pricing';
-const CACHE_KEY = 'pricing_cache_v3';
+const CACHE_KEY = 'pricing_cache_v4';
 
 const FALLBACK_PLANS: Plan[] = [
   {
