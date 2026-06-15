@@ -39,7 +39,7 @@ describe('Withdrawal E2E Flow', function () {
 
     it('balance starts at 0', function () {
         $balance = app(LedgerService::class)->getCurrentBalance();
-        expect($balance)->toBe(0.0);
+        expect($balance)->toBe(0);
     });
 
     it('cannot withdraw with 0 balance', function () {
@@ -107,7 +107,7 @@ describe('Withdrawal E2E Flow', function () {
         );
 
         expect($withdrawal)->toBeInstanceOf(Withdrawal::class);
-        expect($withdrawal->amount)->toBe(50000.0);
+        expect($withdrawal->amount)->toBe(50000);
         expect($withdrawal->bank_name)->toBe('BCA');
         expect($withdrawal->status)->toBeIn(['pending', 'approved']);
     });
@@ -131,7 +131,7 @@ describe('Withdrawal E2E Flow', function () {
         );
         $balanceAfter = app(LedgerService::class)->getCurrentBalance();
 
-        expect($balanceBefore - $balanceAfter)->toBe(30000.0);
+        expect($balanceBefore - $balanceAfter)->toBe(30000);
     });
 
     it('reject withdrawal restores balance', function () {

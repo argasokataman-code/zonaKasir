@@ -68,7 +68,7 @@ test('webhook rejects invalid token', function () {
     $response->assertStatus(401);
 });
 
-test('webhook returns 404 for unknown disbursement', function () {
+test('webhook accepts unknown disbursement for retry', function () {
     $payload = [
         'id' => '9999999999999999999',
         'status' => 'DONE',
@@ -80,7 +80,7 @@ test('webhook returns 404 for unknown disbursement', function () {
 
     $response = $this->postJson('/api/webhooks/flip', $payload);
 
-    $response->assertStatus(404);
+    $response->assertStatus(200);
 });
 
 test('webhook requires token', function () {

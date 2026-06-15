@@ -28,7 +28,7 @@ class WithdrawalService
      * @throws InsufficientBalanceException
      */
     public function request(
-        float $amount,
+        int $amount,
         string $idempotencyKey,
     ): Withdrawal {
         if (empty($idempotencyKey)) {
@@ -141,14 +141,24 @@ class WithdrawalService
         try {
             $withdrawal->update(['status' => 'processing']);
 
-            // Pre-flight: Check Flip balance before sending
+            // Calculate fee (ditanggung tenant, dipotong dari nominal)
+            $feeAmount = (int) config('flip.withdrawal_approval.fee_amount', 2500);
+            $netAmount = $withdrawal->amount - $feeAmount;
+
+            if ($netAmount <= 0) {
+                throw new DisbursementFailedException(
+                    'Nominal terlalu kecil setelah dipotong fee Rp ' . number_format($feeAmount, 0, ',', '.')
+                );
+            }
+
+            // Pre-flight: Check Flip balance against net amount yg dikirim
             $flipBalance = $this->flipData->getBalance();
             if ($flipBalance === null) {
                 throw new DisbursementFailedException('Gagal memeriksa saldo Flip');
             }
-            if (($flipBalance['balance'] ?? 0) < $withdrawal->amount) {
+            if (($flipBalance['balance'] ?? 0) < $netAmount) {
                 throw new DisbursementFailedException(
-                    'Saldo Flip tidak mencukupi. Dibutuhkan: Rp ' . number_format($withdrawal->amount, 0, ',', '.')
+                    'Saldo Flip tidak mencukupi. Dibutuhkan: Rp ' . number_format($netAmount, 0, ',', '.')
                     . '. Tersedia: Rp ' . number_format($flipBalance['balance'] ?? 0, 0, ',', '.')
                 );
             }
@@ -157,7 +167,7 @@ class WithdrawalService
                 'bank_code'         => $withdrawal->bank_code,
                 'account_number'    => $withdrawal->bank_account_number,
                 'account_name'      => $withdrawal->bank_account_name,
-                'amount'            => $withdrawal->amount,
+                'amount'            => $netAmount,
                 'remark'           => "Zonakasir WD #{$withdrawal->id}",
                 'idempotency_key'   => $withdrawal->idempotency_key,
             ]);
@@ -175,14 +185,29 @@ class WithdrawalService
                 'disburse_id'       => $result['id'] ?? null,
                 'disburse_response' => $result,
                 'approved_by'       => $approvedBy,
+                'fee_amount'        => $feeAmount,
                 'processed_at'      => now(),
             ]);
 
-            LedgerEntry::where('reference_type', 'withdrawal_request')
-                ->where('reference_id', $withdrawal->id)
-                ->update(['reference_type' => 'withdrawal_complete']);
+            if ($newStatus === 'failed') {
+                // Rollback ledger: restore tenant balance (full requested amount)
+                $this->ledger->entry(
+                    ledgerableType: Withdrawal::class,
+                    ledgerableId: $withdrawal->id,
+                    entryType: 'credit',
+                    amount: $withdrawal->amount,
+                    description: "Withdrawal rollback #{$withdrawal->id}: Flip returned {$result['status']}",
+                    referenceType: 'withdrawal_rollback',
+                    referenceId: $withdrawal->id,
+                );
+            } else {
+                // Update ledger reference: withdrawal_request → complete/processing
+                LedgerEntry::where('reference_type', 'withdrawal_request')
+                    ->where('reference_id', $withdrawal->id)
+                    ->update(['reference_type' => 'withdrawal_complete']);
+            }
 
-            // Send notification to tenant only if completed
+            // Send notification
             if ($newStatus === 'completed') {
                 Notification::send($withdrawal->requestedBy, new WithdrawalApproved($withdrawal));
             }
