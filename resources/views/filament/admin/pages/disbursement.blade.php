@@ -125,49 +125,67 @@
                                                 </select>
                                             </div>
 
+                                            {{-- Bank Info (ALWAYS visible, auto-filled) --}}
+                                            <div class="p-3 bg-gray-50 rounded-lg text-sm">
+                                                <div class="font-medium text-gray-700 mb-1">Bank Information (auto-filled)</div>
+                                                @if ($selectedTenantInfo && $selectedTenantInfo['has_bank'])
+                                                    <div class="grid grid-cols-3 gap-4">
+                                                        <div>
+                                                            <span class="text-gray-500">Bank:</span>
+                                                            <span class="font-medium">{{ $selectedTenantInfo['bank_name'] }} ({{ $selectedTenantInfo['bank_code'] }})</span>
+                                                        </div>
+                                                        <div>
+                                                            <span class="text-gray-500">Account:</span>
+                                                            <span class="font-medium font-mono">{{ $selectedTenantInfo['bank_account_number'] }}</span>
+                                                        </div>
+                                                        <div>
+                                                            <span class="text-gray-500">Name:</span>
+                                                            <span class="font-medium">{{ $selectedTenantInfo['bank_account_name'] }}</span>
+                                                        </div>
+                                                    </div>
+                                                @else
+                                                    <div class="text-gray-400 italic">Pilih tenant untuk melihat informasi bank</div>
+                                                @endif
+                                            </div>
+
                                             {{-- Amount Input --}}
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Nominal (Total Debit dari Flip)</label>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Nominal (total debit dari Flip)</label>
                                                 <div class="flex items-center border border-gray-300 rounded-lg shadow-sm focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
                                                     <span class="pl-3 pr-1 py-2 text-gray-500 text-sm bg-gray-50 border-r border-gray-300 rounded-l-lg">Rp</span>
                                                     <input type="number" wire:model="transferAmount" min="50000" step="1000"
                                                         class="flex-1 border-0 py-2 px-3 text-sm focus:ring-0 focus:outline-none"
-                                                        placeholder="50.000">
+                                                        placeholder="100.000">
                                                 </div>
+                                                <div class="text-xs text-gray-400 mt-1">Min. Rp 50.000</div>
                                             </div>
 
-                                            {{-- Bank Info (auto-filled) --}}
-                                            @if ($selectedTenantInfo && $selectedTenantInfo['has_bank'])
-                                                <div class="p-3 bg-gray-50 rounded-lg text-sm">
-                                                    <div class="font-medium text-gray-700 mb-1">Informasi Bank</div>
-                                                    <div>{{ $selectedTenantInfo['bank_name'] }} ({{ $selectedTenantInfo['bank_code'] }})</div>
-                                                    <div class="font-mono">{{ $selectedTenantInfo['bank_account_number'] }}</div>
-                                                    <div>{{ $selectedTenantInfo['bank_account_name'] }}</div>
-                                                </div>
-                                            @endif
-
-                                            {{-- Fee Breakdown --}}
-                                            @if ($calculatedFee && $calculatedNet)
-                                                <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
-                                                    <div class="font-medium text-yellow-800 mb-1">Rincian Biaya</div>
-                                                    <div class="flex justify-between">
-                                                        <span>Total Debit:</span>
-                                                        <span>Rp {{ number_format($transferAmount, 0, ',', '.') }}</span>
+                                            {{-- Fee Breakdown (ALWAYS visible) --}}
+                                            <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm">
+                                                <div class="font-medium text-yellow-800 mb-1">Fee Breakdown</div>
+                                                @if ($calculatedFee && $calculatedNet)
+                                                    <div class="space-y-1">
+                                                        <div class="flex justify-between">
+                                                            <span>Total debit dari Flip:</span>
+                                                            <span class="font-medium">Rp {{ number_format($transferAmount, 0, ',', '.') }}</span>
+                                                        </div>
+                                                        <div class="flex justify-between text-red-600">
+                                                            <span>Fee Flip:</span>
+                                                            <span class="font-medium">- Rp {{ number_format($calculatedFee, 0, ',', '.') }}</span>
+                                                        </div>
+                                                        <div class="flex justify-between border-t pt-1 mt-1 font-bold">
+                                                            <span>Tenant terima (net):</span>
+                                                            <span class="text-green-600">Rp {{ number_format($calculatedNet, 0, ',', '.') }}</span>
+                                                        </div>
                                                     </div>
-                                                    <div class="flex justify-between text-red-600">
-                                                        <span>Fee:</span>
-                                                        <span>- Rp {{ number_format($calculatedFee, 0, ',', '.') }}</span>
-                                                    </div>
-                                                    <div class="flex justify-between font-bold border-t pt-1 mt-1">
-                                                        <span>Diterima Tenant:</span>
-                                                        <span class="text-green-600">Rp {{ number_format($calculatedNet, 0, ',', '.') }}</span>
-                                                    </div>
-                                                </div>
-                                            @endif
+                                                @else
+                                                    <div class="text-gray-400 italic">Masukkan nominal untuk melihat rincian biaya</div>
+                                                @endif
+                                            </div>
 
                                             {{-- Internal Notes --}}
                                             <div>
-                                                <label class="block text-sm font-medium text-gray-700 mb-1">Catatan Internal (opsional)</label>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">Internal Notes (optional)</label>
                                                 <textarea wire:model="transferNotes" rows="2"
                                                     class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm"
                                                     placeholder="Catatan untuk admin..."></textarea>
@@ -192,12 +210,17 @@
                                 </button>
                             @else
                                 <button type="button" wire:click="showConfirmationDialog"
-                                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
-                                    Konfirmasi Transfer
+                                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                                    {{ !$selectedTenantId || !$transferAmount || $transferAmount < 50000 ? 'disabled' : '' }}>
+                                    @if ($calculatedNet)
+                                        Transfer Rp {{ number_format($calculatedNet, 0, ',', '.') }}
+                                    @else
+                                        Konfirmasi Transfer
+                                    @endif
                                 </button>
                                 <button type="button" wire:click="closeTransferForm"
                                     class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">
-                                    Batal
+                                    Cancel
                                 </button>
                             @endif
                         </div>
