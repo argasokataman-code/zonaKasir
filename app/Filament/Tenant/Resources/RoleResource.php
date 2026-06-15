@@ -6,6 +6,7 @@ use App\Filament\Tenant\Resources\RoleResource\Pages;
 use App\Models\Tenants\Role;
 use App\Traits\HasTranslatableResource;
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -28,27 +29,51 @@ class RoleResource extends Resource
                 TextInput::make('name')
                     ->translateLabel()
                     ->required(),
-                CheckboxList::make('webPermissions')
-                    ->label('Web app permissions')
-                    ->bulkToggleable()
-                    ->columns(4)
-                    ->relationship(
-                        titleAttribute: 'name',
-                        modifyQueryUsing: fn ($query) => $query->where('guard_name', 'web')
-                    )
-                    ->noSearchResultsMessage('No permissions found.')
-                    ->searchable(),
-                CheckboxList::make('mobilePermissions')
-                    ->label('Mobile app permissions')
-                    ->bulkToggleable()
-                    ->columns(4)
-                    ->relationship(
-                        titleAttribute: 'name',
-                        modifyQueryUsing: fn ($query) => $query->where('guard_name', 'sanctum')
-                    )
-                    ->noSearchResultsMessage('No permissions found.')
-                    ->searchable(),
+                ...static::buildPermissionSections('web', 'Web App Permissions'),
+                ...static::buildPermissionSections('sanctum', 'Mobile App Permissions'),
             ])->columns(1);
+    }
+
+    /**
+     * Build Section-wrapped CheckboxList components for a given guard.
+     *
+     * @return array<int, \Filament\Forms\Components\Component>
+     */
+    protected static function buildPermissionSections(string $guard, string $heading): array
+    {
+        $sections = [];
+
+        foreach (Role::PERMISSION_GROUPS as $groupKey => $group) {
+            $permissionNames = $group[$guard] ?? [];
+
+            if (empty($permissionNames)) {
+                continue;
+            }
+
+            $methodName = $guard . ucfirst($groupKey) . 'Permissions';
+
+            $sections[] = Section::make($group['label'])
+                ->icon($group['icon'])
+                ->collapsible()
+                ->collapsed()
+                ->schema([
+                    CheckboxList::make($methodName)
+                        ->label(false)
+                        ->bulkToggleable()
+                        ->columns(3)
+                        ->relationship(
+                            titleAttribute: 'name',
+                            modifyQueryUsing: fn ($query) => $query->whereIn(
+                                config('permission.table_names.permissions').'.name',
+                                $permissionNames
+                            )
+                        )
+                        ->noSearchResultsMessage(__('No permissions found.'))
+                        ->searchable(),
+                ]);
+        }
+
+        return $sections;
     }
 
     public static function table(Table $table): Table
