@@ -103,6 +103,13 @@ class WithdrawalService
             return $withdrawal;
         });
 
+        Log::info('Withdrawal created', [
+            'withdrawal_id' => $withdrawal->id,
+            'amount' => $withdrawal->amount,
+            'status' => $withdrawal->status,
+            'auto_approve' => $isAutoApprove,
+        ]);
+
         if ($isAutoApprove) {
             try {
                 $feeAmount = (int) config('flip.withdrawal_approval.fee_amount', 2500);
@@ -114,9 +121,7 @@ class WithdrawalService
                         'account_number'    => $withdrawal->bank_account_number,
                         'account_name'      => $withdrawal->bank_account_name,
                         'amount'            => $netAmount,
-'remark'            => 'ZK Withdrawal',
-
-
+                        'remark'            => 'ZK Withdrawal',
                         'idempotency_key'   => $withdrawal->idempotency_key,
                     ]);
 
@@ -132,6 +137,14 @@ class WithdrawalService
                         'disburse_id'       => $result['id'] ?? null,
                         'disburse_response' => $result,
                         'fee_amount'        => $feeAmount,
+                    ]);
+
+                    Log::info('Auto-approve disbursement completed', [
+                        'withdrawal_id' => $withdrawal->id,
+                        'status' => $newStatus,
+                        'amount' => $netAmount,
+                        'disburse_id' => $result['id'] ?? null,
+                        'flip_status' => $result['status'] ?? 'unknown',
                     ]);
                 }
             } catch (\Throwable $e) {
@@ -239,6 +252,16 @@ class WithdrawalService
                 'processed_at'      => now(),
             ]);
 
+            Log::info('Withdrawal approval completed', [
+                'withdrawal_id' => $withdrawal->id,
+                'status' => $newStatus,
+                'amount' => $withdrawal->amount,
+                'fee' => $feeAmount,
+                'disburse_id' => $result['id'] ?? null,
+                'flip_status' => $result['status'] ?? 'unknown',
+                'approved_by' => $approvedBy,
+            ]);
+
             if ($newStatus === 'failed') {
                 // Rollback ledger: restore tenant balance (full requested amount)
                 $this->ledger->entry(
@@ -305,6 +328,13 @@ class WithdrawalService
                 referenceType: 'withdrawal_rejected',
                 referenceId: $withdrawal->id,
             );
+
+            Log::info('Withdrawal rejected', [
+                'withdrawal_id' => $withdrawal->id,
+                'amount' => $withdrawal->amount,
+                'rejected_by' => $rejectedBy,
+                'reason' => $reason,
+            ]);
 
             // Send notification to tenant
             Notification::send($withdrawal->requestedBy, new WithdrawalRejected($withdrawal));

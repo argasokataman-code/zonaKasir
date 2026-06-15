@@ -63,11 +63,17 @@ class WithdrawalApproval extends Page implements HasForms
             $adminId = auth()->id();
             app(WithdrawalService::class)->approve($withdrawalId, $adminId);
 
+            Log::info('Admin approved withdrawal', [
+                'withdrawal_id' => $withdrawalId,
+                'tenant_id' => $tenantId,
+                'admin_id' => $adminId,
+            ]);
             Notification::make()->title('Withdrawal approved & disbursed via Flip')->success()->send();
             $this->loadWithdrawals();
         } catch (\Throwable $e) {
             Log::error('Withdrawal approval failed', [
                 'withdrawal_id' => $withdrawalId,
+                'tenant_id' => $tenantId,
                 'error' => $e->getMessage(),
             ]);
             Notification::make()->title('Error: ' . $e->getMessage())->danger()->send();
@@ -81,11 +87,17 @@ class WithdrawalApproval extends Page implements HasForms
             $adminId = auth()->id();
             app(WithdrawalService::class)->reject($withdrawalId, $adminId, 'Rejected by admin');
 
+            Log::info('Admin rejected withdrawal', [
+                'withdrawal_id' => $withdrawalId,
+                'tenant_id' => $tenantId,
+                'admin_id' => $adminId,
+            ]);
             Notification::make()->title('Withdrawal rejected')->warning()->send();
             $this->loadWithdrawals();
         } catch (\Throwable $e) {
             Log::error('Withdrawal rejection failed', [
                 'withdrawal_id' => $withdrawalId,
+                'tenant_id' => $tenantId,
                 'error' => $e->getMessage(),
             ]);
             Notification::make()->title('Error: ' . $e->getMessage())->danger()->send();
