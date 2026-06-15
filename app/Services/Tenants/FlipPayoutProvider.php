@@ -22,9 +22,11 @@ class FlipPayoutProvider implements DisbursementProvider
             $body['account_name'] = $params['account_name'];
         }
 
+        // Flip API V3 — idempotency-key di header, body form-urlencoded
         $response = Http::withBasicAuth($secretKey, '')
             ->withHeader('Idempotency-Key', $params['idempotency_key'])
-            ->post($baseUrl . '/v2/disbursement', $body);
+            ->asForm()
+            ->post($baseUrl . '/v3/disbursement', $body);
 
         if ($response->failed()) {
             Log::error('Flip Disbursement failed', [
@@ -55,8 +57,9 @@ class FlipPayoutProvider implements DisbursementProvider
         $secretKey = config('flip.secret_key');
         $baseUrl = config('flip.base_url');
 
+        // Flip API V3 — GET /get-disbursement?id=xxx
         $response = Http::withBasicAuth($secretKey, '')
-            ->get($baseUrl . '/v2/disbursement/' . $disburseId);
+            ->get($baseUrl . '/v3/get-disbursement', ['id' => $disburseId]);
 
         if ($response->failed()) {
             return ['id' => $disburseId, 'status' => 'unknown', 'error' => $response->json()];
