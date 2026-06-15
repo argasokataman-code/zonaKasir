@@ -25,6 +25,8 @@ class ManageSubscription extends Page
 
     protected static ?string $slug = 'subscription';
 
+    protected static bool $shouldRegisterNavigation = false;
+
     public ?string $snapRedirectUrl = null;
 
     public function mount(): void
