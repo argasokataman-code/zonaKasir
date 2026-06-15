@@ -71,7 +71,7 @@ async function cacheStaticAssets() {
   } catch {}
 
   // Custom JS
-  const js = ['custom-javascript', 'printer', 'indexeddb', 'offline-manager', 'sync-manager', 'offline-indicator', 'session-timeout'];
+  const js = ['custom-javascript', 'printer', 'indexeddb', 'offline-manager', 'sync-manager', 'offline-indicator', 'session-timeout', 'html5-qrcode'];
   await Promise.all(js.map(n => cache.add(`/js/app/${n}.js`).catch(() => {})));
 
   // Filament assets
@@ -252,7 +252,8 @@ self.addEventListener('activate', event => {
 // Fetch
 self.addEventListener('fetch', event => {
   const url = event.request.url;
-  if (url.includes('/member/login') || url.includes('/admin/login')) return;
+  // Never cache auth-related pages — allows account switching
+  if (url.includes('/login') || url.includes('/logout') || url.includes('/auth/google') || url.includes('/member/offline')) return;
 
   if (isApiRoute(url)) event.respondWith(handleApiRequest(event));
   else if (isNavigationRequest(event)) event.respondWith(handlePageRequest(event));
@@ -298,4 +299,14 @@ self.addEventListener('message', event => {
     );
   }
   if (d.type === 'CLEAR_PAGES_CACHE') event.waitUntil(caches.delete(PAGES_CACHE));
+  if (d.type === 'CLEAR_SESSION') {
+    // Clear all page + API caches on logout for clean account switch
+    event.waitUntil(
+      Promise.all([
+        caches.delete(PAGES_CACHE),
+        caches.delete(API_CACHE),
+        caches.delete(DYNAMIC_CACHE),
+      ])
+    );
+  }
 });

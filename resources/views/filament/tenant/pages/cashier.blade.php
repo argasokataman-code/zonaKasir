@@ -4,12 +4,6 @@
 
 @endphp
 <div class="" x-data="{ cartOpen: false, isOffline: !navigator.onLine }" x-init="window.addEventListener('online', () => isOffline = false); window.addEventListener('offline', () => isOffline = true);">
-  {{-- Offline Banner --}}
-  <div x-show="isOffline" x-cloak
-    class="fixed top-0 left-0 right-0 z-[9999] flex items-center justify-between bg-amber-500 px-4 py-2 text-sm font-medium text-white shadow-md">
-    <span>{{ __('⚠️ Offline mode — Switch to') }} <a href="/member/offline-pos" class="font-bold underline">{{ __('Offline POS') }}</a></span>
-    <button onclick="if(window.syncManager) window.syncManager.syncAll()" class="rounded bg-white/20 px-3 py-1 text-xs hover:bg-white/30">{{ __('Retry') }}</button>
-  </div>
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-4">
     <div class="col-span-1 lg:col-span-2 pb-24 lg:pb-0">
       {{-- Mobile back button --}}
