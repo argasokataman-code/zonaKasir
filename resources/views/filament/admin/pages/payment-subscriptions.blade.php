@@ -102,7 +102,58 @@
             </x-filament::section>
         </div>
 
-        {{-- Row 3: Payment Health --}}
+        {{-- Row 3: Platform Earnings --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <x-filament::section>
+                <div class="p-4">
+                    <div class="text-sm text-gray-500">Subscription Revenue</div>
+                    <div class="text-2xl font-bold text-success-600">
+                        Rp {{ number_format($totalRevenue, 0, ',', '.') }}
+                    </div>
+                    <div class="text-xs text-gray-400 mt-1">
+                        Dari biaya langganan tenant
+                    </div>
+                </div>
+            </x-filament::section>
+
+            <x-filament::section>
+                <div class="p-4">
+                    <div class="text-sm text-gray-500">Platform Fees (Midtrans)</div>
+                    <div class="text-2xl font-bold text-primary-600">
+                        Rp {{ number_format($totalPlatformFees, 0, ',', '.') }}
+                    </div>
+                    <div class="text-xs text-gray-400 mt-1">
+                        Fee platform per transaksi
+                    </div>
+                </div>
+            </x-filament::section>
+
+            <x-filament::section>
+                <div class="p-4">
+                    <div class="text-sm text-gray-500">Withdrawal Fees</div>
+                    <div class="text-2xl font-bold text-info-600">
+                        Rp {{ number_format($totalWithdrawalFees, 0, ',', '.') }}
+                    </div>
+                    <div class="text-xs text-gray-400 mt-1">
+                        Rp 2.500 per withdrawal
+                    </div>
+                </div>
+            </x-filament::section>
+
+            <x-filament::section>
+                <div class="p-4">
+                    <div class="text-sm text-gray-500 font-bold">Total App Earnings</div>
+                    <div class="text-2xl font-bold text-gray-900">
+                        Rp {{ number_format($totalAppEarnings, 0, ',', '.') }}
+                    </div>
+                    <div class="text-xs text-gray-400 mt-1">
+                        Subscription + Fees
+                    </div>
+                </div>
+            </x-filament::section>
+        </div>
+
+        {{-- Row 4: Payment Health --}}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <x-filament::section>
                 <div class="p-4">

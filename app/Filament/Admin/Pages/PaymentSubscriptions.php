@@ -4,6 +4,8 @@ namespace App\Filament\Admin\Pages;
 
 use App\Models\Invoice;
 use App\Models\Subscription;
+use App\Models\Tenants\MidtransPayment;
+use App\Models\Tenants\Withdrawal;
 use App\Tenant;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\DB;
@@ -47,6 +49,11 @@ class PaymentSubscriptions extends Page
     public array $expiringSoon = [];
     public array $failedPayments = [];
     public array $topTenantsByRevenue = [];
+
+    // Platform earnings
+    public float $totalPlatformFees = 0;
+    public float $totalWithdrawalFees = 0;
+    public float $totalAppEarnings = 0;
 
     public function mount(): void
     {
@@ -214,6 +221,17 @@ class PaymentSubscriptions extends Page
             'total_amount' => $item->total_amount,
             'invoice_count' => $item->invoice_count,
         ])->toArray();
+
+        // ── Platform earnings (non-subscription) ──
+        $this->totalPlatformFees = (float) MidtransPayment::withoutGlobalScope('tenant')
+            ->whereIn('status', ['settlement', 'capture'])
+            ->sum('fee_platform');
+
+        $this->totalWithdrawalFees = (float) Withdrawal::withoutGlobalScope('tenant')
+            ->where('status', 'completed')
+            ->sum('fee_amount');
+
+        $this->totalAppEarnings = $this->totalRevenue + $this->totalPlatformFees + $this->totalWithdrawalFees;
     }
 
     /**
