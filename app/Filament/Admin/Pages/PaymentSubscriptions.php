@@ -14,11 +14,11 @@ class PaymentSubscriptions extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
 
-    protected static ?string $navigationLabel = 'Subscriptions';
+    protected static ?string $navigationLabel = 'Revenue';
 
     protected static ?string $navigationGroup = 'Payment Gateway';
 
-    protected static ?string $title = 'Subscription Payments';
+    protected static ?string $title = 'Revenue & Earnings';
 
     protected static string $view = 'filament.admin.pages.payment-subscriptions';
 
