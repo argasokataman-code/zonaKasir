@@ -23,8 +23,6 @@ class FlipWebhookController extends Controller
 
         Log::info('Flip webhook received', [
             'payload' => $payload,
-            'header_keys' => collect($request->headers->all())->keys()->toArray(),
-            'has_signature' => $request->hasHeader('X-Flip-Signature'),
         ]);
 
         // ── Verify HMAC signature (if Flip provides it) ──
@@ -52,9 +50,10 @@ class FlipWebhookController extends Controller
             }
         }
 
-        // ── Validate required fields ──
-        $disbursementId = $payload['id'] ?? null;
-        $status = $payload['status'] ?? null;
+        // ── Flip sends {data: {id, status, ...}, token: "..."} ──
+        $disbursementData = $payload['data'] ?? $payload;
+        $disbursementId = $disbursementData['id'] ?? null;
+        $status = $disbursementData['status'] ?? null;
 
         if (! $disbursementId || ! $status) {
             Log::warning('Flip webhook: Missing required fields', [
