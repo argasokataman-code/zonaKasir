@@ -27,7 +27,7 @@ class PricingResource extends JsonResource
             'cta' => match (true) {
                 $this->slug === 'on-premise' => ['label' => __('Konsultasi Sekarang'), 'action' => 'contact'],
                 $this->price_monthly <= 0 => ['label' => __('Daftar Gratis'), 'action' => 'register'],
-                $this->slug === 'enterprise' => ['label' => __('Hubungi Sales'), 'action' => 'contact'],
+                $this->slug === 'enterprise' => ['label' => __('Coba Gratis 7 Hari'), 'action' => 'register'],
                 default => ['label' => __('Coba Gratis 7 Hari'), 'action' => 'register'],
             },
             'is_on_premise' => $this->slug === 'on-premise',
