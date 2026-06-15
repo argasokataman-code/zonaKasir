@@ -10,7 +10,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::connection('central')->table('tenants', function (Blueprint $table) {
-            $table->string('google_id')->nullable()->unique()->after('id');
+            if (!Schema::connection('central')->hasColumn('tenants', 'google_id')) {
+                $table->string('google_id')->nullable()->unique()->after('id');
+            }
         });
     }
 
