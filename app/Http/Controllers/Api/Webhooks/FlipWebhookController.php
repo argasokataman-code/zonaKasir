@@ -21,9 +21,10 @@ class FlipWebhookController extends Controller
     {
         $payload = $request->all();
 
-        Log::debug('Flip webhook received', [
-            'headers' => $request->headers->all(),
+        Log::info('Flip webhook received', [
             'payload' => $payload,
+            'header_keys' => collect($request->headers->all())->keys()->toArray(),
+            'has_signature' => $request->hasHeader('X-Flip-Signature'),
         ]);
 
         // ── Verify HMAC signature (if Flip provides it) ──
