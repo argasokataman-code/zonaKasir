@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Constants\Role;
 use App\Models\Tenants\User;
+use App\Services\TenantContext;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 use Spatie\Permission\Models\Permission;
@@ -346,16 +347,26 @@ class PermissionSeeder extends Seeder
 
     private function savePermission($roles): void
     {
+        $tenantId = TenantContext::get();
+
         foreach ($roles['guard'] as $guard) {
             $permission = Permission::firstOrCreate(['name' => $roles['action'], 'guard_name' => $guard]);
+            if ($tenantId && ! $permission->tenant_id) {
+                $permission->update(['tenant_id' => $tenantId]);
+            }
             $this->givePermissionToRole($roles['role'], $permission);
         }
     }
 
     private function givePermissionToRole($role, $permission): void
     {
+        $tenantId = TenantContext::get();
+
         /** @var ModelsRole $role */
         $role = ModelsRole::where('name', $role[0])->firstOrCreate(['name' => $role[0]]);
+        if ($tenantId && ! $role->tenant_id) {
+            $role->update(['tenant_id' => $tenantId]);
+        }
         $role->permissions()->syncWithoutDetaching($permission);
     }
 
