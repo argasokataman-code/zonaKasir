@@ -1,4 +1,6 @@
-<x-filament-panels::page>
+<x-filament-panels::page class="relative overflow-hidden">
+    <div class="absolute inset-0 z-0 parallax-bg"></div>
+    <div class="relative z-10">
     {{-- Back navigation --}}
     <div class="mb-4">
         <a href="{{ url('/member') }}" class="inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
@@ -73,9 +75,9 @@
     </div>
     @endif
 
-    <div class="mb-6">
+    <div class="mb-6 flex flex-col items-center">
         <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">{{ __('Available Plans') }}</h2>
-        <div class="grid gap-4 pb-2 sm:overflow-x-auto sm:-mx-6 sm:px-6 sm:flex sm:flex-nowrap sm:scrollbar-thin" style="grid-template-columns: 1fr;">
+        <div class="flex flex-col gap-4 pb-2 sm:flex-row sm:flex-nowrap sm:overflow-x-auto sm:scrollbar-thin sm:justify-center sm:gap-6">
             @foreach($plans as $plan)
             <div
                 x-data="{ open: false }"
@@ -326,4 +328,19 @@
         </div>
     </div>
     @endif
+    </div>
+
+    <style>
+        .parallax-bg {
+            background: linear-gradient(to bottom, transparent 0%, rgba(244,244,242,0.6) 50%, #F4F4F2 100%), url('/images/landing/retail_hero_bg_1781378962689.jpg') center/cover no-repeat;
+            opacity: 0.4;
+            filter: grayscale(1) contrast(1.25);
+            animation: slowZoom 20s ease-in-out infinite alternate;
+            transform-origin: center;
+        }
+        @keyframes slowZoom {
+            from { transform: scale(1) translate(0, 0); }
+            to { transform: scale(1.08) translate(-2%, -1%); }
+        }
+    </style>
 </x-filament-panels::page>

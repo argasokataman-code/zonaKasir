@@ -11,6 +11,11 @@ class InventoryStats extends BaseWidget
 {
     protected static ?string $pollingInterval = '300s';
 
+    protected function getColumns(): int
+    {
+        return 2;
+    }
+
     protected function getStats(): array
     {
         $totalProducts = Product::count();

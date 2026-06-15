@@ -42,11 +42,11 @@
       <p class="text-xs text-gray-500 mb-2">
         Showing 5 of {{ $totalCount }} unread notifications
       </p>
-      <a href="{{ route('notification.index') }}"
-         class="text-sm text-primary-600 hover:text-primary-800 font-medium flex items-center gap-1">
-        View all notifications
+      <span
+         class="text-sm text-gray-500 font-medium flex items-center gap-1">
+        {{ __('View all notifications') }}
         <x-heroicon-o-arrow-right class="h-4 w-4" />
-      </a>
+      </span>
     </div>
   @endif
 </x-filament::section>

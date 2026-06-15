@@ -3,20 +3,16 @@
 namespace Database\Seeders;
 
 use App\Models\Tenants\Product;
+use App\Models\Tenants\Stock;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class ProductSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         if (config('database.default') !== 'sqlite') {
-            \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=0');
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
         }
 
         Product::truncate();
@@ -30,6 +26,8 @@ class ProductSeeder extends Seeder
                 'initial_price' => 200000,
                 'selling_price' => 250000,
                 'unit' => 'PCS',
+                'type' => 'product',
+                'show' => true,
                 'hero_images' => [
                     'https://picsum.photos/seed/royalcanin/800/600',
                 ],
@@ -42,6 +40,8 @@ class ProductSeeder extends Seeder
                 'initial_price' => 40000,
                 'selling_price' => 55000,
                 'unit' => 'PCS',
+                'type' => 'product',
+                'show' => true,
                 'hero_images' => [
                     'https://picsum.photos/seed/whiskas/800/600',
                 ],
@@ -54,6 +54,8 @@ class ProductSeeder extends Seeder
                 'initial_price' => 30000,
                 'selling_price' => 45000,
                 'unit' => 'PCS',
+                'type' => 'product',
+                'show' => true,
                 'hero_images' => [
                     'https://picsum.photos/seed/dogshampoo/800/600',
                 ],
@@ -66,6 +68,8 @@ class ProductSeeder extends Seeder
                 'initial_price' => 60000,
                 'selling_price' => 85000,
                 'unit' => 'PCS',
+                'type' => 'product',
+                'show' => true,
                 'hero_images' => [
                     'https://picsum.photos/seed/catlitter/800/600',
                 ],
@@ -78,6 +82,8 @@ class ProductSeeder extends Seeder
                 'initial_price' => 15000,
                 'selling_price' => 22000,
                 'unit' => 'PCS',
+                'type' => 'product',
+                'show' => true,
                 'hero_images' => [
                     'https://picsum.photos/seed/birdseed/800/600',
                 ],
@@ -85,11 +91,19 @@ class ProductSeeder extends Seeder
         ];
 
         foreach ($products as $p) {
-            Product::create($p);
+            $product = Product::create($p);
+            Stock::create([
+                'initial_price' => $p['initial_price'],
+                'selling_price' => $p['selling_price'],
+                'stock' => $p['stock'],
+                'init_stock' => $p['stock'],
+                'product_id' => $product->id,
+                'type' => 'in',
+            ]);
         }
 
         if (config('database.default') !== 'sqlite') {
-            \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1');
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
         }
     }
 }

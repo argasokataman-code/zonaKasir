@@ -54,16 +54,16 @@
               @endif
 
               {{-- Stock badge --}}
-              @if (!$product->is_non_stock)
-                @php $stock = $product->stockCalculate; @endphp
-                @if ($stock <= 0)
-                  <div class="absolute inset-0 flex items-center justify-center bg-black/50">
-                    <span class="rounded-md bg-red-600 px-2 py-1 text-xs font-bold text-white">{{ __('Out of stock') }}</span>
-                  </div>
-                @elseif ($stock < Setting::get('minimum_stock_nofication', 10))
-                  <span class="absolute left-2 top-2 rounded-md bg-amber-500 px-1.5 py-0.5 text-xs font-bold text-white shadow-sm">{{ $stock }} {{ __('Stock') }}</span>
+                @if (!$product->is_non_stock)
+                  @php $stock = $product->stockCalculate; @endphp
+                  @if ($stock <= 0)
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/50">
+                      <span class="rounded-md bg-red-600 px-2 py-1 text-xs font-bold text-white">{{ __('Out of stock') }}</span>
+                    </div>
+                  @else
+                    <span class="absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-xs font-bold text-white shadow-sm {{ $stock < \App\Models\Tenants\Setting::get('minimum_stock_nofication', 10) ? 'bg-amber-500' : 'bg-zonakasir-primary' }}">{{ $stock }} {{ __('Stock') }}</span>
+                  @endif
                 @endif
-              @endif
 
               {{-- Cart quantity badge --}}
               @php $cartQty = $cartItems->first(fn ($i) => $i->product_id === $product->id)?->qty ?? 0; @endphp
@@ -328,6 +328,12 @@
                   x-text="paymentMethod.name.substring(0, 8)">
                 </div>
               </template>
+              <template x-if="!paymentMethods.length">
+                <p class="col-span-full text-center text-xs text-amber-600 font-medium">{{ __('No payment methods available') }}</p>
+              </template>
+              <template x-if="paymentMethods.length && !cartDetail['payment_method_id']">
+                <p class="col-span-full text-center text-xs text-amber-600 font-medium">{{ __('Select a payment method above') }}</p>
+              </template>
             </div>
             <x-filament::input.wrapper
               x-show="paymentMethods.filter((pm) => pm.is_credit)[0]?.id == cartDetail['payment_method_id']"
@@ -344,55 +350,95 @@
             @error('payed_money')
               <span class="error text-danger-500">{{ $message }}</span>
             @enderror
-            <input id="display"
-              class="@error('payed_money') 'border-danger-500' @enderror w-full rounded-md border border-gray-300 bg-white p-2 text-right text-base text-black dark:bg-gray-900 dark:text-white md:text-lg"
-              focus :disabled="isTouchScreen" x-mask:dynamic="$money($input)" x-on:keyup="changes" x-ref="payedMoney"
-              inputMode="numeric">
-            <div class="mt-4 grid grid-cols-3 gap-2" id="calculator-button-shortcut">
+
+            {{-- Payment input display --}}
+            <div class="relative mb-3">
+              <input id="display" readonly autofocus
+                class="w-full rounded-xl border-2 bg-gray-50 p-4 pb-6 text-right text-2xl font-bold text-gray-900 focus:outline-none dark:bg-gray-800 dark:text-white @error('payed_money') border-red-500 @else border-gray-200 dark:border-gray-600 focus:border-zonakasir-primary @enderror"
+                x-ref="payedMoney" inputMode="none" tabindex="0" @keydown="handleKeydown($event)">
+              <span class="absolute bottom-1 right-4 text-xs text-gray-400" x-show="rawValue > 0" x-cloak>
+                {{ __('Change') }}: <span class="font-semibold text-zonakasir-primary" x-text="moneyFormat(changeAmount > 0 ? changeAmount : 0)"></span>
+              </span>
             </div>
-            <div class="mt-2 grid grid-cols-3 gap-2" id="calculator-button">
-              <button type="button" class="col-span-3 rounded-md bg-gray-300 p-1.5 text-sm hover:bg-gray-400 md:p-2 md:text-lg"
-                x-on:click="append('no_changes')">{{ __('No change') }}</button>
-              <button type="button" class="rounded-md bg-gray-300 p-1.5 text-sm hover:bg-gray-400 md:p-2 md:text-lg"
-                x-on:click="append(7)">7</button>
-              <button type="button" class="rounded-md bg-gray-300 p-1.5 text-sm hover:bg-gray-400 md:p-2 md:text-lg"
-                x-on:click="append(8)">8</button>
-              <button type="button" class="rounded-md bg-gray-300 p-1.5 text-sm hover:bg-gray-400 md:p-2 md:text-lg"
-                x-on:click="append(9)">9</button>
-              <button type="button" class="rounded-md bg-gray-300 p-1.5 text-sm hover:bg-gray-400 md:p-2 md:text-lg"
-                x-on:click="append(4)">4</button>
-              <button type="button" class="rounded-md bg-gray-300 p-1.5 text-sm hover:bg-gray-400 md:p-2 md:text-lg"
-                x-on:click="append(5)">5</button>
-              <button type="button" class="rounded-md bg-gray-300 p-1.5 text-sm hover:bg-gray-400 md:p-2 md:text-lg"
-                x-on:click="append(6)">6</button>
-              <button type="button" class="rounded-md bg-gray-300 p-1.5 text-sm hover:bg-gray-400 md:p-2 md:text-lg"
-                x-on:click="append(1)">1</button>
-              <button type="button" class="rounded-md bg-gray-300 p-1.5 text-sm hover:bg-gray-400 md:p-2 md:text-lg"
-                x-on:click="append(2)">2</button>
-              <button type="button" class="rounded-md bg-gray-300 p-1.5 text-sm hover:bg-gray-400 md:p-2 md:text-lg"
-                x-on:click="append(3)">3</button>
-              <button type="button" class="rounded-md bg-gray-300 p-1.5 text-sm hover:bg-gray-400 md:p-2 md:text-lg"
-                x-on:click="append('.')">.</button>
-              <button type="button" class="rounded-md bg-gray-300 p-1.5 text-sm hover:bg-gray-400 md:p-2 md:text-lg"
-                x-on:click="append(0)">0</button>
+
+            {{-- Quick amount shortcuts (populated dynamically) --}}
+            <div class="mb-3 grid grid-cols-3 gap-2" id="calculator-button-shortcut">
+            </div>
+
+            {{-- Modern number pad --}}
+            <div class="mb-3 grid grid-cols-3 gap-2">
+              {{-- Row 1 --}}
+              <button type="button" 
+                class="flex min-h-[48px] items-center justify-center rounded-xl bg-white p-3 text-xl font-semibold text-gray-800 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-50 hover:shadow active:scale-95 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:hover:bg-gray-700"
+                x-on:click="pressDigit(7)">7</button>
               <button type="button"
-                class="flex items-center justify-center rounded-md bg-gray-300 p-1.5 text-sm hover:bg-gray-400 md:p-2 md:text-lg"
-                x-on:click="append('backspace')">
-                <x-filament::icon icon="heroicon-o-backspace" class="h-4 w-4 text-gray-500 dark:text-white md:h-5 md:w-5" />
-              </button>
+                class="flex min-h-[48px] items-center justify-center rounded-xl bg-white p-3 text-xl font-semibold text-gray-800 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-50 hover:shadow active:scale-95 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:hover:bg-gray-700"
+                x-on:click="pressDigit(8)">8</button>
+              <button type="button"
+                class="flex min-h-[48px] items-center justify-center rounded-xl bg-white p-3 text-xl font-semibold text-gray-800 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-50 hover:shadow active:scale-95 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:hover:bg-gray-700"
+                x-on:click="pressDigit(9)">9</button>
+              {{-- Row 2 --}}
+              <button type="button"
+                class="flex min-h-[48px] items-center justify-center rounded-xl bg-white p-3 text-xl font-semibold text-gray-800 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-50 hover:shadow active:scale-95 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:hover:bg-gray-700"
+                x-on:click="pressDigit(4)">4</button>
+              <button type="button"
+                class="flex min-h-[48px] items-center justify-center rounded-xl bg-white p-3 text-xl font-semibold text-gray-800 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-50 hover:shadow active:scale-95 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:hover:bg-gray-700"
+                x-on:click="pressDigit(5)">5</button>
+              <button type="button"
+                class="flex min-h-[48px] items-center justify-center rounded-xl bg-white p-3 text-xl font-semibold text-gray-800 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-50 hover:shadow active:scale-95 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:hover:bg-gray-700"
+                x-on:click="pressDigit(6)">6</button>
+              {{-- Row 3 --}}
+              <button type="button"
+                class="flex min-h-[48px] items-center justify-center rounded-xl bg-white p-3 text-xl font-semibold text-gray-800 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-50 hover:shadow active:scale-95 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:hover:bg-gray-700"
+                x-on:click="pressDigit(1)">1</button>
+              <button type="button"
+                class="flex min-h-[48px] items-center justify-center rounded-xl bg-white p-3 text-xl font-semibold text-gray-800 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-50 hover:shadow active:scale-95 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:hover:bg-gray-700"
+                x-on:click="pressDigit(2)">2</button>
+              <button type="button"
+                class="flex min-h-[48px] items-center justify-center rounded-xl bg-white p-3 text-xl font-semibold text-gray-800 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-50 hover:shadow active:scale-95 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:hover:bg-gray-700"
+                x-on:click="pressDigit(3)">3</button>
+              {{-- Row 4 --}}
+              <button type="button"
+                class="flex min-h-[48px] items-center justify-center rounded-xl bg-red-50 p-3 text-lg font-semibold text-red-600 shadow-sm ring-1 ring-red-200 transition-all hover:bg-red-100 hover:shadow active:scale-95 dark:bg-red-900/30 dark:text-red-400 dark:ring-red-800"
+                x-on:click="pressClear()">C</button>
+              <button type="button"
+                class="flex min-h-[48px] items-center justify-center rounded-xl bg-white p-3 text-xl font-semibold text-gray-800 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-50 hover:shadow active:scale-95 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:hover:bg-gray-700"
+                x-on:click="pressDigit(0)">0</button>
+              <button type="button"
+                class="flex min-h-[48px] items-center justify-center rounded-xl bg-white p-3 text-lg font-semibold text-gray-800 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-50 hover:shadow active:scale-95 dark:bg-gray-800 dark:text-gray-100 dark:ring-gray-700 dark:hover:bg-gray-700"
+                x-on:click="pressDecimal()">.</button>
             </div>
+            {{-- Row 5: Backspace full-width --}}
+            <button type="button"
+              class="mb-3 flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-gray-100 p-2 text-sm font-semibold text-gray-500 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-200 active:scale-95 dark:bg-gray-700 dark:text-gray-300 dark:ring-gray-600 dark:hover:bg-gray-600"
+              x-on:click="pressBackspace()">
+              <x-filament::icon icon="heroicon-o-backspace" class="h-4 w-4" />
+              <span>{{ __('Delete') }}</span>
+            </button>
             </div>
             <div class="mt-2 grid grid-cols-3 gap-2">
+                <div x-show="paymentMethodWarning" x-cloak x-transition class="col-span-3 text-center text-sm text-danger-600 font-medium">
+                    {{ __('Select a payment method first') }}
+                </div>
+                {{-- Exact amount button --}}
+                <button type="button"
+                  class="flex min-h-[48px] w-full items-center justify-center gap-x-2 rounded-xl bg-amber-50 p-3 text-sm font-semibold text-amber-700 shadow-sm ring-1 ring-amber-200 transition-all hover:bg-amber-100 active:scale-95 dark:bg-amber-900/30 dark:text-amber-400 dark:ring-amber-800"
+                  x-on:click="pressNoChange()">
+                  <x-heroicon-o-check class="h-5 w-5" />
+                  {{ __('Exact amount') }}
+                </button>
+                {{-- Pay now --}}
                 <button wire:loading.attr="disabled" type="submit"
-                  class="flex w-full items-center justify-center gap-x-2 rounded-md bg-zonakasir-primary p-2 text-sm text-white hover:brightness-110 md:text-lg">
+                  class="flex min-h-[48px] w-full items-center justify-center gap-x-2 rounded-xl bg-zonakasir-primary p-3 text-base font-bold text-white shadow-lg shadow-zonakasir-primary/30 transition-all hover:brightness-110 active:scale-95 disabled:opacity-50">
                   <div wire:loading>
                     <x-filament::loading-indicator class="h-5 w-5" />
                   </div>
-                  {{ __('Pay it') }}
+                  {{ __('Pay now') }}
                 </button>
+                {{-- Cancel --}}
                 <button wire:click="dispatch('close-modal', {id: 'proceed-the-payment'});" type="button"
-                  class="flex w-full items-center justify-center gap-x-2 rounded-md bg-gray-300 p-2 text-sm md:text-lg">
-                  {{ __('Close') }}
+                  class="flex min-h-[48px] w-full items-center justify-center gap-x-2 rounded-xl bg-gray-100 p-3 text-sm font-semibold text-gray-700 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-200 active:scale-95 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700 dark:hover:bg-gray-700">
+                  {{ __('Cancel') }}
                 </button>
               </div>
           </div>
@@ -877,60 +923,123 @@
     });
     Alpine.data('detail', () => {
       return {
+        paymentMethodWarning: false,
+        rawValue: 0,
+        changeAmount: 0,
+        maxValue: 999999999,
+        decimalActive: false,
+        decimalCount: 0,
+
+        init() {
+            Livewire.on('payment-method-missing', () => {
+                this.paymentMethodWarning = true;
+                setTimeout(() => this.paymentMethodWarning = false, 3000);
+            });
+            this.$watch('subtotal', (val) => {
+              if (val !== undefined && val !== null) this.recalc();
+            });
+        },
         isTouchScreen() {
           return ('ontouchstart' in window) ||
             (navigator.maxTouchPoints > 0) ||
             (navigator.msMaxTouchPoints > 0);
         },
-        displayValue: '',
         paymentMethods: $wire.entangle('paymentMethods'),
         cartDetail: @js($cartDetail),
         subtotal: $wire.entangle('total_price'),
-        shortcut(number) {
-          this.$refs.payedMoney.value = moneyFormat(number);
-          this.changes();
-          return;
+
+        pressDigit(digit) {
+          if (this.decimalActive) {
+            this.decimalCount++;
+            if (this.decimalCount > 2) return;
+            this.rawValue = this.rawValue + digit / Math.pow(10, this.decimalCount);
+            this.rawValue = parseFloat(this.rawValue.toFixed(2));
+          } else {
+            let next = this.rawValue * 10 + digit;
+            if (next > this.maxValue) return;
+            this.rawValue = next;
+          }
+          this.sync();
         },
-        append(number) {
-          if (number == 'no_changes') {
-            this.$refs.payedMoney.value = moneyFormat(this.subtotal);
-            this.changes();
-            return;
+        pressDecimal() {
+          if (this.decimalActive) return;
+          this.decimalActive = true;
+          this.decimalCount = 0;
+          // Ensure rawValue is float so toFixed works
+          this.rawValue = parseFloat(this.rawValue.toString());
+          this.sync();
+        },
+        pressBackspace() {
+          if (this.decimalActive && this.decimalCount > 0) {
+            this.decimalCount--;
+            if (this.decimalCount === 0) {
+              this.decimalActive = false;
+              this.rawValue = Math.round(this.rawValue);
+            } else {
+              this.rawValue = Math.floor(this.rawValue * Math.pow(10, this.decimalCount)) / Math.pow(10, this.decimalCount);
+            }
+          } else if (this.decimalActive && this.decimalCount === 0) {
+            this.decimalActive = false;
+          } else {
+            this.rawValue = Math.floor(this.rawValue / 10);
           }
-          if (number == 'backspace') {
-            this.displayValue = this.displayValue.slice(0, -1);
-            this.$refs.payedMoney.value = moneyFormat(this.displayValue);
-            this.changes();
-            return;
+          this.sync();
+        },
+        pressClear() {
+          this.rawValue = 0;
+          this.decimalActive = false;
+          this.decimalCount = 0;
+          this.sync();
+        },
+        pressNoChange() {
+          let sub = this.getSubtotal();
+          this.rawValue = sub;
+          this.decimalActive = false;
+          this.decimalCount = 0;
+          this.sync();
+        },
+        shortcut(number) {
+          let n = parseFloat(number);
+          if (isNaN(n) || n < 0) return;
+          if (n > this.maxValue) n = this.maxValue;
+          this.rawValue = n;
+          this.decimalActive = false;
+          this.decimalCount = 0;
+          this.sync();
+        },
+        getSubtotal() {
+          let sub = typeof this.subtotal === 'number' ? this.subtotal : parseFloat(this.subtotal || '0');
+          return isNaN(sub) ? 0 : sub;
+        },
+        sync() {
+          this.$refs.payedMoney.value = moneyFormat(this.rawValue);
+          this.recalc();
+        },
+        recalc() {
+          let sub = this.getSubtotal();
+          this.changeAmount = this.rawValue - sub;
+          let safeChange = this.changeAmount > 0 ? this.changeAmount : 0;
+          $wire.set('cartDetail.money_changes', safeChange);
+          $wire.set('cartDetail.payed_money', this.rawValue);
+          if (this.$refs.moneyChanges) {
+            this.$refs.moneyChanges.textContent = moneyFormat(safeChange);
           }
-          this.displayValue += number;
-          this.$refs.payedMoney.value = moneyFormat(this.displayValue);
-          this.changes();
+        },
+        handleKeydown(event) {
+          let k = event.key;
+          if (k >= '0' && k <= '9') { this.pressDigit(parseInt(k, 10)); event.preventDefault(); }
+          else if (k === '.' || k === ',') { this.pressDecimal(); event.preventDefault(); }
+          else if (k === 'Backspace') { this.pressBackspace(); event.preventDefault(); }
+          else if (k === 'Delete') { this.pressClear(); event.preventDefault(); }
+          else if (k === 'Escape') { $wire.dispatch('close-modal', {id: 'proceed-the-payment'}); event.preventDefault(); }
         },
         selectPayment(method) {
           this.cartDetail['payment_method_id'] = method.id;
           $wire.setPaymentMethodId(method.id);
 
-          // Midtrans types that don't need calculator: directly proceed payment
-          var midtransTypes = [/*'credit_card',*/ 'debit_card', 'gopay', 'shopeepay', 'qris', 'bank_transfer', 'indomaret', 'alfamart', 'kredivo', 'akulaku'];
+          var midtransTypes = ['debit_card', 'gopay', 'shopeepay', 'qris', 'bank_transfer', 'indomaret', 'alfamart', 'kredivo', 'akulaku'];
           if (midtransTypes.includes(method.payment_type)) {
-            // Small delay to allow Livewire to sync payment_method_id
             setTimeout(() => { $wire.proceedThePayment(); }, 100);
-          }
-        },
-        changes() {
-          let val = this.$refs.payedMoney.value || '';
-          let numericValue = val.replace(/\D/g, '');
-          let num = parseInt(numericValue, 10);
-          num = isNaN(num) ? 0 : num;
-
-          this.displayValue = num > 0 ? num.toString() : '';
-
-          $wire.cartDetail['money_changes'] = num - (this.subtotal);
-          $wire.cartDetail['payed_money'] = num;
-
-          if (this.$refs.moneyChanges) {
-            this.$refs.moneyChanges.textContent = moneyFormat($wire.cartDetail['money_changes']);
           }
         }
       }
@@ -980,7 +1089,7 @@
         button.textContent = numberFormat(suggestion);
         button.setAttribute('type', 'button')
         button.setAttribute('x-on:click', `shortcut(${suggestion})`);
-        button.className = 'bg-gray-300 hover:bg-gray-400 p-2 rounded-md text-lg';
+        button.className = 'flex min-h-[40px] items-center justify-center rounded-xl bg-zonakasir-primary/10 p-2 text-sm font-semibold text-zonakasir-primary shadow-sm ring-1 ring-zonakasir-primary/20 transition-all hover:bg-zonakasir-primary/20 active:scale-95 dark:bg-zonakasir-primary/20 dark:text-zonakasir-primary/90 dark:ring-zonakasir-primary/30';
         calculatorBtn.appendChild(button);
       }
     }
@@ -1023,6 +1132,12 @@
       let totalPrice = $refs.total.getAttribute('data-value');
       if ("@js(feature(PaymentShortcutButton::class))" == 'true') {
         generateButton(totalPrice);
+      }
+      if (event.id === 'proceed-the-payment') {
+        setTimeout(() => {
+          const el = document.getElementById('display');
+          if (el) el.focus();
+        }, 150);
       }
       modalOpened = true;
     });
