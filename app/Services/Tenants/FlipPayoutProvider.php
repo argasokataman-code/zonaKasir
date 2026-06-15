@@ -13,12 +13,12 @@ class FlipPayoutProvider implements DisbursementProvider
         $baseUrl = config('flip.base_url');
 
         $response = Http::withBasicAuth($secretKey, '')
+            ->withHeader('Idempotency-Key', $params['idempotency_key'])
             ->post($baseUrl . '/v2/disbursement', [
                 'bank_code'      => $this->mapBankCode($params['bank_code']),
                 'account_number' => $params['account_number'],
                 'amount'         => (int) round($params['amount']), // Round instead of truncate
                 'remark'         => $params['remark'] ?? 'ZonaKasir Disbursement',
-                'idempotency_key'=> $params['idempotency_key'],
             ]);
 
         if ($response->failed()) {
