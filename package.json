@@ -5,7 +5,7 @@
         "build": "vite build && npm run sw:version",
         "sw:version": "node scripts/sw-version.mjs",
         "landing:dev": "cd landing && npm run dev",
-        "landing:build": "cd landing && npm install && npm run landing:build",
+        "landing:build": "cd landing && npm install && npm run build",
         "build:all": "npm run build && npm run landing:build"
     },
     "dependencies": {
