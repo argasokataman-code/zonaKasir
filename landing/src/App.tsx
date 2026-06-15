@@ -1430,7 +1430,7 @@ export default function App() {
                             <span>{label}</span>
                           </li>
                         ))}
-                        {!plan.is_on_premise && Object.keys(plan.features).length > 6 && (
+                        {Object.keys(plan.features).length > 6 && (
                           <li>
                             <button onClick={() => setExpandedFeatures(prev => ({ ...prev, [plan.id]: !prev[plan.id] }))}
                               className="text-[10px] text-zonakasir-primary font-semibold hover:underline pl-6 cursor-pointer">
