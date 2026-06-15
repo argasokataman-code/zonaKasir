@@ -98,7 +98,11 @@ class ManageSubscription extends Page
                 if ($subscription->status === 'trialing' && $subscription->trial_ends_at && $subscription->trial_ends_at->isPast()) {
                     $subscription->update(['status' => 'expired']);
                 }
-                // ⚠️ DO NOT update plan_id here — wait for webhook confirmation
+                // Update billing cycle to match user's selection (invoice amount uses this)
+                // ⚠️ plan_id not updated here — wait for webhook confirmation
+                if ($subscription->billing_cycle !== $billingCycle) {
+                    $subscription->update(['billing_cycle' => $billingCycle]);
+                }
             } else {
                 $subscription = Subscription::create([
                     'tenant_id' => $tenantId,
