@@ -114,7 +114,9 @@ class WithdrawalService
                         'account_number'    => $withdrawal->bank_account_number,
                         'account_name'      => $withdrawal->bank_account_name,
                         'amount'            => $netAmount,
-                        'remark'            => "Zonakasir WD #{$withdrawal->id}",
+'remark'            => 'ZonaKasir Withdrawal',
+
+
                         'idempotency_key'   => $withdrawal->idempotency_key,
                     ]);
 
@@ -216,7 +218,7 @@ class WithdrawalService
                 'account_number'    => $withdrawal->bank_account_number,
                 'account_name'      => $withdrawal->bank_account_name,
                 'amount'            => $netAmount,
-                'remark'           => "Zonakasir WD #{$withdrawal->id}",
+                'remark'           => 'ZonaKasir Withdrawal',
                 'idempotency_key'   => $withdrawal->idempotency_key,
             ]);
 
