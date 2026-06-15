@@ -19,6 +19,8 @@ class ManageSubscription extends Page
 
     protected static string $view = 'filament.tenant.pages.subscription';
 
+    protected static string $layout = 'filament-panels::components.layout.base';
+
     protected static ?string $title = 'Subscription';
 
     protected static ?string $navigationLabel = 'Subscription';
