@@ -72,6 +72,21 @@ class LedgerService
         return LedgerEntry::sum(DB::raw("CASE WHEN entry_type = 'credit' THEN amount ELSE -amount END"));
     }
 
+    /**
+     * Get current balance with MySQL GET_LOCK to prevent concurrent reads.
+     */
+    public function getCurrentBalanceWithLock(): float
+    {
+        $lockName = 'ledger_balance_lock';
+        DB::select("SELECT GET_LOCK(?, 10) AS lock_acquired", [$lockName]);
+
+        try {
+            return $this->getCurrentBalance();
+        } finally {
+            DB::select("SELECT RELEASE_LOCK(?)", [$lockName]);
+        }
+    }
+
     public function getTransactions($from, $to): \Illuminate\Database\Eloquent\Collection
     {
         return LedgerEntry::whereBetween('created_at', [$from, $to])

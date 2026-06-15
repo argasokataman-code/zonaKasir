@@ -17,6 +17,7 @@ class WithdrawalService
     public function __construct(
         private readonly LedgerService $ledger,
         private readonly DisbursementProvider $disbursement,
+        private readonly FlipDataService $flipData,
     ) {}
 
     /**
@@ -35,6 +36,13 @@ class WithdrawalService
         }
 
         $about = About::first();
+        if (! $about) {
+            throw new \InvalidArgumentException('Tenant bank info not configured');
+        }
+
+        if (empty($about->bank_account_number) || empty($about->bank_code)) {
+            throw new \InvalidArgumentException('Informasi bank tidak lengkap');
+        }
 
         return DB::transaction(function () use ($amount, $idempotencyKey, $about) {
             $available = $this->ledger->getCurrentBalance();
@@ -112,7 +120,10 @@ class WithdrawalService
      */
     public function approve(int $withdrawalId, int $approvedBy): Withdrawal
     {
-        $withdrawal = Withdrawal::findOrFail($withdrawalId);
+        $withdrawal = Withdrawal::where('id', $withdrawalId)
+            ->lockForUpdate()
+            ->firstOrFail();
+
         abort_if($withdrawal->status !== 'pending', 400, 'Withdrawal already processed');
 
         $singleAdminMax = config('flip.withdrawal_approval.single_admin_max', 25000000);
@@ -130,6 +141,18 @@ class WithdrawalService
         try {
             $withdrawal->update(['status' => 'processing']);
 
+            // Pre-flight: Check Flip balance before sending
+            $flipBalance = $this->flipData->getBalance();
+            if ($flipBalance === null) {
+                throw new DisbursementFailedException('Gagal memeriksa saldo Flip');
+            }
+            if (($flipBalance['balance'] ?? 0) < $withdrawal->amount) {
+                throw new DisbursementFailedException(
+                    'Saldo Flip tidak mencukupi. Dibutuhkan: Rp ' . number_format($withdrawal->amount, 0, ',', '.')
+                    . '. Tersedia: Rp ' . number_format($flipBalance['balance'] ?? 0, 0, ',', '.')
+                );
+            }
+
             $result = $this->disbursement->send([
                 'bank_code'         => $withdrawal->bank_code,
                 'account_number'    => $withdrawal->bank_account_number,
@@ -139,9 +162,17 @@ class WithdrawalService
                 'idempotency_key'   => $withdrawal->idempotency_key,
             ]);
 
+            // Handle Flip returned status (don't assume completed)
+            $newStatus = match ($result['status'] ?? 'pending') {
+                'DONE'    => 'completed',
+                'PENDING' => 'processing',
+                'FAILED', 'CANCELLED' => 'failed',
+                default   => 'processing',
+            };
+
             $withdrawal->update([
-                'status'            => 'completed',
-                'disburse_id'       => $result['id'],
+                'status'            => $newStatus,
+                'disburse_id'       => $result['id'] ?? null,
                 'disburse_response' => $result,
                 'approved_by'       => $approvedBy,
                 'processed_at'      => now(),
@@ -151,8 +182,10 @@ class WithdrawalService
                 ->where('reference_id', $withdrawal->id)
                 ->update(['reference_type' => 'withdrawal_complete']);
 
-            // Send notification to tenant
-            Notification::send($withdrawal->requestedBy, new WithdrawalApproved($withdrawal));
+            // Send notification to tenant only if completed
+            if ($newStatus === 'completed') {
+                Notification::send($withdrawal->requestedBy, new WithdrawalApproved($withdrawal));
+            }
 
         } catch (Throwable $e) {
             $withdrawal->update([
