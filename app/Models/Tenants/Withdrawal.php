@@ -19,6 +19,10 @@ class Withdrawal extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'processed_at' => 'datetime',
+    ];
+
     protected static $recordEvents = ['created', 'updated'];
 
     public function requestedBy(): BelongsTo
