@@ -246,7 +246,6 @@ class TenantPanelProvider extends PanelProvider
                 $this->generateNavigationItem(SettlementResource::class),
                 $this->generateNavigationItem(WithdrawalResource::class),
                 $this->generateNavigationItem(WithdrawalPage::class),
-                $this->generateNavigationItem(ManageSubscription::class),
             ]),
             NavigationGroup::make(__('Setting'))->collapsible(false)->items([
                 $this->generateNavigationItem(GeneralSetting::class),
