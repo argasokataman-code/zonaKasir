@@ -146,7 +146,7 @@
                         </div>
                         @endif
 
-                            <div class="mt-auto pt-3 border-t border-gray-100 relative" x-data="{ showBilling: false, showConfirm: false, confirmPlan: null, confirmBilling: '', selectedBilling: '' }">
+                            <div class="mt-auto pt-3 border-t border-gray-100 relative" x-data="{ showBilling: false, showConfirm: false, confirmPlan: null, confirmBilling: '', confirmPlanName: '', selectedBilling: '' }">
                                 @if($current && $current['id'] === $plan['id'])
                                     @if($current['is_on_trial'])
                                         <button
@@ -254,7 +254,8 @@
                                     <div class="relative bg-white rounded-[8px] shadow-xl w-full max-w-sm p-6">
                                         <h3 class="text-sm font-bold text-gray-900 mb-1">{{ __('Confirm Plan Change') }}</h3>
                                         <p class="text-xs text-gray-500 mb-1">
-                                            {{ __('Your current plan is') }} <span class="font-bold text-gray-900">{{ $current['name'] ?? '—' }}</span>.
+                                            {{ __('Your current plan is') }} <span class="font-bold text-gray-900">{{ $current['name'] ?? '—' }}</span>
+                                            ({{ __($current['billing_cycle'] === 'yearly' ? 'Yearly' : 'Monthly') }}).
                                         </p>
                                         <p class="text-xs text-gray-500 mb-4">
                                             {{ __('Switch to') }} <span class="font-bold text-gray-900" x-text="confirmPlanName"></span>
