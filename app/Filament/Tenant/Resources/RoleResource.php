@@ -29,8 +29,8 @@ class RoleResource extends Resource
                 TextInput::make('name')
                     ->translateLabel()
                     ->required(),
-                ...static::buildPermissionSections('web', 'Web App Permissions'),
-                ...static::buildPermissionSections('sanctum', 'Mobile App Permissions'),
+                ...static::buildPermissionSections('web', __('Web App Permissions')),
+                ...static::buildPermissionSections('sanctum', __('Mobile App Permissions')),
             ])->columns(1);
     }
 
@@ -52,7 +52,7 @@ class RoleResource extends Resource
 
             $methodName = $guard . ucfirst($groupKey) . 'Permissions';
 
-            $sections[] = Section::make($group['label'])
+            $sections[] = Section::make(__($group['label']))
                 ->icon($group['icon'])
                 ->collapsible()
                 ->collapsed()
