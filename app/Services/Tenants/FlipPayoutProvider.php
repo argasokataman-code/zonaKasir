@@ -12,14 +12,19 @@ class FlipPayoutProvider implements DisbursementProvider
         $secretKey = config('flip.secret_key');
         $baseUrl = config('flip.base_url');
 
+        $body = [
+            'bank_code'      => $this->mapBankCode($params['bank_code']),
+            'account_number' => $params['account_number'],
+            'amount'         => (int) round($params['amount']),
+            'remark'         => $params['remark'] ?? 'ZK Disbursement',
+        ];
+        if (! empty($params['account_name'])) {
+            $body['account_name'] = $params['account_name'];
+        }
+
         $response = Http::withBasicAuth($secretKey, '')
             ->withHeader('Idempotency-Key', $params['idempotency_key'])
-            ->post($baseUrl . '/v2/disbursement', [
-                'bank_code'      => $this->mapBankCode($params['bank_code']),
-                'account_number' => $params['account_number'],
-                'amount'         => (int) round($params['amount']), // Round instead of truncate
-                'remark'         => $params['remark'] ?? 'ZK Disbursement',
-            ]);
+            ->post($baseUrl . '/v2/disbursement', $body);
 
         if ($response->failed()) {
             Log::error('Flip Disbursement failed', [
@@ -60,8 +65,27 @@ class FlipPayoutProvider implements DisbursementProvider
 
     private function mapBankCode(string $code): string
     {
-        // Flip codes: bca, mandiri, bni, bri, cimb, etc.
-        // We use simple mapping to lower case as most match the bank name
-        return strtolower($code);
+        // DB stores numeric codes (014, 009), Flip expects lowercase names (bca, bni)
+        $map = [
+            '014' => 'bca',
+            '009' => 'bni',
+            '002' => 'bri',
+            '008' => 'mandiri',
+            '022' => 'cimb',
+            '451' => 'bsi',
+            '200' => 'btn',
+            '011' => 'danamon',
+            '016' => 'maybank',
+            '013' => 'permata',
+            '028' => 'ocbc',
+            '019' => 'panin',
+            '426' => 'mega',
+            '004' => 'bank_jatim',
+            '006' => 'bank_jateng',
+            '425' => 'bjb',
+            '046' => 'bank_sumut',
+        ];
+
+        return $map[$code] ?? strtolower($code);
     }
 }
