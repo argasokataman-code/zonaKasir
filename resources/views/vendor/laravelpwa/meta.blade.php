@@ -182,7 +182,19 @@
   if ('serviceWorker' in navigator) {
     var swUpdating = false;
 
-    navigator.serviceWorker.register('/serviceworker.js?v=' + Date.now(), { scope: '/' })
+    // Reload deferred update when navigating away from cashier
+    var pendingUpdate = sessionStorage.getItem('pwa_pending_update');
+    if (pendingUpdate === 'true' && !window.location.pathname.includes('/cashier')) {
+      sessionStorage.removeItem('pwa_pending_update');
+      navigator.serviceWorker.ready.then(function(registration) {
+        if (registration.waiting) {
+          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+        }
+        setTimeout(function() { window.location.reload(); }, 300);
+      });
+    }
+
+    navigator.serviceWorker.register('/serviceworker.js', { scope: '/' })
       .then(function(registration) {
         console.log('[PWA] SW registered, scope:', registration.scope);
 
@@ -194,6 +206,22 @@
             // New SW installed + old SW still controlling → update ready
             if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
               console.log('[PWA] New version ready, auto-reloading...');
+
+              // Safety: don't reload during active transaction
+              var path = window.location.pathname;
+              var isCashier = path.includes('/cashier');
+              var hasPendingInput = document.querySelector('form[data-dirty]') ||
+                document.querySelector('[wire\\:dirty]') ||
+                document.querySelector('[x-dirty]') ||
+                document.querySelector('input[data-changed]');
+
+              if (isCashier && hasPendingInput) {
+                console.log('[PWA] Active transaction detected, deferring update');
+                // Store flag, reload on next idle navigation
+                sessionStorage.setItem('pwa_pending_update', 'true');
+                return;
+              }
+
               // Tell new SW to take over immediately
               newWorker.postMessage({ type: 'SKIP_WAITING' });
               // Reload after short delay to let claim() finish
