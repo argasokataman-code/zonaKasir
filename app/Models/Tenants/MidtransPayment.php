@@ -21,6 +21,7 @@ class MidtransPayment extends Model
 
     protected $casts = [
         'cart_data' => 'json',
+        'paid_at' => 'datetime',
     ];
 
     protected static $recordEvents = ['created', 'updated'];
