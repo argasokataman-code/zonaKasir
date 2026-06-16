@@ -114,7 +114,6 @@
         <div class="flex flex-col gap-4 pb-2 sm:flex-row sm:flex-nowrap sm:overflow-x-auto sm:scrollbar-thin sm:justify-center sm:gap-6">
             @foreach($plans as $plan)
             <div
-                x-data="{ featuresOpen: false }"
                 class="bg-white rounded-[6px] shadow-sm flex flex-col relative border @if($current && $current['id'] === $plan['id']) border-2 border-gray-900 shadow-md @else border-[#E5E5E1] @endif w-full sm:flex-shrink-0 sm:w-[280px] sm:min-w-[280px]"
             >
                     @if(($plan['is_popular'] ?? false) && $plan['price_monthly'] > 0)
@@ -154,31 +153,33 @@
                         </div>
 
                         @if(!empty($plan['features']))
-                        <button
-                            type="button"
-                            x-on:click="featuresOpen = !featuresOpen"
-                            class="w-full flex items-center justify-between text-[10px] font-bold text-gray-900 uppercase tracking-wider py-1.5 border-t border-gray-100 cursor-pointer hover:text-gray-600 transition-colors"
-                        >
-                            <span>{{ __('Features') }} ({{ count($plan['features']) }})</span>
-                            <svg class="w-3 h-3 transition-transform duration-200" x-bind:class="featuresOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                        </button>
+                        <div x-data="{ open: false }">
+                            <button
+                                type="button"
+                                x-on:click="open = !open"
+                                class="w-full flex items-center justify-between text-[10px] font-bold text-gray-900 uppercase tracking-wider py-1.5 border-t border-gray-100 cursor-pointer hover:text-gray-600 transition-colors"
+                            >
+                                <span>{{ __('Features') }} ({{ count($plan['features']) }})</span>
+                                <svg class="w-3 h-3 transition-transform duration-200" x-bind:class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                            </button>
 
-                        <div
-                            x-show="featuresOpen"
-                            x-collapse
-                            x-cloak
-                            class="overflow-hidden"
-                        >
-                            <ul class="space-y-1.5 text-[11px] text-gray-600 font-medium py-2">
-                                @foreach($plan['features'] as $key => $label)
-                                <li class="flex items-start gap-2">
-                                    <span class="w-3.5 h-3.5 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mt-0.5">
-                                        <svg class="w-2 h-2 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                                    </span>
-                                    <span>{{ is_string($label) ? $label : (is_string($key) ? $key : $label) }}</span>
-                                </li>
-                                @endforeach
-                            </ul>
+                            <div
+                                x-show="open"
+                                x-collapse
+                                x-cloak
+                                class="overflow-hidden"
+                            >
+                                <ul class="space-y-1.5 text-[11px] text-gray-600 font-medium py-2">
+                                    @foreach($plan['features'] as $key => $label)
+                                    <li class="flex items-start gap-2">
+                                        <span class="w-3.5 h-3.5 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mt-0.5">
+                                            <svg class="w-2 h-2 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                                        </span>
+                                        <span>{{ is_string($label) ? $label : (is_string($key) ? $key : $label) }}</span>
+                                    </li>
+                                    @endforeach
+                                </ul>
+                            </div>
                         </div>
                         @endif
 
