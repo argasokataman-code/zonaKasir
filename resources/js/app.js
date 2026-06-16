@@ -357,55 +357,60 @@ window.buildReceiptPreviewHtml = function(selling, about, printerData) {
   return h;
 }
 
-// ─── Global 419 handler: replace browser confirm with custom popup ──
+// ─── Global 419 handler: auto-refresh instead of browser confirm ──
 (function() {
-  function injectExpiredModal() {
-    if (document.getElementById('global-expired-modal')) return;
-    var div = document.createElement('div');
-    div.id = 'global-expired-modal';
-    div.innerHTML =
-      '<div style="position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;">' +
-        '<div style="background:#fff;border-radius:16px;padding:32px;max-width:380px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.25);">' +
-          '<div style="font-size:48px;margin-bottom:12px;">🔒</div>' +
-          '<h2 style="margin:0 0 8px;font-size:20px;font-weight:700;color:#1f2937;">Sesi Telah Habis</h2>' +
-          '<p style="margin:0 0 24px;font-size:14px;color:#6b7280;line-height:1.5;">Sesi kamu sudah berakhir karena terlalu lama tidak aktif. Silakan masuk kembali.</p>' +
-          '<button id="global-expired-refresh" style="width:100%;padding:12px 24px;border:none;border-radius:10px;background:#FF6600;color:#fff;font-size:15px;font-weight:600;cursor:pointer;">Segarkan Halaman</button>' +
-        '</div>' +
-      '</div>';
-    document.body.appendChild(div);
-    document.getElementById('global-expired-refresh').onclick = function() {
-      window.location.reload();
-    };
+  function handle419() {
+    // Auto-refresh dulu, baru show modal kalo gagal
+    var lastRefresh = sessionStorage.getItem('last_419_refresh');
+    var now = Date.now();
+    if (lastRefresh && (now - parseInt(lastRefresh)) < 10000) {
+      // Already refreshed recently — prevent infinite loop, show modal
+      if (document.getElementById('global-expired-modal')) return;
+      var div = document.createElement('div');
+      div.id = 'global-expired-modal';
+      div.innerHTML =
+        '<div style="position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;">' +
+          '<div style="background:#fff;border-radius:16px;padding:32px;max-width:380px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.25);">' +
+            '<div style="font-size:48px;margin-bottom:12px;">🔒</div>' +
+            '<h2 style="margin:0 0 8px;font-size:20px;font-weight:700;color:#1f2937;">Sesi Telah Habis</h2>' +
+            '<p style="margin:0 0 24px;font-size:14px;color:#6b7280;line-height:1.5;">Sesi kamu sudah berakhir karena terlalu lama tidak aktif. Silakan masuk kembali.</p>' +
+            '<button id="global-expired-refresh" style="width:100%;padding:12px 24px;border:none;border-radius:10px;background:#FF6600;color:#fff;font-size:15px;font-weight:600;cursor:pointer;">Segarkan Halaman</button>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(div);
+      document.getElementById('global-expired-refresh').onclick = function() {
+        sessionStorage.removeItem('last_419_refresh');
+        window.location.reload();
+      };
+      return;
+    }
+    sessionStorage.setItem('last_419_refresh', String(now));
+    window.location.reload();
   }
 
-  // Intercept Livewire 419 via hook (Livewire v3)
+  // Intercept Livewire 419 via hook
+  function registerLivewireHook() {
+    if (window.Livewire) {
+      Livewire.hook('request.fail', function({ status, preventDefault }) {
+        if (status === 419) {
+          preventDefault();
+          handle419();
+        }
+      });
+    }
+  }
   if (window.Livewire) {
-    Livewire.hook('request.fail', function({ status, preventDefault }) {
-      if (status === 419) {
-        preventDefault();
-        injectExpiredModal();
-      }
-    });
+    registerLivewireHook();
   } else {
-    // Fallback: wait for Livewire to load, then register hook
-    document.addEventListener('livewire:init', function() {
-      if (window.Livewire) {
-        Livewire.hook('request.fail', function({ status, preventDefault }) {
-          if (status === 419) {
-            preventDefault();
-            injectExpiredModal();
-          }
-        });
-      }
-    });
+    document.addEventListener('livewire:init', registerLivewireHook);
   }
 
-  // Also intercept fetch/XHR 419 for non-Livewire requests
+  // Intercept XHR 419
   var origOpen = XMLHttpRequest.prototype.open;
   XMLHttpRequest.prototype.open = function() {
     this.addEventListener('load', function() {
       if (this.status === 419) {
-        injectExpiredModal();
+        handle419();
       }
     });
     origOpen.apply(this, arguments);

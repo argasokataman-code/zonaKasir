@@ -98,16 +98,6 @@ class Profile extends Model
 
                     return $static->getUploadedFileUsing($component, $file, $storedFileNames);
                 })
-                ->deleteUploadedFileUsing(function ($file) {
-                    // Hapus file dari disk + UploadedFile record saat user klik X
-                    $uploadDisk = config('filesystems.upload_disk');
-                    if (is_string($file) && Storage::disk($uploadDisk)->exists($file)) {
-                        Storage::disk($uploadDisk)->delete($file);
-                    }
-                    UploadedFile::where('relative_path', $file)
-                        ->orWhere('url', $file)
-                        ->delete();
-                })
                 ->imageEditorMode(2)
                 ->translateLabel(),
             TextInput::make('password')
