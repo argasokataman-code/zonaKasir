@@ -12,6 +12,8 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Facades\RateLimiter;
+use Spatie\Activitylog\Facades\Activity;
 
 class SendNotification extends Page implements HasForms
 {
@@ -25,6 +27,8 @@ class SendNotification extends Page implements HasForms
 
     protected static string $view = 'filament.admin.pages.send-notification';
 
+    protected static ?string $title = 'Send Notification';
+
     public ?string $target = null;
 
     public ?string $subject = null;
@@ -36,8 +40,29 @@ class SendNotification extends Page implements HasForms
         $this->form->fill();
     }
 
+    public static function canAccess(): bool
+    {
+        return auth('admin')->user()?->can('manage settings') ?? false;
+    }
+
     public function send(): void
     {
+        // Rate limit: max 5 sends per minute per admin
+        $adminId = auth('admin')->id();
+        $rateKey = "send-notification:{$adminId}";
+
+        if (RateLimiter::tooManyAttempts($rateKey, 5)) {
+            $seconds = RateLimiter::availableIn($rateKey);
+            Notification::make()
+                ->danger()
+                ->title('Too many requests')
+                ->body("Please wait {$seconds} seconds before sending again.")
+                ->send();
+            return;
+        }
+
+        RateLimiter::hit($rateKey, 60);
+
         $data = $this->form->getState();
         $target = $data['target'];
         $subject = $data['subject'];
@@ -47,21 +72,52 @@ class SendNotification extends Page implements HasForms
             ? Tenant::where('is_active', true)->get()
             : Tenant::where('id', $target)->get();
 
-        $count = 0;
+        if ($tenants->isEmpty()) {
+            Notification::make()
+                ->danger()
+                ->title('No tenants found')
+                ->send();
+            return;
+        }
+
+        $totalCount = 0;
+        $failedTenants = [];
+
         foreach ($tenants as $tenant) {
-            // Send notification inside each tenant's database
-            $tenant->run(function () use ($subject, $body, &$count) {
-                $users = \App\Models\Tenants\User::all();
-                foreach ($users as $user) {
-                    $user->notify(new BroadcastMessage($subject, $body));
-                    $count++;
-                }
-            });
+            try {
+                $tenant->run(function () use ($subject, $body, &$totalCount) {
+                    \App\Models\Tenants\User::query()
+                        ->chunkById(200, function ($users) use ($subject, $body, &$totalCount) {
+                            foreach ($users as $user) {
+                                try {
+                                    $user->notify(new BroadcastMessage($subject, $body));
+                                    $totalCount++;
+                                } catch (\Exception $e) {
+                                    \Log::warning("Failed to send notification to user {$user->id}: {$e->getMessage()}");
+                                }
+                            }
+                        });
+                });
+            } catch (\Exception $e) {
+                $failedTenants[] = $tenant->id;
+                \Log::error("Failed to send notification to tenant {$tenant->id}: {$e->getMessage()}");
+            }
+        }
+
+        // Audit log
+        Activity::causedBy(auth('admin')->user())
+            ->performedOn(Tenant::class)
+            ->event('send_notification')
+            ->log("Sent notification to {$totalCount} user(s) across {$tenants->count()} tenant(s). Subject: {$subject}");
+
+        $message = "Notification sent to {$totalCount} user(s) across {$tenants->count()} tenant(s)";
+        if (! empty($failedTenants)) {
+            $message .= ". Failed: " . implode(', ', $failedTenants);
         }
 
         Notification::make()
             ->success()
-            ->title("Notification sent to {$count} user(s) across {$tenants->count()} tenant(s)")
+            ->title($message)
             ->send();
 
         $this->form->fill();
@@ -87,6 +143,7 @@ class SendNotification extends Page implements HasForms
                     ->maxLength(255),
                 Textarea::make('body')
                     ->required()
+                    ->maxLength(5000)
                     ->rows(6),
             ]);
     }

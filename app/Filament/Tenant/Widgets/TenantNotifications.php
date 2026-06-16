@@ -10,6 +10,8 @@ class TenantNotifications extends Widget
 
     protected int | string | array $columnSpan = 'full';
 
+    protected static string $pollingInterval = '30s';
+
     public function getViewData(): array
     {
         $user = auth()->user();
@@ -25,5 +27,32 @@ class TenantNotifications extends Widget
             'totalCount' => $totalUnread,
             'showAll' => $totalUnread > 5,
         ];
+    }
+
+    public function markAsRead(string $notificationId): void
+    {
+        $user = auth()->user();
+        if (! $user) {
+            return;
+        }
+
+        $notification = $user->notifications()->where('id', $notificationId)->first();
+        if ($notification && is_null($notification->read_at)) {
+            $notification->update(['read_at' => now()]);
+        }
+
+        $this->dispatch('refreshNotifications');
+    }
+
+    public function markAllAsRead(): void
+    {
+        $user = auth()->user();
+        if (! $user) {
+            return;
+        }
+
+        $user->unreadNotifications()->update(['read_at' => now()]);
+
+        $this->dispatch('refreshNotifications');
     }
 }

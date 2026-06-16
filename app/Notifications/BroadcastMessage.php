@@ -4,6 +4,9 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
+use NotificationChannels\Fcm\FcmChannel;
+use NotificationChannels\Fcm\FcmMessage;
+use NotificationChannels\Fcm\Resources\Notification as FcmNotification;
 
 class BroadcastMessage extends Notification
 {
@@ -14,6 +17,10 @@ class BroadcastMessage extends Notification
 
     public function via($notifiable): array
     {
+        if ($notifiable->fcm_token && env('FIREBASE_CREDENTIALS')) {
+            return [FcmChannel::class, 'database'];
+        }
+
         return ['database'];
     }
 
@@ -25,5 +32,23 @@ class BroadcastMessage extends Notification
             'format' => 'filament',
             'duration' => 'persistent',
         ];
+    }
+
+    public function toFcm($notifiable): FcmMessage
+    {
+        return (new FcmMessage(
+            notification: new FcmNotification(
+                title: $this->subject,
+                body: $this->body,
+            )
+        ))->data([
+            'title' => $this->subject,
+            'body' => $this->body,
+        ]);
+    }
+
+    public function getType(): string
+    {
+        return 'broadcast_message';
     }
 }
