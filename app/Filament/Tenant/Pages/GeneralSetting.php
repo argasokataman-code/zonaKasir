@@ -97,7 +97,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
                     'name' => $uploaded->relative_path ?: $uploaded->name,
                     'size' => $uploaded->size ?? 0,
                     'type' => $uploaded->mime_type ?? null,
-                    'url' => $uploaded->url,
+                    'url' => $uploaded->url ?? '',
                 ]];
             } else {
                 // Fallback to disk lookup for legacy relative-path-only values
@@ -108,7 +108,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
                             'name' => ltrim($profile->photo, '/'),
                             'size' => Storage::disk($uploadDisk)->size($profile->photo),
                             'type' => Storage::disk($uploadDisk)->mimeType($profile->photo),
-                            'url' => UploadedFile::urlFromPath($profile->photo, $uploadDisk),
+                            'url' => UploadedFile::urlFromPath($profile->photo, $uploadDisk) ?? '',
                         ]];
                     }
                 } catch (\Exception $e) {
