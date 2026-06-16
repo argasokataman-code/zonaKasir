@@ -126,6 +126,9 @@ class RegisterTenantForm extends Component implements HasForms
 
         TenantContext::set($tenantId);
         Auth::login(\App\Models\Tenants\User::where('email', $data['email'])->first());
+
+        // Set welcome modal
+        session(['welcome_type' => 'trial', 'welcome_data' => []]);
         session()->save();
 
         $this->dispatch('redirect-after-register');
