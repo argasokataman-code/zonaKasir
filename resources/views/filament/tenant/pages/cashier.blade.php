@@ -799,7 +799,8 @@
 
     /* Better touch scrolling for cart & product list */
     .overflow-y-auto, .overflow-auto {
-      -webkit-overflow-scrolling: touch;
+      -webkit-overflow-scrolling: auto;
+      overscroll-behavior: contain;
     }
 
     /* Remove tap highlight on mobile */

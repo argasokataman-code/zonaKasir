@@ -87,6 +87,7 @@
         if (el) {
           Livewire.find(el.getAttribute('wire:id')).set('turnstileToken', token);
         }
+      }
       </script>
     @endif
 

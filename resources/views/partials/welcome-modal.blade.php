@@ -197,7 +197,7 @@ function welcomeModal() {
 
       const colors = ['#FF6600', '#FF8C38', '#FFB347', '#FFD700', '#FF4500', '#FF6347'];
       const pieces = [];
-      const count = 150;
+      const count = 60;
 
       for (let i = 0; i < count; i++) {
         pieces.push({
@@ -239,8 +239,8 @@ function welcomeModal() {
           ctx.restore();
         }
 
-        // Slow down after 4 seconds
-        if (frame > 240) {
+        // Slow down after 2 seconds
+        if (frame > 120) {
           const remaining = pieces.filter(p => p.y < canvas.height + 50);
           if (remaining.length === 0) return;
         }
@@ -249,11 +249,11 @@ function welcomeModal() {
       };
       animate();
 
-      // Auto-stop canvas after 8 seconds
+      // Auto-stop canvas after 3 seconds
       setTimeout(() => {
         const c = document.getElementById('welcome-confetti-canvas');
         if (c) c.style.display = 'none';
-      }, 8000);
+      }, 3000);
     },
     dismiss() {
       const el = this.$el.closest('[x-data]');

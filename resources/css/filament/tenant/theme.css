@@ -2,8 +2,29 @@
 @config '../../../../tailwind.config.js';
 
 
+/* Sidebar: fix scroll + GPU acceleration */
+.fi-sidebar {
+  max-height: 100vh;
+  overflow-y: hidden;
+}
+
 .fi-sidebar-nav {
   @apply bg-white drop-shadow-md dark:bg-gray-900;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: auto;
+  overscroll-behavior: contain;
+  will-change: scroll-position;
+  /* Ensure nav fills remaining space minus header */
+  max-height: calc(100vh - 4rem);
+}
+
+/* Scrollbar styling */
+.fi-sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+.fi-sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.15);
+  border-radius: 2px;
 }
 
 .fi-sidebar-item a {
