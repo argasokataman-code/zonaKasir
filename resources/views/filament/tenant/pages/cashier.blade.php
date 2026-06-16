@@ -335,18 +335,15 @@
                 <p class="col-span-full text-center text-xs text-amber-600 font-medium">{{ __('Select a payment method above') }}</p>
               </template>
             </div>
-            <x-filament::input.wrapper
-              x-show="paymentMethods.filter((pm) => pm.is_credit)[0]?.id == cartDetail['payment_method_id']"
-              :valid="!$errors->has('due_date')" class="mb-2">
-              <x-slot name="prefix">
-                {{ __('Due date') }}
-              </x-slot>
-              <x-filament::input type="date" wire:model="cartDetail.due_date" />
-            </x-filament::input.wrapper>
             <div class="mb-4">
               @include('filament.tenant.pages.cashier.total')
             </div>
-            <div x-show="paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.payment_type == 'cash' || !paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.payment_type">
+            @php
+              $isCreditSelected = true;
+            @endphp
+            <div class="grid gap-3" :class="paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.is_credit ? 'md:grid-cols-[1fr_1fr]' : 'grid-cols-1'">
+            {{-- Calculator area --}}
+            <div>
             @error('payed_money')
               <span class="error text-danger-500">{{ $message }}</span>
             @enderror
@@ -416,24 +413,76 @@
               <span>{{ __('Delete') }}</span>
             </button>
             </div>
-            <div class="mt-2 grid grid-cols-3 gap-2">
-                <div x-show="paymentMethodWarning" x-cloak x-transition class="col-span-3 text-center text-sm text-danger-600 font-medium">
+            {{-- Piutang form: sebelah calculator --}}
+            <div x-show="paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.is_credit"
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 translate-x-2"
+                 x-transition:enter-end="opacity-100 translate-x-0"
+                 class="flex flex-col gap-3 rounded-xl border-2 border-dashed border-amber-300 bg-amber-50/50 p-4 dark:border-amber-700 dark:bg-amber-900/20">
+              <div class="flex items-center gap-2 text-sm font-semibold text-amber-700 dark:text-amber-400">
+                <x-heroicon-o-exclamation-circle class="h-5 w-5" />
+                <span>{{ __('Piutang / Credit') }}</span>
+              </div>
+              {{-- Member select --}}
+              <div>
+                <div class="flex items-center justify-between mb-1">
+                  <label class="text-xs font-medium text-gray-600 dark:text-gray-400">{{ __('Member') }} <span class="text-red-500">*</span></label>
+                  <button type="button" x-on:click="$dispatch('open-modal', {id: 'modal-quick-member'})"
+                    class="text-xs font-semibold text-zonakasir-primary hover:underline">
+                    + {{ __('Add member') }}
+                  </button>
+                </div>
+                <select wire:model="cartDetail.member_id"
+                  class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-zonakasir-primary focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white">
+                  <option value="">{{ __('Select member...') }}</option>
+                  @foreach($members as $id => $memberName)
+                    <option value="{{ $id }}">{{ $memberName }}</option>
+                  @endforeach
+                </select>
+              </div>
+              {{-- Due date --}}
+              <div>
+                <label class="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">{{ __('Due date') }} <span class="text-red-500">*</span></label>
+                <input type="date" wire:model="cartDetail.due_date"
+                  class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-zonakasir-primary focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
+              </div>
+              {{-- DP / Partial payment --}}
+              <div>
+                <label class="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">{{ __('Down payment (optional)') }}</label>
+                <div class="relative">
+                  <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">Rp</span>
+                  <input type="text" wire:model.live="cartDetail.payed_money"
+                    class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-sm text-right text-gray-900 focus:border-zonakasir-primary focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                    placeholder="0" />
+                </div>
+                <p x-show="cartDetail.payed_money > 0" x-cloak class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  {{ __('Remaining:') }} <span class="font-semibold text-amber-600" x-text="moneyFormat({{ $total_price }} - (cartDetail.payed_money || 0))"></span>
+                </p>
+              </div>
+              {{-- Info --}}
+              <p class="text-xs text-gray-500 dark:text-gray-400">{{ __('Customer will pay later. Due date is required.') }}</p>
+            </div>
+            </div>
+            <div class="mt-2 grid gap-2" :class="paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.is_credit ? 'grid-cols-2' : 'grid-cols-3'">
+                <div x-show="paymentMethodWarning" x-cloak x-transition class="col-span-full text-center text-sm text-danger-600 font-medium">
                     {{ __('Select a payment method first') }}
                 </div>
-                {{-- Exact amount button --}}
+                {{-- Exact amount button (non-piutang only) --}}
                 <button type="button"
+                  x-show="!paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.is_credit"
                   class="flex min-h-[48px] w-full items-center justify-center gap-x-2 rounded-xl bg-amber-50 p-3 text-sm font-semibold text-amber-700 shadow-sm ring-1 ring-amber-200 transition-all hover:bg-amber-100 active:scale-95 dark:bg-amber-900/30 dark:text-amber-400 dark:ring-amber-800"
                   x-on:click="pressNoChange()">
                   <x-heroicon-o-check class="h-5 w-5" />
                   {{ __('Exact amount') }}
                 </button>
-                {{-- Pay now --}}
-                <button wire:loading.attr="disabled" type="submit"
+                {{-- Pay / Confirm Piutang --}}
+                <button wire:loading.attr="disabled" wire:target="proceedThePayment" type="submit"
                   class="flex min-h-[48px] w-full items-center justify-center gap-x-2 rounded-xl bg-zonakasir-primary p-3 text-base font-bold text-white shadow-lg shadow-zonakasir-primary/30 transition-all hover:brightness-110 active:scale-95 disabled:opacity-50">
-                  <div wire:loading>
+                  <span wire:loading.remove wire:target="proceedThePayment" x-show="paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.is_credit">{{ __('Confirm Piutang') }}</span>
+                  <span wire:loading.remove wire:target="proceedThePayment" x-show="!paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.is_credit">{{ __('Pay now') }}</span>
+                  <span wire:loading wire:target="proceedThePayment">
                     <x-filament::loading-indicator class="h-5 w-5" />
-                  </div>
-                  {{ __('Pay now') }}
+                  </span>
                 </button>
                 {{-- Cancel --}}
                 <button wire:click="dispatch('close-modal', {id: 'proceed-the-payment'});" type="button"
@@ -480,6 +529,38 @@
         </x-filament::button>
         <x-filament::button color="gray" x-on:click="$dispatch('close-modal', {id: 'success-modal'})">
           {{ __('Close') }}
+        </x-filament::button>
+      </div>
+    </x-slot>
+  </x-filament::modal>
+
+  {{-- Quick Add Member Modal --}}
+  <x-filament::modal id="modal-quick-member" width="md">
+    <x-slot name="heading">
+      {{ __('Quick Add Member') }}
+    </x-slot>
+    <div class="flex flex-col gap-4">
+      <div>
+        <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Name') }} <span class="text-red-500">*</span></label>
+        <input type="text" wire:model="newMemberName"
+          class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-zonakasir-primary focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+          placeholder="{{ __('Member name') }}" />
+        @error('newMemberName') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+      </div>
+      <div>
+        <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Phone / Contact') }}</label>
+        <input type="text" wire:model="newMemberPhone"
+          class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-zonakasir-primary focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+          placeholder="{{ __('Phone or email') }}" />
+      </div>
+    </div>
+    <x-slot name="footer">
+      <div class="flex gap-2">
+        <x-filament::button wire:click="quickCreateMember" wire:loading.attr="disabled">
+          {{ __('Save') }}
+        </x-filament::button>
+        <x-filament::button color="gray" x-on:click="$dispatch('close-modal', {id: 'modal-quick-member'})">
+          {{ __('Cancel') }}
         </x-filament::button>
       </div>
     </x-slot>
@@ -755,7 +836,7 @@
     // Load Midtrans Snap.js
     var snapScript = document.createElement('script');
     snapScript.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
-    snapScript.setAttribute('data-client-key', @js(config('midtrans.client_key')));
+    snapScript.setAttribute('data-client-key', @js(config('midtrans.client_key') ?? ''));
     snapScript.async = false;
     document.head.appendChild(snapScript);
 
@@ -842,10 +923,20 @@
         p.table(['@lang('Discount')', `(${moneyFormat(selling.total_discount_per_item + selling.discount_price)})`])
       }
       p.table(['@lang('Total price')', moneyFormat(selling.grand_total_price)])
-        .text('-------------------------------')
-        .table(['@lang('Payed money')', moneyFormat(selling.payed_money)])
-        .table(['@lang('Change')', moneyFormat(selling.money_changes)])
-        .align('center');
+        .text('-------------------------------');
+      if (selling.payment_method?.is_credit) {
+        if (selling.payed_money > 0) {
+          p.table(['@lang('DP (Down payment)')', moneyFormat(selling.payed_money)])
+           .table(['@lang('Remaining')', moneyFormat(selling.grand_total_price - selling.payed_money)]);
+        } else {
+          p.table(['@lang('Remaining')', moneyFormat(selling.grand_total_price)]);
+        }
+        if (selling.due_date) p.table(['@lang('Due date')', selling.due_date]);
+      } else {
+        p.table(['@lang('Payed money')', moneyFormat(selling.payed_money)])
+         .table(['@lang('Change')', moneyFormat(selling.money_changes)]);
+      }
+      p.align('center');
       if (printerData.footer != undefined) p.text(printerData.footer);
       await p.cut().print();
     }
@@ -884,8 +975,20 @@
       if (discount > 0) h += `<div style="display:flex;justify-content:space-between"><span>Discount</span><span>(${moneyFormat(discount)})</span></div>`;
       h += `<div style="display:flex;justify-content:space-between;font-weight:700"><span>Total price</span><span>${moneyFormat(selling.grand_total_price)}</span></div>`;
       h += `<div style="text-align:center;letter-spacing:.2em;margin:6px 0">${line}</div>`;
-      h += `<div style="display:flex;justify-content:space-between"><span>Payed money</span><span>${moneyFormat(selling.payed_money)}</span></div>`;
-      h += `<div style="display:flex;justify-content:space-between"><span>Change</span><span>${moneyFormat(selling.money_changes)}</span></div>`;
+      const isCredit = selling.payment_method?.is_credit || false;
+      if (isCredit) {
+        h += `<div style="display:flex;justify-content:space-between"><span>Total</span><span>${moneyFormat(selling.grand_total_price)}</span></div>`;
+        if (selling.payed_money > 0) {
+          h += `<div style="display:flex;justify-content:space-between"><span>DP (Down payment)</span><span>${moneyFormat(selling.payed_money)}</span></div>`;
+          h += `<div style="display:flex;justify-content:space-between;font-weight:700"><span>Remaining</span><span>${moneyFormat(selling.grand_total_price - selling.payed_money)}</span></div>`;
+        } else {
+          h += `<div style="display:flex;justify-content:space-between;font-weight:700"><span>Remaining</span><span>${moneyFormat(selling.grand_total_price)}</span></div>`;
+        }
+        if (selling.due_date) h += `<div style="display:flex;justify-content:space-between"><span>Due date</span><span>${esc(selling.due_date)}</span></div>`;
+      } else {
+        h += `<div style="display:flex;justify-content:space-between"><span>Payed money</span><span>${moneyFormat(selling.payed_money)}</span></div>`;
+        h += `<div style="display:flex;justify-content:space-between"><span>Change</span><span>${moneyFormat(selling.money_changes)}</span></div>`;
+      }
       if (printerData?.footer) h += `<div style="text-align:center;margin-top:4px">${esc(printerData.footer)}</div>`;
       h += `<div style="font-size:10px;margin-top:2px">copy</div>`;
       return h;
@@ -937,6 +1040,9 @@
             });
             this.$watch('subtotal', (val) => {
               if (val !== undefined && val !== null) this.recalc();
+            });
+            document.addEventListener('shortcut-payment', (e) => {
+              this.shortcut(e.detail.amount);
             });
         },
         isTouchScreen() {
@@ -1079,17 +1185,28 @@
       return suggestions;
     }
 
+    let lastGeneratedTotal = null;
+
     function generateButton(totalPrice) {
+      if (totalPrice === lastGeneratedTotal) return;
+      lastGeneratedTotal = totalPrice;
+
       const shortcutSuggestion = generateSuggestedPayments(totalPrice);
       let calculatorBtn = document.getElementById('calculator-button-shortcut');
-      calculatorBtn.innerHTML = '';
+      if (!calculatorBtn) return;
+
+      while (calculatorBtn.firstChild) {
+        calculatorBtn.removeChild(calculatorBtn.firstChild);
+      }
 
       for (let suggestion of shortcutSuggestion) {
         const button = document.createElement('button');
         button.textContent = numberFormat(suggestion);
-        button.setAttribute('type', 'button')
-        button.setAttribute('x-on:click', `shortcut(${suggestion})`);
+        button.setAttribute('type', 'button');
         button.className = 'flex min-h-[40px] items-center justify-center rounded-xl bg-zonakasir-primary/10 p-2 text-sm font-semibold text-zonakasir-primary shadow-sm ring-1 ring-zonakasir-primary/20 transition-all hover:bg-zonakasir-primary/20 active:scale-95 dark:bg-zonakasir-primary/20 dark:text-zonakasir-primary/90 dark:ring-zonakasir-primary/30';
+        button.addEventListener('click', () => {
+          document.dispatchEvent(new CustomEvent('shortcut-payment', { detail: { amount: suggestion } }));
+        });
         calculatorBtn.appendChild(button);
       }
     }

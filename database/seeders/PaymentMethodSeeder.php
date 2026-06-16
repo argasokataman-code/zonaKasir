@@ -6,13 +6,13 @@ use Illuminate\Database\Seeder;
 
 class PaymentMethodSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         foreach ($this->data() as $data) {
-            \App\Models\Tenants\PaymentMethod::create($data);
+            \App\Models\Tenants\PaymentMethod::updateOrCreate(
+                ['payment_type' => $data['payment_type']],
+                $data
+            );
         }
     }
 
@@ -21,11 +21,18 @@ class PaymentMethodSeeder extends Seeder
         return [
             [
                 'name' => 'Cash',
-                'is_cash' => true,
-                'is_debit' => false,
-                'is_credit' => false,
-                'is_wallet' => false,
-                'icon' => 'assets/images/payment-methods/cash.png',
+                'payment_type' => 'cash',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'QRIS',
+                'payment_type' => 'qris',
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Piutang',
+                'payment_type' => 'credit',
+                'is_active' => true,
             ],
         ];
     }

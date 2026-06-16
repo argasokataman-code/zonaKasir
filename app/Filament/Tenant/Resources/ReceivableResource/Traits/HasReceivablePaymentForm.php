@@ -17,7 +17,7 @@ trait HasReceivablePaymentForm
         return [
             Select::make('payment_method_id')
                 ->label(__('Payment method'))
-                ->options(PaymentMethod::query()->where('is_credit', 'false')->pluck('name', 'id'))
+                ->options(PaymentMethod::query()->where('is_credit', 'false')->where('is_active', true)->pluck('name', 'id'))
                 ->required(),
             TextInput::make('amount')
                 ->translateLabel()

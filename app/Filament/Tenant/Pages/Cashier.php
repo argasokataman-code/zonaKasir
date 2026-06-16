@@ -105,6 +105,7 @@ class Cashier extends Page implements HasForms
 
         $this->paymentMethods = PaymentMethod::query()
             ->select('id', 'name', 'is_credit', 'payment_type')
+            ->where('is_active', true)
             ->get()
             ->toArray();
 
@@ -191,5 +192,38 @@ class Cashier extends Page implements HasForms
         $this->fillPaymentMethodLabel();
 
         $this->dispatch('close-modal', id: 'edit-detail');
+    }
+
+    public string $newMemberName = '';
+    public string $newMemberPhone = '';
+
+    public function quickCreateMember(): void
+    {
+        $this->validate([
+            'newMemberName' => 'required|string|max:255',
+        ], [
+            'newMemberName.required' => 'Member name is required.',
+        ]);
+
+        $member = Member::create([
+            'name' => $this->newMemberName,
+            'email' => $this->newMemberPhone,
+            'identity_number' => $this->newMemberPhone,
+            'joined_date' => now(),
+        ]);
+
+        $this->members = Member::query()
+            ->select('id', 'name')
+            ->get()
+            ->pluck('name', 'id');
+
+        $this->cartDetail['member_id'] = $member->id;
+        $this->cartDetail['member_label'] = $member->name;
+
+        $this->newMemberName = '';
+        $this->newMemberPhone = '';
+
+        $this->dispatch('close-modal', id: 'modal-quick-member');
+        $this->dispatch('member-created', memberId: $member->id, memberName: $member->name);
     }
 }

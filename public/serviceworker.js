@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'd1baa860';
+const CACHE_VERSION = '000bc8e0';
 const STATIC_CACHE = `zonakasir-static-${CACHE_VERSION}`;
 const PAGES_CACHE = `zonakasir-pages-${CACHE_VERSION}`;
 const API_CACHE = `zonakasir-api-${CACHE_VERSION}`;
@@ -136,6 +136,8 @@ async function handlePageRequest(event) {
 }
 
 async function handleStaticRequest(event) {
+  const url = new URL(event.request.url);
+  if (!url.protocol.startsWith('http')) return fetch(event.request);
   const cached = await caches.match(event.request);
   if (cached) return cached;
   try {
@@ -146,11 +148,13 @@ async function handleStaticRequest(event) {
 }
 
 async function handleDynamicRequest(event) {
+  const url = new URL(event.request.url);
+  if (!url.protocol.startsWith('http')) return fetch(event.request);
   const cached = await caches.match(event.request);
   if (cached) return cached;
   try {
     const resp = await fetch(event.request);
-    if (resp.ok) {
+    if (resp.ok && event.request.method === 'GET') {
       const cache = await caches.open(DYNAMIC_CACHE);
       cache.put(event.request, resp.clone());
       trimCache(DYNAMIC_CACHE, 100);
