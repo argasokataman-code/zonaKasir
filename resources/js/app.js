@@ -357,6 +357,72 @@ window.buildReceiptPreviewHtml = function(selling, about, printerData) {
   return h;
 }
 
+// ─── Global loading bar (visible saat Livewire request berjalan) ──
+(function() {
+  var bar = null;
+  var timer = null;
+  var progress = 0;
+
+  function createBar() {
+    if (bar) return;
+    bar = document.createElement('div');
+    bar.id = 'global-loading-bar';
+    bar.style.cssText =
+      'position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#FF6600,#FF8C38);' +
+      'z-index:999999;width:0%;transition:width 0.3s ease;box-shadow:0 0 6px rgba(255,102,0,0.5);';
+    document.body.appendChild(bar);
+  }
+
+  function showBar() {
+    createBar();
+    progress = 10;
+    bar.style.width = progress + '%';
+    // Animate from 10% → 70% smoothly
+    clearInterval(timer);
+    timer = setInterval(function() {
+      if (progress < 70) {
+        progress += Math.random() * 8;
+        if (progress > 70) progress = 70;
+        bar.style.width = progress + '%';
+      }
+    }, 300);
+  }
+
+  function completeBar() {
+    clearInterval(timer);
+    progress = 100;
+    if (bar) {
+      bar.style.width = '100%';
+      // Fade out after 300ms
+      setTimeout(function() {
+        if (bar) {
+          bar.style.opacity = '0';
+          setTimeout(function() {
+            if (bar) {
+              bar.style.width = '0%';
+              bar.style.opacity = '1';
+            }
+          }, 500);
+        }
+      }, 300);
+    }
+  }
+
+  // Livewire request hooks
+  function registerLivewireLoading() {
+    if (window.Livewire) {
+      Livewire.hook('request.start', function() { showBar(); });
+      Livewire.hook('request.success', function() { completeBar(); });
+      Livewire.hook('request.fail', function() { completeBar(); });
+    }
+  }
+  if (window.Livewire) {
+    registerLivewireLoading();
+  } else {
+    document.addEventListener('livewire:init', registerLivewireLoading);
+  }
+})();
+
 // ─── Global 419 handler: auto-refresh instead of browser confirm ──
 (function() {
   function handle419() {
