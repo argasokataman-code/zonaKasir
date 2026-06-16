@@ -8,7 +8,6 @@ use App\Filament\Tenant\Widgets\InventoryStats;
 use App\Filament\Tenant\Widgets\LowStockProducts;
 use App\Filament\Tenant\Widgets\PaymentMethodChart;
 use App\Filament\Tenant\Widgets\SalesChart;
-use App\Filament\Tenant\Widgets\TenantNotifications;
 use App\Filament\Tenant\Widgets\TodaysBestSellingProduct;
 use App\Filament\Tenant\Widgets\TransactionStats;
 use Filament\Forms\Components\DatePicker;
@@ -38,7 +37,6 @@ class Dashboard extends BaseDashboard
             InventoryStats::class,
             TodaysBestSellingProduct::class,
             LowStockProducts::class,
-            TenantNotifications::class,
         ];
     }
 }
