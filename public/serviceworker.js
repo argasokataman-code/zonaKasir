@@ -109,18 +109,39 @@ async function handleApiRequest(event) {
 }
 
 async function handlePageRequest(event) {
+  // Livewire POST: passthrough — bypass SW entirely
   if (isLivewireUpdate(event)) {
-    try { return await fetch(event.request); }
-    catch {
-      return new Response(JSON.stringify({ message: 'Offline', errors: { server: ['No network'] } }), {
+    return fetch(event.request).catch(() =>
+      new Response(JSON.stringify({ message: 'Offline', errors: { server: ['No network'] } }), {
         status: 419, headers: { 'Content-Type': 'application/json' },
-      });
-    }
+      })
+    );
   }
 
+  // Stale-while-revalidate for navigation:
+  // 1. Serve from cache instantly
+  // 2. Fetch from network in background → update cache
+  // 3. If no cache → network-first
+  const cached = await caches.match(event.request);
+  if (cached) {
+    // Background revalidate
+    fetch(event.request)
+      .then(resp => {
+        if (resp.ok) {
+          caches.open(PAGES_CACHE).then(cache => {
+            cache.put(event.request, resp);
+            trimCache(PAGES_CACHE, 50);
+          });
+        }
+      })
+      .catch(() => {});
+    return cached;
+  }
+
+  // No cache → network-first with timeout
   try {
     const ctrl = new AbortController();
-    const tid = setTimeout(() => ctrl.abort(), 10000);
+    const tid = setTimeout(() => ctrl.abort(), 5000);
     const resp = await fetch(event.request, { signal: ctrl.signal });
     clearTimeout(tid);
     if (resp.ok) {
@@ -130,8 +151,7 @@ async function handlePageRequest(event) {
     }
     return resp;
   } catch {
-    const cached = await caches.match(event.request);
-    return cached || caches.match(OFFLINE_PAGE);
+    return caches.match(OFFLINE_PAGE);
   }
 }
 
@@ -142,7 +162,11 @@ async function handleStaticRequest(event) {
   if (cached) return cached;
   try {
     const resp = await fetch(event.request);
-    if (resp.ok) (await caches.open(STATIC_CACHE)).put(event.request, resp.clone());
+    if (resp.ok) {
+      const cache = await caches.open(STATIC_CACHE);
+      cache.put(event.request, resp.clone());
+      trimCache(STATIC_CACHE, 80);
+    }
     return resp;
   } catch { return new Response('', { status: 408, statusText: 'Offline' }); }
 }

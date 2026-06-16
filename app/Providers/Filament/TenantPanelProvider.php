@@ -117,38 +117,20 @@ class TenantPanelProvider extends PanelProvider
         );
 
         FilamentView::registerRenderHook(
-            PanelsRenderHook::BODY_START,
-            fn () => view('partials.expired-layout-kill')
-        );
-
-        FilamentView::registerRenderHook(
-            PanelsRenderHook::BODY_START,
-            fn () => view('partials.shop-wallpaper')
-        );
-
-        FilamentView::registerRenderHook(
             PanelsRenderHook::GLOBAL_SEARCH_AFTER,
             fn () => view('version-indicator')
         );
 
+        // Merged partials — fewer hooks, shared DB queries
         FilamentView::registerRenderHook(
-            PanelsRenderHook::BODY_END,
-            fn () => view('partials.expired-overlay')
+            PanelsRenderHook::BODY_START,
+            fn () => view('partials.body-start')
         );
 
         FilamentView::registerRenderHook(
             PanelsRenderHook::BODY_END,
-            fn () => view('partials.welcome-modal')
+            fn () => view('partials.body-end')
         );
-
-        if (app()->environment('demo')) {
-        FilamentView::registerRenderHook(
-                PanelsRenderHook::BODY_START,
-                fn (): View => view('donation-banner', [
-                    'link' => 'https://trakteer.id/sheenazien8/tip',
-                ]),
-            );
-        }
 
         return $panel;
     }

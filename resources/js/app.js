@@ -5,33 +5,40 @@ document.addEventListener('DOMContentLoaded', function() {
   if (window.offlineManager) {
     window.offlineManager.init().then(function() {
       console.log('[PWA] OfflineManager initialized');
-      if (window.offlineManager && navigator.onLine) {
-        // Only prefetch if stale (> 30 min) or no data yet
-        window.offlineManager.getMeta('last_prefetch').then(function(lastPrefetch) {
-          var isStale = !lastPrefetch || (Date.now() - new Date(lastPrefetch).getTime() > 30 * 60 * 1000);
-          if (isStale) {
-            window.offlineManager.prefetchMasterData().catch(function() {
-              console.log('[PWA] Prefetch skipped (not authenticated or offline)');
-            });
-          } else {
-            console.log('[PWA] Data is fresh, skipping prefetch');
-          }
-        }).catch(function() {
-          window.offlineManager.prefetchMasterData().catch(function() {});
-        });
-      }
+      // Defer prefetch to idle — don't block rendering
+      var deferPrefetch = window.requestIdleCallback || function(cb) { setTimeout(cb, 3000); };
+      deferPrefetch(function() {
+        if (window.offlineManager && navigator.onLine) {
+          window.offlineManager.getMeta('last_prefetch').then(function(lastPrefetch) {
+            var isStale = !lastPrefetch || (Date.now() - new Date(lastPrefetch).getTime() > 30 * 60 * 1000);
+            if (isStale) {
+              window.offlineManager.prefetchMasterData().catch(function() {
+                console.log('[PWA] Prefetch skipped (not authenticated or offline)');
+              });
+            } else {
+              console.log('[PWA] Data is fresh, skipping prefetch');
+            }
+          }).catch(function() {
+            window.offlineManager.prefetchMasterData().catch(function() {});
+          });
+        }
+      });
     }).catch(function(err) {
       console.error('[PWA] OfflineManager init failed:', err);
     });
   }
-  if (window.syncManager) {
-    window.syncManager.init();
-    console.log('[PWA] SyncManager initialized');
-  }
-  if (window.offlineIndicator) {
-    window.offlineIndicator.init();
-    console.log('[PWA] OfflineIndicator initialized');
-  }
+  // Defer non-critical init — let UI paint first
+  var deferInit = window.requestIdleCallback || function(cb) { setTimeout(cb, 1000); };
+  deferInit(function() {
+    if (window.syncManager) {
+      window.syncManager.init();
+      console.log('[PWA] SyncManager initialized');
+    }
+    if (window.offlineIndicator) {
+      window.offlineIndicator.init();
+      console.log('[PWA] OfflineIndicator initialized');
+    }
+  });
 });
 
 // Listen for SW-initiated data sync
