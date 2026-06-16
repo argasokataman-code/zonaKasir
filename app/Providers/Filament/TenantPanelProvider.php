@@ -40,6 +40,7 @@ use App\Filament\Tenant\Resources\TableResource;
 use App\Filament\Tenant\Resources\UserResource;
 use App\Filament\Tenant\Resources\VoucherResource;
 use App\Filament\Tenant\Resources\WithdrawalResource;
+use App\Filament\Tenant\Resources\ActivityLogResource;
 use App\Http\Middleware\LocalizationMiddleware;
 use App\Http\Middleware\TenantIsolationMiddleware;
 use App\Models\Tenants\About;
@@ -247,6 +248,7 @@ class TenantPanelProvider extends PanelProvider
                 $this->generateNavigationItem(WithdrawalResource::class),
                 $this->generateNavigationItem(WithdrawalPage::class),
                 $this->generateNavigationItem(ManageSubscription::class),
+                $this->generateNavigationItem(ActivityLogResource::class),
             ]),
             NavigationGroup::make(__('Setting'))->collapsible(false)->items([
                 $this->generateNavigationItem(GeneralSetting::class),
