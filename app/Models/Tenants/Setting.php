@@ -9,12 +9,9 @@ use Illuminate\Support\Facades\Cache;
 /**
  * @mixin IdeHelperSetting
  */
-use App\Models\Traits\HasTenant;
-use App\Services\TenantContext;
 class Setting extends Model
 {
-    use HasTenant;
-    use HasFactory, HasTenant;
+    use HasFactory;
 
     protected $fillable = ['key', 'value'];
 
@@ -37,13 +34,11 @@ class Setting extends Model
 
     public static function set($key, $value)
     {
-        // Update the value in the database
         self::updateOrCreate(
-            ['key' => $key, 'tenant_id' => TenantContext::get()],
+            ['key' => $key],
             ['value' => $value]
         );
 
-        // Update the value in cache
         $cacheKey = 'setting_'.$key;
         Cache::put($cacheKey, $value, now()->addMinutes(3 * 60));
     }
