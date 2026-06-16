@@ -114,7 +114,7 @@
         <div class="flex flex-col gap-4 pb-2 sm:flex-row sm:flex-nowrap sm:overflow-x-auto sm:scrollbar-thin sm:justify-center sm:gap-6">
             @foreach($plans as $plan)
             <div
-                x-data="{ open: false }"
+                x-data="{ featuresOpen: false }"
                 class="bg-white rounded-[6px] shadow-sm flex flex-col relative border @if($current && $current['id'] === $plan['id']) border-2 border-gray-900 shadow-md @else border-[#E5E5E1] @endif w-full sm:flex-shrink-0 sm:w-[280px] sm:min-w-[280px]"
             >
                     @if(($plan['is_popular'] ?? false) && $plan['price_monthly'] > 0)
@@ -156,15 +156,15 @@
                         @if(!empty($plan['features']))
                         <button
                             type="button"
-                            x-on:click="open = !open"
+                            x-on:click="featuresOpen = !featuresOpen"
                             class="w-full flex items-center justify-between text-[10px] font-bold text-gray-900 uppercase tracking-wider py-1.5 border-t border-gray-100 cursor-pointer hover:text-gray-600 transition-colors"
                         >
                             <span>{{ __('Features') }} ({{ count($plan['features']) }})</span>
-                            <svg class="w-3 h-3 transition-transform duration-200" x-bind:class="open ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                            <svg class="w-3 h-3 transition-transform duration-200" x-bind:class="featuresOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                         </button>
 
                         <div
-                            x-show="open"
+                            x-show="featuresOpen"
                             x-collapse
                             x-cloak
                             class="overflow-hidden"
