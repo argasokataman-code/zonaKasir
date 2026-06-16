@@ -34,9 +34,12 @@ class ActivityLogResource extends Resource
                     ->badge()
                     ->color(fn ($state) => match ($state) {
                         'created' => 'success',
+                        'updated' => 'warning',
+                        'deleted' => 'danger',
+                        'login' => 'info',
+                        'logout' => 'gray',
                         'activated' => 'success',
                         'suspended' => 'danger',
-                        'deleted' => 'danger',
                         default => 'gray',
                     }),
                 TextColumn::make('subject_type')
@@ -57,6 +60,7 @@ class ActivityLogResource extends Resource
             ->defaultSort('created_at', 'desc')
             ->filters([
                 Tables\Filters\SelectFilter::make('event')
+                    ->label('Event')
                     ->options([
                         'created' => 'Created',
                         'updated' => 'Updated',
@@ -66,6 +70,45 @@ class ActivityLogResource extends Resource
                         'activated' => 'Activated',
                         'suspended' => 'Suspended',
                     ]),
+                Tables\Filters\SelectFilter::make('subject_type')
+                    ->label('Model')
+                    ->options([
+                        'App\\Models\\Tenants\\User' => 'User',
+                        'App\\Models\\Tenants\\Role' => 'Role',
+                        'App\\Models\\Tenants\\Product' => 'Product',
+                        'App\\Models\\Tenants\\Category' => 'Category',
+                        'App\\Models\\Tenants\\Selling' => 'Selling',
+                        'App\\Models\\Tenants\\Stock' => 'Stock',
+                        'App\\Models\\Tenants\\Member' => 'Member',
+                        'App\\Models\\Tenants\\Supplier' => 'Supplier',
+                        'App\\Models\\Tenants\\PaymentMethod' => 'Payment Method',
+                        'App\\Models\\Tenants\\Withdrawal' => 'Withdrawal',
+                        'App\\Models\\Tenants\\Settlement' => 'Settlement',
+                        'App\\Models\\Tenants\\MidtransPayment' => 'Midtrans Payment',
+                        'App\\Models\\Tenants\\Voucher' => 'Voucher',
+                        'App\\Models\\Tenants\\CashDrawer' => 'Cash Drawer',
+                        'App\\Models\\Tenants\\About' => 'About',
+                        'App\\Models\\Tenants\\Profile' => 'Profile',
+                        'App\\Models\\Tenants\\LedgerEntry' => 'Ledger Entry',
+                    ])
+                    ->searchable(),
+                Tables\Filters\Filter::make('created_at')
+                    ->form([
+                        \Filament\Forms\Components\DatePicker::make('created_from')
+                            ->label('From')
+                            ->placeholder('Start date'),
+                        \Filament\Forms\Components\DatePicker::make('created_until')
+                            ->label('To')
+                            ->placeholder('End date'),
+                    ])
+                    ->query(function ($query, array $data): void {
+                        $query
+                            ->when($data['created_from'], fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
+                            ->when($data['created_until'], fn ($q, $date) => $q->whereDate('created_at', '<=', $date));
+                    })
+                    ->indicateRemoveUsing(fn (array $data): string => filled($data['created_from'] ?? null)
+                        ? 'From ' . $data['created_from'] . ($data['created_until'] ? ' to ' . $data['created_until'] : '')
+                        : ($data['created_until'] ? 'Until ' . $data['created_until'] : '')),
             ]);
     }
 
