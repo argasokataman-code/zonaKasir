@@ -17,6 +17,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -27,6 +29,7 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
 {
     use HasTenant;
     use HasApiTokens, HasFactory, HasRoles, HasTenant, Notifiable, SoftDeletes;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -63,6 +66,14 @@ class User extends Authenticatable implements FilamentUser, HasAvatar, HasName
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'email', 'is_owner'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function canAccessPanel(Panel $panel): bool
     {
