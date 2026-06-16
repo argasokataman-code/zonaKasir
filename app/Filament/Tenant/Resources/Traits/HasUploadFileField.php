@@ -20,6 +20,8 @@ trait HasUploadFileField
 
         $shouldFetchFileInformation = $component->shouldFetchFileInformation();
 
+
+
         // If Filament provided an array payload, normalize it
         if (is_array($file)) {
             $name = $file['name'] ?? $file['relative_path'] ?? null;
