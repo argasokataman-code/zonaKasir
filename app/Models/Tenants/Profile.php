@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Validation\Rules\Password;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Tapp\FilamentTimezoneField\Forms\Components\TimezoneSelect;
 
 /**
@@ -24,6 +26,7 @@ class Profile extends Model
     use HasTenant;
     use HasFactory,
         HasUploadFileField;
+    use LogsActivity;
 
     protected $fillable = [
         'phone',
@@ -32,6 +35,14 @@ class Profile extends Model
         'photo',
         'timezone',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['phone', 'address', 'locale', 'timezone', 'photo'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function user(): BelongsTo
     {

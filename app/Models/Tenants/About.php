@@ -12,6 +12,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Get;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @mixin IdeHelperAbout
@@ -22,8 +24,17 @@ class About extends Model
     use HasTenant;
     use HasFactory,
         HasUploadFileField;
+    use LogsActivity;
 
     protected $guarded = ['id'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['shop_name', 'shop_location', 'business_type', 'other_business_type', 'bank_name', 'bank_account_name', 'bank_account_number', 'bank_code', 'photo'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public static function form(): array
     {
