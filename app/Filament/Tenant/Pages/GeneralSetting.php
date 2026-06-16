@@ -76,14 +76,21 @@ class GeneralSetting extends Page implements HasActions, HasForms
             $this->about = $about;
         }
 
-        $this->feature = [
-            'supplier' => Feature::active('supplier'),
-            'purchasing' => Feature::active('purchasing'),
-            'receivable' => Feature::active('receivable'),
-            'stock-opname' => Feature::active('stock-opname'),
-            'voucher' => Feature::active('voucher'),
-            'product-import' => Feature::active('product-import')
-        ];
+        // Hanya tampilkan fitur yang ada di plan subscription
+        $planAccess = app(\App\Services\PlanAccessService::class);
+        $tenantId = auth()->user()?->tenant_id;
+        $allowedFeatures = $tenantId ? $planAccess->getCurrentPlanFeatures($tenantId) : [];
+        // Semua feature key harus snake_case (sama dengan config/plans.php dan Plan model)
+        $allFeatures = ['supplier', 'purchasing', 'receivable', 'stock_opname', 'voucher', 'product_import'];
+        $this->feature = [];
+        foreach ($allFeatures as $f) {
+            if (in_array($f, $allowedFeatures, true)) {
+                $this->feature[$f] = Feature::active($f);
+            } elseif (Feature::active($f)) {
+                // Cleanup: deactivate fitur yang tidak ada di plan tapi sebelumnya diaktifkan
+                Feature::deactivate($f);
+            }
+        }
 
         $user = auth()->user();
         $profile = $user->profile ?? $user->profile()->create();
@@ -157,24 +164,34 @@ class GeneralSetting extends Page implements HasActions, HasForms
                         ]),
                     Tabs\Tab::make('Feature')
                         ->statePath('feature')
-                        ->visible(can('access feature flag'))
+                        ->visible(can('access feature flag') && count($this->feature ?? []) > 0)
                         ->translateLabel()
-                        ->schema([
-                            Section::make([
-                                Checkbox::make('supplier')->inline(),
-                                Checkbox::make('purchasing')->inline(),
-                                Checkbox::make('receivable')->inline(),
-                                Checkbox::make('stock-opname')->inline(),
-                                Checkbox::make('voucher')->inline(),
-                                Checkbox::make('product-import')->inline(),
-                            ]),
-                            Actions::make([
-                                Action::make('Save')
-                                    ->translateLabel()
-                                    ->requiresConfirmation()
-                                    ->action('saveFeature'),
-                            ]),
-                        ]),
+                        ->schema(function () {
+                            $allowed = array_keys($this->feature ?? []);
+                            $featureLabels = [
+                                'supplier' => __('Supplier'),
+                                'purchasing' => __('Purchasing'),
+                                'receivable' => __('Receivable'),
+                                'stock_opname' => __('Stock Opname'),
+                                'voucher' => __('Voucher'),
+                                'product_import' => __('Product Import'),
+                            ];
+                            $checkboxes = [];
+                            foreach ($allowed as $f) {
+                                if (isset($featureLabels[$f])) {
+                                    $checkboxes[] = Checkbox::make($f)->label($featureLabels[$f])->inline();
+                                }
+                            }
+                            return [
+                                Section::make($checkboxes),
+                                Actions::make([
+                                    Action::make('Save')
+                                        ->translateLabel()
+                                        ->requiresConfirmation()
+                                        ->action('saveFeature'),
+                                ]),
+                            ];
+                        }),
                     Tabs\Tab::make('Profile')
                         ->statePath('profile')
                         ->translateLabel()
@@ -270,22 +287,31 @@ class GeneralSetting extends Page implements HasActions, HasForms
 
     public function saveFeature(): void
     {
-        if (can('access feature flag')) {
-            foreach ($this->feature as $name => $value) {
-                if ($value) {
-                    Feature::activate($name);
-                } else {
-                    Feature::deactivate($name);
-                }
-            }
-
-            Notification::make()
-                ->title(__('Success'))
-                ->success()
-                ->send();
-
-            $this->mount();
+        if (! can('access feature flag')) {
+            return;
         }
+
+        $planAccess = app(\App\Services\PlanAccessService::class);
+        $tenantId = auth()->user()?->tenant_id;
+        $planFeatures = $tenantId ? $planAccess->getCurrentPlanFeatures($tenantId) : [];
+
+        foreach ($this->feature as $name => $value) {
+            if ($value) {
+                // Hanya aktifkan jika fitur ada di plan subscription
+                if (in_array($name, $planFeatures, true)) {
+                    Feature::activate($name);
+                }
+            } else {
+                Feature::deactivate($name);
+            }
+        }
+
+        Notification::make()
+            ->title(__('Success'))
+            ->success()
+            ->send();
+
+        $this->mount();
     }
 
     public function saveProfile(): void

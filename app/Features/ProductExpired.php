@@ -2,12 +2,11 @@
 
 namespace App\Features;
 
+use App\Features\Traits\ResolvesFromPlan;
+
 class ProductExpired
 {
-    public $name = 'product-expired';
+    use ResolvesFromPlan;
 
-    public function resolve(mixed $scope): mixed
-    {
-        return false;
-    }
+    public $name = 'product-expired';
 }

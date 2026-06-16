@@ -2,12 +2,11 @@
 
 namespace App\Features;
 
+use App\Features\Traits\ResolvesFromPlan;
+
 class ProductImport
 {
-    public $name = 'product-import';
+    use ResolvesFromPlan;
 
-    public function resolve(mixed $scope): mixed
-    {
-        return false;
-    }
+    public $name = 'product-import';
 }
