@@ -14,7 +14,7 @@
         $plans = app(\App\Filament\Tenant\Pages\ManageSubscription::class)->getAvailablePlans();
     @endphp
 
-    @if($snapRedirectUrl)
+    @if($snapRedirectUrl && !$showPaymentSuccess)
     <div
       x-data="{ url: '{{ $snapRedirectUrl }}' }"
       x-init="$nextTick(() => window.location.href = url)"
@@ -31,6 +31,26 @@
         </a>
         <p class="text-sm text-blue-600 mt-3">{{ __('If not redirected, click the button above.') }}</p>
     </div>
+    @endif
+
+    @if($showPaymentSuccess)
+    <div
+      x-data
+      x-init="$nextTick(() => $dispatch('open-modal', { id: 'payment-success-modal' }))"
+    ></div>
+
+    <x-filament::modal id="payment-success-modal" :close-by-clicking-away="false" :close-by-escaping="false" width="md">
+        <div class="flex flex-col items-center py-4">
+            <x-heroicon-o-check-circle style="color: rgb(34 197 94); width: 100px" />
+            <h3 class="text-xl font-bold text-gray-900 mt-4">{{ __('Payment Successful') }}</h3>
+            <p class="text-sm text-gray-500 mt-2 text-center">{{ __('Your subscription is now active. You can start using the application.') }}</p>
+        </div>
+        <x-slot name="footer">
+            <x-filament::button tag="a" href="{{ url('/member') }}" class="w-full">
+                {{ __('Go to Dashboard') }}
+            </x-filament::button>
+        </x-slot>
+    </x-filament::modal>
     @endif
 
     @if($current)
