@@ -27,6 +27,18 @@
         {{ $slot }}
 
         @filamentScripts
+
+        {{-- Global helpers for Alpine — blocking, available before deferred module scripts --}}
+        <script>
+        window.moneyFormat = function(number, currency) {
+            var activeCurrency = currency || window.zonakasirCurrency || 'IDR';
+            var activeLocale = window.zonakasirLocale || 'en';
+            var options = { style: 'currency', currency: activeCurrency };
+            if (activeCurrency === 'IDR') { options.minimumFractionDigits = 0; }
+            return new Intl.NumberFormat(activeLocale, options).format(number);
+        };
+        </script>
+
         @vite('resources/js/app.js')
     </body>
 </html>

@@ -101,10 +101,16 @@ class TenantPanelProvider extends PanelProvider
         } catch (\Throwable) {
         }
 
-        // 5 render hooks (was 6): HEAD_END | TOPBAR_AFTER | GLOBAL_SEARCH_AFTER | BODY_START (merged sidebar-logo) | BODY_END
+        // 6 render hooks: HEAD_END | SCRIPTS_BEFORE | TOPBAR_AFTER | GLOBAL_SEARCH_AFTER | BODY_START (merged) | BODY_END
         FilamentView::registerRenderHook(
             PanelsRenderHook::HEAD_END,
             fn () => view('meta')
+        );
+
+        // Global helpers — inline blocking script BEFORE @filamentScripts (Livewire/Alpine)
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::SCRIPTS_BEFORE,
+            fn () => '<script>window.moneyFormat=function(n,c){var u=c||window.zonakasirCurrency||"IDR",l=window.zonakasirLocale||"en",o={style:"currency",currency:u};u==="IDR"&&(o.minimumFractionDigits=0);return new Intl.NumberFormat(l,o).format(n)};</script>'
         );
 
         FilamentView::registerRenderHook(
