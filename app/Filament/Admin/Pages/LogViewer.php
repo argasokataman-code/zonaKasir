@@ -10,9 +10,9 @@ class LogViewer extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?string $navigationLabel = 'Log Viewer';
+    protected static ?string $navigationLabel = 'Laravel Logs';
 
-    protected static ?string $slug = 'logs';
+    protected static ?string $slug = 'laravel-logs';
 
     protected static string $view = 'filament.admin.pages.log-viewer';
 

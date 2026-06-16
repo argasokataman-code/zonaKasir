@@ -18,7 +18,7 @@ class ActivityLogResource extends Resource
 
     protected static ?string $pluralLabel = 'Activity Log';
 
-    protected static ?string $slug = 'activity-log';
+    protected static ?string $slug = 'logs';
 
     protected static ?string $recordTitleAttribute = 'description';
 
