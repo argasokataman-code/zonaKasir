@@ -1,3 +1,12 @@
+// ─── Vite bundle imports (replaces 7 separate Filament Js assets) ──
+// Order: dependencies first → dependent code last
+import './printer.js';
+import './indexeddb.js';
+import './offline-manager.js';
+import './sync-manager.js';
+import './offline-indicator.js';
+import './session-timeout.js';
+
 let selectedDevice = null;
 
 // ─── PWA Offline Init ────────────────────────────────────────

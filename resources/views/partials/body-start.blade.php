@@ -47,6 +47,16 @@
   }
 @endphp
 
+{{-- Sidebar logo CSS (merged from SIDEBAR_NAV_START hook) --}}
+<style>
+.fi-sidebar-header .fi-logo {
+  height: 3.5rem !important;
+  width: auto;
+  max-height: 3.5rem;
+  object-fit: contain;
+}
+</style>
+
 @if($_isExpired && request()->is('member*') && !request()->is('member/subscription*'))
 <style>
   .fi-layout,

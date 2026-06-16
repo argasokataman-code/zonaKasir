@@ -154,3 +154,6 @@ class Printer {
   }
 }
 
+// Make globally available for inline Blade scripts (new Printer(...))
+window.Printer = Printer;
+

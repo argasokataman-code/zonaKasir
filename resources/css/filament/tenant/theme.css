@@ -2,20 +2,13 @@
 @config '../../../../tailwind.config.js';
 
 
-/* Sidebar: fix scroll + GPU acceleration */
-.fi-sidebar {
-  max-height: 100vh;
-  overflow-y: hidden;
-}
-
+/* Sidebar: smooth scroll + GPU acceleration */
+/* Sidebar already has h-screen flex-col from Filament; nav already has flex-grow overflow-y-auto */
 .fi-sidebar-nav {
   @apply bg-white drop-shadow-md dark:bg-gray-900;
-  overflow-y: auto;
   -webkit-overflow-scrolling: auto;
   overscroll-behavior: contain;
   will-change: scroll-position;
-  /* Ensure nav fills remaining space minus header */
-  max-height: calc(100vh - 4rem);
 }
 
 /* Scrollbar styling */

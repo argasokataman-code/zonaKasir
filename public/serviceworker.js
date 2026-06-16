@@ -1,4 +1,4 @@
-const CACHE_VERSION = '000bc8e0';
+const CACHE_VERSION = 'e1153bd8';
 const STATIC_CACHE = `zonakasir-static-${CACHE_VERSION}`;
 const PAGES_CACHE = `zonakasir-pages-${CACHE_VERSION}`;
 const API_CACHE = `zonakasir-api-${CACHE_VERSION}`;
