@@ -124,17 +124,19 @@ async function handlePageRequest(event) {
   // 3. If no cache → network-first
   const cached = await caches.match(event.request);
   if (cached) {
-    // Background revalidate
-    fetch(event.request)
-      .then(resp => {
-        if (resp.ok) {
-          caches.open(PAGES_CACHE).then(cache => {
-            cache.put(event.request, resp);
-            trimCache(PAGES_CACHE, 50);
-          });
-        }
-      })
-      .catch(() => {});
+    // Background revalidate — use waitUntil to prevent premature SW termination
+    event.waitUntil(
+      fetch(event.request)
+        .then(resp => {
+          if (resp.ok) {
+            return caches.open(PAGES_CACHE).then(cache => {
+              cache.put(event.request, resp.clone());
+              trimCache(PAGES_CACHE, 50);
+            });
+          }
+        })
+        .catch(() => {})
+    );
     return cached;
   }
 

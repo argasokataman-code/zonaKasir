@@ -34,7 +34,16 @@
           {{ $this->form }}
 
           @if(config('turnstile.enabled') && config('turnstile.site_key'))
-            <div class="flex justify-center pt-2">
+            <div class="flex justify-center pt-2" wire:ignore
+                 x-data="{
+                     token: null,
+                     init() {
+                         window.onTurnstileSuccess = (token) => {
+                             this.token = token;
+                             $wire.set('turnstileToken', token);
+                         };
+                     }
+                 }">
               <div class="cf-turnstile" data-sitekey="{{ config('turnstile.site_key') }}" data-callback="onTurnstileSuccess"></div>
             </div>
             @error('turnstile')
@@ -81,15 +90,7 @@
 
   @if(config('turnstile.enabled') && config('turnstile.site_key'))
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-    <script>
-      function onTurnstileSuccess(token) {
-        var el = document.querySelector('[wire\\\\:id]');
-        if (el) {
-          Livewire.find(el.getAttribute('wire:id')).set('turnstileToken', token);
-        }
-      }
-      </script>
-    @endif
+  @endif
 
   <style>
     .parallax-bg {
