@@ -311,12 +311,19 @@ class GeneralSetting extends Page implements HasActions, HasForms
         $user = auth()->user();
         $profile = $user->profile;
 
+        if (! $profile) {
+            $profile = $user->profile()->create([
+                'locale' => 'en',
+                'timezone' => 'UTC',
+            ]);
+        }
+
         // Pisahkan data User dan Profile
         $userData = [
             'name' => $this->profile['name'] ?? $user->name,
             'email' => $this->profile['email'] ?? $user->email,
         ];
-        if (!empty($this->profile['password'])) {
+        if (! empty($this->profile['password'])) {
             $userData['password'] = bcrypt($this->profile['password']);
         }
 
@@ -328,33 +335,37 @@ class GeneralSetting extends Page implements HasActions, HasForms
         ];
 
         // Handle upload photo baru
-        if (isset($this->profile['photo']) && is_array($this->profile['photo']) && count($this->profile['photo']) > 0) {
-            $photoVal = array_values($this->profile['photo'])[0];
-            if ($photoVal instanceof TemporaryUploadedFile) {
-                $uploadedId = $this->storeAsUploadedFile($photoVal);
-                $tmpFile = UploadedFile::find($uploadedId);
-                if ($tmpFile) {
-                    $relativePath = $tmpFile->moveToPublic('profile', $profile->photo ?: null);
-                    $profileData['photo'] = $relativePath;
-                }
-            } elseif (is_string($photoVal)) {
-                $profileData['photo'] = $photoVal;
-            }
-        } elseif (isset($this->profile['photo']) && (empty($this->profile['photo']) || $this->profile['photo'] === null)) {
-            // Hapus foto jika dihapus di UI
-            if ($profile->photo) {
-                $tmpFile = UploadedFile::where('relative_path', $profile->photo)->first()
-                    ?? UploadedFile::where('url', $profile->photo)->first();
-                if ($tmpFile) {
-                    $tmpFile->deleteFromPublic('profile');
-                } else {
-                    $uploadDisk = config('filesystems.upload_disk');
-                    if (Storage::disk($uploadDisk)->exists($profile->photo)) {
-                        Storage::disk($uploadDisk)->delete($profile->photo);
+        try {
+            if (isset($this->profile['photo']) && is_array($this->profile['photo']) && count($this->profile['photo']) > 0) {
+                $photoVal = array_values($this->profile['photo'])[0];
+                if ($photoVal instanceof TemporaryUploadedFile) {
+                    $uploadedId = $this->storeAsUploadedFile($photoVal);
+                    $tmpFile = UploadedFile::find($uploadedId);
+                    if ($tmpFile) {
+                        $relativePath = $tmpFile->moveToPublic('profile', $profile->photo ?: null);
+                        $profileData['photo'] = $relativePath;
                     }
+                } elseif (is_string($photoVal)) {
+                    $profileData['photo'] = $photoVal;
                 }
-                $profileData['photo'] = null;
+            } elseif (isset($this->profile['photo']) && (empty($this->profile['photo']) || $this->profile['photo'] === null)) {
+                // Hapus foto jika dihapus di UI
+                if ($profile->photo) {
+                    $tmpFile = UploadedFile::where('relative_path', $profile->photo)->first()
+                        ?? UploadedFile::where('url', $profile->photo)->first();
+                    if ($tmpFile) {
+                        $tmpFile->deleteFromPublic('profile');
+                    } else {
+                        $uploadDisk = config('filesystems.upload_disk');
+                        if (Storage::disk($uploadDisk)->exists($profile->photo)) {
+                            Storage::disk($uploadDisk)->delete($profile->photo);
+                        }
+                    }
+                    $profileData['photo'] = null;
+                }
             }
+        } catch (\Exception $e) {
+            \Log::error('Profile photo upload failed: ' . $e->getMessage());
         }
 
         $user->update($userData);
