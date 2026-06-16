@@ -34,10 +34,21 @@ class Setting extends Model
 
     public static function set($key, $value)
     {
+        $old = self::where('key', $key)->first();
+
         self::updateOrCreate(
             ['key' => $key],
             ['value' => $value]
         );
+
+        activity()
+            ->performedOn($old ?? new self)
+            ->event('updated')
+            ->withProperties([
+                'attributes' => ['key' => $key, 'value' => $value],
+                'old' => $old ? ['key' => $old->key, 'value' => $old->value] : null,
+            ])
+            ->log("Setting updated: {$key}");
 
         $cacheKey = 'setting_'.$key;
         Cache::put($cacheKey, $value, now()->addMinutes(3 * 60));

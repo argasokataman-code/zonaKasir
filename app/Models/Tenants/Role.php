@@ -3,6 +3,8 @@
 namespace App\Models\Tenants;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Models\Role as ModelsRole;
 use Spatie\Permission\PermissionRegistrar;
 
@@ -13,6 +15,7 @@ use App\Models\Traits\HasTenant;
 class Role extends ModelsRole
 {
     use HasTenant;
+    use LogsActivity;
 
     /**
      * Permission groups mapped to Filament navigation structure.
@@ -144,6 +147,14 @@ class Role extends ModelsRole
             ],
         ],
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function mobilePermissions(): BelongsToMany
     {
