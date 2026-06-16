@@ -84,18 +84,6 @@ class GeneralSetting extends Page implements HasActions, HasForms
         $user = auth()->user();
         $profile = $user->profile ?? $user->profile()->create();
 
-        // DEBUG: log mount profile loading
-        \Log::info('GeneralSetting mount', [
-            'user_id' => $user->id,
-            'profile_id' => $profile?->id,
-            'profile_locale' => $profile?->locale,
-            'profile_timezone' => $profile?->timezone,
-            'profile_phone' => $profile?->phone,
-            'profile_address' => $profile?->address,
-            'profile_tenant_id' => $profile?->tenant_id,
-            'user_tenant_id' => $user->tenant_id,
-        ]);
-
         // Prepare profile data and normalize photo to the FileUpload expected structure
         $photoState = null;
         if ($profile?->photo) {
@@ -312,12 +300,6 @@ class GeneralSetting extends Page implements HasActions, HasForms
 
     public function saveProfile(): void
     {
-        // DEBUG: log state before validation
-        \Log::info('saveProfile called', [
-            'profile_state' => $this->profile,
-            'user_id' => auth()->id(),
-        ]);
-
         $this->validate([
             'profile.email' => 'required|email',
             'profile.timezone' => 'required',
@@ -351,14 +333,6 @@ class GeneralSetting extends Page implements HasActions, HasForms
             'locale' => $this->profile['locale'] ?? $profile->locale,
             'timezone' => $this->profile['timezone'] ?? $profile->timezone,
         ];
-
-        // DEBUG: log what will be saved
-        \Log::info('saveProfile data', [
-            'user_data' => $userData,
-            'profile_data' => $profileData,
-            'profile_id' => $profile->id,
-            'profile_exists' => $profile->exists,
-        ]);
 
         // Handle upload photo baru
         try {
@@ -394,16 +368,8 @@ class GeneralSetting extends Page implements HasActions, HasForms
             \Log::error('Profile photo upload failed: ' . $e->getMessage());
         }
 
-        $userResult = $user->update($userData);
-        $profileResult = $profile->update($profileData);
-
-        // DEBUG: log update results
-        \Log::info('saveProfile results', [
-            'user_update' => $userResult,
-            'profile_update' => $profileResult,
-            'profile_was_changed' => $profile->wasChanged(),
-            'profile_dirty' => $profile->getDirty(),
-        ]);
+        $user->update($userData);
+        $profile->update($profileData);
 
         Notification::make()
             ->title(__('Success'))
