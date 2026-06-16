@@ -158,15 +158,6 @@ class ActivityLogResource extends Resource
                         $query
                             ->when($data['created_from'] ?? null, fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
                             ->when($data['created_until'] ?? null, fn ($q, $date) => $q->whereDate('created_at', '<=', $date));
-                    })
-                    ->indicateRemoveUsing(fn (array $data): string => match (true) {
-                        filled($data['created_from'] ?? null) && filled($data['created_until'] ?? null)
-                            => 'From ' . $data['created_from'] . ' to ' . $data['created_until'],
-                        filled($data['created_from'] ?? null)
-                            => 'From ' . $data['created_from'],
-                        filled($data['created_until'] ?? null)
-                            => 'Until ' . $data['created_until'],
-                        default => '',
                     }),
             ]);
     }
