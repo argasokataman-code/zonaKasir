@@ -2,12 +2,11 @@
 
 namespace App\Features;
 
+use App\Features\Traits\ResolvesFromPlan;
+
 class PaymentShortcutButton
 {
     public $name = 'payment-shortcut-button';
 
-    public function resolve(mixed $scope): mixed
-    {
-        return true;
-    }
+    use ResolvesFromPlan;
 }

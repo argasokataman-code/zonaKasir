@@ -2,12 +2,11 @@
 
 namespace App\Features;
 
+use App\Features\Traits\ResolvesFromPlan;
+
 class ProductSku
 {
     public $name = 'product-sku';
 
-    public function resolve(mixed $scope): mixed
-    {
-        return true;
-    }
+    use ResolvesFromPlan;
 }

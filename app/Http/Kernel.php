@@ -81,5 +81,6 @@ class Kernel extends HttpKernel
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'method_and_permission' => \App\Http\Middleware\ResourcePerMethodMiddleware::class,
         'withdrawal.ratelimit' => \App\Http\Middleware\WithdrawalRateLimit::class,
+        'plan.feature' => \App\Http\Middleware\PlanFeatureMiddleware::class,
     ];
 }

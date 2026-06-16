@@ -2,12 +2,11 @@
 
 namespace App\Features;
 
+use App\Features\Traits\ResolvesFromPlan;
+
 class PrintSellingA5
 {
     public $name = 'print-selling-a5';
 
-    public function resolve(mixed $scope): mixed
-    {
-        return true;
-    }
+    use ResolvesFromPlan;
 }
