@@ -54,44 +54,58 @@
     @endif
 
     @if($current)
-    <div class="bg-white border border-[#E5E5E1] rounded-[6px] p-6 mb-6 shadow-sm">
-        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">{{ __('Current Plan') }}</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Plan</p>
-                <p class="text-lg font-bold text-gray-900 mt-1">{{ $current['name'] }}</p>
+    <div class="mb-6">
+        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 text-center">{{ __('Current Plan') }}</h2>
+        <div class="bg-white rounded-[6px] shadow-md flex flex-col relative border-2 border-gray-900 w-full sm:w-[280px] sm:min-w-[280px] mx-auto">
+            <div class="absolute top-0 left-0 bg-gray-900 text-white text-[8px] font-mono font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-bl-[4px] rounded-tr-[5px]">
+                {{ __('Active') }}
+                @if($current['is_on_trial'])
+                    {{ __('Trial') }}
+                @endif
             </div>
-            <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Status</p>
-                <p class="mt-1">
-                    @if($current['is_on_trial'])
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-yellow-100 text-yellow-800">Trial</span>
-                    @elseif($current['status'] === 'active')
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-800">Active</span>
+            <div class="p-5 pt-10 flex flex-col h-full">
+                <div>
+                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">
+                        {{ $current['max_stores'] > 10 ? __('Enterprise') : ($current['max_stores'] > 1 ? __('Business') : __('Starter')) }}
+                    </span>
+                    <h3 class="font-sans font-bold text-base text-gray-900">{{ $current['name'] }}</h3>
+                </div>
+
+                <div class="py-3 my-3 border-y border-gray-100">
+                    @if($current['price_monthly'] ?? 0 > 0)
+                        @if($current['billing_cycle'] === 'yearly')
+                            <span class="font-mono text-2xl font-black text-gray-900">Rp {{ number_format($current['price_yearly'] ?? $current['price_monthly'], 0, ',', '.') }}</span>
+                            <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">{{ __('Per Year') }}</span>
+                            <span class="text-[9px] text-gray-400 block mt-0.5">Rp {{ number_format($current['price_monthly'], 0, ',', '.') }}/{{ __('month') }}</span>
+                        @else
+                            <span class="font-mono text-2xl font-black text-gray-900">Rp {{ number_format($current['price_monthly'], 0, ',', '.') }}</span>
+                            <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">{{ __('Per Month') }}</span>
+                            @if($current['price_yearly'] ?? false)
+                            <span class="text-[9px] text-gray-400 block mt-0.5">Rp {{ number_format($current['price_yearly'], 0, ',', '.') }}/{{ __('year') }}</span>
+                            @endif
+                        @endif
                     @else
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800">{{ ucfirst($current['status']) }}</span>
+                        <span class="font-mono text-2xl font-black text-gray-900">{{ __('Free') }}</span>
+                        <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">{{ __('Forever') }}</span>
                     @endif
-                </p>
-            </div>
-            <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Billing</p>
-                <p class="text-lg font-bold text-gray-900 mt-1">{{ ucfirst($current['billing_cycle']) }}</p>
-            </div>
-            <div>
-                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('Limits') }}</p>
-                <p class="text-lg font-bold text-gray-900 mt-1">{{ $current['max_stores'] }} stores / {{ $current['max_users'] }} users</p>
-            </div>
-        </div>
-        @if(count($current['features']) > 0)
-        <div class="mt-4 pt-4 border-t border-gray-100">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">{{ __('Features') }}</p>
-            <div class="flex flex-wrap gap-1.5">
-                @foreach($current['features'] as $feature)
-                <span class="px-2 py-0.5 bg-green-50 text-green-700 text-[10px] font-medium rounded-full border border-green-200">{{ $feature }}</span>
-                @endforeach
+                </div>
+
+                <div class="text-[10px] text-gray-400 font-semibold mb-2">
+                    {{ $current['max_stores'] }} {{ __('outlets') }} / {{ $current['max_users'] }} {{ __('users') }}
+                </div>
+
+                @if(!empty($current['features']))
+                <div class="text-[10px] text-gray-400 font-semibold mb-2 border-t border-gray-100 pt-2">
+                    @foreach($current['features'] as $feature)
+                    <div class="flex items-center gap-2 py-0.5">
+                        <svg class="w-3 h-3 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        <span class="text-gray-600">{{ is_string($feature) ? $feature : (is_string(array_key_first((array) $feature)) ? array_key_first((array) $feature) : $feature) }}</span>
+                    </div>
+                    @endforeach
+                </div>
+                @endif
             </div>
         </div>
-        @endif
     </div>
     @endif
 
