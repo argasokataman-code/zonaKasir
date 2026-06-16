@@ -17,6 +17,23 @@ class Subscription extends Model
 
     protected $guarded = ['id'];
 
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        // Clear Pennant feature cache when plan changes
+        // Ensures upgraded/downgraded tenants get correct features immediately
+        static::saved(function (self $subscription) {
+            if ($subscription->wasChanged('plan_id') && $subscription->tenant_id) {
+                try {
+                    \Laravel\Pennant\Feature::for($subscription->tenant_id)->purge();
+                } catch (\Throwable $e) {
+                    report($e);
+                }
+            }
+        });
+    }
+
     protected $casts = [
         'trial_ends_at' => 'datetime',
         'starts_at' => 'datetime',
