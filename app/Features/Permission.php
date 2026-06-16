@@ -2,12 +2,11 @@
 
 namespace App\Features;
 
+use App\Features\Traits\ResolvesFromPlan;
+
 class Permission
 {
     public $name = 'permission';
 
-    public function resolve(): mixed
-    {
-        return true;
-    }
+    use ResolvesFromPlan;
 }

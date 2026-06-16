@@ -2,12 +2,11 @@
 
 namespace App\Features;
 
+use App\Features\Traits\ResolvesFromPlan;
+
 class StockOpname
 {
     public $name = 'stock-opname';
 
-    public function resolve(): mixed
-    {
-        return true;
-    }
+    use ResolvesFromPlan;
 }

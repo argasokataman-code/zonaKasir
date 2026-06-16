@@ -2,12 +2,11 @@
 
 namespace App\Features;
 
+use App\Features\Traits\ResolvesFromPlan;
+
 class PaymentMethod
 {
     public $name = 'payment-method';
 
-    public function resolve(): mixed
-    {
-        return true;
-    }
+    use ResolvesFromPlan;
 }

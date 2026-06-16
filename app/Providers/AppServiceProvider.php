@@ -80,7 +80,7 @@ class AppServiceProvider extends ServiceProvider
             $this->loadMigrationsFrom(database_path('migrations/tenant'));
         }
 
-        Feature::resolveScopeUsing(fn ($driver) => null);
+        Feature::resolveScopeUsing(fn ($driver) => auth()->user()?->tenant_id);
         Feature::discover();
 
         config([

@@ -2,12 +2,11 @@
 
 namespace App\Features;
 
+use App\Features\Traits\ResolvesFromPlan;
+
 class EditProfile
 {
     public $name = 'edit-profile';
 
-    public function resolve(mixed $scope): mixed
-    {
-        return true;
-    }
+    use ResolvesFromPlan;
 }

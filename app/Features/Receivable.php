@@ -2,12 +2,11 @@
 
 namespace App\Features;
 
+use App\Features\Traits\ResolvesFromPlan;
+
 class Receivable
 {
     public $name = 'receivable';
 
-    public function resolve(): mixed
-    {
-        return true;
-    }
+    use ResolvesFromPlan;
 }

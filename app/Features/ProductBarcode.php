@@ -2,12 +2,11 @@
 
 namespace App\Features;
 
+use App\Features\Traits\ResolvesFromPlan;
+
 class ProductBarcode
 {
     public $name = 'product-barcode';
 
-    public function resolve(mixed $scope): mixed
-    {
-        return true;
-    }
+    use ResolvesFromPlan;
 }
