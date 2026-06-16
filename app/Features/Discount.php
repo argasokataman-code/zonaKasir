@@ -2,13 +2,9 @@
 
 namespace App\Features;
 
+use App\Features\Traits\ResolvesFromPlan;
+
 class Discount
 {
-    /**
-     * Resolve the feature's initial value.
-     */
-    public function resolve(mixed $scope): mixed
-    {
-        return false;
-    }
+    use ResolvesFromPlan;
 }
