@@ -16,22 +16,10 @@ class TurnstileService
 
     /**
      * Check if Turnstile is enabled and configured.
-     * Automatically disabled when domain is not proxied through Cloudflare
-     * (no CF-Connecting-IP header) — prevents "Cannot determine Turnstile's
-     * embedded location" error on non-Cloudflare domains.
      */
     public function isEnabled(): bool
     {
-        if (! $this->enabled || ! filled($this->secretKey)) {
-            return false;
-        }
-
-        // CF-Connecting-IP only present when domain is proxied (orange cloud)
-        if (! Request::header('CF-Connecting-IP')) {
-            return false;
-        }
-
-        return true;
+        return $this->enabled && filled($this->secretKey);
     }
 
     /**
