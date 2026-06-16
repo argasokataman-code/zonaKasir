@@ -92,3 +92,5 @@ class IndexedDBManager {
     }
   }
 }
+
+window.IndexedDBManager = IndexedDBManager;

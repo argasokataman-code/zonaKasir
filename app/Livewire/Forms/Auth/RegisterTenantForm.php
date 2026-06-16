@@ -128,7 +128,7 @@ class RegisterTenantForm extends Component implements HasForms
         Auth::login(\App\Models\Tenants\User::where('email', $data['email'])->first());
         session()->save();
 
-        $this->redirect('/member');
+        $this->dispatch('redirect-after-register');
     }
 
     public function render()

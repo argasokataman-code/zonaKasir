@@ -101,14 +101,10 @@ class TenantPanelProvider extends PanelProvider
         } catch (\Throwable) {
         }
 
+        // 5 render hooks (was 6): HEAD_END | TOPBAR_AFTER | GLOBAL_SEARCH_AFTER | BODY_START (merged sidebar-logo) | BODY_END
         FilamentView::registerRenderHook(
             PanelsRenderHook::HEAD_END,
             fn () => view('meta')
-        );
-
-        FilamentView::registerRenderHook(
-            PanelsRenderHook::SIDEBAR_NAV_START,
-            fn () => view('partials.sidebar-logo-css')
         );
 
         FilamentView::registerRenderHook(
@@ -121,7 +117,6 @@ class TenantPanelProvider extends PanelProvider
             fn () => view('version-indicator')
         );
 
-        // Merged partials — fewer hooks, shared DB queries
         FilamentView::registerRenderHook(
             PanelsRenderHook::BODY_START,
             fn () => view('partials.body-start')
@@ -147,13 +142,7 @@ class TenantPanelProvider extends PanelProvider
             ->viteTheme('resources/css/filament/tenant/theme.css')
             ->colors(['primary' => Color::hex('#FF6600')])
             ->assets([
-                Js::make('custom-javascript', resource_path('js/app.js')),
-                Js::make('printer', resource_path('js/printer.js')),
-                Js::make('indexeddb', resource_path('js/indexeddb.js')),
-                Js::make('offline-manager', resource_path('js/offline-manager.js')),
-                Js::make('sync-manager', resource_path('js/sync-manager.js')),
-                Js::make('offline-indicator', resource_path('js/offline-indicator.js')),
-                Js::make('session-timeout', resource_path('js/session-timeout.js')),
+                // html5-qrcode tetap dari CDN (cannot bundle)
                 Js::make('html5-qrcode', 'https://unpkg.com/html5-qrcode'),
             ])
             ->favicon(url('favicon.ico'))

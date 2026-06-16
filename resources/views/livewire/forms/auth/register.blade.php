@@ -92,6 +92,14 @@
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   @endif
 
+  @script
+  <script>
+    Livewire.on('redirect-after-register', () => {
+      window.location.href = '/member';
+    });
+  </script>
+  @endscript
+
   <style>
     .parallax-bg {
       background: linear-gradient(to bottom, transparent 0%, rgba(244,244,242,0.6) 50%, #F4F4F2 100%), url('/images/landing/retail_hero_bg_1781378962689.jpg') center/cover no-repeat;
