@@ -2,10 +2,21 @@
 @config '../../../../tailwind.config.js';
 
 
-/* Sidebar: smooth scroll + GPU acceleration */
-/* Sidebar already has h-screen flex-col from Filament; nav already has flex-grow overflow-y-auto */
+/* Sidebar: fix scrolling on mobile + PWA */
+.fi-sidebar {
+  /* Force height containment so flex-grow nav calculates correctly */
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: auto;
+}
+@supports not (height: 100dvh) {
+  .fi-sidebar { height: 100vh; }
+}
+
 .fi-sidebar-nav {
   @apply bg-white drop-shadow-md dark:bg-gray-900;
+  overflow-y: auto !important;
   -webkit-overflow-scrolling: auto;
   overscroll-behavior: contain;
   will-change: scroll-position;
