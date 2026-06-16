@@ -29,12 +29,24 @@ class ManageSubscription extends Page
 
     public ?string $snapRedirectUrl = null;
 
+    public bool $showPaymentSuccess = false;
+
+    public string $paymentStatus = '';
+
     public function mount(): void
     {
         // Prevent empty action modals from rendering (PHP 8.4 root element detection fix)
         $this->hasActionsModalRendered = true;
         $this->hasInfolistsModalRendered = true;
         $this->hasFormsModalRendered = true;
+
+        // ── Midtrans redirect params (after payment) ──
+        $statusCode = request()->query('status_code');
+        $orderStatus = request()->query('transaction_status');
+        if ($statusCode) {
+            $this->paymentStatus = $orderStatus ?? ($statusCode === '200' ? 'success' : 'failed');
+            $this->showPaymentSuccess = $statusCode === '200';
+        }
 
         $planId = request()->query('plan_id');
         $billing = request()->query('billing', 'monthly');
