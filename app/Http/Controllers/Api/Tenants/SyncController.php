@@ -58,7 +58,7 @@ class SyncController extends Controller
 
         $categories = Category::query();
         $members = Member::query()->select('id', 'name', 'code', 'phone');
-        $paymentMethods = PaymentMethod::query()->select('id', 'name', 'is_credit', 'payment_type');
+        $paymentMethods = PaymentMethod::query()->select('id', 'name', 'is_credit', 'payment_type')->where('is_active', true);
 
         if ($isDelta) {
             $categories->where('updated_at', '>', $since);

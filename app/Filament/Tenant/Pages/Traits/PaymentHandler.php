@@ -201,6 +201,6 @@ trait PaymentHandler
 
         $this->mount();
 
-        $this->dispatch('selling-created', selling: $selling->load('sellingDetails.product', 'table'));
+        $this->dispatch('selling-created', selling: $selling->load('sellingDetails.product', 'table', 'paymentMethod'));
     }
 }

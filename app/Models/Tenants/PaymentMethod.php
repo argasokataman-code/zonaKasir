@@ -32,6 +32,7 @@ class PaymentMethod extends Model
         'is_debit' => 'boolean',
         'is_credit' => 'boolean',
         'is_wallet' => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     public const MIDTRANS_TYPES = [
@@ -58,7 +59,7 @@ class PaymentMethod extends Model
 
         $this->is_cash = in_array($this->payment_type, ['cash']);
         $this->is_debit = in_array($this->payment_type, ['debit_card', 'bank_transfer']);
-        $this->is_credit = in_array($this->payment_type, ['credit_card', 'kredivo', 'akulaku']);
+        $this->is_credit = in_array($this->payment_type, ['credit_card', 'kredivo', 'akulaku', 'credit']);
         $this->is_wallet = in_array($this->payment_type, ['gopay', 'shopeepay', 'qris']);
     }
 
