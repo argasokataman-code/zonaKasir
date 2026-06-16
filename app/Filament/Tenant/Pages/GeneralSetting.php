@@ -85,10 +85,11 @@ class GeneralSetting extends Page implements HasActions, HasForms
         $profile = $user->profile ?? $user->profile()->create();
 
         // Prepare profile photo state — SIMPLE STRING path, NOT preview array
-        // getUploadedFileUsing callback converts string → preview array for display
+        // Guard: skip corrupted photo values (empty, array, '[]', etc.)
         $photoState = null;
-        if ($profile?->photo) {
-            $photoState = [$profile->photo];
+        $_photo = $profile?->photo;
+        if ($_photo && is_string($_photo) && $_photo !== '[]' && $_photo !== '') {
+            $photoState = [$_photo];
         }
 
         $this->profile = [
