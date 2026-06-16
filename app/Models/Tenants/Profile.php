@@ -12,7 +12,6 @@ use Filament\Forms\Get;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 use Tapp\FilamentTimezoneField\Forms\Components\TimezoneSelect;
 
@@ -96,16 +95,14 @@ class Profile extends Model
                 ->rule(Password::default())
                 ->autocomplete('new-password')
                 ->dehydrated(fn ($state): bool => filled($state))
-                ->dehydrateStateUsing(fn ($state): string => Hash::make($state))
                 ->live(debounce: 500)
-                ->same('passwordConfirmation'),
+                ->same('password_confirmation'),
             TextInput::make('password_confirmation')
                 ->label(__('filament-panels::pages/auth/edit-profile.form.password_confirmation.label'))
                 ->password()
                 ->revealable(filament()->arePasswordsRevealable())
                 ->required()
-                ->visible(fn (Get $get): bool => filled($get('password')))
-                ->dehydrated(false),
+                ->visible(fn (Get $get): bool => filled($get('password'))),
             Actions::make([
                 Action::make('Save')
                     ->translateLabel()
