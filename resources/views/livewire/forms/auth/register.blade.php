@@ -33,7 +33,7 @@
         <form wire:submit.prevent="create" class="space-y-6">
           {{ $this->form }}
 
-          @if(config('turnstile.enabled') && config('turnstile.site_key'))
+          @if(app(\App\Services\TurnstileService::class)->isEnabled())
             <div class="flex justify-center pt-2" wire:ignore
                  x-data="{
                      token: null,
@@ -88,7 +88,7 @@
     </div>
   </div>
 
-  @if(config('turnstile.enabled') && config('turnstile.site_key'))
+  @if(app(\App\Services\TurnstileService::class)->isEnabled())
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   @endif
 
