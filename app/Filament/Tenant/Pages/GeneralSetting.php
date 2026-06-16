@@ -63,8 +63,12 @@ class GeneralSetting extends Page implements HasActions, HasForms
         $about = About::first()?->toArray() ?? $this->about;
         if ($about) {
             $about['preview_image'] = $about['photo'];
-            if ($about['photo']) {
-                $about['photo'] = [$about['photo']];
+            // Guard: skip corrupted photo values (empty, array, '[]', etc.)
+            $_aboutPhoto = $about['photo'] ?? null;
+            if ($_aboutPhoto && is_string($_aboutPhoto) && $_aboutPhoto !== '[]' && $_aboutPhoto !== '') {
+                $about['photo'] = [$_aboutPhoto];
+            } else {
+                $about['photo'] = null;
             }
             foreach (config('setting.key') as $key) {
                 $this->setting[$key] = Setting::get($key);
