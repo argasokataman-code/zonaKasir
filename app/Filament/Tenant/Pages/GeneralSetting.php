@@ -84,37 +84,11 @@ class GeneralSetting extends Page implements HasActions, HasForms
         $user = auth()->user();
         $profile = $user->profile ?? $user->profile()->create();
 
-        // Prepare profile data and normalize photo to the FileUpload expected structure
+        // Prepare profile photo state — SIMPLE STRING path, NOT preview array
+        // getUploadedFileUsing callback converts string → preview array for display
         $photoState = null;
         if ($profile?->photo) {
-            // Prefer UploadedFile record when available (contains metadata)
-            $uploaded = UploadedFile::where('relative_path', $profile->photo)
-                ->orWhere('url', $profile->photo)
-                ->first();
-
-            if ($uploaded) {
-                $photoState = [[
-                    'name' => $uploaded->relative_path ?: $uploaded->name,
-                    'size' => $uploaded->size ?? 0,
-                    'type' => $uploaded->mime_type ?? null,
-                    'url' => $uploaded->url ?? '',
-                ]];
-            } else {
-                // Fallback to disk lookup for legacy relative-path-only values
-                $uploadDisk = config('filesystems.upload_disk');
-                try {
-                    if (Storage::disk($uploadDisk)->exists($profile->photo)) {
-                        $photoState = [[
-                            'name' => ltrim($profile->photo, '/'),
-                            'size' => Storage::disk($uploadDisk)->size($profile->photo),
-                            'type' => (string) (Storage::disk($uploadDisk)->mimeType($profile->photo) ?? ''),
-                            'url' => (string) (UploadedFile::urlFromPath($profile->photo, $uploadDisk) ?? ''),
-                        ]];
-                    }
-                } catch (\Exception $e) {
-                    $photoState = null;
-                }
-            }
+            $photoState = [$profile->photo];
         }
 
         $this->profile = [
