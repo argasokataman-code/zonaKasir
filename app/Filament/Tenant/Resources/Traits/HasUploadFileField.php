@@ -45,9 +45,9 @@ trait HasUploadFileField
             }
 
             return [
-                'name' => $name ?? $url,
+                'name' => (string) ($name ?? $url ?? ''),
                 'size' => $size,
-                'type' => $type,
+                'type' => (string) ($type ?? ''),
                 'url' => $url,
             ];
         }
@@ -70,9 +70,9 @@ trait HasUploadFileField
         }
 
         return [
-            'name' => $file,
+            'name' => (string) ($file ?? ''),
             'size' => $size,
-            'type' => $type,
+            'type' => (string) ($type ?? ''),
             'url' => UploadedFile::urlFromPath($file, $component->getDiskName()),
         ];
     }
