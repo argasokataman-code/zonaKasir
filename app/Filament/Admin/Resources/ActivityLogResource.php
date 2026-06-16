@@ -47,7 +47,8 @@ class ActivityLogResource extends Resource
                 TextColumn::make('subject_id')
                     ->label('Subject'),
                 TextColumn::make('causer.email')
-                    ->label('By'),
+                    ->label('By')
+                    ->formatStateUsing(fn ($state, $record) => $record->causer?->email ?? '-'),
                 TextColumn::make('created_at')
                     ->label('Date')
                     ->dateTime('d M Y H:i:s')
@@ -58,9 +59,12 @@ class ActivityLogResource extends Resource
                 Tables\Filters\SelectFilter::make('event')
                     ->options([
                         'created' => 'Created',
+                        'updated' => 'Updated',
+                        'deleted' => 'Deleted',
+                        'login' => 'Login',
+                        'logout' => 'Logout',
                         'activated' => 'Activated',
                         'suspended' => 'Suspended',
-                        'deleted' => 'Deleted',
                     ]),
             ]);
     }
