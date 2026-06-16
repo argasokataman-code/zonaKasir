@@ -101,7 +101,7 @@ class ActivityLogResource extends Resource
                     }),
                 TextColumn::make('causer.email')
                     ->label('By')
-                    ->formatStateUsing(fn ($state, $record) => $record->causer?->email ?? '-'),
+                    ->formatStateUsing(fn ($state) => $state ?? '-'),
                 TextColumn::make('created_at')
                     ->label('Date')
                     ->dateTime('d M Y H:i:s')
@@ -154,7 +154,7 @@ class ActivityLogResource extends Resource
                         \Filament\Forms\Components\DatePicker::make('created_until')
                             ->label('To'),
                     ])
-                    ->query(function ($query, array $data): void {
+                    ->query(function ($query, array $data) {
                         $query
                             ->when($data['created_from'] ?? null, fn ($q, $date) => $q->whereDate('created_at', '>=', $date))
                             ->when($data['created_until'] ?? null, fn ($q, $date) => $q->whereDate('created_at', '<=', $date));
