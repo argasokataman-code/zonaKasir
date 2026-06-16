@@ -107,8 +107,8 @@ class GeneralSetting extends Page implements HasActions, HasForms
                         $photoState = [[
                             'name' => ltrim($profile->photo, '/'),
                             'size' => Storage::disk($uploadDisk)->size($profile->photo),
-                            'type' => Storage::disk($uploadDisk)->mimeType($profile->photo),
-                            'url' => UploadedFile::urlFromPath($profile->photo, $uploadDisk) ?? '',
+                            'type' => (string) (Storage::disk($uploadDisk)->mimeType($profile->photo) ?? ''),
+                            'url' => (string) (UploadedFile::urlFromPath($profile->photo, $uploadDisk) ?? ''),
                         ]];
                     }
                 } catch (\Exception $e) {
@@ -264,8 +264,19 @@ class GeneralSetting extends Page implements HasActions, HasForms
                 $this->about['uploaded_file_id'] = $this->storeAsUploadedFile($photo);
                 $this->about['photo'] = null;
             } elseif (is_string($photo)) {
-                $this->about['photo'] = $photo;
-            }
+                    $this->about['photo'] = $photo;
+                    // Buat/update UploadedFile record (sama seperti profile photo)
+                    $uploadDisk = config('filesystems.upload_disk');
+                    if (! UploadedFile::where('relative_path', $photo)->exists()) {
+                        UploadedFile::create([
+                            'name' => basename($photo),
+                            'relative_path' => $photo,
+                            'url' => UploadedFile::urlFromPath($photo, $uploadDisk),
+                            'disk' => $uploadDisk,
+                            'path' => '',
+                        ]);
+                    }
+                }
         }
 
         $aboutService->createOrUpdate($this->about);
@@ -347,6 +358,24 @@ class GeneralSetting extends Page implements HasActions, HasForms
                     }
                 } elseif (is_string($photoVal)) {
                     $profileData['photo'] = $photoVal;
+                    // Buat/update UploadedFile record agar mount() temukan di refresh
+                    $uploadDisk = config('filesystems.upload_disk');
+                    $existing = UploadedFile::where('relative_path', $photoVal)->first();
+                    if (! $existing) {
+                        // Hapus UploadedFile lama jika ada (ganti foto)
+                        if ($profile->photo && $profile->photo !== $photoVal) {
+                            UploadedFile::where('relative_path', $profile->photo)
+                                ->orWhere('url', $profile->photo)
+                                ->delete();
+                        }
+                        UploadedFile::create([
+                            'name' => basename($photoVal),
+                            'relative_path' => $photoVal,
+                            'url' => UploadedFile::urlFromPath($photoVal, $uploadDisk),
+                            'disk' => $uploadDisk,
+                            'path' => '',
+                        ]);
+                    }
                 }
             } elseif (isset($this->profile['photo']) && (empty($this->profile['photo']) || $this->profile['photo'] === null)) {
                 // Hapus foto jika dihapus di UI
