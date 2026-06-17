@@ -1,0 +1,229 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Http\Controllers\Api\Tenants\AboutController;
+use App\Http\Controllers\Api\Tenants\Master\CategoryController;
+use App\Http\Controllers\Api\Tenants\Master\MemberController;
+use App\Http\Controllers\Api\Tenants\Master\Product\StockController;
+use App\Http\Controllers\Api\Tenants\Master\ProductController;
+use App\Http\Controllers\Api\Tenants\Master\SupplierController;
+use App\Http\Controllers\Api\Tenants\NotificationController;
+use App\Http\Controllers\Api\Tenants\PaymentMethodController;
+use App\Http\Controllers\Api\Tenants\ProfileController;
+use App\Http\Controllers\Api\Tenants\RegisterFCMTokenController;
+use App\Http\Controllers\Api\Tenants\Reports\PurchasingReportController;
+use App\Http\Controllers\Api\Tenants\Reports\ProductReportController as ApiProductReportController;
+use App\Http\Controllers\Api\Tenants\Reports\SellingReportController as ApiSellingReportController;
+use App\Http\Controllers\Api\Tenants\Settings\SecureInitialPriceController;
+use App\Http\Controllers\Api\Tenants\Transaction\CashDrawerController;
+use App\Http\Controllers\Api\Tenants\Transaction\DashboardController;
+use App\Http\Controllers\Api\Tenants\Reports\BalanceController;
+use App\Http\Controllers\Api\Tenants\Reports\ReconciliationController;
+use App\Http\Controllers\Api\Tenants\Reports\SettlementController;
+use App\Http\Controllers\Api\Tenants\Transaction\SellingController;
+use App\Http\Controllers\Api\Tenants\Transaction\WithdrawalController;
+use App\Http\Controllers\Api\Tenants\UploadController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\PrinterController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+// ─── API routes for tenant ─────────────────────────────────
+// Loaded with `api` middleware ONLY (no web middleware stacking).
+
+Route::middleware([
+    'api',
+])
+    ->prefix('api')
+    ->group(function () {
+        Route::group(['prefix' => 'auth'], function () {
+            Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+                ->middleware('throttle:5,1')
+                ->name('login');
+
+            Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+                ->middleware('guest')
+                ->name('password.email');
+
+            Route::get('/verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+                ->name('verification.verify');
+
+            Route::post('/email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+                ->middleware(['auth:sanctum', 'throttle:6,1'])
+                ->name('verification.send');
+
+            Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+                ->middleware('auth:sanctum')
+                ->middleware('auth')
+                ->name('logout');
+
+            Route::get('/me', [ProfileController::class, 'index'])
+                ->middleware('auth:sanctum')
+                ->can('read profile')
+                ->name('me');
+
+            Route::put('/me', [ProfileController::class, 'update'])
+                ->middleware('auth:sanctum')
+                ->can('update profile')
+                ->name('profile.update');
+        });
+
+        Route::group(['middleware' => 'auth:sanctum'], function () {
+            Route::post('/register-fcm-token', RegisterFCMTokenController::class);
+
+            Route::group(['prefix' => 'temp'], function () {
+                Route::post('upload', UploadController::class);
+            });
+
+            Route::group(['prefix' => 'master'], function () {
+                Route::resource('/supplier', SupplierController::class);
+                Route::group(['prefix' => '/category'], function () {
+                    Route::get('/', [CategoryController::class, 'index'])->can('read category');
+                    Route::post('/', [CategoryController::class, 'store'])->can('create category');
+                    Route::get('/{category}', [CategoryController::class, 'show'])->can('read category');
+                    Route::put('/{category}', [CategoryController::class, 'update'])->can('update category');
+                    Route::delete('/{category}', [CategoryController::class, 'destroy'])->can('delete category');
+                });
+
+                Route::group(['prefix' => '/product'], function () {
+                    Route::get('/', [ProductController::class, 'index'])->can('read product');
+                    Route::post('/', [ProductController::class, 'store'])->can('create product');
+                    Route::get('/{product}', [ProductController::class, 'show'])->can('read product');
+                    Route::put('/{product}', [ProductController::class, 'update'])->can('update product');
+                    Route::delete('/{product}', [ProductController::class, 'destroy'])->can('delete product');
+                    Route::get('/{product}/stock', [StockController::class, 'index'])->can('read product stock');
+                    Route::post('/{product}/stock', [StockController::class, 'store'])->can('create product stock');
+                    Route::delete('/{product}/stock/{stock}', [StockController::class, 'destroy'])->can('delete product stock');
+                });
+
+                Route::resource('member', MemberController::class)
+                    ->middleware('method_and_permission:index@read member|store@create member|show@read member|destroy@delete member|update@update member');
+
+                Route::group(['prefix' => 'payment-method'], function () {
+                    Route::get('/', [PaymentMethodController::class, 'index'])->can('read payment method');
+                });
+
+            });
+
+            Route::group(['prefix' => 'about'], function () {
+                Route::get('/', [AboutController::class, 'index'])
+                    ->can('read about')
+                    ->name('about');
+                Route::put('/', [AboutController::class, 'update'])
+                    ->can('update about')
+                    ->name('about.update');
+            });
+
+            Route::group(['prefix' => 'transaction'], function () {
+                Route::get('/dashboard/total-revenue', [DashboardController::class, 'totalRevenue'])
+                    ->name('transaction.dashboard.total-revenue');
+                Route::get('/dashboard/total-gross-profit', [DashboardController::class, 'totalGrossProfit'])
+                    ->name('transaction.dashboard.total-gross-profit');
+                Route::get('/dashboard/total-sales', [DashboardController::class, 'totalSales'])
+                    ->name('transaction.dashboard.total-sales');
+
+                Route::get('/selling', [SellingController::class, 'index'])->can('read selling');
+                Route::post('/selling', [SellingController::class, 'store'])
+                    ->middleware('throttle:30,1')
+                    ->can('create selling');
+                Route::get('/selling/{selling}', [SellingController::class, 'show'])->can('read selling');
+
+                Route::get('/withdrawal', [WithdrawalController::class, 'index'])->can('read withdrawal');
+                Route::post('/withdrawal', [WithdrawalController::class, 'store'])
+                    ->middleware('throttle:30,1', 'withdrawal.ratelimit')
+                    ->can('create withdrawal');
+                Route::post('/withdrawal/{withdrawal}/approve', [WithdrawalController::class, 'approve'])->can('update withdrawal');
+                Route::post('/withdrawal/{withdrawal}/reject', [WithdrawalController::class, 'reject'])->can('update withdrawal');
+                Route::group(['prefix' => 'cash-drawer'], function () {
+                    Route::get('/', [CashDrawerController::class, 'show']);
+                    Route::post('/', [CashDrawerController::class, 'store'])
+                        ->middleware('throttle:10,1')
+                        ->can('open cash drawer');
+                    Route::post('/close', [CashDrawerController::class, 'close'])
+                        ->middleware('throttle:10,1')
+                        ->can('close cash drawer');
+                });
+            });
+
+            // Permission checks added for setting endpoints
+            Route::middleware('can:manage settings')->group(function () {
+                Route::get('setting/{key}', [App\Http\Controllers\Api\Tenants\SettingController::class, 'show'])
+                    ->name('setting.show');
+                Route::post('setting', [App\Http\Controllers\Api\Tenants\SettingController::class, 'store'])
+                    ->name('setting.store');
+            });
+
+            Route::post('setting/secure-initial-price', [SecureInitialPriceController::class, 'store'])
+                ->name('setting.secure-initial-price.store')
+                ->can('enable secure initial price');
+
+            Route::post('setting/secure-initial-price/verify', [SecureInitialPriceController::class, 'verify'])
+                ->name('setting.secure-initial-price.verify')
+                ->can('verify secure initial price');
+
+            Route::group(['prefix' => 'report'], function () {
+                Route::post('/cashier', \App\Http\Controllers\CashierReportController::class)
+                    ->can('generate cashier report');
+                Route::post('/selling', ApiSellingReportController::class)
+                    ->can('generate selling report');
+                Route::post('/product', ApiProductReportController::class)
+                    ->can('generate product report');
+                Route::get('/balance', [BalanceController::class, 'index'])
+                    ->can('read balance');
+                Route::get('/settlements', [SettlementController::class, 'index'])
+                    ->can('read settlement');
+                Route::post('/reconciliation/run', [ReconciliationController::class, 'run'])
+                    ->can('manage settings');
+            });
+
+            Route::group(['prefix' => 'printer'], function () {
+                Route::get('/', [PrinterController::class, 'index'])
+                    ->can('read printer');
+                Route::post('/', [PrinterController::class, 'store'])
+                    ->can('create printer');
+                Route::put('/{printer}', [PrinterController::class, 'update'])
+                    ->can('update printer');
+                Route::delete('/{printer}', [PrinterController::class, 'destroy'])
+                    ->can('delete printer');
+            });
+
+            Route::group(['prefix' => 'notification'], function () {
+                Route::get('/', [NotificationController::class, 'index'])
+                    ->name('notification.index');
+                Route::put('/{notification}/{product}', [NotificationController::class, 'update'])
+                    ->name('notification.update');
+                Route::delete('/clear', [NotificationController::class, 'clear'])
+                    ->name('notification.destroy');
+            });
+
+            Route::group(['prefix' => 'coupon'], function () {
+                Route::post('/redeem', [\App\Http\Controllers\Api\Tenants\CouponController::class, 'redeem']);
+            });
+
+            Route::group(['prefix' => 'billing'], function () {
+                Route::get('/invoices', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'index']);
+                Route::post('/invoices', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'create']);
+                Route::get('/invoices/{id}', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'show']);
+                Route::post('/invoices/{id}/pay', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'pay']);
+                Route::get('/features', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'features']);
+            });
+
+            Route::group(['prefix' => 'sync'], function () {
+                Route::get('/data', [\App\Http\Controllers\Api\Tenants\SyncController::class, 'data']);
+                Route::post('/submit', [\App\Http\Controllers\Api\Tenants\SyncController::class, 'submit']);
+            });
+
+            Route::get('/user', function (Request $request) {
+                return $request->user();
+            });
+
+        });
+
+        Route::get('/', function () {
+            return ['Laravel' => app()->version()];
+        });
+    });

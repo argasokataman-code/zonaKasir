@@ -60,8 +60,10 @@ class AuthenticatedSessionController extends Controller
 
     public function destroy(Request $request)
     {
+        $user = $request->user();
+
         // Log logout
-        if ($user = $request->user()) {
+        if ($user) {
             activity()
                 ->performedOn($user)
                 ->event('logout')
@@ -71,24 +73,25 @@ class AuthenticatedSessionController extends Controller
                 ->log('Logout');
         }
 
-        // Handle API (Sanctum) logout — revoke ALL tokens
-        if ($request->wantsJson()) {
-            $request->user()?->tokens()->delete();
+        // Revoke ALL Sanctum tokens (both API and web users)
+        $user?->tokens()->delete();
 
+        // Handle API (Sanctum) logout — return JSON
+        if ($request->wantsJson()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Logout successful',
             ]);
         }
 
-        $guard = Auth::guard('web');
-        $guard->logout();
+        // Web logout — invalidate session, clear cookie, redirect to login
+        Auth::guard('web')->logout();
 
         $session = $request->session();
         $session->invalidate();
         $session->regenerateToken();
 
-        // Clear session cookie
+        // Force-clear the session cookie from browser
         $sessionName = config('session.cookie', 'laravel_session');
         $response = redirect()->route('filament.tenant.auth.login');
         $response->headers->setCookie(cookie()->forget($sessionName));

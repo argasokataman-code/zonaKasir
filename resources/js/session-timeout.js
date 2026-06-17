@@ -127,15 +127,33 @@
     if (keepAliveTimer) clearInterval(keepAliveTimer);
     if (checkTimer) clearInterval(checkTimer);
 
-    // For web users (Filament): just redirect to login.
-    // Session will expire naturally via garbage collection (config/session.php lifetime=120).
-    // Calling /api/auth/logout requires auth:sanctum middleware which web users don't have.
+    // POST to the proper logout endpoint to revoke tokens + invalidate session.
+    // Fallback: redirect to login if POST fails (e.g. network error).
     var path = window.location.pathname;
+    var logoutUrl = '/member/logout';
     var loginUrl = '/member/login';
     if (path.indexOf('/admin') === 0) {
+      logoutUrl = '/admin/logout';
       loginUrl = '/admin/login';
     }
-    window.location.href = loginUrl;
+
+    var csrf = getCsrfToken();
+    if (csrf) {
+      fetch(logoutUrl, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': csrf,
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'text/html,application/xhtml+xml',
+        },
+      }).then(function() {
+        window.location.href = loginUrl;
+      }).catch(function() {
+        window.location.href = loginUrl;
+      });
+    } else {
+      window.location.href = loginUrl;
+    }
   }
 
   function getCsrfToken() {
@@ -161,8 +179,15 @@
 
   // --- Init ---
   function init() {
-    // Don't run on login page
-    if (window.location.pathname.indexOf('/login') !== -1) return;
+    // On login page: clear stale browser storage from previous session, then bail.
+    // Replaces dead-code blade partials clear-browser-on-logout/clear-browser-storage.
+    if (window.location.pathname.indexOf('/login') !== -1) {
+      try {
+        localStorage.clear();
+        sessionStorage.clear();
+      } catch (e) { /* storage unavailable */ }
+      return;
+    }
 
     injectModal();
     attachActivityListeners();

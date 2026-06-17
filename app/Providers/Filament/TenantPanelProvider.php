@@ -150,6 +150,7 @@ class TenantPanelProvider extends PanelProvider
             ->assets([
                 // html5-qrcode tetap dari CDN (cannot bundle)
                 Js::make('html5-qrcode', 'https://unpkg.com/html5-qrcode'),
+                Js::make('session-timeout', resource_path('js/session-timeout.js')),
             ])
             ->favicon(url('favicon.ico'))
             ->spa(config('app.spa_mode'))
