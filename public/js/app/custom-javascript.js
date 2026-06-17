@@ -92,85 +92,74 @@ let selectedDevice = null;
   }
 })();
 
-// ─── Livewire Error Modal Interceptor ─────────────────────
-// Prevents black blank dialog when server unreachable
-// Inject CSS to hide black iframe + override dialog behavior
+// ─── Livewire Error Modal Fix ─────────────────────────────
+// Restyle Livewire's black blank dialog → white + message + close
 (function() {
-  // 1. Inject CSS to hide black iframe immediately
+  // Inject CSS to restyle the dialog
   var style = document.createElement('style');
   style.textContent = `
-    #livewire-error { display: none !important; }
-    #livewire-error[open] { display: none !important; }
-    dialog#livewire-error { display: none !important; }
-    dialog#livewire-error[open] { display: none !important; }
+    dialog#livewire-error {
+      border: none !important;
+      border-radius: 16px !important;
+      padding: 0 !important;
+      max-width: 380px !important;
+      width: 90% !important;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3) !important;
+    }
+    dialog#livewire-error::backdrop {
+      background: rgba(0,0,0,0.5) !important;
+    }
+    dialog#livewire-error iframe {
+      display: none !important;
+    }
   `;
   document.head.appendChild(style);
 
-  // 2. Override document.createElement to intercept dialog creation
-  var origCreate = document.createElement.bind(document);
-  document.createElement = function(tag, options) {
-    var el = origCreate(tag, options);
-    if (tag.toLowerCase() === 'dialog') {
-      // Monitor when this dialog gets an id of livewire-error
-      var origId = Object.getOwnPropertyDescriptor(Element.prototype, 'id');
-      if (origId && origId.set) {
-        Object.defineProperty(el, 'id', {
-          set: function(val) {
-            origId.set.call(this, val);
-            if (val === 'livewire-error') {
-              // This is Livewire's error dialog - prevent it from showing
-              this.style.display = 'none';
-              this.showModal = function() {}; // No-op
-              this.show = function() {}; // No-op
-              // Replace content after a tick
-              var self = this;
-              setTimeout(function() {
-                self.remove();
-                // Show our custom offline message instead
-                showOfflineMessage();
-              }, 50);
-            }
-          },
-          get: function() { return origId.get.call(this); }
-        });
-      }
-    }
-    return el;
-  };
-
-  // 3. Custom offline message function
-  function showOfflineMessage() {
-    if (document.getElementById('custom-offline-modal')) return;
-    var dialog = origCreate('dialog');
-    dialog.id = 'custom-offline-modal';
-    dialog.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:380px;width:90%;border:none;border-radius:16px;padding:0;box-shadow:0 20px 60px rgba(0,0,0,0.3);z-index:99999;';
-    dialog.innerHTML = '<div style="background:#fff;border-radius:16px;padding:32px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif;">' +
-      '<div style="width:56px;height:56px;background:#FEF3C7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px;">📡</div>' +
-      '<h2 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#1f2937;">Koneksi Terputus</h2>' +
-      '<p style="margin:0 0 20px;color:#6b7280;font-size:14px;line-height:1.5;">Tidak dapat terhubung ke server.<br>Periksa koneksi internet kamu.</p>' +
-      '<button onclick="window.location.reload()" style="background:#FF6600;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;width:100%;">Coba Lagi</button>' +
-      '</div>';
-    document.body.appendChild(dialog);
-    // Backdrop
-    var backdrop = origCreate('div');
-    backdrop.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99998;';
-    backdrop.onclick = function() { dialog.remove(); backdrop.remove(); };
-    document.body.appendChild(backdrop);
-    dialog.showModal();
-  }
-
-  // 4. MutationObserver as fallback
+  // MutationObserver to replace dialog content
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       mutation.addedNodes.forEach(function(node) {
-        if (node.id === 'livewire-error' || (node.querySelector && node.querySelector('#livewire-error'))) {
-          var target = node.id === 'livewire-error' ? node : node.querySelector('#livewire-error');
-          if (target) {
-            target.style.display = 'none';
+        var target = null;
+        if (node.id === 'livewire-error') target = node;
+        if (node.querySelector) target = node.querySelector('#livewire-error');
+        if (!target) return;
+
+        // Wait for dialog to be ready, then replace content
+        setTimeout(function() {
+          // Hide iframe, show custom content
+          var iframe = target.querySelector('iframe');
+          if (iframe) iframe.style.display = 'none';
+
+          // Check if we already replaced content
+          if (target.querySelector('.custom-offline-content')) return;
+
+          // Detect error type
+          var isAuthError = false;
+          try {
+            if (iframe && iframe.contentDocument) {
+              var html = iframe.contentDocument.body.innerHTML;
+              isAuthError = html.includes('401') || html.includes('403') || html.includes('Unauthorized');
+            }
+          } catch(e) {}
+
+          // Auth error → redirect to login
+          if (isAuthError) {
             target.remove();
-            showOfflineMessage();
+            window.location.href = window.location.pathname.indexOf('/admin') === 0 ? '/admin/login' : '/member/login';
+            return;
           }
-        }
+
+          // Network error → show custom message
+          target.innerHTML = '<div class="custom-offline-content" style="background:#fff;border-radius:16px;padding:32px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif;">' +
+            '<div style="width:56px;height:56px;background:#FEF3C7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px;">📡</div>' +
+            '<h2 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#1f2937;">Koneksi Terputus</h2>' +
+            '<p style="margin:0 0 20px;color:#6b7280;font-size:14px;line-height:1.5;">Tidak dapat terhubung ke server.<br>Periksa koneksi internet kamu.</p>' +
+            '<button onclick="window.location.reload()" style="background:#FF6600;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;width:100%;">Coba Lagi</button>' +
+            '</div>';
+
+          // Remove body overflow hidden
+          document.body.style.overflow = '';
+        }, 100);
       });
     });
   });
