@@ -109,9 +109,18 @@
 
   async runStartupSync() {
     if (!this.isPWA || !navigator.onLine) return;
+
+    // Init DB first — fail gracefully if unavailable
+    let db;
+    try {
+      db = await this.initOfflineDb();
+    } catch(e) {
+      console.error('[PWA] IndexedDB unavailable, skipping sync:', e);
+      return;
+    }
+
     // Check if data is already fresh (< 30 min old)
     try {
-      const db = await this.initOfflineDb();
       const tx = db.transaction('meta', 'readonly');
       const req = tx.objectStore('meta').get('last_prefetch');
       const lastPrefetch = await new Promise(r => { req.onsuccess = () => r(req.result); req.onerror = () => r(null); });
@@ -131,11 +140,10 @@
       { name: 'Categories', url: '/api/master/category', store: 'categories' },
       { name: 'Members', url: '/api/master/member', store: 'members' },
       { name: 'Payment methods', url: '/api/master/payment-method', store: 'payment_methods' },
-      { name: 'Settings', url: '/api/about', store: 'about' },
+      { name: 'Settings', url: '/api/about', store: 'about', single: true },
     ];
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
-    const db = await this.initOfflineDb();
     let done = 0;
 
     for (const step of steps) {
@@ -146,12 +154,19 @@
           credentials: 'same-origin',
         });
         if (resp.ok) {
-          const data = await resp.json();
-          const items = Array.isArray(data) ? data : (data.data || []);
+          const raw = await resp.json();
+          // Normalize: array endpoints return array, single endpoints return object
+          let items;
+          if (step.single) {
+            const obj = raw.data || raw;
+            items = (obj && typeof obj === 'object' && !Array.isArray(obj)) ? [obj] : [];
+          } else {
+            items = Array.isArray(raw) ? raw : (raw.data || []);
+          }
           if (items.length > 0) {
             const tx = db.transaction(step.store, 'readwrite');
             const store = tx.objectStore(step.store);
-            if (step.store !== 'about') store.clear();
+            store.clear();
             items.forEach(item => store.put(item));
           }
         }
