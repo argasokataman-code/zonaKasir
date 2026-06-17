@@ -31,7 +31,7 @@ return [
     |
     */
 
-    'expiration' => null,
+    'expiration' => 10080, // 7 days — tokens expire, must re-authenticate
 
     /*
     |--------------------------------------------------------------------------

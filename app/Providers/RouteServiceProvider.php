@@ -53,8 +53,11 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapTenantRoutes()
     {
-        Route::middleware('api')
-            ->group(base_path('routes/tenant.php'));
+        // Web routes: `web` middleware ONLY (session, CSRF, cookies).
+        Route::group([], base_path('routes/tenant-web.php'));
+
+        // API routes: `api` middleware ONLY (Sanctum, throttle, bindings).
+        Route::group([], base_path('routes/tenant-api.php'));
     }
 
     protected function centralDomains(): array

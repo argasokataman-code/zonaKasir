@@ -15,7 +15,13 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
-            return route('login');
+            // Route 'login' resolves to /api/auth/login (API endpoint).
+            // Redirect to the appropriate Filament panel login instead.
+            if (str_starts_with($request->path(), 'admin')) {
+                return '/admin/login';
+            }
+
+            return '/member/login';
         }
     }
 }

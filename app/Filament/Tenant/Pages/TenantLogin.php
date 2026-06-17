@@ -71,7 +71,7 @@ class TenantLogin extends Login
     public function mount(): void
     {
         if (Filament::auth()->check()) {
-            redirect()->intended(Filament::getUrl());
+            $this->redirect(Filament::getUrl());
         }
 
         if (app()->environment('demo')) {

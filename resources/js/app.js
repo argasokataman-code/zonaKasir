@@ -454,14 +454,16 @@ window.buildReceiptPreviewHtml = function(selling, about, printerData) {
     window.location.reload();
   }
 
-  // Intercept Livewire 419 via hook
+  // Intercept Livewire 419 via request fail callback
   function registerLivewireHook() {
     if (window.Livewire) {
-      Livewire.hook('request.fail', function({ status, preventDefault }) {
-        if (status === 419) {
-          preventDefault();
-          handle419();
-        }
+      Livewire.hook('request', function({ fail }) {
+        fail(function({ status, preventDefault }) {
+          if (status === 419) {
+            preventDefault();
+            handle419();
+          }
+        });
       });
     }
   }
@@ -483,22 +485,91 @@ window.buildReceiptPreviewHtml = function(selling, about, printerData) {
   };
 })();
 
-// ─── Logout: Clear SW session cache for account switching ────
+// ─── Global 401 handler: auto-refresh on stale session ──
+(function() {
+  function handle401() {
+    var lastRefresh = sessionStorage.getItem('last_401_refresh');
+    var now = Date.now();
+    if (lastRefresh && (now - parseInt(lastRefresh)) < 10000) {
+      // Already refreshed recently — prevent infinite loop
+      return;
+    }
+    sessionStorage.setItem('last_401_refresh', String(now));
+    window.location.reload();
+  }
+
+  // Intercept Livewire 401 via request fail callback
+  function registerLivewire401Hook() {
+    if (window.Livewire) {
+      Livewire.hook('request', function({ fail }) {
+        fail(function({ status, preventDefault }) {
+          if (status === 401) {
+            preventDefault();
+            handle401();
+          }
+        });
+      });
+    }
+  }
+  if (window.Livewire) {
+    registerLivewire401Hook();
+  } else {
+    document.addEventListener('livewire:init', registerLivewire401Hook);
+  }
+
+  // Intercept XHR 401
+  var origOpen2 = XMLHttpRequest.prototype.open;
+  XMLHttpRequest.prototype.open = function() {
+    this.addEventListener('load', function() {
+      if (this.status === 401 && window.location.pathname.startsWith('/member')) {
+        handle401();
+      }
+    });
+    origOpen2.apply(this, arguments);
+  };
+})();
+
+// ─── Logout: Handle stale CSRF + clear SW cache ────
 document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('submit', function(e) {
     var form = e.target;
-    if (form.method && form.method.toUpperCase() === 'POST') {
-      var action = form.action || window.location.href;
-      if (action.includes('/logout')) {
-        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-          navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_SESSION' });
-        }
-        // Also clear IndexedDB session data
-        if (window.offlineManager && window.offlineManager.db) {
-          window.offlineManager.clearAll().catch(function() {});
-        }
-      }
+    if (!form.method || form.method.toUpperCase() !== 'POST') return;
+    var action = form.action || window.location.href;
+    if (!action.includes('/logout')) return;
+
+    // Clear SW + IndexedDB regardless
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_SESSION' });
     }
+    if (window.offlineManager && window.offlineManager.db) {
+      window.offlineManager.clearAll().catch(function() {});
+    }
+
+    e.preventDefault();
+    var formData = new FormData(form);
+    fetch(action, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'text/html,application/xhtml+xml' },
+      // Use redirect: 'follow' (default) so Set-Cookie headers from the
+      // server's 302 response are applied to the browser cookie jar.
+      // 'manual' would cause opaque redirect → Set-Cookie lost → stale session.
+    }).then(function(resp) {
+      if (resp.status === 419) {
+        window.location.href = '/member/login';
+        return;
+      }
+      window.location.href = '/member/login';
+    }).catch(function() {
+      form.submit();
+    });
   });
+});
+
+// ─── bfcache guard: reload on back/forward to clear stale session ──
+window.addEventListener('pageshow', function(e) {
+  if (e.persisted) {
+    window.location.reload();
+  }
 });
 
