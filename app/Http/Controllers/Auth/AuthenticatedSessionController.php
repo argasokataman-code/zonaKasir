@@ -55,7 +55,9 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         // For normal browser form submissions, redirect to the Filament panel.
-        return redirect()->intended(Filament::getUrl());
+        // Use Filament::getUrl() directly — skip intended() to avoid restoring
+        // stale URLs like /member/offline-pos after session expiry.
+        return redirect(Filament::getUrl());
     }
 
     public function destroy(Request $request)
