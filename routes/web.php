@@ -17,6 +17,7 @@ Route::view('/privacy', 'privacy-policy');
 Route::view('/terms', 'terms-of-service');
 
 Route::view('/offline', 'offline');
+Route::view('/network-error', 'network-error');
 
 Route::get('/member/offline-pos', function () {
     return view('filament.tenant.pages.offline-pos');

@@ -23,6 +23,11 @@ let selectedDevice = null;
 
     // Hide any Livewire error modal that already appeared
     document.querySelectorAll('[x-data]').forEach(function(el) {
+      // Alpine.js v3 API
+      if (el._x_dataStack && el._x_dataStack[0] && el._x_dataStack[0].open !== undefined) {
+        el._x_dataStack[0].open = false;
+      }
+      // Alpine.js v2 API (fallback)
       if (el.__x && el.__x.$data && el.__x.$data.open !== undefined) {
         el.__x.$data.open = false;
       }
@@ -85,6 +90,47 @@ let selectedDevice = null;
       }
     });
   }
+})();
+
+// ─── Livewire Error Modal Interceptor ─────────────────────
+// Prevents black blank dialog when server unreachable
+// Instead: auto-redirect to login page
+(function() {
+  // MutationObserver to catch any livewire-error dialog
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      mutation.addedNodes.forEach(function(node) {
+        if (node.id === 'livewire-error' && node.tagName === 'DIALOG') {
+          // Replace black iframe with custom message
+          setTimeout(function() {
+            var iframe = node.querySelector('iframe');
+            if (iframe) {
+              iframe.style.backgroundColor = '#fff';
+              // Try to read iframe content for error type
+              try {
+                var body = iframe.contentWindow.document.body;
+                var html = body ? body.innerHTML : '';
+                if (html.includes('401') || html.includes('403') || html.includes('Unauthorized') || html.includes('not authorize')) {
+                  // Auth error → redirect to login
+                  window.location.href = window.location.pathname.indexOf('/admin') === 0 ? '/admin/login' : '/member/login';
+                  return;
+                }
+              } catch(e) {}
+              // Other errors → replace with custom message
+              iframe.remove();
+              node.innerHTML = '<div style="background:#fff;border-radius:12px;padding:32px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif;height:100%;">' +
+                '<div style="font-size:48px;margin-bottom:16px;">⚠️</div>' +
+                '<h2 style="margin:0 0 8px;font-size:18px;color:#1f2937;">Koneksi Terputus</h2>' +
+                '<p style="margin:0 0 20px;color:#6b7280;font-size:14px;">Tidak dapat terhubung ke server. Periksa koneksi internet kamu.</p>' +
+                '<button onclick="window.location.reload()" style="background:#FF6600;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">Coba Lagi</button>' +
+                '</div>';
+            }
+          }, 150);
+        }
+      });
+    });
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
 })();
 
 // ─── PWA Visibility Change — Session Refresh ─────────────────

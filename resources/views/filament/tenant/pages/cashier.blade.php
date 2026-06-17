@@ -3,7 +3,135 @@
   use App\Features\{PaymentShortcutButton, SellingTax, Discount};
 
 @endphp
-<div class="" x-data="{ cartOpen: false, isOffline: !navigator.onLine }" x-init="window.addEventListener('online', () => isOffline = false); window.addEventListener('offline', () => isOffline = true);">
+<div class="" x-data="{
+  cartOpen: false,
+  isOffline: !navigator.onLine,
+  isPWA: window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true,
+  offlineProducts: [],
+  offlineCategories: [],
+  offlineCart: {},
+  offlineSelectedCategory: null,
+  offlineSearch: '',
+  offlineDb: null,
+  paymentModalOpen: false,
+  selectedPaymentMethod: null,
+  offlineCartNote: '',
+  offlineCartDiscount: 0,
+  offlinePaymentMethod: 'cash',
+
+  async initOfflineDb() {
+    if (this.offlineDb) return this.offlineDb;
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open('zonakasir_offline', 2);
+      req.onsuccess = (e) => { this.offlineDb = e.target.result; resolve(this.offlineDb); };
+      req.onerror = (e) => reject(e.target.error);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        ['products','categories','members','payment_methods','about','settings','pending_sales','meta'].forEach(n => {
+          if (!db.objectStoreNames.contains(n)) db.createObjectStore(n, { keyPath: n === 'pending_sales' ? 'temp_id' : n === 'settings' ? 'key' : n === 'meta' ? 'key' : 'id' });
+        });
+      };
+    });
+  },
+
+  async loadOfflineData() {
+    try {
+      const db = await this.initOfflineDb();
+      const tx = db.transaction('products', 'readonly');
+      const req = tx.objectStore('products').getAll();
+      req.onsuccess = () => { this.offlineProducts = req.result || []; };
+    } catch(e) { console.error('[Offline] Load products error:', e); }
+    try {
+      const db = await this.initOfflineDb();
+      const tx = db.transaction('categories', 'readonly');
+      const req = tx.objectStore('categories').getAll();
+      req.onsuccess = () => { this.offlineCategories = req.result || []; };
+    } catch(e) { console.error('[Offline] Load categories error:', e); }
+  },
+
+  get filteredOfflineProducts() {
+    let filtered = this.offlineProducts;
+    if (this.offlineSelectedCategory) filtered = filtered.filter(p => p.category_id === this.offlineSelectedCategory);
+    if (this.offlineSearch) {
+      const q = this.offlineSearch.toLowerCase();
+      filtered = filtered.filter(p => (p.name && p.name.toLowerCase().includes(q)) || (p.sku && p.sku.toLowerCase().includes(q)) || (p.barcode && p.barcode.toLowerCase().includes(q)));
+    }
+    return filtered;
+  },
+
+  offlineAddToCart(productId) {
+    const p = this.offlineProducts.find(x => x.id === productId);
+    if (!p || (!p.is_non_stock && (p.stock_calculate !== undefined ? p.stock_calculate : p.stock || 0) <= 0)) return;
+    if (!this.offlineCart[productId]) this.offlineCart[productId] = { id: productId, name: p.name, price: p.selling_price_calculate || p.selling_price || 0, qty: 0, discount_price: 0 };
+    this.offlineCart[productId].qty++;
+  },
+
+  offlineRemoveFromCart(productId) {
+    if (!this.offlineCart[productId]) return;
+    this.offlineCart[productId].qty--;
+    if (this.offlineCart[productId].qty <= 0) delete this.offlineCart[productId];
+  },
+
+  get offlineCartCount() {
+    return Object.values(this.offlineCart).reduce((sum, item) => sum + item.qty, 0);
+  },
+
+  get offlineCartSubtotal() {
+    return Object.values(this.offlineCart).reduce((sum, item) => sum + (item.price * item.qty), 0);
+  },
+
+  async saveOfflineSale() {
+    const db = await this.initOfflineDb();
+    const tx = db.transaction('pending_sales', 'readwrite');
+    const entry = {
+      temp_id: 'offline_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+      products: Object.values(this.offlineCart),
+      total_price: this.offlineCartSubtotal - this.offlineCartDiscount,
+      total_qty: this.offlineCartCount,
+      payed_money: 0,
+      money_changes: 0,
+      discount_price: this.offlineCartDiscount,
+      note: this.offlineCartNote,
+      payment_method_id: this.selectedPaymentMethod,
+      status: 'pending',
+      created_at: new Date().toISOString(),
+      synced: false
+    };
+    tx.objectStore('pending_sales').put(entry);
+    this.offlineCart = {};
+    this.offlineCartDiscount = 0;
+    this.offlineCartNote = '';
+    this.paymentModalOpen = false;
+  }
+}" x-init="
+  // PWA check: redirect to network error page if offline in regular browser
+  if (!navigator.onLine && !isPWA) {
+    window.location.href = '/network-error';
+    return;
+  }
+  window.addEventListener('online', () => { isOffline = false; });
+  window.addEventListener('offline', () => {
+    isOffline = true;
+    if (isPWA) { loadOfflineData(); }
+    else { window.location.href = '/network-error'; }
+  });
+  if (isPWA && !navigator.onLine) loadOfflineData();
+">
+  {{-- Offline Mode Indicator --}}
+  <div x-show="isOffline && isPWA" x-cloak
+    class="mb-4 rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 flex items-center gap-3 dark:bg-amber-900/20 dark:border-amber-800">
+    <span class="text-amber-600 dark:text-amber-400">
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+      </svg>
+    </span>
+    <div class="flex-1">
+      <p class="text-sm font-semibold text-amber-800 dark:text-amber-200">{{ __('Offline Mode Active') }}</p>
+      <p class="text-xs text-amber-600 dark:text-amber-400">{{ __('Transactions will sync when you are back online. Cash payment only.') }}</p>
+    </div>
+    <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+  </div>
+
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-4">
     <div class="col-span-1 lg:col-span-2 pb-24 lg:pb-0">
       {{-- Mobile back button --}}
@@ -39,7 +167,7 @@
       </div>
 
       {{-- Product Cards Grid --}}
-      <div class="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" wire:loading.class="opacity-60">
+      <div x-show="!isOffline" class="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4" wire:loading.class="opacity-60">
         @forelse ($products as $product)
           <div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
             {{-- Image --}}
@@ -107,6 +235,219 @@
             <p class="mt-2 text-lg font-medium">{{ __('Product not found') }}</p>
           </div>
         @endforelse
+      </div>
+
+      {{-- Offline Product Cards Grid --}}
+      <div x-show="isOffline && isPWA" x-cloak class="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        {{-- Offline Search --}}
+        <div class="col-span-full mb-2">
+          <div class="relative">
+            <x-heroicon-o-magnifying-glass class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <input type="text" x-model="offlineSearch" placeholder="{{ __('Search products offline...') }}"
+              class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 focus:border-zonakasir-primary focus:outline-none focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white">
+          </div>
+        </div>
+
+        {{-- Offline Categories --}}
+        <div class="col-span-full mb-2 flex gap-2 overflow-x-auto">
+          <button @click="offlineSelectedCategory = null"
+            class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
+            :class="offlineSelectedCategory === null ? 'bg-zonakasir-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'">
+            {{ __('All') }}
+          </button>
+          <template x-for="cat in offlineCategories" :key="cat.id">
+            <button @click="offlineSelectedCategory = cat.id"
+              class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
+              :class="offlineSelectedCategory === cat.id ? 'bg-zonakasir-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'"
+              x-text="cat.name"></button>
+          </template>
+        </div>
+
+        {{-- Offline Product Cards --}}
+        <template x-for="product in filteredOfflineProducts" :key="product.id">
+          <div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
+            <div class="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-gray-700">
+              <template x-if="product.hero_images_url">
+                <img :src="product.hero_images_url" :alt="product.name" class="h-full w-full object-cover transition-transform group-hover:scale-105">
+              </template>
+              <template x-if="!product.hero_images_url">
+                <div class="flex h-full items-center justify-center text-gray-400">
+                  <x-heroicon-o-photo class="h-10 w-10" />
+                </div>
+              </template>
+
+              {{-- Stock badge --}}
+              <template x-if="!product.is_non_stock && (product.stock_calculate !== undefined ? product.stock_calculate : product.stock || 0) <= 0">
+                <div class="absolute inset-0 flex items-center justify-center bg-black/50">
+                  <span class="rounded-md bg-red-600 px-2 py-1 text-xs font-bold text-white">{{ __('Out of stock') }}</span>
+                </div>
+              </template>
+              <template x-if="!product.is_non_stock && (product.stock_calculate !== undefined ? product.stock_calculate : product.stock || 0) > 0 && (product.stock_calculate !== undefined ? product.stock_calculate : product.stock || 0) <= 10">
+                <span class="absolute left-2 top-2 rounded-md bg-amber-500 px-1.5 py-0.5 text-xs font-bold text-white shadow-sm" x-text="(product.stock_calculate !== undefined ? product.stock_calculate : product.stock || 0) + ' {{ __("Stock") }}'"></span>
+              </template>
+              <template x-if="!product.is_non_stock && (product.stock_calculate !== undefined ? product.stock_calculate : product.stock || 0) > 10">
+                <span class="absolute left-2 top-2 rounded-md bg-zonakasir-primary px-1.5 py-0.5 text-xs font-bold text-white shadow-sm" x-text="(product.stock_calculate !== undefined ? product.stock_calculate : product.stock || 0) + ' {{ __("Stock") }}'"></span>
+              </template>
+
+              {{-- Cart quantity badge --}}
+              <template x-if="offlineCart[product.id] && offlineCart[product.id].qty > 0">
+                <span class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm" x-text="offlineCart[product.id].qty"></span>
+              </template>
+            </div>
+
+            <div class="flex flex-1 flex-col justify-between p-3">
+              <div>
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-400" x-text="product.sku"></p>
+                <h3 class="mt-0.5 text-sm font-semibold leading-tight text-gray-900 dark:text-white line-clamp-2" x-text="product.name"></h3>
+              </div>
+              <div class="mt-2 flex items-center justify-between">
+                <span class="text-sm font-bold text-zonakasir-primary" x-text="'Rp ' + (product.selling_price_calculate || product.selling_price || 0).toLocaleString('id-ID')"></span>
+                <template x-if="!offlineCart[product.id] || offlineCart[product.id].qty === 0">
+                  <button @click="offlineAddToCart(product.id)"
+                    class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                    <x-heroicon-o-plus class="h-5 w-5" />
+                  </button>
+                </template>
+                <template x-if="offlineCart[product.id] && offlineCart[product.id].qty > 0">
+                  <div class="flex items-center gap-1">
+                    <button @click="offlineRemoveFromCart(product.id)"
+                      class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
+                      <x-heroicon-o-minus-small class="h-5 w-5" />
+                    </button>
+                    <span class="w-8 text-center text-sm font-semibold text-zonakasir-primary" x-text="offlineCart[product.id].qty"></span>
+                    <button @click="offlineAddToCart(product.id)"
+                      class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                      <x-heroicon-o-plus-small class="h-5 h-5" />
+                    </button>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        {{-- Offline empty state --}}
+        <template x-if="filteredOfflineProducts.length === 0">
+          <div class="col-span-full flex flex-col items-center justify-center py-16 text-gray-400">
+            <x-heroicon-o-cube class="h-16 w-16" />
+            <p class="mt-2 text-lg font-medium">{{ __('No cached products') }}</p>
+            <p class="text-sm">{{ __('Go online first to sync data') }}</p>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    {{-- Offline: cart toggle button --}}
+    <div x-show="isOffline && isPWA" class="fixed bottom-0 left-0 right-0 z-50 border-t bg-white px-3 pb-[env(safe-area-inset-bottom)] pt-3 shadow-lg dark:border-gray-800 dark:bg-gray-900 lg:hidden">
+      <button @click="cartOpen = true" class="flex w-full items-center justify-between rounded-lg bg-zonakasir-primary px-4 py-3 min-h-[48px] text-white">
+        <span class="font-semibold">{{ __('View Cart') }}</span>
+        <span class="flex items-center gap-2">
+          <span x-text="offlineCartCount" class="rounded-full bg-white/20 px-2 py-0.5 text-sm"></span>
+          <x-heroicon-o-chevron-up class="h-5 w-5" />
+        </span>
+      </button>
+    </div>
+
+    {{-- Offline: cart panel --}}
+    <div x-show="isOffline && isPWA && cartOpen" x-cloak class="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white shadow-2xl transition-transform duration-300 dark:bg-gray-900">
+      <div class="flex items-center justify-between border-b p-3 dark:border-gray-800">
+        <p class="text-base font-semibold">{{ __('Offline Cart') }}</p>
+        <button @click="cartOpen = false" class="rounded-full p-1 hover:bg-gray-100 dark:hover:bg-gray-800">
+          <x-heroicon-o-x-mark class="h-5 w-5" />
+        </button>
+      </div>
+
+      <div class="p-3 space-y-3">
+        {{-- Cart items --}}
+        <template x-if="offlineCartCount === 0">
+          <p class="text-center text-gray-400 py-8">{{ __('Cart is empty') }}</p>
+        </template>
+
+        <template x-for="(item, productId) in offlineCart" :key="productId">
+          <div class="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-gray-800">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900 dark:text-white truncate" x-text="item.name"></p>
+              <p class="text-xs text-zonakasir-primary font-semibold" x-text="'Rp ' + item.price.toLocaleString('id-ID')"></p>
+            </div>
+            <div class="flex items-center gap-1">
+              <button @click="offlineRemoveFromCart(parseInt(productId))"
+                class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                <x-heroicon-o-minus-small class="h-4 w-4" />
+              </button>
+              <span class="w-8 text-center text-sm font-semibold" x-text="item.qty"></span>
+              <button @click="offlineAddToCart(parseInt(productId))"
+                class="w-8 h-8 rounded-full bg-zonakasir-primary flex items-center justify-center text-white">
+                <x-heroicon-o-plus-small class="h-4 w-4" />
+              </button>
+            </div>
+            <p class="text-sm font-bold text-gray-900 dark:text-white w-24 text-right" x-text="'Rp ' + (item.price * item.qty).toLocaleString('id-ID')"></p>
+          </div>
+        </template>
+
+        {{-- Offline cart summary --}}
+        <div x-show="offlineCartCount > 0" class="border-t pt-3 dark:border-gray-800">
+          <div class="flex justify-between text-sm mb-1">
+            <span class="text-gray-500">{{ __('Subtotal') }}</span>
+            <span class="font-semibold" x-text="'Rp ' + offlineCartSubtotal.toLocaleString('id-ID')"></span>
+          </div>
+          <div class="flex justify-between text-lg font-bold mb-3">
+            <span>{{ __('Total') }}</span>
+            <span class="text-zonakasir-primary" x-text="'Rp ' + offlineCartSubtotal.toLocaleString('id-ID')"></span>
+          </div>
+          <button @click="paymentModalOpen = true"
+            class="w-full rounded-lg bg-zonakasir-primary py-3 text-white font-semibold text-sm hover:bg-zonakasir-primary/90 transition-colors">
+            {{ __('Proceed to Payment') }}
+          </button>
+          <p class="text-xs text-gray-400 text-center mt-2">{{ __('Payment will sync when online') }}</p>
+        </div>
+      </div>
+    </div>
+
+    {{-- Offline: payment modal --}}
+    <div x-show="isOffline && isPWA && paymentModalOpen" x-cloak class="fixed inset-0 z-[100] flex items-end justify-center bg-black/50 sm:items-center">
+      <div class="w-full max-w-md rounded-t-2xl bg-white p-4 shadow-xl dark:bg-gray-900 sm:rounded-2xl" @click.outside="paymentModalOpen = false">
+        <h3 class="text-lg font-semibold mb-1">{{ __('Offline Payment') }}</h3>
+        <p class="text-xs text-amber-600 bg-amber-50 rounded-lg px-3 py-2 mb-4 font-medium">
+          ⚠️ {{ __('QRIS & digital payment unavailable offline. Cash only.') }}
+        </p>
+
+        <div class="space-y-2 mb-4">
+          <div class="flex justify-between text-sm">
+            <span class="text-gray-500">{{ __('Total') }}</span>
+            <span class="font-bold" x-text="'Rp ' + offlineCartSubtotal.toLocaleString('id-ID')"></span>
+          </div>
+        </div>
+
+        {{-- Payment method: cash only --}}
+        <div class="mb-4">
+          <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">{{ __('Payment Method') }}</label>
+          <div class="flex gap-2">
+            <button @click="offlinePaymentMethod = 'cash'"
+              class="flex-1 rounded-lg border-2 py-3 text-sm font-semibold transition-all"
+              :class="offlinePaymentMethod === 'cash' ? 'border-zonakasir-primary bg-zonakasir-primary text-white' : 'border-gray-200 bg-white text-gray-600 dark:border-gray-700 dark:bg-gray-800'">
+              💵 {{ __('Cash') }}
+            </button>
+            <button disabled class="flex-1 rounded-lg border-2 border-gray-100 bg-gray-50 py-3 text-sm font-semibold text-gray-300 cursor-not-allowed dark:border-gray-800 dark:bg-gray-900">
+              📱 QRIS
+              <span class="block text-[10px] font-normal">{{ __('Offline') }}</span>
+            </button>
+            <button disabled class="flex-1 rounded-lg border-2 border-gray-100 bg-gray-50 py-3 text-sm font-semibold text-gray-300 cursor-not-allowed dark:border-gray-800 dark:bg-gray-900">
+              💳 {{ __('Card') }}
+              <span class="block text-[10px] font-normal">{{ __('Offline') }}</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <button @click="paymentModalOpen = false"
+            class="flex-1 rounded-lg border border-gray-300 py-3 text-sm font-semibold dark:border-gray-600">
+            {{ __('Cancel') }}
+          </button>
+          <button @click="saveOfflineSale()"
+            class="flex-1 rounded-lg bg-zonakasir-primary py-3 text-sm font-semibold text-white hover:bg-zonakasir-primary/90">
+            {{ __('Save Offline') }}
+          </button>
+        </div>
       </div>
     </div>
 
