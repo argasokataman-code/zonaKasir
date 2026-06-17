@@ -20,6 +20,22 @@ let selectedDevice = null;
   function redirectLogin() {
     if (REDIRECTING) return;
     REDIRECTING = true;
+
+    // Hide any Livewire error modal that already appeared
+    document.querySelectorAll('[x-data]').forEach(function(el) {
+      if (el.__x && el.__x.$data && el.__x.$data.open !== undefined) {
+        el.__x.$data.open = false;
+      }
+    });
+    // Force-hide any fixed/modal overlays
+    document.querySelectorAll('.fi-modal-window, [role="dialog"]').forEach(function(el) {
+      el.style.display = 'none';
+    });
+    // Remove backdrop
+    document.querySelectorAll('.fi-modal-window ~ div, .fixed.inset-0').forEach(function(el) {
+      if (el.style.zIndex > 50) el.style.display = 'none';
+    });
+
     // Clear SW session cache
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_SESSION' });
@@ -32,10 +48,8 @@ let selectedDevice = null;
   window.fetch = function() {
     return origFetch.apply(this, arguments).then(function(resp) {
       if ((resp.status === 401 || resp.status === 403) && !isLoginUrl(window.location.href)) {
-        // Don't intercept login page checks or initial page load
         var url = (arguments[0] && arguments[0].url) ? arguments[0].url : String(arguments[0]);
-        if (!isLoginUrl(url) && url.indexOf('/api/') !== -1) {
-          // API auth error → redirect
+        if (!isLoginUrl(url)) {
           redirectLogin();
         }
       }
@@ -55,7 +69,7 @@ let selectedDevice = null;
     this.addEventListener('load', function() {
       if ((this.status === 401 || this.status === 403) && !isLoginUrl(window.location.href)) {
         var url = this._interceptUrl || '';
-        if (!isLoginUrl(url) && url.indexOf('/api/') !== -1) {
+        if (!isLoginUrl(url)) {
           redirectLogin();
         }
       }
@@ -71,6 +85,56 @@ let selectedDevice = null;
       }
     });
   }
+})();
+
+// ─── PWA Visibility Change — Session Refresh ─────────────────
+// When user returns to PWA after idle, refresh session to prevent 401
+(function() {
+  if (!document.cookie.includes('session')) return;
+
+  var LAST_HIDDEN = 0;
+  var THRESHOLD_MS = 5 * 60 * 1000; // 5 min — if away longer, refresh session
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      LAST_HIDDEN = Date.now();
+      return;
+    }
+
+    // Page became visible — check how long we were away
+    var awayMs = Date.now() - LAST_HIDDEN;
+    if (awayMs < THRESHOLD_MS) return; // short switch, skip
+
+    console.log('[PWA] Away ' + Math.round(awayMs / 1000) + 's — refreshing session');
+
+    // Silent HEAD request to refresh session lifetime on server
+    fetch(window.location.pathname, {
+      method: 'HEAD',
+      credentials: 'same-origin',
+      headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    }).then(function(resp) {
+      if (resp.status === 401 || resp.status === 403) {
+        // Session expired while away → redirect login
+        var path = window.location.pathname;
+        var loginUrl = path.indexOf('/admin') === 0 ? '/admin/login' : '/member/login';
+        window.location.href = loginUrl;
+      }
+    }).catch(function() {});
+  });
+
+  // Also refresh on app focus (PWA specific)
+  window.addEventListener('focus', function() {
+    if (LAST_HIDDEN > 0) {
+      var awayMs = Date.now() - LAST_HIDDEN;
+      if (awayMs >= THRESHOLD_MS && navigator.onLine) {
+        fetch(window.location.pathname, {
+          method: 'HEAD',
+          credentials: 'same-origin',
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        }).catch(function() {});
+      }
+    }
+  });
 })();
 
 // ─── PWA Offline Init ────────────────────────────────────────
