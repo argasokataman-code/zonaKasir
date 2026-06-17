@@ -425,58 +425,7 @@ window.buildReceiptPreviewHtml = function(selling, about, printerData) {
 
 // ─── Global 419 handler: auto-refresh instead of browser confirm ──
 (function() {
-  function isOffline() {
-    return !navigator.onLine;
-  }
-
-  function showOfflineSessionMessage() {
-    if (document.getElementById('offline-session-modal')) return;
-    var div = document.createElement('div');
-    div.id = 'offline-session-modal';
-    div.innerHTML =
-      '<div style="position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;">' +
-        '<div style="background:#fff;border-radius:16px;padding:32px;max-width:380px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.25);">' +
-          '<div style="font-size:48px;margin-bottom:12px;">📡</div>' +
-          '<h2 style="margin:0 0 8px;font-size:20px;font-weight:700;color:#1f2937;">Koneksi Terputus</h2>' +
-          '<p style="margin:0 0 24px;font-size:14px;color:#6b7280;line-height:1.5;">Tidak ada koneksi internet. Beberapa fitur tidak tersedia saat offline. Menunggu koneksi kembali...</p>' +
-          '<button id="offline-session-retry" style="width:100%;padding:12px 24px;border:none;border-radius:10px;background:#FF6600;color:#fff;font-size:15px;font-weight:600;cursor:pointer;">Coba Lagi</button>' +
-        '</div>' +
-      '</div>';
-    document.body.appendChild(div);
-    document.getElementById('offline-session-retry').onclick = function() {
-      div.remove();
-      if (navigator.onLine) window.location.reload();
-    };
-  }
-
-  function removeOfflineSessionMessage() {
-    var el = document.getElementById('offline-session-modal');
-    if (el) el.remove();
-  }
-
   function handle419() {
-    // When offline, SW returns 419 for failed Livewire POSTs.
-    // Don't reload — show offline message instead to avoid infinite reload loop.
-    if (isOffline()) {
-      showOfflineSessionMessage();
-      return;
-    }
-
-    // navigator.onLine can be true while network is unreachable (fake online).
-    // Probe server before reloading to avoid slow reload loop (8s timeout each).
-    // Use timestamp param to bust SW cache and get real network response.
-    fetch('/?_swprobe=' + Date.now(), { method: 'HEAD', cache: 'no-store', credentials: 'same-origin' })
-      .then(function(resp) {
-        // Server reachable → safe to reload
-        doReload419();
-      })
-      .catch(function() {
-        // Server unreachable → show offline message, don't reload
-        showOfflineSessionMessage();
-      });
-  }
-
-  function doReload419() {
     // Auto-refresh dulu, baru show modal kalo gagal
     var lastRefresh = sessionStorage.getItem('last_419_refresh');
     var now = Date.now();
@@ -534,17 +483,6 @@ window.buildReceiptPreviewHtml = function(selling, about, printerData) {
     });
     origOpen.apply(this, arguments);
   };
-
-  // Remove offline session message when connection is restored
-  window.addEventListener('online', function() {
-    removeOfflineSessionMessage();
-    // Clean up any leftover Livewire error modal
-    var lwModal = document.getElementById('livewire-error');
-    if (lwModal) {
-      lwModal.remove();
-      document.body.style.overflow = 'visible';
-    }
-  });
 })();
 
 // ─── Global 401 handler: auto-refresh on stale session ──
@@ -630,7 +568,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ─── bfcache guard: reload on back/forward to clear stale session ──
 window.addEventListener('pageshow', function(e) {
-  if (e.persisted && navigator.onLine) {
+  if (e.persisted) {
     window.location.reload();
   }
 });
