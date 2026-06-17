@@ -239,15 +239,15 @@ class Cashier extends Page implements HasForms
     {
         return [
             'products' => Product::query()
-                ->select('id', 'name', 'sku', 'barcode', 'selling_price', 'stock_calculate', 'is_non_stock', 'category_id', 'hero_images')
-                ->with('category:id,name')
+                ->select('id', 'name', 'sku', 'selling_price', 'stock_calculate', 'is_non_stock', 'category_id', 'hero_images')
+                ->with('category:id,name', 'primaryBarcode:product_id,code')
                 ->orderByDesc('created_at')
                 ->get()
                 ->map(fn (Product $p) => [
                     'id' => $p->id,
                     'name' => $p->name,
                     'sku' => $p->sku,
-                    'barcode' => $p->barcode,
+                    'barcode' => $p->primaryBarcode->first()?->code ?? null,
                     'selling_price' => $p->selling_price,
                     'selling_price_calculate' => $p->selling_price_calculate ?? $p->selling_price,
                     'stock_calculate' => $p->stock_calculate,
