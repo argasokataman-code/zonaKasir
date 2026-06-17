@@ -127,6 +127,16 @@
     if (keepAliveTimer) clearInterval(keepAliveTimer);
     if (checkTimer) clearInterval(checkTimer);
 
+    // Clear SW caches + IndexedDB for clean account switch
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type: 'CLEAR_SESSION' });
+    }
+    try {
+      if (window.offlineManager && window.offlineManager.db) {
+        window.offlineManager.clearAll().catch(function() {});
+      }
+    } catch (e) { /* ignore */ }
+
     // POST to the proper logout endpoint to revoke tokens + invalidate session.
     // Fallback: redirect to login if POST fails (e.g. network error).
     var path = window.location.pathname;
