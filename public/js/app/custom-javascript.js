@@ -94,38 +94,82 @@ let selectedDevice = null;
 
 // ─── Livewire Error Modal Interceptor ─────────────────────
 // Prevents black blank dialog when server unreachable
-// Instead: auto-redirect to login page
+// Inject CSS to hide black iframe + override dialog behavior
 (function() {
-  // MutationObserver to catch any livewire-error dialog
+  // 1. Inject CSS to hide black iframe immediately
+  var style = document.createElement('style');
+  style.textContent = `
+    #livewire-error { display: none !important; }
+    #livewire-error[open] { display: none !important; }
+    dialog#livewire-error { display: none !important; }
+    dialog#livewire-error[open] { display: none !important; }
+  `;
+  document.head.appendChild(style);
+
+  // 2. Override document.createElement to intercept dialog creation
+  var origCreate = document.createElement.bind(document);
+  document.createElement = function(tag, options) {
+    var el = origCreate(tag, options);
+    if (tag.toLowerCase() === 'dialog') {
+      // Monitor when this dialog gets an id of livewire-error
+      var origId = Object.getOwnPropertyDescriptor(Element.prototype, 'id');
+      if (origId && origId.set) {
+        Object.defineProperty(el, 'id', {
+          set: function(val) {
+            origId.set.call(this, val);
+            if (val === 'livewire-error') {
+              // This is Livewire's error dialog - prevent it from showing
+              this.style.display = 'none';
+              this.showModal = function() {}; // No-op
+              this.show = function() {}; // No-op
+              // Replace content after a tick
+              var self = this;
+              setTimeout(function() {
+                self.remove();
+                // Show our custom offline message instead
+                showOfflineMessage();
+              }, 50);
+            }
+          },
+          get: function() { return origId.get.call(this); }
+        });
+      }
+    }
+    return el;
+  };
+
+  // 3. Custom offline message function
+  function showOfflineMessage() {
+    if (document.getElementById('custom-offline-modal')) return;
+    var dialog = origCreate('dialog');
+    dialog.id = 'custom-offline-modal';
+    dialog.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);max-width:380px;width:90%;border:none;border-radius:16px;padding:0;box-shadow:0 20px 60px rgba(0,0,0,0.3);z-index:99999;';
+    dialog.innerHTML = '<div style="background:#fff;border-radius:16px;padding:32px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif;">' +
+      '<div style="width:56px;height:56px;background:#FEF3C7;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px;">📡</div>' +
+      '<h2 style="margin:0 0 8px;font-size:18px;font-weight:700;color:#1f2937;">Koneksi Terputus</h2>' +
+      '<p style="margin:0 0 20px;color:#6b7280;font-size:14px;line-height:1.5;">Tidak dapat terhubung ke server.<br>Periksa koneksi internet kamu.</p>' +
+      '<button onclick="window.location.reload()" style="background:#FF6600;color:#fff;border:none;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;width:100%;">Coba Lagi</button>' +
+      '</div>';
+    document.body.appendChild(dialog);
+    // Backdrop
+    var backdrop = origCreate('div');
+    backdrop.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99998;';
+    backdrop.onclick = function() { dialog.remove(); backdrop.remove(); };
+    document.body.appendChild(backdrop);
+    dialog.showModal();
+  }
+
+  // 4. MutationObserver as fallback
   var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       mutation.addedNodes.forEach(function(node) {
-        if (node.id === 'livewire-error' && node.tagName === 'DIALOG') {
-          // Replace black iframe with custom message
-          setTimeout(function() {
-            var iframe = node.querySelector('iframe');
-            if (iframe) {
-              iframe.style.backgroundColor = '#fff';
-              // Try to read iframe content for error type
-              try {
-                var body = iframe.contentWindow.document.body;
-                var html = body ? body.innerHTML : '';
-                if (html.includes('401') || html.includes('403') || html.includes('Unauthorized') || html.includes('not authorize')) {
-                  // Auth error → redirect to login
-                  window.location.href = window.location.pathname.indexOf('/admin') === 0 ? '/admin/login' : '/member/login';
-                  return;
-                }
-              } catch(e) {}
-              // Other errors → replace with custom message
-              iframe.remove();
-              node.innerHTML = '<div style="background:#fff;border-radius:12px;padding:32px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,sans-serif;height:100%;">' +
-                '<div style="font-size:48px;margin-bottom:16px;">⚠️</div>' +
-                '<h2 style="margin:0 0 8px;font-size:18px;color:#1f2937;">Koneksi Terputus</h2>' +
-                '<p style="margin:0 0 20px;color:#6b7280;font-size:14px;">Tidak dapat terhubung ke server. Periksa koneksi internet kamu.</p>' +
-                '<button onclick="window.location.reload()" style="background:#FF6600;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;">Coba Lagi</button>' +
-                '</div>';
-            }
-          }, 150);
+        if (node.id === 'livewire-error' || (node.querySelector && node.querySelector('#livewire-error'))) {
+          var target = node.id === 'livewire-error' ? node : node.querySelector('#livewire-error');
+          if (target) {
+            target.style.display = 'none';
+            target.remove();
+            showOfflineMessage();
+          }
         }
       });
     });
