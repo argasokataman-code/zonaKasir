@@ -236,6 +236,7 @@ class TenantPanelProvider extends PanelProvider
     private function getMiddleware(): array
     {
         return [
+            \App\Http\Middleware\NoCacheResponse::class,
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,
