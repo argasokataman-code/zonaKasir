@@ -136,16 +136,6 @@ test('403 error page has auto-redirect', function () {
     $this->assertFileExists(resource_path('views/errors/403.blade.php'));
 });
 
-// ─── Offline POS Meta Tags Tests ──────────────────────────
-
-test('offline pos page has CSRF token meta tag', function () {
-    $this->assertFileExists(resource_path('views/filament/tenant/pages/offline-pos.blade.php'));
-    $content = file_get_contents(resource_path('views/filament/tenant/pages/offline-pos.blade.php'));
-    expect($content)->toContain('csrf-token');
-    expect($content)->toContain('mobile-web-app-capable');
-    expect($content)->toContain('apple-mobile-web-app-capable');
-});
-
 // ─── Service Worker Tests ─────────────────────────────────
 
 test('service worker file exists', function () {

@@ -56,7 +56,7 @@ class AuthenticatedSessionController extends Controller
 
         // For normal browser form submissions, redirect to the Filament panel.
         // Use Filament::getUrl() directly — skip intended() to avoid restoring
-        // stale URLs like /member/offline-pos after session expiry.
+        // stale URLs after session expiry.
         return redirect(Filament::getUrl());
     }
 
