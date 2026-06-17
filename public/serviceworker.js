@@ -147,7 +147,9 @@ async function handlePageRequest(event) {
       }
       return resp;
     }).catch(() =>
-      new Response(JSON.stringify({ message: 'Offline', errors: { server: ['No network'] } }), {
+      // Return 419 (session expired) so client-side handler can show
+      // a proper offline message instead of Livewire's iframe error modal.
+      new Response(JSON.stringify({ message: 'offline', errors: { server: ['No network'] } }), {
         status: 419, headers: { 'Content-Type': 'application/json' },
       })
     );
@@ -322,7 +324,8 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = event.request.url;
   // Never cache auth-related pages — allows account switching
-  if (url.includes('/login') || url.includes('/logout') || url.includes('/auth/google') || url.includes('/member/offline')) return;
+  // Also skip SW probe requests (used by 419 handler to check real network)
+  if (url.includes('/login') || url.includes('/logout') || url.includes('/auth/google') || url.includes('/member/offline') || url.includes('_swprobe=')) return;
 
   if (isApiRoute(url)) event.respondWith(handleApiRequest(event));
   else if (isNavigationRequest(event)) event.respondWith(handlePageRequest(event));

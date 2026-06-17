@@ -109,7 +109,25 @@
     window.location.href = '/network-error';
     return;
   }
-  window.addEventListener('online', () => { isOffline = false; });
+  window.addEventListener('online', async () => {
+    isOffline = false;
+    // Merge offline cart items into Livewire server cart before refreshing
+    var offlineKeys = Object.keys(offlineCart);
+    if (offlineKeys.length > 0 && typeof $wire !== 'undefined' && $wire.$refresh && $wire.$el && $wire.$el.isConnected) {
+      for (var i = 0; i < offlineKeys.length; i++) {
+        var pid = parseInt(offlineKeys[i]);
+        var item = offlineCart[pid];
+        if (item && item.qty > 0) {
+          try { await $wire.addCart(pid, { amount: item.qty }); } catch(e) { console.error('[PWA] Merge cart error:', e); }
+        }
+      }
+      offlineCart = {};
+    }
+    // Sync Livewire server state after merge
+    if (typeof $wire !== 'undefined' && $wire.$refresh && $wire.$el && $wire.$el.isConnected) {
+      $wire.$refresh();
+    }
+  });
   window.addEventListener('offline', () => {
     isOffline = true;
     if (isPWA) { loadOfflineData(); }
@@ -290,9 +308,9 @@
               </template>
 
               {{-- Cart quantity badge --}}
-              <template x-if="offlineCart[product.id] && offlineCart[product.id].qty > 0">
-                <span class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm" x-text="offlineCart[product.id].qty"></span>
-              </template>
+              <span x-show="offlineCart[product.id] && offlineCart[product.id].qty > 0"
+                class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm"
+                x-text="(offlineCart[product.id] && offlineCart[product.id].qty) || 0" x-cloak></span>
             </div>
 
             <div class="flex flex-1 flex-col justify-between p-3">
@@ -302,25 +320,25 @@
               </div>
               <div class="mt-2 flex items-center justify-between">
                 <span class="text-sm font-bold text-zonakasir-primary" x-text="'Rp ' + (product.selling_price_calculate || product.selling_price || 0).toLocaleString('id-ID')"></span>
-                <template x-if="!offlineCart[product.id] || offlineCart[product.id].qty === 0">
+                {{-- Add button: show when qty is 0 or not in cart --}}
+                <button @click="offlineAddToCart(product.id)"
+                  x-show="!offlineCart[product.id] || offlineCart[product.id].qty === 0"
+                  class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                  <x-heroicon-o-plus class="h-5 w-5" />
+                </button>
+                {{-- Qty controls: show when qty > 0 --}}
+                <div x-show="offlineCart[product.id] && offlineCart[product.id].qty > 0" x-cloak
+                  class="flex items-center gap-1">
+                  <button @click="offlineRemoveFromCart(product.id)"
+                    class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
+                    <x-heroicon-o-minus-small class="h-5 w-5" />
+                  </button>
+                  <span class="w-8 text-center text-sm font-semibold text-zonakasir-primary" x-text="(offlineCart[product.id] && offlineCart[product.id].qty) || 0"></span>
                   <button @click="offlineAddToCart(product.id)"
                     class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
-                    <x-heroicon-o-plus class="h-5 w-5" />
+                    <x-heroicon-o-plus-small class="h-5 h-5" />
                   </button>
-                </template>
-                <template x-if="offlineCart[product.id] && offlineCart[product.id].qty > 0">
-                  <div class="flex items-center gap-1">
-                    <button @click="offlineRemoveFromCart(product.id)"
-                      class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
-                      <x-heroicon-o-minus-small class="h-5 w-5" />
-                    </button>
-                    <span class="w-8 text-center text-sm font-semibold text-zonakasir-primary" x-text="offlineCart[product.id].qty"></span>
-                    <button @click="offlineAddToCart(product.id)"
-                      class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
-                      <x-heroicon-o-plus-small class="h-5 h-5" />
-                    </button>
-                  </div>
-                </template>
+                </div>
               </div>
             </div>
           </div>
@@ -453,7 +471,7 @@
 
     {{-- Mobile: cart toggle button with scan --}}
     <div class="fixed bottom-0 left-0 right-0 z-50 border-t bg-white px-3 pb-[env(safe-area-inset-bottom)] pt-3 shadow-lg dark:border-gray-800 dark:bg-gray-900 lg:hidden"
-      x-show="!cartOpen">
+      x-show="!cartOpen && !isOffline">
       <div class="flex gap-2">
         <button @click="cartOpen = true"
           class="flex flex-1 items-center justify-between rounded-lg bg-zonakasir-primary px-4 py-3 min-h-[48px] text-white">
