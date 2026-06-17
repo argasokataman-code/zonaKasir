@@ -13,6 +13,9 @@ Route::get('/landing', function () {
         ->header('Content-Type', 'text/html');
 });
 
+Route::view('/privacy', 'privacy-policy');
+Route::view('/terms', 'terms-of-service');
+
 Route::view('/offline', 'offline');
 
 Route::get('/member/offline-pos', function () {
