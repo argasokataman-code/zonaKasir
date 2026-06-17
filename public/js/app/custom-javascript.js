@@ -124,13 +124,6 @@ let selectedDevice = null;
         if (node.querySelector) target = node.querySelector('#livewire-error');
         if (!target) return;
 
-        // Offline: remove modal immediately — no flickering
-        if (!navigator.onLine) {
-          target.remove();
-          document.body.style.overflow = '';
-          return;
-        }
-
         // Wait for dialog to be ready, then replace content
         setTimeout(function() {
           // Hide iframe, show custom content

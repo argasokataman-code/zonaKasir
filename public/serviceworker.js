@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'c5b2f7a1';
+const CACHE_VERSION = 'd8a3e1b2';
 const STATIC_CACHE = `zonakasir-static-${CACHE_VERSION}`;
 const PAGES_CACHE = `zonakasir-pages-${CACHE_VERSION}`;
 const API_CACHE = `zonakasir-api-${CACHE_VERSION}`;
@@ -147,10 +147,11 @@ async function handlePageRequest(event) {
       }
       return resp;
     }).catch(() =>
-      // Return 419 (session expired) so client-side handler can show
-      // a proper offline message instead of Livewire's iframe error modal.
-      new Response(JSON.stringify({ message: 'offline', errors: { server: ['No network'] } }), {
-        status: 419, headers: { 'Content-Type': 'application/json' },
+      // Return 200 with empty Livewire response — tells Livewire "nothing to update".
+      // This prevents the iframe error modal and the 419 reload loop entirely.
+      // Livewire parses {"components":[],"assets":{}} → no DOM changes → no flickering.
+      new Response(JSON.stringify({ components: [], assets: {} }), {
+        status: 200, headers: { 'Content-Type': 'application/json' },
       })
     );
   }
