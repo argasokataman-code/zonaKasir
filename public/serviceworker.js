@@ -6,7 +6,7 @@ const DYNAMIC_CACHE = `zonakasir-dynamic-${CACHE_VERSION}`;
 const OFFLINE_PAGE = '/offline';
 
 const APP_SHELL_URLS = [
-  '/', '/offline', '/member/offline-pos', '/favicon.ico',
+  '/', '/offline', '/favicon.ico',
   '/images/icons/icon-48x48.png', '/images/icons/icon-72x72.png',
   '/images/icons/icon-96x96.png', '/images/icons/icon-128x128.png',
   '/images/icons/icon-144x144.png', '/images/icons/icon-152x152.png',

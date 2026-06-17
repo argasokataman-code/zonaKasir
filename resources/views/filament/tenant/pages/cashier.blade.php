@@ -133,76 +133,65 @@
     // Show splash
     this.showSyncSplash = true;
     this.syncProgress = 0;
-    this.syncStatus = 'Connecting to server...';
+    this.syncStatus = 'Syncing data...';
 
-    const steps = [
-      { name: 'Products', url: '/api/master/product', store: 'products' },
-      { name: 'Categories', url: '/api/master/category', store: 'categories' },
-      { name: 'Members', url: '/api/master/member', store: 'members' },
-      { name: 'Payment methods', url: '/api/master/payment-method', store: 'payment_methods' },
-      { name: 'Settings', url: '/api/about', store: 'about', single: true },
-    ];
-
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
-    let done = 0;
-
-    for (const step of steps) {
-      this.syncStatus = 'Syncing ' + step.name + '...';
-      try {
-        const resp = await fetch(step.url, {
-          headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': csrfToken },
-          credentials: 'same-origin',
-        });
-        if (resp.ok) {
-          const raw = await resp.json();
-          // Normalize: array endpoints return array, single endpoints return object
-          let items;
-          if (step.single) {
-            const obj = raw.data || raw;
-            items = (obj && typeof obj === 'object' && !Array.isArray(obj)) ? [obj] : [];
-          } else {
-            items = Array.isArray(raw) ? raw : (raw.data || []);
-          }
-          if (items.length > 0) {
-            const tx = db.transaction(step.store, 'readwrite');
-            const store = tx.objectStore(step.store);
-            store.clear();
-            items.forEach(item => store.put(item));
-          }
-        }
-      } catch(e) { console.error('[PWA] Sync ' + step.name + ' failed:', e); }
-      done++;
-      this.syncProgress = Math.round((done / steps.length) * 100);
-    }
-
-    // Save sync timestamp
     try {
-      const tx = db.transaction('meta', 'readwrite');
-      tx.objectStore('meta').put({ key: 'last_prefetch', value: new Date().toISOString() });
-    } catch(e) {}
+      // Single Livewire call — uses session auth + tenant context
+      const data = await $wire.call('getOfflineSyncData');
+      this.syncProgress = 60;
 
-    this.syncStatus = 'Ready!';
-    this.syncProgress = 100;
-    await new Promise(r => setTimeout(r, 500));
-    this.showSyncSplash = false;
-    // Reload offline product data
-    this.loadOfflineData();
+      // Write each dataset to IndexedDB
+      const stores = [
+        { key: 'products', items: data.products || [] },
+        { key: 'categories', items: data.categories || [] },
+        { key: 'members', items: data.members || [] },
+        { key: 'payment_methods', items: data.payment_methods || [] },
+        { key: 'about', items: data.about ? [data.about] : [], single: true },
+      ];
+
+      for (const store of stores) {
+        const tx = db.transaction(store.key, 'readwrite');
+        const objStore = tx.objectStore(store.key);
+        objStore.clear();
+        if (store.single) {
+          store.items.forEach(item => objStore.put(item));
+        } else {
+          store.items.forEach(item => objStore.put(item));
+        }
+      }
+
+      // Save sync timestamp
+      const metaTx = db.transaction('meta', 'readwrite');
+      metaTx.objectStore('meta').put({ key: 'last_prefetch', value: new Date().toISOString() });
+
+      this.syncProgress = 100;
+      this.syncStatus = 'Ready!';
+      await new Promise(r => setTimeout(r, 500));
+      this.showSyncSplash = false;
+      this.loadOfflineData();
+    } catch(e) {
+      console.error('[PWA] Sync failed:', e);
+      this.syncStatus = 'Sync failed';
+      await new Promise(r => setTimeout(r, 1000));
+      this.showSyncSplash = false;
+    }
+  },
+
+  init: function() {
+    if (!navigator.onLine && !this.isPWA) {
+      window.location.href = '/network-error';
+      return;
+    }
+    window.addEventListener('online', () => { this.isOffline = false; });
+    window.addEventListener('offline', () => {
+      this.isOffline = true;
+      if (this.isPWA) { this.loadOfflineData(); }
+      else { window.location.href = '/network-error'; }
+    });
+    if (this.isPWA && !navigator.onLine) this.loadOfflineData();
+    if (this.isPWA) this.runStartupSync();
   }
-}" x-init="
-  // PWA check: redirect to network error page if offline in regular browser
-  if (!navigator.onLine && !isPWA) {
-    window.location.href = '/network-error';
-    return;
-  }
-  window.addEventListener('online', () => { isOffline = false; });
-  window.addEventListener('offline', () => {
-    isOffline = true;
-    if (isPWA) { loadOfflineData(); }
-    else { window.location.href = '/network-error'; }
-  });
-  if (isPWA && !navigator.onLine) loadOfflineData();
-  if (isPWA) runStartupSync();
-">
+}">
 
   {{-- ═══ SYNC SPLASH SCREEN (PWA only) ═══ --}}
   <div x-show="showSyncSplash" x-cloak
@@ -562,7 +551,7 @@
           class="flex flex-1 items-center justify-between rounded-lg bg-zonakasir-primary px-4 py-3 min-h-[48px] text-white">
           <span class="font-semibold">{{ __('View Cart') }}</span>
           <span class="flex items-center gap-2">
-            <span x-text="$wire.cartItems ? $wire.cartItems.length : 0" class="rounded-full bg-white/20 px-2 py-0.5 text-sm"></span>
+            <span class="rounded-full bg-white/20 px-2 py-0.5 text-sm">{{ $cartCount }}</span>
             <x-heroicon-o-chevron-up class="h-5 w-5" />
           </span>
         </button>

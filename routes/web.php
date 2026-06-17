@@ -19,10 +19,6 @@ Route::view('/terms', 'terms-of-service');
 Route::view('/offline', 'offline');
 Route::view('/network-error', 'network-error');
 
-Route::get('/member/offline-pos', function () {
-    return view('filament.tenant.pages.offline-pos');
-})->middleware('auth');
-
 Route::get('/serviceworker.js', function () {
     return response()->file(public_path('serviceworker.js'))
         ->header('Content-Type', 'application/javascript');

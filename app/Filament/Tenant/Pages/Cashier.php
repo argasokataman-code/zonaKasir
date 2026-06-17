@@ -40,6 +40,8 @@ class Cashier extends Page implements HasForms
 
     public Collection $cartItems;
 
+    public int $cartCount = 0;
+
     public Collection $availableVoucher;
 
     public array $cartDetail = [];
@@ -98,6 +100,8 @@ class Cashier extends Page implements HasForms
             ->orderByDesc('created_at')
             ->cashier()
             ->get();
+
+        $this->cartCount = $this->cartItems->count();
 
         $this->loadAvailableVouchers();
 
@@ -225,5 +229,48 @@ class Cashier extends Page implements HasForms
 
         $this->dispatch('close-modal', id: 'modal-quick-member');
         $this->dispatch('member-created', memberId: $member->id, memberName: $member->name);
+    }
+
+    /**
+     * Return all data needed for PWA offline IndexedDB sync.
+     * Uses Livewire's auth session instead of raw fetch (which lacks tenant context).
+     */
+    public function getOfflineSyncData(): array
+    {
+        return [
+            'products' => Product::query()
+                ->select('id', 'name', 'sku', 'barcode', 'selling_price', 'stock_calculate', 'is_non_stock', 'category_id', 'hero_images')
+                ->with('category:id,name')
+                ->orderByDesc('created_at')
+                ->get()
+                ->map(fn (Product $p) => [
+                    'id' => $p->id,
+                    'name' => $p->name,
+                    'sku' => $p->sku,
+                    'barcode' => $p->barcode,
+                    'selling_price' => $p->selling_price,
+                    'selling_price_calculate' => $p->selling_price_calculate ?? $p->selling_price,
+                    'stock_calculate' => $p->stock_calculate,
+                    'is_non_stock' => $p->is_non_stock,
+                    'category_id' => $p->category_id,
+                    'category_name' => $p->category?->name ?? '',
+                    'hero_image' => $p->hero_image,
+                ])
+                ->toArray(),
+            'categories' => Category::query()
+                ->select('id', 'name')
+                ->get()
+                ->toArray(),
+            'members' => Member::query()
+                ->select('id', 'name')
+                ->get()
+                ->toArray(),
+            'payment_methods' => PaymentMethod::query()
+                ->select('id', 'name', 'is_credit', 'payment_type')
+                ->where('is_active', true)
+                ->get()
+                ->toArray(),
+            'about' => About::first()?->toArray() ?? [],
+        ];
     }
 }
