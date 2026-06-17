@@ -18,6 +18,9 @@
   offlineCartNote: '',
   offlineCartDiscount: 0,
   offlinePaymentMethod: 'cash',
+  syncProgress: 0,
+  syncStatus: '',
+  showSyncSplash: false,
 
   async initOfflineDb() {
     if (this.offlineDb) return this.offlineDb;
@@ -102,6 +105,73 @@
     this.offlineCartDiscount = 0;
     this.offlineCartNote = '';
     this.paymentModalOpen = false;
+  },
+
+  async runStartupSync() {
+    if (!this.isPWA || !navigator.onLine) return;
+    // Check if data is already fresh (< 30 min old)
+    try {
+      const db = await this.initOfflineDb();
+      const tx = db.transaction('meta', 'readonly');
+      const req = tx.objectStore('meta').get('last_prefetch');
+      const lastPrefetch = await new Promise(r => { req.onsuccess = () => r(req.result); req.onerror = () => r(null); });
+      if (lastPrefetch && lastPrefetch.value) {
+        const age = Date.now() - new Date(lastPrefetch.value).getTime();
+        if (age < 30 * 60 * 1000) return; // fresh, skip sync
+      }
+    } catch(e) {}
+
+    // Show splash
+    this.showSyncSplash = true;
+    this.syncProgress = 0;
+    this.syncStatus = 'Connecting to server...';
+
+    const steps = [
+      { name: 'Products', url: '/api/master/product', store: 'products' },
+      { name: 'Categories', url: '/api/master/category', store: 'categories' },
+      { name: 'Members', url: '/api/master/member', store: 'members' },
+      { name: 'Payment methods', url: '/api/master/payment-method', store: 'payment_methods' },
+      { name: 'Settings', url: '/api/about', store: 'about' },
+    ];
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+    const db = await this.initOfflineDb();
+    let done = 0;
+
+    for (const step of steps) {
+      this.syncStatus = 'Syncing ' + step.name + '...';
+      try {
+        const resp = await fetch(step.url, {
+          headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': csrfToken },
+          credentials: 'same-origin',
+        });
+        if (resp.ok) {
+          const data = await resp.json();
+          const items = Array.isArray(data) ? data : (data.data || []);
+          if (items.length > 0) {
+            const tx = db.transaction(step.store, 'readwrite');
+            const store = tx.objectStore(step.store);
+            if (step.store !== 'about') store.clear();
+            items.forEach(item => store.put(item));
+          }
+        }
+      } catch(e) { console.error('[PWA] Sync ' + step.name + ' failed:', e); }
+      done++;
+      this.syncProgress = Math.round((done / steps.length) * 100);
+    }
+
+    // Save sync timestamp
+    try {
+      const tx = db.transaction('meta', 'readwrite');
+      tx.objectStore('meta').put({ key: 'last_prefetch', value: new Date().toISOString() });
+    } catch(e) {}
+
+    this.syncStatus = 'Ready!';
+    this.syncProgress = 100;
+    await new Promise(r => setTimeout(r, 500));
+    this.showSyncSplash = false;
+    // Reload offline product data
+    this.loadOfflineData();
   }
 }" x-init="
   // PWA check: redirect to network error page if offline in regular browser
@@ -116,7 +186,25 @@
     else { window.location.href = '/network-error'; }
   });
   if (isPWA && !navigator.onLine) loadOfflineData();
+  if (isPWA) runStartupSync();
 ">
+
+  {{-- ═══ SYNC SPLASH SCREEN (PWA only) ═══ --}}
+  <div x-show="showSyncSplash" x-cloak
+    style="position:fixed;inset:0;z-index:999999;background:#FF6600;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;">
+    <div style="text-align:center;color:#fff;">
+      {{-- Logo --}}
+      <div style="font-size:48px;margin-bottom:16px;">⚡</div>
+      <h1 style="font-size:24px;font-weight:700;margin-bottom:8px;">{{ config('app.name') }}</h1>
+      <p style="font-size:14px;opacity:0.85;margin-bottom:32px;" x-text="syncStatus"></p>
+      {{-- Progress bar --}}
+      <div style="width:280px;height:6px;background:rgba(255,255,255,0.3);border-radius:3px;overflow:hidden;margin:0 auto 12px;">
+        <div :style="'width:' + syncProgress + '%;height:100%;background:#fff;border-radius:3px;transition:width 0.3s ease;'"></div>
+      </div>
+      <p style="font-size:13px;opacity:0.7;" x-text="syncProgress + '%'"></p>
+    </div>
+  </div>
+
   {{-- Offline Mode Indicator --}}
   <div x-show="isOffline && isPWA" x-cloak
     class="mb-4 rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 flex items-center gap-3 dark:bg-amber-900/20 dark:border-amber-800">
