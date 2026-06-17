@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'a3ff3578';
+const CACHE_VERSION = 'b4a1e9c2';
 const STATIC_CACHE = `zonakasir-static-${CACHE_VERSION}`;
 const PAGES_CACHE = `zonakasir-pages-${CACHE_VERSION}`;
 const API_CACHE = `zonakasir-api-${CACHE_VERSION}`;
@@ -85,8 +85,16 @@ async function cacheStaticAssets() {
 async function handleApiRequest(event) {
   const isGet = event.request.method === 'GET';
   if (!isGet) {
-    try { return await fetch(event.request); }
-    catch { return new Response(JSON.stringify({ error: 'offline' }), { status: 503, headers: { 'Content-Type': 'application/json' } }); }
+    try {
+      const resp = await fetch(event.request);
+      // Auth error on POST — don't cache, let client handle
+      if (resp.status === 401 || resp.status === 403) {
+        return resp;
+      }
+      return resp;
+    } catch {
+      return new Response(JSON.stringify({ error: 'offline' }), { status: 503, headers: { 'Content-Type': 'application/json' } });
+    }
   }
 
   try {
@@ -94,6 +102,10 @@ async function handleApiRequest(event) {
     const tid = setTimeout(() => ctrl.abort(), 8000);
     const resp = await fetch(event.request, { signal: ctrl.signal });
     clearTimeout(tid);
+    // Don't cache auth errors
+    if (resp.status === 401 || resp.status === 403) {
+      return resp;
+    }
     if (resp.ok && isMasterDataApi(event.request.url)) {
       const clone = resp.clone();
       (await caches.open(API_CACHE)).put(event.request, clone);
@@ -108,44 +120,51 @@ async function handleApiRequest(event) {
   }
 }
 
+function isLoginPage(url) {
+  try {
+    const path = new URL(url, self.location.origin).pathname;
+    return path.includes('/login') || path.includes('/member/login') || path.includes('/admin/login');
+  } catch { return false; }
+}
+
+function getLoginRedirect(request) {
+  try {
+    const path = new URL(request.url, self.location.origin).pathname;
+    const loginUrl = path.startsWith('/admin') ? '/admin/login' : '/member/login';
+    return Response.redirect(loginUrl, 302);
+  } catch {
+    return Response.redirect('/member/login', 302);
+  }
+}
+
 async function handlePageRequest(event) {
   // Livewire POST: passthrough — bypass SW entirely
   if (isLivewireUpdate(event)) {
-    return fetch(event.request).catch(() =>
+    return fetch(event.request).then(resp => {
+      // Intercept 401/403 from Livewire — redirect to login
+      if (resp.status === 401 || resp.status === 403) {
+        return getLoginRedirect(event.request);
+      }
+      return resp;
+    }).catch(() =>
       new Response(JSON.stringify({ message: 'Offline', errors: { server: ['No network'] } }), {
         status: 419, headers: { 'Content-Type': 'application/json' },
       })
     );
   }
 
-  // Stale-while-revalidate for navigation:
-  // 1. Serve from cache instantly
-  // 2. Fetch from network in background → update cache
-  // 3. If no cache → network-first
-  const cached = await caches.match(event.request);
-  if (cached) {
-    // Background revalidate — use waitUntil to prevent premature SW termination
-    event.waitUntil(
-      fetch(event.request)
-        .then(resp => {
-          if (resp.ok) {
-            return caches.open(PAGES_CACHE).then(cache => {
-              cache.put(event.request, resp.clone());
-              trimCache(PAGES_CACHE, 50);
-            });
-          }
-        })
-        .catch(() => {})
-    );
-    return cached;
-  }
-
-  // No cache → network-first with timeout
+  // Network-first for navigation — check auth status
   try {
     const ctrl = new AbortController();
-    const tid = setTimeout(() => ctrl.abort(), 5000);
+    const tid = setTimeout(() => ctrl.abort(), 8000);
     const resp = await fetch(event.request, { signal: ctrl.signal });
     clearTimeout(tid);
+
+    // Auth error → redirect to login (don't cache error pages)
+    if (resp.status === 401 || resp.status === 403) {
+      return getLoginRedirect(event.request);
+    }
+
     if (resp.ok) {
       const cache = await caches.open(PAGES_CACHE);
       cache.put(event.request, resp.clone());
@@ -153,6 +172,26 @@ async function handlePageRequest(event) {
     }
     return resp;
   } catch {
+    // Offline → serve from cache, but skip cached error pages
+    const cached = await caches.match(event.request);
+    if (cached) {
+      // Background revalidate
+      event.waitUntil(
+        fetch(event.request).then(resp => {
+          if (resp.status === 401 || resp.status === 403) {
+            // Auth error in background — don't update cache
+            return;
+          }
+          if (resp.ok) {
+            return caches.open(PAGES_CACHE).then(cache => {
+              cache.put(event.request, resp.clone());
+              trimCache(PAGES_CACHE, 50);
+            });
+          }
+        }).catch(() => {})
+      );
+      return cached;
+    }
     return caches.match(OFFLINE_PAGE);
   }
 }
