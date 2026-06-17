@@ -1527,8 +1527,8 @@ export default function App() {
                 <span>&bull; Copyright &copy; 2026 PT Zona Teknologi Nusantara.</span>
               </div>
               <div className="flex gap-4 font-medium">
-                <a href="#privacy" className="hover:text-white">Kebijakan Privasi</a>
-                <a href="#tos" className="hover:text-white">Ketentuan Layanan</a>
+                <a href="/privacy" className="hover:text-white">Kebijakan Privasi</a>
+                <a href="/terms" className="hover:text-white">Ketentuan Layanan</a>
                 <a href="#help" className="hover:text-white">Bantuan Kasir</a>
               </div>
             </div>
