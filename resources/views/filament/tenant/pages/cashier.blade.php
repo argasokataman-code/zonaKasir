@@ -718,8 +718,8 @@
                   x-on:click="$wire.reduceCart({{ $item->product_id }});" wire:loading.attr="disabled">
                   <x-heroicon-o-minus-small class="h-3.5 w-3.5 !text-green-900" />
                 </button>
-                <button class="rounded-lg !bg-danger-100 px-2 py-0.5" wire:click="deleteCart({{ $item->id }})"
-                  wire:loading.attr="disabled">
+                <button class="rounded-lg !bg-danger-100 px-2 py-0.5" wire:click.stop="deleteCart({{ $item->id }})"
+                  wire:loading.attr="disabled" type="button">
                   <x-heroicon-o-trash class="h-3.5 w-3.5 !text-danger-900" />
                 </button>
                 <livewire:price-setting :cart-item="$item" key="{{ $item->id }}" />

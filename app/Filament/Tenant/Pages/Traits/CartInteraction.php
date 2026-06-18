@@ -66,6 +66,10 @@ trait CartInteraction
             ->select('id', 'qty', 'product_id', 'price')
             ->cashier()
             ->first();
+        if (! $cartItem) {
+            $this->refreshCart();
+            return;
+        }
         $qty = $cartItem->qty - 1;
         if ($qty == 0) {
             $cartItem->delete();
