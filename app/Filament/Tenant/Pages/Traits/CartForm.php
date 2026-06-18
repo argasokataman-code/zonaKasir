@@ -32,6 +32,7 @@ trait CartForm
                     ->label('Member')
                     ->getSearchResultsUsing(function (string $search): array {
                         return Member::query()
+                            ->select('id', 'name')
                             ->where('name', 'like', "%{$search}%")
                             ->orWhere('email', 'like', "%{$search}%")
                             ->orWhere('code', 'like', "%{$search}%")

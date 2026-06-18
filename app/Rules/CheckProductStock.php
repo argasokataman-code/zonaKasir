@@ -29,7 +29,9 @@ class CheckProductStock implements DataAwareRule, ValidationRule
     {
         $index = Str::of($attribute)->explode('.')[1];
         $dataProduct = $this->data['products'][$index];
-        $product = Product::find($dataProduct['product_id']);
+        $product = Product::select('id', 'is_non_stock')
+            ->with(['stocks:product_id,stock,type,initial_price,selling_price,date,created_at'])
+            ->find($dataProduct['product_id']);
         if (! $product) {
             $fail('The product is not found.');
 
@@ -39,7 +41,7 @@ class CheckProductStock implements DataAwareRule, ValidationRule
             return;
         }
         if (isset($dataProduct['price_unit_id']) && $dataProduct['price_unit_id'] != null) {
-            $value = PriceUnit::query()->find($dataProduct['price_unit_id'])->stock * $dataProduct['qty'];
+            $value = PriceUnit::query()->select('id', 'stock')->find($dataProduct['price_unit_id'])->stock * $dataProduct['qty'];
         }
         $bool = $product->stock_calculate < $value;
 

@@ -48,6 +48,7 @@ trait VoucherHandler
     protected function loadAvailableVouchers(): void
     {
         $this->availableVoucher = TenantsVoucher::query()
+            ->select('id', 'code', 'type', 'nominal', 'minimal_buying', 'start_date', 'expired', 'kuota', 'used')
             ->where('minimal_buying', '<=', $this->cartItems->sum('price'))
             ->where('start_date', '<=', today()->format('Y-m-d'))
             ->where('expired', '>=', today()->format('Y-m-d'))

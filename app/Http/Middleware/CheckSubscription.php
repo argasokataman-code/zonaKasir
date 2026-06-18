@@ -29,7 +29,8 @@ class CheckSubscription
         }
 
         // Check for expired / past_due subscription
-        $blockedSub = Subscription::where('tenant_id', $tenantId)
+        $blockedSub = Subscription::select('id', 'status', 'tenant_id')
+            ->where('tenant_id', $tenantId)
             ->whereIn('status', ['expired', 'past_due'])
             ->latest()
             ->first();
@@ -42,7 +43,8 @@ class CheckSubscription
             ], 403);
         }
 
-        $subscription = Subscription::where('tenant_id', $tenantId)
+        $subscription = Subscription::select('id', 'status', 'tenant_id', 'trial_ends_at', 'ends_at')
+            ->where('tenant_id', $tenantId)
             ->whereIn('status', ['trialing', 'active'])
             ->latest()
             ->first();

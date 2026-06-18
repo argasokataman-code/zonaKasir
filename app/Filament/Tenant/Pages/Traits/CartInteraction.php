@@ -30,12 +30,13 @@ trait CartInteraction
         if (! $data) {
             $qty = (
                 CartItem::whereProductId($product->getKey())
+                    ->select('id', 'qty')
                     ->cashier()
                     ->first()?->qty ?? 0
             ) + 1;
         } else {
             if (!$data['amount']) {
-                $this->deleteCart(CartItem::whereProductId($product->getKey())->first());
+                $this->deleteCart(CartItem::whereProductId($product->getKey())->select('id')->first());
                 return;
             }
             $qty = $data['amount'];
@@ -62,6 +63,7 @@ trait CartInteraction
     public function reduceCart(Product $product)
     {
         $cartItem = CartItem::whereProductId($product->getKey())
+            ->select('id', 'qty', 'product_id', 'price')
             ->cashier()
             ->first();
         $qty = $cartItem->qty - 1;
@@ -154,6 +156,7 @@ trait CartInteraction
         $stock = 1;
 
         $cartItem = CartItem::whereProductId($product->getKey())
+            ->select('id', 'qty')
             ->cashier()
             ->first();
         if ($cartItem) {

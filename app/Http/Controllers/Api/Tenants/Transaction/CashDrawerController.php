@@ -41,7 +41,7 @@ class CashDrawerController extends Controller
             DB::commit();
 
             if ($lastOpenedCashDrawer) {
-                User::all()->each(function ($user) use ($lastOpenedCashDrawer) {
+                User::select('id')->each(function ($user) use ($lastOpenedCashDrawer) {
                     $user->notify(new \App\Notifications\CashDrawerAlert($lastOpenedCashDrawer, 'opened'));
                 });
             }
@@ -81,7 +81,7 @@ class CashDrawerController extends Controller
             DB::commit();
 
             if ($lastOpenedCashDrawer) {
-                User::all()->each(function ($user) use ($lastOpenedCashDrawer) {
+                User::select('id')->each(function ($user) use ($lastOpenedCashDrawer) {
                     $user->notify(new \App\Notifications\CashDrawerAlert($lastOpenedCashDrawer, 'closed'));
                 });
             }
