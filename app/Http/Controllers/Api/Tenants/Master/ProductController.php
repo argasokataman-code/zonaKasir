@@ -22,6 +22,7 @@ class ProductController extends Controller
         $perPage = $this->resolvePerPage($request);
 
         $products = QueryBuilder::for(Product::class)
+            ->select('id', 'name', 'sku', 'selling_price', 'initial_price', 'type', 'unit', 'stock', 'is_non_stock', 'category_id', 'hero_images', 'show', 'created_at')
             ->allowedFilters([
                 'name',
                 'category_id',
@@ -35,6 +36,7 @@ class ProductController extends Controller
                 AllowedFilter::custom('global', new SearchFields, 'name,sku,barcodes.code'),
             ])
             ->allowedIncludes(['category', 'images'])
+            ->with(['category:id,name', 'stocks:product_id,stock,type,is_ready,date,created_at'])
             ->orderByDesc('created_at')
             ->simplePaginate($perPage ?? (new Product())->getPerPage());
 
@@ -48,7 +50,7 @@ class ProductController extends Controller
         try {
             $request->created();
             $product = Product::latest()->first();
-            $product->load(['category', 'stocks']);
+            $product->load(['category:id,name', 'stocks:product_id,stock,type,is_ready,date,created_at']);
 
             return $this->buildResponse()
                 ->setData(new ProductCollection($product))
@@ -77,7 +79,7 @@ class ProductController extends Controller
             abort(404, 'Product not found');
         }
 
-        $model->load(['category', 'stocks']);
+        $model->load(['category:id,name', 'stocks:product_id,stock,type,is_ready,date,created_at']);
         $model = new ProductCollection($model);
 
         return $this->buildResponse()
@@ -90,7 +92,7 @@ class ProductController extends Controller
         try {
             $request->updated();
             $product = Product::findorfail($request->route('product'));
-            $product->load(['category', 'stocks']);
+            $product->load(['category:id,name', 'stocks:product_id,stock,type,is_ready,date,created_at']);
 
             return $this->buildResponse()
                 ->setData(new ProductCollection($product))

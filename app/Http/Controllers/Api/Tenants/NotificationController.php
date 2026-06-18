@@ -35,7 +35,7 @@ class NotificationController extends Controller
         try {
             DB::beginTransaction();
             
-            if (!Product::find($product)) {
+            if (!Product::select('id')->find($product->id)) {
                 DB::rollBack();
                 return $this->buildResponse()
                     ->setCode(404)

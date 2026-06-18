@@ -24,7 +24,8 @@ class InvoiceController extends Controller
 
         $perPage = min((int) ($request->get('per_page', 15)), 100);
 
-        $invoices = Invoice::where('tenant_id', $tenantId)
+        $invoices = Invoice::select('id', 'tenant_id', 'subscription_id', 'number', 'amount', 'status', 'payment_method', 'notes', 'paid_at', 'created_at')
+            ->where('tenant_id', $tenantId)
             ->latest()
             ->paginate($perPage);
 
@@ -42,7 +43,8 @@ class InvoiceController extends Controller
         try {
             $tenantId = auth()->user()->tenant_id;
 
-            $subscription = Subscription::with('plan')
+            $subscription = Subscription::select('id', 'tenant_id', 'plan_id', 'status', 'billing_cycle', 'trial_ends_at', 'starts_at', 'ends_at')
+                ->with('plan:id,name,price_monthly,price_yearly')
                 ->where('tenant_id', $tenantId)
                 ->whereIn('status', ['trialing', 'active'])
                 ->latest()
@@ -84,7 +86,8 @@ class InvoiceController extends Controller
     {
         $tenantId = auth()->user()->tenant_id;
 
-        $invoice = Invoice::where('tenant_id', $tenantId)
+        $invoice = Invoice::select('id', 'tenant_id', 'subscription_id', 'number', 'amount', 'status', 'payment_method', 'notes', 'paid_at', 'created_at')
+            ->where('tenant_id', $tenantId)
             ->where('id', $id)
             ->first();
 
@@ -105,7 +108,8 @@ class InvoiceController extends Controller
         try {
             $tenantId = auth()->user()->tenant_id;
 
-            $invoice = Invoice::where('tenant_id', $tenantId)
+            $invoice = Invoice::select('id', 'tenant_id', 'subscription_id', 'number', 'amount', 'status', 'payment_method', 'notes', 'paid_at', 'created_at')
+                ->where('tenant_id', $tenantId)
                 ->where('id', $id)
                 ->first();
 

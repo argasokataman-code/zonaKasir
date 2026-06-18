@@ -13,6 +13,7 @@ class PaymentMethodController extends Controller
     public function index(Request $request): JsonResponse
     {
         $paymentMethods = QueryBuilder::for(PaymentMethod::class)
+            ->select('id', 'name', 'is_credit', 'payment_type', 'is_active')
             ->where('is_active', true)
             ->orderByDesc('created_at')
             ->simplePaginate($this->resolvePerPage($request) ?? 15);

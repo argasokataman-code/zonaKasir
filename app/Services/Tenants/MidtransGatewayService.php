@@ -288,14 +288,15 @@ class MidtransGatewayService
         }
 
         // 2. Find payment record
-        $payment = MidtransPayment::where('order_id', $payload['order_id'])->first();
+        $payment = MidtransPayment::select('id', 'order_id', 'status', 'gross_amount', 'payment_type', 'selling_id', 'midtrans_transaction_id', 'paid_at', 'cart_data')
+            ->where('order_id', $payload['order_id'])->first();
         if (!$payment) {
             Log::error('Midtrans webhook: payment not found', ['order_id' => $payload['order_id']]);
             return;
         }
 
         // 3. Verify signature
-        $about = About::first();
+        $about = About::select('id', 'midtrans_server_key', 'midtrans_merchant_id', 'platform_fee_percent')->first();
         $serverKey = $about->midtrans_server_key ?? config('midtrans.server_key');
         if (!$this->verifySignature($payload, $serverKey)) {
             Log::critical('Midtrans webhook signature verification failed', ['order_id' => $payload['order_id']]);
@@ -358,7 +359,7 @@ class MidtransGatewayService
 
     public function confirmSettlement(MidtransPayment $payment): void
     {
-        $about = About::first();
+        $about = About::select('id', 'midtrans_server_key', 'midtrans_merchant_id', 'platform_fee_percent')->first();
         $fees = $this->feeCalculator->calculate(
             paymentType: $payment->payment_type,
             grossAmount: $payment->gross_amount,
@@ -370,7 +371,7 @@ class MidtransGatewayService
 
     private function finalizeSettlement(MidtransPayment $payment, array $payload): void
     {
-        $about = About::first();
+        $about = About::select('id', 'midtrans_server_key', 'midtrans_merchant_id', 'platform_fee_percent')->first();
         $fees = $this->feeCalculator->calculate(
             paymentType: $payload['payment_type'],
             grossAmount: $payment->gross_amount,
