@@ -27,6 +27,7 @@ trait CartInteraction
     public function addCart(Product $product, ?array $data = null)
     {
         $auth = Filament::auth()->id();
+
         if (! $data) {
             $qty = (
                 CartItem::whereProductId($product->getKey())
@@ -34,16 +35,26 @@ trait CartInteraction
                     ->cashier()
                     ->first()?->qty ?? 0
             ) + 1;
-        } else {
-            if (!$data['amount']) {
-                $this->deleteCart(CartItem::whereProductId($product->getKey())->select('id')->first());
+        } elseif (isset($data['_bulk'])) {
+            $qty = (int) $data['_bulk'];
+            if ($qty <= 0) {
+                CartItem::where('product_id', $product->getKey())->cashier()->delete();
+                $this->refreshCart();
+
                 return;
             }
-            $qty = $data['amount'];
+        } elseif (! $data['amount']) {
+            $this->deleteCart($product);
+
+            return;
+        } else {
+            $qty = (int) $data['amount'];
         }
+
         if (! $this->validateStock($product, $qty)) {
             return;
         }
+
         CartItem::query()
             ->updateOrCreate(
                 [
@@ -53,10 +64,10 @@ trait CartInteraction
                 [
                     'qty' => $qty,
                     'price' => $product->selling_price * $qty,
-                    'user_id' => $auth,
-                    'product_id' => $product->getKey(),
                 ]
             );
+
+        $this->dispatch('cart-updated');
         $this->refreshCart();
     }
 
@@ -68,12 +79,12 @@ trait CartInteraction
             ->first();
         if (! $cartItem) {
             $this->refreshCart();
+
             return;
         }
         $qty = $cartItem->qty - 1;
         if ($qty == 0) {
             $cartItem->delete();
-
             $this->refreshCart();
 
             return;
@@ -87,9 +98,9 @@ trait CartInteraction
         $this->refreshCart();
     }
 
-    public function deleteCart(CartItem $cartItem)
+    public function deleteCart(Product $product)
     {
-        $cartItem->delete();
+        CartItem::where('product_id', $product->getKey())->cashier()->delete();
         $this->refreshCart();
     }
 
@@ -99,7 +110,6 @@ trait CartInteraction
             return;
         }
         $cartItem->discount_price = (float) $value;
-
         $cartItem->save();
         $this->refreshCart();
     }

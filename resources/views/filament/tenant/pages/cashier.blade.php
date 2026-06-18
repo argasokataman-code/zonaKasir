@@ -4,7 +4,7 @@
 
 @endphp
 <div class="" x-data="{
-  cartOpen: false,
+  cartOpen: $persist(false).as('cashier_cartOpen'),
   isOffline: !navigator.onLine,
   isPWA: window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true,
   offlineProducts: [],
@@ -21,30 +21,44 @@
   syncProgress: 0,
   syncStatus: '',
   showSyncSplash: false,
-  // Instant cart qty map — product_id => qty (synced from Livewire)
-  cartQty: {{ Js::from(collect($cartItems)->pluck('qty', 'product_id')->toArray()) }},
+  // Cart badge qty map — product_id => qty (optimistic, updated instantly)
+   cartQty: {{ Js::from(collect($cartItems)->pluck('qty', 'product_id')->toArray()) }},
+   debounceTimers: {},
 
-  // Instant add — update badge instantly, sync server in background
-  instantAdd(productId) {
-    this.cartQty[productId] = (this.cartQty[productId] || 0) + 1;
-    if (navigator.onLine) $wire.addCart(productId);
-  },
+   // Instant add — update badge instantly, sync server in background
+   instantAdd(productId) {
+     this.cartQty[productId] = (this.cartQty[productId] || 0) + 1;
+     clearTimeout(this.debounceTimers[productId]);
+     this.debounceTimers[productId] = setTimeout(() => {
+       if (navigator.onLine) {
+         $wire.addCart(productId, { _bulk: this.cartQty[productId] });
+       }
+     }, 300);
+   },
 
-  instantReduce(productId) {
-    if ((this.cartQty[productId] || 0) > 0) {
-      this.cartQty[productId]--;
-      if (this.cartQty[productId] <= 0) delete this.cartQty[productId];
-    }
-    if (navigator.onLine) $wire.reduceCart(productId);
-  },
+   instantReduce(productId) {
+     if ((this.cartQty[productId] || 0) > 0) {
+       this.cartQty[productId]--;
+       if (this.cartQty[productId] <= 0) delete this.cartQty[productId];
+     }
+     clearTimeout(this.debounceTimers[productId]);
+     this.debounceTimers[productId] = setTimeout(() => {
+       if (navigator.onLine) {
+         const qty = this.cartQty[productId] || 0;
+         $wire.addCart(productId, { _bulk: qty });
+       }
+     }, 300);
+   },
 
-  // Re-sync qty from Livewire after server response
-  syncCartQty() {
-    const items = {{ Js::from(collect($cartItems)->pluck('qty', 'product_id')->toArray()) }};
-    this.cartQty = items;
-  },
+   // Sync badge from server after Livewire action completes
+   handleCartDataUpdated(event) {
+     // Livewire v3 detail = [ {cartItems} ]; fallback for bare {cartItems}
+     const raw = event.detail;
+     const data = Array.isArray(raw) ? raw[0] : raw;
+     this.cartQty = data?.cartItems || {};
+   },
 
-  async initOfflineDb() {
+   async initOfflineDb() {
     if (this.offlineDb) return this.offlineDb;
     return new Promise((resolve, reject) => {
       const req = indexedDB.open('zonakasir_offline', 2);
@@ -212,8 +226,26 @@
     });
     if (this.isPWA && !navigator.onLine) this.loadOfflineData();
     if (this.isPWA) this.runStartupSync();
-  }
-}">
+    this.$nextTick(() => this.adjustForSidebar());
+    window.addEventListener('resize', () => this.adjustForSidebar());
+  },
+
+  // Prevent product grid from colliding with fixed sidebar
+  adjustForSidebar() {
+    if (window.innerWidth < 1024) return;
+    const sidebar = this.$refs.sidebar;
+    const grid = this.$refs.layoutGrid;
+    if (!sidebar || !grid) return;
+    const sidebarLeft = sidebar.getBoundingClientRect().left;
+    const gridRect = grid.getBoundingClientRect();
+    const gap = 16;
+    if (gridRect.right > sidebarLeft) {
+      grid.style.marginRight = `${gridRect.right - sidebarLeft + gap}px`;
+    } else {
+      grid.style.marginRight = '';
+    }
+  },
+}" x-on:cart-data-updated.window="handleCartDataUpdated">
 
   {{-- ═══ SYNC SPLASH SCREEN (PWA only) ═══ --}}
   <div x-show="showSyncSplash" x-cloak
@@ -246,7 +278,7 @@
     <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-x-4">
+  <div x-ref="layoutGrid" class="grid grid-cols-1 lg:grid-cols-3 gap-x-4">
     <div class="col-span-1 lg:col-span-2 pb-24 lg:pb-0">
       {{-- Mobile back button --}}
       <div class="mb-2 flex items-center gap-2 lg:hidden">
@@ -285,7 +317,7 @@
         @forelse ($products as $product)
           <div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
             {{-- Image --}}
-            <div class="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-gray-700">
+            <div class="relative aspect-[3/2] overflow-hidden bg-gray-100 dark:bg-gray-700">
               @php $heroImage = $product->heroImage; @endphp
               @if ($heroImage)
                 <img src="{{ $heroImage }}" alt="{{ $product->name }}" class="h-full w-full object-cover transition-transform group-hover:scale-105">
@@ -308,31 +340,33 @@
                 @endif
 
               {{-- Cart quantity badge --}}
-              <span x-show="cartQty[{{ $product->id }}]" x-cloak class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm" x-text="cartQty[{{ $product->id }}]"></span>
+              <span x-show="cartQty[{{ $product->id }}]" x-cloak class="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm" x-text="cartQty[{{ $product->id }}]"></span>
             </div>
 
             {{-- Info --}}
-            <div class="flex flex-1 flex-col justify-between p-3">
+            <div class="flex flex-1 flex-col justify-between px-2.5 py-2">
               <div>
-                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ $product->sku }}</p>
-                <h3 class="mt-0.5 text-sm font-semibold leading-tight text-gray-900 dark:text-white line-clamp-2">{{ $product->name }}</h3>
+                <p class="text-[11px] font-medium text-gray-500 dark:text-gray-400">{{ $product->sku }}</p>
+                <h3 class="mt-0.5 leading-tight text-xs font-semibold text-gray-900 dark:text-white line-clamp-2">{{ $product->name }}</h3>
               </div>
-              <div class="mt-2 flex items-center justify-between">
-                <span class="text-sm font-bold text-zonakasir-primary">{{ price_format($product->sellingPriceCalculate) }}</span>
-                <button x-show="!cartQty[{{ $product->id }}]" @click="instantAdd({{ $product->id }})"
-                  class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
-                  <x-heroicon-o-plus class="h-5 w-5" />
-                </button>
-                <div x-show="cartQty[{{ $product->id }}]" x-cloak class="flex items-center gap-1">
-                  <button @click="instantReduce({{ $product->id }})"
-                    class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
-                    <x-heroicon-o-minus-small class="h-5 w-5" />
+              <div class="mt-1.5 flex items-center">
+                <span class="text-xs font-bold text-zonakasir-primary">{{ price_format($product->sellingPriceCalculate) }}</span>
+                <div class="ml-auto flex items-center justify-end min-w-[76px] min-h-[36px]">
+                  <button x-show="!cartQty[{{ $product->id }}]" @click="instantAdd({{ $product->id }})"
+                    class="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                    <x-heroicon-o-plus class="h-4 w-4" />
                   </button>
-                  <span class="w-8 text-center text-sm font-semibold text-zonakasir-primary" x-text="cartQty[{{ $product->id }}]"></span>
-                  <button @click="instantAdd({{ $product->id }})"
-                    class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
-                    <x-heroicon-o-plus-small class="h-5 w-5" />
-                  </button>
+                  <div x-show="cartQty[{{ $product->id }}]" x-cloak class="flex items-center gap-[2px]">
+                    <button @click="instantReduce({{ $product->id }})"
+                      class="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
+                      <x-heroicon-o-minus-small class="h-4 w-4" />
+                    </button>
+                    <span class="w-5 text-center text-xs font-semibold text-zonakasir-primary" x-text="cartQty[{{ $product->id }}]"></span>
+                    <button @click="instantAdd({{ $product->id }})"
+                      class="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                      <x-heroicon-o-plus-small class="h-4 w-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -374,7 +408,7 @@
         {{-- Offline Product Cards --}}
         <template x-for="product in filteredOfflineProducts" :key="product.id">
           <div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
-            <div class="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-gray-700">
+            <div class="relative aspect-[3/2] overflow-hidden bg-gray-100 dark:bg-gray-700">
               <template x-if="product.hero_images_url">
                 <img :src="product.hero_images_url" :alt="product.name" class="h-full w-full object-cover transition-transform group-hover:scale-105">
               </template>
@@ -399,36 +433,38 @@
 
               {{-- Cart quantity badge --}}
               <template x-if="offlineCart[product.id] && offlineCart[product.id].qty > 0">
-                <span class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm" x-text="offlineCart[product.id].qty"></span>
+                <span class="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm" x-text="offlineCart[product.id].qty"></span>
               </template>
             </div>
 
-            <div class="flex flex-1 flex-col justify-between p-3">
+            <div class="flex flex-1 flex-col justify-between px-2.5 py-2">
               <div>
-                <p class="text-xs font-medium text-gray-500 dark:text-gray-400" x-text="product.sku"></p>
-                <h3 class="mt-0.5 text-sm font-semibold leading-tight text-gray-900 dark:text-white line-clamp-2" x-text="product.name"></h3>
+                <p class="text-[11px] font-medium text-gray-500 dark:text-gray-400" x-text="product.sku"></p>
+                <h3 class="mt-0.5 leading-tight text-xs font-semibold text-gray-900 dark:text-white line-clamp-2" x-text="product.name"></h3>
               </div>
-              <div class="mt-2 flex items-center justify-between">
-                <span class="text-sm font-bold text-zonakasir-primary" x-text="'Rp ' + (product.selling_price_calculate || product.selling_price || 0).toLocaleString('id-ID')"></span>
-                <template x-if="!offlineCart[product.id] || offlineCart[product.id].qty === 0">
-                  <button @click="offlineAddToCart(product.id)"
-                    class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
-                    <x-heroicon-o-plus class="h-5 w-5" />
-                  </button>
-                </template>
-                <template x-if="offlineCart[product.id] && offlineCart[product.id].qty > 0">
-                  <div class="flex items-center gap-1">
-                    <button @click="offlineRemoveFromCart(product.id)"
-                      class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
-                      <x-heroicon-o-minus-small class="h-5 w-5" />
-                    </button>
-                    <span class="w-8 text-center text-sm font-semibold text-zonakasir-primary" x-text="offlineCart[product.id].qty"></span>
+              <div class="mt-1.5 flex items-center">
+                <span class="text-xs font-bold text-zonakasir-primary" x-text="'Rp ' + (product.selling_price_calculate || product.selling_price || 0).toLocaleString('id-ID')"></span>
+                <div class="ml-auto flex items-center justify-end min-w-[76px] min-h-[36px]">
+                  <template x-if="!offlineCart[product.id] || offlineCart[product.id].qty === 0">
                     <button @click="offlineAddToCart(product.id)"
-                      class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
-                      <x-heroicon-o-plus-small class="h-5 h-5" />
+                      class="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                      <x-heroicon-o-plus class="h-4 w-4" />
                     </button>
-                  </div>
-                </template>
+                  </template>
+                  <template x-if="offlineCart[product.id] && offlineCart[product.id].qty > 0">
+                    <div class="flex items-center gap-[2px]">
+                      <button @click="offlineRemoveFromCart(product.id)"
+                        class="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
+                        <x-heroicon-o-minus-small class="h-4 w-4" />
+                      </button>
+                      <span class="w-5 text-center text-xs font-semibold text-zonakasir-primary" x-text="offlineCart[product.id].qty"></span>
+                      <button @click="offlineAddToCart(product.id)"
+                        class="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                        <x-heroicon-o-plus-small class="h-4 w-4" />
+                      </button>
+                    </div>
+                  </template>
+                </div>
               </div>
             </div>
           </div>
@@ -592,7 +628,7 @@
     </div>
 
     {{-- Sidebar: always visible on desktop, bottom sheet on mobile --}}
-    <div class="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white shadow-2xl transition-transform duration-300 dark:bg-gray-900 lg:inset-auto lg:right-0 lg:top-0 lg:h-screen lg:w-[40%] xl:w-1/3 lg:rounded-none lg:shadow-none lg:translate-y-0"
+    <div x-ref="sidebar" class="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white shadow-2xl transition-transform duration-300 dark:bg-gray-900 lg:inset-auto lg:right-0 lg:top-0 lg:h-screen lg:w-[40%] xl:w-1/3 lg:rounded-none lg:shadow-none lg:translate-y-0"
       x-bind:class="cartOpen ? 'translate-y-0' : 'translate-y-full lg:!translate-y-0'"
       x-cloak>
       <div class="flex items-center justify-between border-b p-3 dark:border-gray-800 lg:hidden">
@@ -673,7 +709,7 @@
           <p class="mb-1 hidden text-xl font-semibold lg:block">{{ __('Current Orders') }}</p>
           <div class="flex gap-x-1"></div>
         </div>
-        <div class="max-h-[40%] min-h-32 overflow-auto" wire:loading.class="opacity-20"
+        <div class="max-h-[40vh] min-h-32 overflow-auto" wire:loading.class="opacity-20"
           wire:target="addCart,reduceCart,deleteCart,addDiscountPricePerItem,addCartUsingScanner">
           @forelse($cartItems as $item)
             <div class="mb-2 rounded-lg border bg-white px-3 py-2 dark:border-gray-900 dark:bg-gray-900"
@@ -718,7 +754,7 @@
                   x-on:click="$wire.reduceCart({{ $item->product_id }});" wire:loading.attr="disabled">
                   <x-heroicon-o-minus-small class="h-3.5 w-3.5 !text-green-900" />
                 </button>
-                <button class="rounded-lg !bg-danger-100 px-2 py-0.5" wire:click.stop="deleteCart({{ $item->id }})"
+                <button class="rounded-lg !bg-danger-100 px-2 py-0.5" wire:click.stop="deleteCart({{ $item->product_id }})"
                   wire:loading.attr="disabled" type="button">
                   <x-heroicon-o-trash class="h-3.5 w-3.5 !text-danger-900" />
                 </button>
