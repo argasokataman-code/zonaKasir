@@ -26,7 +26,7 @@ trait HasIdempotentOperations
         // In production, use Cache::remember with longer TTL (24 hours typical)
         // For now, store in database via IdempotencyLog model
         
-        $log = \App\Models\Tenants\IdempotencyLog::where('idempotency_key', $key)->first();
+        $log = \App\Models\Tenants\IdempotencyLog::select('id', 'idempotency_key', 'status', 'response')->where('idempotency_key', $key)->first();
         
         if ($log && $log->status === 'completed') {
             // Return cached successful result

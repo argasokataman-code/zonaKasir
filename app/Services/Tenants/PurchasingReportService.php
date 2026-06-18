@@ -30,7 +30,8 @@ class PurchasingReportService
         $reports = [];
         /** @var Collection<Purchasing> $purchasings */
         $purchasings = Purchasing::query()
-            ->with(['stocks.product', 'supplier'])
+            ->select('id', 'date', 'supplier_id')
+            ->with(['stocks.product:id,name,unit', 'stocks:id,product_id,init_stock,initial_price,total_initial_price,selling_price,total_selling_price', 'supplier:id,name'])
             ->whereBetween('date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
             ->get();
 

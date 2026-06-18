@@ -23,7 +23,7 @@ trait HasPurchasingForm
                 ->searchable(['sku', 'name'])
                 ->live()
                 ->afterStateUpdated(function (Set $set, ?string $state) {
-                    $product = Product::find($state);
+                    $product = Product::select('id', 'initial_price', 'selling_price')->find($state);
                     if ($product) {
                         $set('initial_price', $product->initial_price);
                         $set('selling_price', $product->selling_price);

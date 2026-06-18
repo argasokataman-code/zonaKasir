@@ -43,7 +43,7 @@ class PrintLabel extends Page implements HasForms
     public function mount($record)
     {
         if ($record) {
-            $this->record = Product::find($record);
+            $this->record = Product::select('id', 'name', 'sku', 'unit', 'selling_price')->find($record);
         }
         $this->form->fill();
     }

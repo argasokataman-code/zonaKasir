@@ -14,7 +14,7 @@ class AboutService
     {
         $about = About::query()
             ->updateOrCreate([
-                'id' => About::first()?->getKey() ?? null,
+                'id' => About::select('id')->first()?->getKey() ?? null,
             ], Arr::only($data, [
                 'shop_name',
                 'shop_location',
@@ -27,14 +27,14 @@ class AboutService
                 'photo',
             ]));
 
-        $owner = User::owner()->first();
+        $owner = User::select('id', 'name')->owner()->first();
         if ($owner && isset($data['owner_name'])) {
             $owner->name = $data['owner_name'];
             $owner->save();
         }
 
         if (array_key_exists('uploaded_file_id', $data)) {
-            $tmpFile = UploadedFile::find($data['uploaded_file_id']);
+            $tmpFile = UploadedFile::select('id', 'name', 'relative_path', 'url', 'disk', 'path')->find($data['uploaded_file_id']);
 
             if ($tmpFile && $tmpFile->relative_path !== $about->photo) {
                 try {
@@ -57,8 +57,8 @@ class AboutService
 
     private function deletePhoto(About $about): void
     {
-        $uploadedFile = UploadedFile::where('relative_path', $about->photo)->first()
-            ?? UploadedFile::where('url', $about->photo)->first();
+        $uploadedFile = UploadedFile::select('id', 'name', 'relative_path', 'url', 'disk', 'path')->where('relative_path', $about->photo)->first()
+            ?? UploadedFile::select('id', 'name', 'relative_path', 'url', 'disk', 'path')->where('url', $about->photo)->first();
 
         if ($uploadedFile) {
             $uploadedFile->deleteFromPublic('profile');

@@ -24,7 +24,7 @@ trait HasStockOpnameItemForm
                 ->searchable(['name', 'sku'])
                 ->live()
                 ->afterStateUpdated(function (Set $set, ?string $state) {
-                    $product = Product::find($state);
+                    $product = Product::select('id', 'stock')->find($state);
                     if ($product) {
                         $set('current_stock', $product->stock);
                     }
@@ -43,7 +43,7 @@ trait HasStockOpnameItemForm
 
                         return;
                     }
-                    $product = Product::find($get('product_id'));
+                    $product = Product::select('id', 'stock')->find($get('product_id'));
                     if (! $product) {
                         Notification::make()
                             ->title(__('Please select the product first'))
@@ -68,7 +68,7 @@ trait HasStockOpnameItemForm
                 ->disabled(fn (Get $get) => ! $get('adjustment_type'))
                 ->live(onBlur: true)
                 ->afterStateUpdated(function (Set $set, Get $get, ?string $state) {
-                    $product = Product::find($get('product_id'));
+                    $product = Product::select('id', 'stock')->find($get('product_id'));
                     if (! $product) {
                         Notification::make()
                             ->title(__('Please select the product first'))

@@ -26,7 +26,7 @@ class CashDrawerController extends Controller
         try {
             DB::beginTransaction();
 
-            $lastOpenedCashDrawer = CashDrawer::lastOpened()->first();
+            $lastOpenedCashDrawer = CashDrawer::select('id', 'cash', 'opened_by')->lastOpened()->first();
             if ($lastOpenedCashDrawer) {
                 $lastOpenedCashDrawer->update([
                     'cash' => $request->opening_balance,
@@ -65,7 +65,7 @@ class CashDrawerController extends Controller
         try {
             DB::beginTransaction();
             
-            $lastOpenedCashDrawer = CashDrawer::lastOpened()->first();
+            $lastOpenedCashDrawer = CashDrawer::select('id', 'cash', 'opened_by', 'closed_by')->lastOpened()->first();
             if (!$lastOpenedCashDrawer) {
                 DB::rollBack();
                 return $this->buildResponse()
@@ -101,7 +101,7 @@ class CashDrawerController extends Controller
 
     public function show(): JsonResponse
     {
-        $lastOpenedCashDrawer = CashDrawer::lastOpened()->first();
+        $lastOpenedCashDrawer = CashDrawer::select('id', 'cash', 'opened_by', 'closed_by', 'created_at')->lastOpened()->first();
 
         return $this->buildResponse()
             ->setData($lastOpenedCashDrawer)

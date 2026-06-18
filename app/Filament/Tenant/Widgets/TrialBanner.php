@@ -19,7 +19,8 @@ class TrialBanner extends Widget
             return;
         }
 
-        $subscription = Subscription::where('tenant_id', $user->tenant_id)
+        $subscription = Subscription::select('id', 'tenant_id', 'status', 'trial_ends_at')
+            ->where('tenant_id', $user->tenant_id)
             ->where('status', 'trialing')
             ->latest()
             ->first();

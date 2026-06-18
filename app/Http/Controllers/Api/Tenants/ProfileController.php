@@ -49,7 +49,7 @@ class ProfileController extends Controller
             );
 
             if ($request->filled('uploaded_file_id')) {
-                $tmpFile = UploadedFile::find($request->uploaded_file_id);
+                $tmpFile = UploadedFile::select('id', 'name', 'relative_path', 'url', 'disk', 'path')->find($request->uploaded_file_id);
 
                 if ($tmpFile && $tmpFile->relative_path !== $profile->photo) {
                     $relativePath = $tmpFile->moveToPublic('profile', $profile->photo ?: null);

@@ -17,7 +17,7 @@ class ProductService
     {
         $uploadedHeroImages = [];
 
-        $items = UploadedFile::whereIn('id', $uploadedFileIds)->get()->keyBy('id');
+        $items = UploadedFile::select('id', 'name', 'relative_path', 'url', 'disk', 'path')->whereIn('id', $uploadedFileIds)->get()->keyBy('id');
 
         foreach ($uploadedFileIds as $id) {
             $item = $items->get($id);
@@ -28,8 +28,8 @@ class ProductService
         }
 
         foreach ($product->hero_images as $image) {
-            $uploadedFile = UploadedFile::where('relative_path', $image)->first()
-                ?? UploadedFile::where('url', $image)->first();
+            $uploadedFile = UploadedFile::select('id', 'name', 'relative_path', 'url', 'disk', 'path')->where('relative_path', $image)->first()
+                ?? UploadedFile::select('id', 'name', 'relative_path', 'url', 'disk', 'path')->where('url', $image)->first();
             if ($uploadedFile) {
                 $uploadedFile->deleteFromPublic('product');
             }
@@ -77,8 +77,8 @@ class ProductService
     public function handleDeleteUploadedFile(array $heroImages): void
     {
         foreach ($heroImages as $heroImage) {
-            $uploadedFile = UploadedFile::where('relative_path', $heroImage)->first()
-                ?? UploadedFile::where('url', $heroImage)->first();
+            $uploadedFile = UploadedFile::select('id', 'name', 'relative_path', 'url', 'disk', 'path')->where('relative_path', $heroImage)->first()
+                ?? UploadedFile::select('id', 'name', 'relative_path', 'url', 'disk', 'path')->where('url', $heroImage)->first();
 
             if ($uploadedFile) {
                 $uploadedFile->deleteFromPublic('product');

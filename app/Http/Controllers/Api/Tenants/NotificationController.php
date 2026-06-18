@@ -43,7 +43,7 @@ class NotificationController extends Controller
                     ->present();
             }
 
-            $notification = User::find(auth()->id())
+            $notification = User::select('id')->find(auth()->id())
                 ->notifications()
                 ->where('id', $notification)
                 ->first();

@@ -21,7 +21,7 @@ class AboutResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $owner = User::owner()->first();
+        $owner = User::select('id', 'name')->owner()->first();
         $uploadDisk = config('filesystems.upload_disk');
         $photo = $this?->photo;
         if ($photo && Str::startsWith($photo, ['http://', 'https://'])) {

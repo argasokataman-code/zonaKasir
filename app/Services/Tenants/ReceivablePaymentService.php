@@ -70,7 +70,7 @@ class ReceivablePaymentService
     {
         $receivable = $receivablePayment->receivable;
         $receivable->rest_receivable = $receivable->rest_receivable + $receivablePayment->amount;
-        $receivable->last_billing_date = $receivable->receivablePayments()->latest('date')->first()->date;
+        $receivable->last_billing_date = $receivable->receivablePayments()->select('id', 'date', 'amount')->latest('date')->first()->date;
         $receivable->status = false;
         $receivable->save();
         $receivablePayment->delete();

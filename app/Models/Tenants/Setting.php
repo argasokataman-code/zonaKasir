@@ -20,7 +20,7 @@ class Setting extends Model
         $cacheKey = 'setting_'.$key;
         $result = null;
         if (! Cache::get('setting_'.$key)) {
-            $setting = self::where('key', $key)->first();
+            $setting = self::select('id', 'key', 'value')->where('key', $key)->first();
 
             $result = $setting ? $setting->value ?? $default : $default;
 
@@ -34,7 +34,7 @@ class Setting extends Model
 
     public static function set($key, $value)
     {
-        $old = self::where('key', $key)->first();
+        $old = self::select('id', 'key', 'value')->where('key', $key)->first();
 
         self::updateOrCreate(
             ['key' => $key],

@@ -191,7 +191,7 @@ class ProductRequest extends FormRequest
         if ($this->filled('hero_images_uploaded_file_id')) {
             $uploadedFileId = $this->hero_images_uploaded_file_id;
 
-            $existingFile = UploadedFile::find($uploadedFileId);
+            $existingFile = UploadedFile::select('id', 'name', 'relative_path', 'url', 'disk', 'path')->find($uploadedFileId);
 
             if ($existingFile && $existingFile->relative_path !== ($product->hero_images[0] ?? '')) {
                 $productService = new ProductService();
@@ -206,7 +206,7 @@ class ProductRequest extends FormRequest
     {
         $uploadDisk = config('filesystems.upload_disk');
         $product = $this->route('product');
-        $images = ProductImage::where('product_id', $product->id)->get();
+        $images = ProductImage::select('id', 'product_id', 'name')->where('product_id', $product->id)->get();
         foreach ($images as $image) {
             if (Storage::disk($uploadDisk)->exists($image->name)) {
                 Storage::disk($uploadDisk)->delete($image->name);

@@ -16,7 +16,7 @@ class TransactionStats extends BaseWidget
 
     protected function getStats(): array
     {
-        $timezone = Profile::get()->timezone ?? 'UTC';
+        $timezone = Profile::select('timezone')->first()->timezone ?? 'UTC';
         $startOfDay = now($timezone)->startOfDay()->setTimezone('UTC');
         $endOfDay = $startOfDay->copy()->addDay();
         $startOfYesterday = $startOfDay->copy()->subDay();
