@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'd40fe722'; // bumped: simplified flow, refreshCart in same request
+const CACHE_VERSION = 'db010ea0'; // bumped: simplified flow, refreshCart in same request
 const STATIC_CACHE = `zonakasir-static-${CACHE_VERSION}`;
 const PAGES_CACHE = `zonakasir-pages-${CACHE_VERSION}`;
 const API_CACHE = `zonakasir-api-${CACHE_VERSION}`;

@@ -317,7 +317,7 @@
         @forelse ($products as $product)
           <div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
             {{-- Image --}}
-            <div class="relative aspect-[3/2] overflow-hidden bg-gray-100 dark:bg-gray-700">
+            <div class="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-gray-700">
               @php $heroImage = $product->heroImage; @endphp
               @if ($heroImage)
                 <img src="{{ $heroImage }}" alt="{{ $product->name }}" class="h-full w-full object-cover transition-transform group-hover:scale-105">
@@ -340,31 +340,31 @@
                 @endif
 
               {{-- Cart quantity badge --}}
-              <span x-show="cartQty[{{ $product->id }}]" x-cloak class="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm" x-text="cartQty[{{ $product->id }}]"></span>
+              <span x-show="cartQty[{{ $product->id }}]" x-cloak class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm" x-text="cartQty[{{ $product->id }}]"></span>
             </div>
 
             {{-- Info --}}
-            <div class="flex flex-1 flex-col justify-between px-2.5 py-2">
+            <div class="flex flex-1 flex-col justify-between p-3">
               <div>
-                <p class="text-[11px] font-medium text-gray-500 dark:text-gray-400">{{ $product->sku }}</p>
-                <h3 class="mt-0.5 leading-tight text-xs font-semibold text-gray-900 dark:text-white line-clamp-2">{{ $product->name }}</h3>
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{{ $product->sku }}</p>
+                <h3 class="mt-0.5 text-sm font-semibold leading-tight text-gray-900 dark:text-white line-clamp-2">{{ $product->name }}</h3>
               </div>
-              <div class="mt-1.5 flex items-center">
-                <span class="text-xs font-bold text-zonakasir-primary">{{ price_format($product->sellingPriceCalculate) }}</span>
-                <div class="ml-auto flex items-center justify-end min-w-[76px] min-h-[36px]">
+              <div class="mt-2 flex items-center">
+                <span class="text-sm font-bold text-zonakasir-primary">{{ price_format($product->sellingPriceCalculate) }}</span>
+                <div class="ml-auto flex items-center justify-end min-w-[128px] min-h-[44px]">
                   <button x-show="!cartQty[{{ $product->id }}]" @click="instantAdd({{ $product->id }})"
-                    class="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
-                    <x-heroicon-o-plus class="h-4 w-4" />
+                    class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                    <x-heroicon-o-plus class="h-5 w-5" />
                   </button>
-                  <div x-show="cartQty[{{ $product->id }}]" x-cloak class="flex items-center gap-[2px]">
+                  <div x-show="cartQty[{{ $product->id }}]" x-cloak class="flex items-center gap-1">
                     <button @click="instantReduce({{ $product->id }})"
-                      class="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
-                      <x-heroicon-o-minus-small class="h-4 w-4" />
+                      class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
+                      <x-heroicon-o-minus-small class="h-5 w-5" />
                     </button>
-                    <span class="w-5 text-center text-xs font-semibold text-zonakasir-primary" x-text="cartQty[{{ $product->id }}]"></span>
+                    <span class="w-8 text-center text-sm font-semibold text-zonakasir-primary" x-text="cartQty[{{ $product->id }}]"></span>
                     <button @click="instantAdd({{ $product->id }})"
-                      class="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
-                      <x-heroicon-o-plus-small class="h-4 w-4" />
+                      class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                      <x-heroicon-o-plus-small class="h-5 w-5" />
                     </button>
                   </div>
                 </div>
@@ -408,7 +408,7 @@
         {{-- Offline Product Cards --}}
         <template x-for="product in filteredOfflineProducts" :key="product.id">
           <div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
-            <div class="relative aspect-[3/2] overflow-hidden bg-gray-100 dark:bg-gray-700">
+            <div class="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-gray-700">
               <template x-if="product.hero_images_url">
                 <img :src="product.hero_images_url" :alt="product.name" class="h-full w-full object-cover transition-transform group-hover:scale-105">
               </template>
@@ -433,34 +433,34 @@
 
               {{-- Cart quantity badge --}}
               <template x-if="offlineCart[product.id] && offlineCart[product.id].qty > 0">
-                <span class="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm" x-text="offlineCart[product.id].qty"></span>
+                <span class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm" x-text="offlineCart[product.id].qty"></span>
               </template>
             </div>
 
-            <div class="flex flex-1 flex-col justify-between px-2.5 py-2">
+            <div class="flex flex-1 flex-col justify-between p-3">
               <div>
-                <p class="text-[11px] font-medium text-gray-500 dark:text-gray-400" x-text="product.sku"></p>
-                <h3 class="mt-0.5 leading-tight text-xs font-semibold text-gray-900 dark:text-white line-clamp-2" x-text="product.name"></h3>
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-400" x-text="product.sku"></p>
+                <h3 class="mt-0.5 text-sm font-semibold leading-tight text-gray-900 dark:text-white line-clamp-2" x-text="product.name"></h3>
               </div>
-              <div class="mt-1.5 flex items-center">
-                <span class="text-xs font-bold text-zonakasir-primary" x-text="'Rp ' + (product.selling_price_calculate || product.selling_price || 0).toLocaleString('id-ID')"></span>
-                <div class="ml-auto flex items-center justify-end min-w-[76px] min-h-[36px]">
+              <div class="mt-2 flex items-center">
+                <span class="text-sm font-bold text-zonakasir-primary" x-text="'Rp ' + (product.selling_price_calculate || product.selling_price || 0).toLocaleString('id-ID')"></span>
+                <div class="ml-auto flex items-center justify-end min-w-[128px] min-h-[44px]">
                   <template x-if="!offlineCart[product.id] || offlineCart[product.id].qty === 0">
                     <button @click="offlineAddToCart(product.id)"
-                      class="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
-                      <x-heroicon-o-plus class="h-4 w-4" />
+                      class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                      <x-heroicon-o-plus class="h-5 w-5" />
                     </button>
                   </template>
                   <template x-if="offlineCart[product.id] && offlineCart[product.id].qty > 0">
-                    <div class="flex items-center gap-[2px]">
+                    <div class="flex items-center gap-1">
                       <button @click="offlineRemoveFromCart(product.id)"
-                        class="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
-                        <x-heroicon-o-minus-small class="h-4 w-4" />
+                        class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
+                        <x-heroicon-o-minus-small class="h-5 w-5" />
                       </button>
-                      <span class="w-5 text-center text-xs font-semibold text-zonakasir-primary" x-text="offlineCart[product.id].qty"></span>
+                      <span class="w-8 text-center text-sm font-semibold text-zonakasir-primary" x-text="offlineCart[product.id].qty"></span>
                       <button @click="offlineAddToCart(product.id)"
-                        class="flex min-h-[36px] min-w-[36px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
-                        <x-heroicon-o-plus-small class="h-4 w-4" />
+                        class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                        <x-heroicon-o-plus-small class="h-5 w-5" />
                       </button>
                     </div>
                   </template>
