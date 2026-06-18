@@ -20,6 +20,9 @@ class AdjustProduct
         }
 
         if ($products->count() > 0) {
+            // Eager load stocks once — cache for 3 accessor calls per product
+            $products->each(fn (Product $p) => $p->cacheStockLatest());
+
             $products->each(function (Product $product) {
                 $product->stock = $product->stock_calculate;
                 $product->initial_price = $product->initial_price_calculate ?? $product->initial_price;
