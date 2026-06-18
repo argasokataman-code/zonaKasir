@@ -24,28 +24,28 @@ class SalesChart extends ChartWidget
     protected function getData(): array
     {
         $timezone = Profile::get()->timezone ?? 'UTC';
+        $startUtc = now($timezone)->subDays(6)->startOfDay()->setTimezone('UTC');
+        $endUtc = now($timezone)->addDay()->startOfDay()->setTimezone('UTC');
+
+        // Single grouped query instead of 7 separate queries
+        $dailyData = Selling::query()
+            ->select(
+                DB::raw('DATE(created_at) as date'),
+                DB::raw('COALESCE(SUM(total_price - tax_price - total_discount_per_item - discount_price - total_cost), 0) as net_revenue'),
+                DB::raw('COUNT(*) as total')
+            )
+            ->isPaid()
+            ->whereBetween('created_at', [$startUtc, $endUtc])
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->get()
+            ->keyBy('date');
+
         $labels = [];
         $revenue = [];
-        $transactions = [];
-
         for ($i = 6; $i >= 0; $i--) {
-            $date = now($timezone)->subDays($i)->startOfDay();
-            $labels[] = $date->format('d M');
-
-            $startUtc = $date->copy()->setTimezone('UTC');
-            $endUtc = $startUtc->copy()->addDay();
-
-            $selling = Selling::query()
-                ->select(
-                    DB::raw('COALESCE(SUM(total_price - tax_price - total_discount_per_item - discount_price - total_cost), 0) as net_revenue'),
-                    DB::raw('COUNT(*) as total')
-                )
-                ->isPaid()
-                ->whereBetween('created_at', [$startUtc, $endUtc])
-                ->first();
-
-            $revenue[] = round($selling->net_revenue / 1000);
-            $transactions[] = $selling->total;
+            $date = now($timezone)->subDays($i)->startOfDay()->format('Y-m-d');
+            $labels[] = now($timezone)->subDays($i)->startOfDay()->format('d M');
+            $revenue[] = round(($dailyData->get($date)->net_revenue ?? 0) / 1000);
         }
 
         return [

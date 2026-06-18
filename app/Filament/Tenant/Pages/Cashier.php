@@ -86,16 +86,20 @@ class Cashier extends Page implements HasForms
 
     public function mount(): void
     {
-        $this->about = About::first() ?? null;
+        $this->about = About::select('id', 'shop_name', 'business_type')->first() ?? null;
 
         $this->tax = (float) Setting::get('default_tax', 0);
 
         $this->currency = Setting::get('currency', 'IDR');
 
-        $this->locale = Profile::get()->locale ?? 'en';
+        $this->locale = Profile::select('locale')->first()->locale ?? 'en';
 
         $this->cartItems = CartItem::query()
-            ->with('product')
+            ->select('id', 'product_id', 'qty', 'price', 'discount_price', 'price_unit_id', 'created_at')
+            ->with([
+                'product:id,name,sku,selling_price,is_non_stock,hero_images',
+                'priceUnit:id,selling_price',
+            ])
             ->orderByDesc('created_at')
             ->cashier()
             ->get();
@@ -127,7 +131,7 @@ class Cashier extends Page implements HasForms
 
         $this->fillPaymentMethodLabel();
 
-        $this->categories = Category::all();
+        $this->categories = Category::select('id', 'name')->get();
         $this->loadProducts();
     }
 
@@ -139,7 +143,11 @@ class Cashier extends Page implements HasForms
     protected function refreshCart(): void
     {
         $this->cartItems = CartItem::query()
-            ->with('product', 'priceUnit')
+            ->select('id', 'product_id', 'qty', 'price', 'discount_price', 'price_unit_id', 'created_at')
+            ->with([
+                'product:id,name,sku,selling_price,is_non_stock,hero_images',
+                'priceUnit:id,selling_price',
+            ])
             ->orderByDesc('created_at')
             ->cashier()
             ->get();
@@ -191,7 +199,14 @@ class Cashier extends Page implements HasForms
             $query->where('category_id', $this->selectedCategory);
         }
 
-        $this->products = $query->with(['stocks' => fn ($q) => $q->where('is_ready', 1)->where('type', 'in')])->get();
+        $this->products = $query
+            ->select('id', 'name', 'sku', 'selling_price', 'is_non_stock', 'category_id', 'hero_images')
+            ->with([
+                'stocks' => fn ($q) => $q->select('product_id', 'stock', 'type')
+                    ->where('is_ready', 1)->where('type', 'in'),
+                'category:id,name',
+            ])
+            ->get();
     }
 
     public function updatedSearch(): void

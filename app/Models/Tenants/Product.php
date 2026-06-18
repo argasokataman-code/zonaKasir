@@ -61,9 +61,29 @@ class Product extends Model
 
     public function scopeStockLatestCalculateIn()
     {
-        // Return cached result if available (after eager load)
+        // Return cached result if available (after cacheStockLatest())
         if ($this->_cachedStockLatest !== null) {
             return $this->_cachedStockLatest;
+        }
+
+        // Use eager-loaded stocks if available — avoids N+1 fresh query
+        if ($this->relationLoaded('stocks')) {
+            $usingFifoPrice = Setting::get('selling_method', env('SELLING_METHOD', 'fifo')) == 'fifo';
+            $usingNormalPrice = Setting::get('selling_method', env('SELLING_METHOD', 'fifo')) == 'normal';
+            $usingLifoPrice = Setting::get('selling_method', env('SELLING_METHOD', 'fifo')) == 'lifo';
+
+            $stocks = $this->stocks->where('type', 'in');
+            if ($usingFifoPrice || $usingLifoPrice) {
+                $stocks = $stocks->where('stock', '>', 0);
+            }
+            if ($usingNormalPrice) {
+                $stocks = $stocks->sortBy('date')->values();
+            } elseif ($usingLifoPrice) {
+                $stocks = $stocks->sortByDesc('created_at')->sortByDesc('date')->values();
+            } else {
+                $stocks = $stocks->sortBy('created_at')->sortBy('date')->values();
+            }
+            return $stocks;
         }
 
         $usingFifoPrice = Setting::get('selling_method', env('SELLING_METHOD', 'fifo')) == 'fifo';

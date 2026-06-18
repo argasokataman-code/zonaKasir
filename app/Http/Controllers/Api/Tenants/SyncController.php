@@ -54,9 +54,25 @@ class SyncController extends Controller
             $products->where('updated_at', '>', $since);
         }
 
-        $products = $products->get()->append(['selling_price_calculate', 'stock_calculate']);
+        $products = $products
+            ->select('id', 'name', 'sku', 'selling_price', 'is_non_stock', 'category_id', 'hero_images', 'updated_at')
+            ->with(['category:id,name', 'primaryBarcode:product_id,code'])
+            ->get()
+            ->map(fn (Product $p) => [
+                'id' => $p->id,
+                'name' => $p->name,
+                'sku' => $p->sku,
+                'barcode' => $p->primaryBarcode->first()?->code ?? null,
+                'selling_price' => $p->selling_price,
+                'selling_price_calculate' => $p->selling_price_calculate ?? $p->selling_price,
+                'stock_calculate' => $p->stock_calculate,
+                'is_non_stock' => $p->is_non_stock,
+                'category_id' => $p->category_id,
+                'category_name' => $p->category?->name ?? '',
+                'hero_image' => $p->hero_image,
+            ]);
 
-        $categories = Category::query();
+        $categories = Category::query()->select('id', 'name');
         $members = Member::query()->select('id', 'name', 'code', 'phone');
         $paymentMethods = PaymentMethod::query()->select('id', 'name', 'is_credit', 'payment_type')->where('is_active', true);
 
@@ -68,7 +84,7 @@ class SyncController extends Controller
 
         $settings = [
             'currency' => Setting::get('currency', 'IDR'),
-            'locale' => Profile::get()->locale ?? 'en',
+            'locale' => Profile::select('locale')->first()->locale ?? 'en',
             'default_tax' => (float) Setting::get('default_tax', 0),
         ];
 
@@ -85,7 +101,7 @@ class SyncController extends Controller
             'members' => $members->get(),
             'payment_methods' => $paymentMethods->get(),
             'vouchers' => $vouchers,
-            'about' => About::first(),
+            'about' => About::select('id', 'shop_name', 'shop_location', 'business_type', 'owner_name')->first(),
             'settings' => $settings,
             'tables' => $tables,
             'is_delta' => $isDelta,
