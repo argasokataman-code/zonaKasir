@@ -86,13 +86,13 @@ class Cashier extends Page implements HasForms
 
     public function mount(): void
     {
-        $this->about = About::select('id', 'shop_name', 'business_type')->first() ?? null;
+        $this->about = About::select('id', 'shop_name', 'shop_location', 'business_type')->first() ?? null;
 
         $this->tax = (float) Setting::get('default_tax', 0);
 
         $this->currency = Setting::get('currency', 'IDR');
 
-        $this->locale = Profile::select('locale')->first()->locale ?? 'en';
+        $this->locale = Profile::select('locale')->first()?->locale ?? 'en';
 
         $this->cartItems = CartItem::query()
             ->select('id', 'product_id', 'qty', 'price', 'discount_price', 'price_unit_id', 'created_at')
@@ -202,7 +202,7 @@ class Cashier extends Page implements HasForms
         $this->products = $query
             ->select('id', 'name', 'sku', 'selling_price', 'is_non_stock', 'category_id', 'hero_images')
             ->with([
-                'stocks' => fn ($q) => $q->select('product_id', 'stock', 'type')
+                'stocks' => fn ($q) => $q->select('product_id', 'stock', 'type', 'initial_price', 'selling_price', 'date', 'created_at')
                     ->where('is_ready', 1)->where('type', 'in'),
                 'category:id,name',
             ])
@@ -282,7 +282,11 @@ class Cashier extends Page implements HasForms
         return [
             'products' => Product::query()
                 ->select('id', 'name', 'sku', 'selling_price', 'is_non_stock', 'category_id', 'hero_images')
-                ->with('category:id,name', 'primaryBarcode:product_id,code')
+                ->with([
+                    'category:id,name',
+                    'primaryBarcode:product_id,code',
+                    'stocks:product_id,stock,type,initial_price,selling_price,date,created_at',
+                ])
                 ->orderByDesc('created_at')
                 ->get()
                 ->map(fn (Product $p) => [
