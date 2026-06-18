@@ -67,7 +67,6 @@ trait CartInteraction
                 ]
             );
 
-        $this->dispatch('cart-updated');
         $this->refreshCart();
     }
 

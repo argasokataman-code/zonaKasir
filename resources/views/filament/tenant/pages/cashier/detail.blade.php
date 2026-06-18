@@ -31,7 +31,7 @@
           id: 'modal-selected-table'
         })">
       <p>{{ __('Table') }}</p>
-      <div>{!! $cartDetail['table_id'] ?? '-' !!}</div>
+      <div>{{ ($cartDetail['table_id'] ?? false) ? __('Table') . ' ' . $cartDetail['table_id'] : '-' }}</div>
     </div>
   @endif
   @feature(Voucher::class)
