@@ -10,7 +10,7 @@ class PrinterController extends Controller
     public function index()
     {
         return $this->buildResponse()
-            ->setData(Printer::all())
+            ->setData(Printer::select('id', 'name', 'ip_address', 'port', 'driver')->get())
             ->setMessage('Data retrieved successfully')
             ->present();
     }

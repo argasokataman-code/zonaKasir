@@ -35,7 +35,7 @@ class PaymentTransactions extends Page
 
     public function loadTransactions(): void
     {
-        $tenants = Tenant::all();
+        $tenants = Tenant::select('id', 'data')->get();
         $tenantMap = [];
         foreach ($tenants as $t) {
             $data = is_string($t->data) ? json_decode($t->data, true) : $t->data;
@@ -43,6 +43,7 @@ class PaymentTransactions extends Page
         }
 
         $payments = MidtransPayment::withoutGlobalScope('tenant')
+            ->select('id', 'tenant_id', 'order_id', 'gross_amount', 'fee_midtrans', 'fee_platform', 'net_amount', 'status', 'payment_type', 'payment_channel', 'selling_id', 'created_at', 'paid_at')
             ->orderBy('created_at', 'desc')
             ->limit(50)
             ->get();
@@ -67,6 +68,7 @@ class PaymentTransactions extends Page
         $settled = $payments->filter(fn ($p) => in_array($p->status, ['settlement', 'capture']));
         $pending = $payments->filter(fn ($p) => $p->status === 'pending');
         $allSettled = MidtransPayment::withoutGlobalScope('tenant')
+            ->select('id', 'gross_amount', 'fee_midtrans', 'fee_platform', 'net_amount', 'status')
             ->whereIn('status', ['settlement', 'capture'])
             ->get();
 

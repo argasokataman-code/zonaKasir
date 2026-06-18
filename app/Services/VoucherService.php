@@ -16,7 +16,8 @@ class VoucherService
     {
         $now = now();
         /** @var Voucher $voucher */
-        $voucher = Voucher::whereCode($code)
+        $voucher = Voucher::select('id', 'code', 'type', 'nominal', 'minimal_buying', 'start_date', 'expired', 'kuota', 'used')
+            ->whereCode($code)
             ->first();
         if (! $voucher) {
             Log::warning("Voucher not found: {$code}");

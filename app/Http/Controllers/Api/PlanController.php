@@ -13,7 +13,8 @@ class PlanController extends Controller
     public function index(): JsonResponse
     {
         $plans = Cache::remember('pricing_plans', 3600, function () {
-            return Plan::where('is_active', true)
+            return Plan::select('id', 'name', 'slug', 'price_monthly', 'price_yearly', 'features', 'max_stores', 'max_users', 'is_active')
+                ->where('is_active', true)
                 ->orderByRaw("CASE WHEN slug = 'on-premise' THEN 1 ELSE 0 END")
                 ->orderBy('price_monthly')
                 ->get()

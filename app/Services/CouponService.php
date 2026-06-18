@@ -10,7 +10,7 @@ class CouponService
 {
     public function redeem(string $code, string|int $tenantId): array
     {
-        $coupon = Coupon::where('code', $code)->first();
+        $coupon = Coupon::select('id', 'code', 'type', 'value', 'trial_days', 'used_count', 'max_redemptions', 'expires_at')->where('code', $code)->first();
 
         if (! $coupon) {
             throw new Exception('Kode kupon tidak ditemukan');
@@ -36,7 +36,8 @@ class CouponService
 
     private function applyTrialExtension(Coupon $coupon, string|int $tenantId): array
     {
-        $subscription = Subscription::where('tenant_id', $tenantId)
+        $subscription = Subscription::select('id', 'status', 'tenant_id', 'trial_ends_at', 'ends_at')
+            ->where('tenant_id', $tenantId)
             ->whereIn('status', ['trialing', 'active'])
             ->latest()
             ->first();

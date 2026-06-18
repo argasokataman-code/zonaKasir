@@ -43,7 +43,7 @@ class SubscriptionWebhookController extends Controller
         $transactionStatus = $payload['transaction_status'] ?? '';
         $transactionId = $payload['transaction_id'] ?? '';
 
-        $subscription = Subscription::find((int) $subscriptionId);
+        $subscription = Subscription::select('id', 'tenant_id', 'plan_id', 'status', 'billing_cycle', 'ends_at', 'starts_at')->find((int) $subscriptionId);
 
         if (! $subscription) {
             Log::error('Subscription not found', ['subscription_id' => $subscriptionId]);
@@ -51,7 +51,7 @@ class SubscriptionWebhookController extends Controller
             return response()->json(['error' => 'Subscription not found'], 404);
         }
 
-        $invoice = $subscription->invoices()->latest()->first();
+        $invoice = $subscription->invoices()->select('id', 'midtrans_order_id', 'midtrans_transaction_id', 'midtrans_notification_payload', 'status', 'target_plan_id')->latest()->first();
 
         if (! $invoice) {
             Log::error('Invoice not found for subscription', [

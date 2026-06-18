@@ -96,7 +96,7 @@ class SellingResource extends Resource
             ->filters([
                 SelectFilter::make('user_id')
                     ->label(__('Cashier'))
-                    ->options(User::select('id', 'name')->get()->mapWithKeys(fn (User $user) => [$user->id => $user->cashier_name])),
+                    ->options(User::select('id', 'name', 'email')->get()->mapWithKeys(fn (User $user) => [$user->id => $user->cashier_name])),
                 Filter::make('date')
                     ->form([
                         DatePicker::make('start_date')

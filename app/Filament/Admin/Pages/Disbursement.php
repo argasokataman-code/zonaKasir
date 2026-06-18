@@ -75,7 +75,7 @@ class Disbursement extends Page
 
     public function loadWithdrawals(): void
     {
-        $tenants = \App\Tenant::all();
+        $tenants = \App\Tenant::select('id', 'data')->get();
         $tenantMap = [];
         foreach ($tenants as $t) {
             $data = is_string($t->data) ? json_decode($t->data, true) : $t->data;
@@ -83,6 +83,7 @@ class Disbursement extends Page
         }
 
         $allWithdrawals = Withdrawal::withoutGlobalScope('tenant')
+            ->select('id', 'tenant_id', 'type', 'amount', 'fee_amount', 'status', 'bank_name', 'bank_code', 'bank_account_name', 'bank_account_number', 'disburse_id', 'created_at', 'processed_at')
             ->orderBy('created_at', 'desc')
             ->limit(200)
             ->get();

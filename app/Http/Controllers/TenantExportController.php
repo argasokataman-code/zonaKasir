@@ -9,7 +9,9 @@ class TenantExportController extends Controller
 {
     public function csv()
     {
-        $tenants = Tenant::with('domains')->latest()->get();
+        $tenants = Tenant::select('id', 'data', 'is_active', 'created_at')
+            ->with('domains:id,tenant_id,domain')
+            ->latest()->get();
 
         $filename = 'tenants-' . now()->format('Y-m-d') . '.csv';
         $headers = [
