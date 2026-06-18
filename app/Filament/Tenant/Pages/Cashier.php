@@ -38,7 +38,6 @@ class Cashier extends Page implements HasForms
 
     protected static string $layout = 'filament-panels::components.layout.base';
 
-    protected $listeners = ['cart-updated' => 'refreshCart'];
     public Collection $cartItems;
 
     public int $cartCount = 0;

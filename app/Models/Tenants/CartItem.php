@@ -4,13 +4,9 @@ namespace App\Models\Tenants;
 
 use Filament\Facades\Filament;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use App\Models\Tenants\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 /**
  * @mixin IdeHelperCartItem
@@ -64,23 +60,6 @@ class CartItem extends Model
     public function getDiscountPriceFormatAttribute()
     {
         return price_format($this->discount_price);
-    }
-
-    public function heroImage(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                if ($this->product?->hero_images && count($this->product->hero_images) > 0) {
-                    $path = $this->product->hero_images[0];
-                    if (Str::startsWith($path, ['http://', 'https://'])) {
-                        return $path;
-                    }
-                    $uploadDisk = config('filesystems.upload_disk');
-                    return UploadedFile::urlFromPath($path, $uploadDisk);
-                }
-                return 'https://cdn4.iconfinder.com/data/icons/picture-sharing-sites/32/No_Image-1024.png';
-            }
-        );
     }
 
     public function priceUnit(): BelongsTo
