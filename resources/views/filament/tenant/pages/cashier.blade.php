@@ -707,7 +707,7 @@
                   wire:click.stop="addCart( {{ $item->product_id }} )" wire:loading.attr="disabled">
                   <x-heroicon-o-plus-small class="h-3.5 w-3.5 !text-white" />
                 </button>
-                <x-filament::input.wrapper class="w-16" x-data="cart">
+                <x-filament::input.wrapper class="w-16">
                   <x-filament::input type="text"
                     id="{{ $item->product->name }}-{{ $item->id }}-qty-{{ rand() }}"
                     data-value="{{ $item->qty }}" value="{{ $item->qty }}"
