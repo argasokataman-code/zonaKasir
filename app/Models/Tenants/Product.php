@@ -39,6 +39,9 @@ class Product extends Model
 
     private int $expiredDay = 20;
 
+    /** Cached result of stockLatestCalculateIn() to avoid N+1 re-queries. */
+    private ?\Illuminate\Database\Eloquent\Collection $_cachedStockLatest = null;
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
@@ -58,11 +61,16 @@ class Product extends Model
 
     public function scopeStockLatestCalculateIn()
     {
+        // Return cached result if available (after eager load)
+        if ($this->_cachedStockLatest !== null) {
+            return $this->_cachedStockLatest;
+        }
+
         $usingFifoPrice = Setting::get('selling_method', env('SELLING_METHOD', 'fifo')) == 'fifo';
         $usingNormalPrice = Setting::get('selling_method', env('SELLING_METHOD', 'fifo')) == 'normal';
         $usingLifoPrice = Setting::get('selling_method', env('SELLING_METHOD', 'fifo')) == 'lifo';
 
-        return $this
+        $query = $this
             ->stocks()
             ->where('type', 'in')
             ->when($usingNormalPrice, fn(Builder $query) => $query->orderBy('date')->latest())
@@ -72,6 +80,18 @@ class Product extends Model
             ->when($usingLifoPrice, fn(Builder $query) => $query
                 ->where('stock', '>', 0)
                 ->orderByDesc('created_at')->orderByDesc('date'));
+
+        return $query;
+    }
+
+    /**
+     * Cache stockLatestCalculateIn result for this model instance.
+     * Call after eager loading stocks to prevent N+1 re-queries
+     * across stock_calculate, initial_price_calculate, selling_price_calculate.
+     */
+    public function cacheStockLatest(): void
+    {
+        $this->_cachedStockLatest = $this->stockLatestCalculateIn()->get();
     }
 
     public function stockCalculate(): Attribute
