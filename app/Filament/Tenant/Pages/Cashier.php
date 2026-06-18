@@ -132,6 +132,34 @@ class Cashier extends Page implements HasForms
         $this->loadProducts();
     }
 
+    /**
+     * Lightweight refresh after cart actions (add/reduce/delete/update/clear).
+     * Only re-queries cart items + recalculates totals — no products/categories/etc.
+     * 2 DB queries vs mount()'s 15+.
+     */
+    protected function refreshCart(): void
+    {
+        $this->cartItems = CartItem::query()
+            ->with('product', 'priceUnit')
+            ->orderByDesc('created_at')
+            ->cashier()
+            ->get();
+
+        $this->cartCount = $this->cartItems->count();
+
+        $this->calculateTotalPrice();
+
+        $this->loadAvailableVouchers();
+
+        $this->storeCartForm->fill(array_merge($this->cartDetail, [
+            'payment_method_id' => $this->cartDetail['payment_method_id'] ?? 1,
+            'total_price' => $this->total_price,
+            'friend_price' => $this->cartDetail['friend_price'] ?? false,
+        ]));
+
+        $this->fillPaymentMethodLabel();
+    }
+
     public function loadProducts(): void
     {
         $query = Product::query()
@@ -164,7 +192,7 @@ class Cashier extends Page implements HasForms
             $query->where('category_id', $this->selectedCategory);
         }
 
-        $this->products = $query->get();
+        $this->products = $query->with(['stocks' => fn ($q) => $q->where('is_ready', 1)->where('type', 'in')])->get();
     }
 
     public function updatedSearch(): void

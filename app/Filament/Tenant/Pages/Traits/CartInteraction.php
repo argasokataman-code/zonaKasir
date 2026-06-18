@@ -17,7 +17,6 @@ trait CartInteraction
                 ->title(__('Stock is out'))
                 ->danger()
                 ->send();
-            $this->mount();
 
             return false;
         }
@@ -37,7 +36,6 @@ trait CartInteraction
         } else {
             if (!$data['amount']) {
                 $this->deleteCart(CartItem::whereProductId($product->getKey())->first());
-                $this->mount();
                 return;
             }
             $qty = $data['amount'];
@@ -58,7 +56,7 @@ trait CartInteraction
                     'product_id' => $product->getKey(),
                 ]
             );
-        $this->mount();
+        $this->refreshCart();
     }
 
     public function reduceCart(Product $product)
@@ -70,7 +68,7 @@ trait CartInteraction
         if ($qty == 0) {
             $cartItem->delete();
 
-            $this->mount();
+            $this->refreshCart();
 
             return;
         }
@@ -80,13 +78,13 @@ trait CartInteraction
             'price' => $price,
         ]);
         $cartItem->save();
-        $this->mount();
+        $this->refreshCart();
     }
 
     public function deleteCart(CartItem $cartItem)
     {
         $cartItem->delete();
-        $this->mount();
+        $this->refreshCart();
     }
 
     public function addDiscountPricePerItem(CartItem $cartItem, $value)
@@ -97,14 +95,14 @@ trait CartInteraction
         $cartItem->discount_price = (float) $value;
 
         $cartItem->save();
-        $this->mount();
+        $this->refreshCart();
     }
 
     public function updateCart(CartItem $cartItem, $value)
     {
         if ((int) $value == 0) {
             $cartItem->delete();
-            $this->mount();
+            $this->refreshCart();
 
             return;
         }
@@ -114,7 +112,7 @@ trait CartInteraction
                 ->title(__('Stock is out'))
                 ->danger()
                 ->send();
-            $this->mount();
+            $this->refreshCart();
 
             return;
         }
@@ -124,7 +122,7 @@ trait CartInteraction
             'price' => $price,
         ]);
         $cartItem->save();
-        $this->mount();
+        $this->refreshCart();
     }
 
     public function clearCart()
@@ -137,7 +135,7 @@ trait CartInteraction
             ->title(__('Cart has been cleared'))
             ->success()
             ->send();
-        $this->mount();
+        $this->refreshCart();
     }
 
     public function addCartUsingScanner(string $value)
