@@ -677,7 +677,7 @@
           wire:target="addCart,reduceCart,deleteCart,addDiscountPricePerItem,addCartUsingScanner">
           @forelse($cartItems as $item)
             <div class="mb-2 rounded-lg border bg-white px-3 py-2 dark:border-gray-900 dark:bg-gray-900"
-              id="{{ $item->id }}" key="{{ rand() }}">
+              id="cart-item-{{ $item->id }}" key="cart-item-{{ $item->id }}">
               <div class="grid items-center space-x-3">
                 <div class="flex justify-between">
                   <p class="font-semibold text-sm"> {{ $item->product->name }}</p>
