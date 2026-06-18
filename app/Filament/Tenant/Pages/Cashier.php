@@ -38,6 +38,7 @@ class Cashier extends Page implements HasForms
 
     protected static string $layout = 'filament-panels::components.layout.base';
 
+    protected $listeners = ['cart-updated' => 'refreshCart'];
     public Collection $cartItems;
 
     public int $cartCount = 0;
@@ -165,6 +166,15 @@ class Cashier extends Page implements HasForms
         ]));
 
         $this->fillPaymentMethodLabel();
+
+        // Dispatch updated cart data to Alpine
+        $this->dispatch('cart-data-updated', [
+            'cartItems' => $this->cartItems->pluck('qty', 'product_id')->toArray(),
+            'cartCount' => $this->cartCount,
+            'totalPrice' => $this->total_price,
+            'subTotal' => $this->sub_total,
+            // Tambahkan data lain yang mungkin dibutuhkan Alpine di sini
+        ]);
     }
 
     public function loadProducts(): void
