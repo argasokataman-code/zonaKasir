@@ -96,7 +96,6 @@ class SyncController extends Controller
 
         $vouchers = Voucher::select('id', 'name', 'code', 'type', 'nominal', 'kuota', 'start_date', 'expired', 'minimal_buying')
             ->where('expired', '>=', now())
-            ->whereColumn('kuota', '>', DB::raw('used'))
             ->get();
 
         $response = [
