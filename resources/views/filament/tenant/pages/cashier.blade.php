@@ -21,6 +21,28 @@
   syncProgress: 0,
   syncStatus: '',
   showSyncSplash: false,
+  // Instant cart qty map — product_id => qty (synced from Livewire)
+  cartQty: {{ Js::from(collect($cartItems)->pluck('qty', 'product_id')->toArray()) }},
+
+  // Instant add — update badge instantly, sync server in background
+  instantAdd(productId) {
+    this.cartQty[productId] = (this.cartQty[productId] || 0) + 1;
+    if (navigator.onLine) $wire.addCart(productId);
+  },
+
+  instantReduce(productId) {
+    if ((this.cartQty[productId] || 0) > 0) {
+      this.cartQty[productId]--;
+      if (this.cartQty[productId] <= 0) delete this.cartQty[productId];
+    }
+    if (navigator.onLine) $wire.reduceCart(productId);
+  },
+
+  // Re-sync qty from Livewire after server response
+  syncCartQty() {
+    const items = {{ Js::from(collect($cartItems)->pluck('qty', 'product_id')->toArray()) }};
+    this.cartQty = items;
+  },
 
   async initOfflineDb() {
     if (this.offlineDb) return this.offlineDb;
@@ -286,10 +308,7 @@
                 @endif
 
               {{-- Cart quantity badge --}}
-              @php $cartQty = $cartItems->first(fn ($i) => $i->product_id === $product->id)?->qty ?? 0; @endphp
-              @if ($cartQty > 0)
-                <span class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm">{{ $cartQty }}</span>
-              @endif
+              <span x-show="cartQty[{{ $product->id }}]" x-cloak class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm" x-text="cartQty[{{ $product->id }}]"></span>
             </div>
 
             {{-- Info --}}
@@ -300,24 +319,21 @@
               </div>
               <div class="mt-2 flex items-center justify-between">
                 <span class="text-sm font-bold text-zonakasir-primary">{{ price_format($product->sellingPriceCalculate) }}</span>
-                @if ($cartQty === 0)
-                  <button wire:click="addCart({{ $product->id }})" wire:loading.attr="disabled"
-                    class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90 disabled:opacity-50">
-                    <x-heroicon-o-plus class="h-5 w-5" />
+                <button x-show="!cartQty[{{ $product->id }}]" @click="instantAdd({{ $product->id }})"
+                  class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                  <x-heroicon-o-plus class="h-5 w-5" />
+                </button>
+                <div x-show="cartQty[{{ $product->id }}]" x-cloak class="flex items-center gap-1">
+                  <button @click="instantReduce({{ $product->id }})"
+                    class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
+                    <x-heroicon-o-minus-small class="h-5 w-5" />
                   </button>
-                @else
-                  <div class="flex items-center gap-1">
-                    <button wire:click="reduceCart({{ $product->id }})" wire:loading.attr="disabled"
-                      class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
-                      <x-heroicon-o-minus-small class="h-5 w-5" />
-                    </button>
-                    <span class="w-8 text-center text-sm font-semibold text-zonakasir-primary">{{ $cartQty }}</span>
-                    <button wire:click="addCart({{ $product->id }})" wire:loading.attr="disabled"
-                      class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90 disabled:opacity-50">
-                      <x-heroicon-o-plus-small class="h-5 w-5" />
-                    </button>
-                  </div>
-                @endif
+                  <span class="w-8 text-center text-sm font-semibold text-zonakasir-primary" x-text="cartQty[{{ $product->id }}]"></span>
+                  <button @click="instantAdd({{ $product->id }})"
+                    class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                    <x-heroicon-o-plus-small class="h-5 w-5" />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
