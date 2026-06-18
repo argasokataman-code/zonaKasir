@@ -92,7 +92,7 @@ class TenantPanelProvider extends PanelProvider
 
         try {
             if (\Illuminate\Support\Facades\Schema::hasTable('abouts')) {
-                $about = \App\Models\Tenants\About::first();
+                $about = \App\Models\Tenants\About::select('id', 'shop_name')->first();
                 if ($about) {
                     $panel->brandName($about->shop_name ?? 'Your Brand')
                         ->brandLogo(asset('assets/logo/logo.svg'));
@@ -255,7 +255,7 @@ class TenantPanelProvider extends PanelProvider
     private function isNonFnbBusiness(): bool
     {
         try {
-            $about = About::first();
+            $about = About::select('id', 'business_type')->first();
 
             return $about && $about->business_type !== 'fnb';
         } catch (\Throwable) {

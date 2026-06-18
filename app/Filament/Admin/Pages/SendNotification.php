@@ -69,8 +69,8 @@ class SendNotification extends Page implements HasForms
         $body = $data['body'];
 
         $tenants = $target === 'all'
-            ? Tenant::where('is_active', true)->get()
-            : Tenant::where('id', $target)->get();
+            ? Tenant::select('id', 'is_active')->where('is_active', true)->get()
+            : Tenant::select('id', 'is_active')->where('id', $target)->get();
 
         if ($tenants->isEmpty()) {
             Notification::make()
@@ -125,7 +125,7 @@ class SendNotification extends Page implements HasForms
 
     public function form(Form $form): Form
     {
-        $tenantOptions = Tenant::where('is_active', true)
+        $tenantOptions = Tenant::select('id', 'data')->where('is_active', true)
             ->get()
             ->pluck('data.full_name', 'id')
             ->mapWithKeys(fn ($name, $id) => [$id => "{$name} ({$id})"])

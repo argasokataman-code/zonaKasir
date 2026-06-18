@@ -34,7 +34,7 @@ class AuthenticatedSessionController extends Controller
         if ($request->wantsJson()) {
             $token = $user->createToken($user->getRememberTokenName());
 
-            $role = $user->roles()->first();
+            $role = $user->roles()->select('id', 'name')->first();
             $permissions = [];
             if ($role) {
                 $permissions = $role->permissions()->where('guard_name', 'sanctum')->pluck('name')->toArray();

@@ -85,7 +85,7 @@ class FlipWebhookController extends Controller
             return response()->json(['message' => 'Ignored status'], 200);
         }
 
-        $withdrawal = Withdrawal::where('disburse_id', $disbursementId)->first();
+        $withdrawal = Withdrawal::select('id', 'status', 'amount', 'tenant_id', 'disburse_id')->where('disburse_id', $disbursementId)->first();
 
         if (! $withdrawal) {
             Log::warning('Flip webhook: Withdrawal not found — saving for retry', [

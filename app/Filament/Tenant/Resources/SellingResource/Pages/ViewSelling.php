@@ -22,7 +22,7 @@ class ViewSelling extends ViewRecord
     {
         parent::mount($record);
 
-        $this->about = About::first();
+        $this->about = About::select('id', 'shop_name', 'shop_location', 'business_type', 'owner_name', 'photo')->first();
     }
 
     public function getTitle(): string|Htmlable

@@ -32,13 +32,13 @@ class NotificationDebugger extends Page
     public function check()
     {
         $output = [];
-        $tenants = Tenant::where('is_active', true)->get();
+        $tenants = Tenant::select('id', 'is_active')->where('is_active', true)->get();
         $output[] = "Active tenants: {$tenants->count()}";
 
         foreach ($tenants as $t) {
             try {
                 $userCount = \App\Models\Tenants\User::count();
-                $firstUser = \App\Models\Tenants\User::first();
+                $firstUser = \App\Models\Tenants\User::select('id')->first();
                 $notifCount = 0;
                 $latestNotif = null;
                 if ($firstUser) {

@@ -52,7 +52,7 @@ class LoginRequest extends FormRequest
         // For web requests with session
         if (! $this->wantsJson()) {
             if (! Auth::guard('web')->attempt($credentials, $this->boolean('remember'))) {
-                $user = User::where('email', $this->email)->first();
+                $user = User::select('id', 'email', 'email_verified_at')->where('email', $this->email)->first();
                 if ($user && ! $user->hasVerifiedEmail()) {
                     throw ValidationException::withMessages([
                         'email' => 'Email is not verified, please check your email to verify your account',
@@ -68,7 +68,7 @@ class LoginRequest extends FormRequest
         }
 
         // For API requests without session: manually verify credentials
-        $user = User::where('email', $this->email)->first();
+        $user = User::select('id', 'email', 'password', 'email_verified_at')->where('email', $this->email)->first();
         if (! $user || ! Hash::check($this->password, $user->password)) {
             RateLimiter::hit($this->throttleKey());
             throw ValidationException::withMessages([

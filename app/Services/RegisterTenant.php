@@ -51,16 +51,16 @@ class RegisterTenant
         $trialDays = $data['trial_days'] ?? 7;
         $coupon = null;
         if (! empty($data['coupon_code'])) {
-            $coupon = Coupon::where('code', $data['coupon_code'])->first();
+            $coupon = Coupon::select('id', 'code', 'type', 'trial_days', 'is_valid', 'expired_at')->where('code', $data['coupon_code'])->first();
             if ($coupon && $coupon->isValid() && $coupon->type === 'trial_extension') {
                 $trialDays += $coupon->trial_days ?? 0;
             }
         }
 
-        $cheapestPlan = Plan::where('is_active', true)
+        $cheapestPlan = Plan::select('id', 'price_monthly')->where('is_active', true)
             ->where('price_monthly', '>', 0)
             ->orderBy('price_monthly')
-            ->first() ?? Plan::first();
+            ->first() ?? Plan::select('id')->first();
 
         Subscription::create([
             'tenant_id' => $name,

@@ -28,11 +28,11 @@ class GoogleController extends Controller
             $googleId = $googleUser->getId();
 
             // Find tenant by google_id
-            $tenant = \App\Tenant::where('google_id', $googleId)->first();
+            $tenant = \App\Tenant::select('id', 'google_id', 'tenancy_email')->where('google_id', $googleId)->first();
 
             if ($tenant) {
                 TenantContext::set($tenant->id);
-                $user = User::where('google_id', $googleId)->first();
+                $user = User::select('id', 'google_id', 'tenant_id')->where('google_id', $googleId)->first();
 
                 if ($user) {
                     Auth::login($user, true);
@@ -42,7 +42,7 @@ class GoogleController extends Controller
             }
 
             // Fallback: find user directly by google_id
-            $user = User::withoutGlobalScopes()->where('google_id', $googleId)->first();
+            $user = User::withoutGlobalScopes()->select('id', 'google_id', 'tenant_id')->where('google_id', $googleId)->first();
             if ($user) {
                 TenantContext::set($user->tenant_id);
                 // Ensure tenant record exists
@@ -56,10 +56,10 @@ class GoogleController extends Controller
             }
 
             // Check email in tenants table
-            $tenant = \App\Tenant::where('tenancy_email', $googleUser->getEmail())->first();
+            $tenant = \App\Tenant::select('id', 'tenancy_email', 'google_id')->where('tenancy_email', $googleUser->getEmail())->first();
             if ($tenant) {
                 TenantContext::set($tenant->id);
-                $user = User::where('email', $googleUser->getEmail())->first();
+                $user = User::select('id', 'email', 'tenant_id', 'google_id')->where('email', $googleUser->getEmail())->first();
                 if ($user) {
                     $user->update(['google_id' => $googleId]);
                     $tenant->update(['google_id' => $googleId]);
@@ -70,7 +70,7 @@ class GoogleController extends Controller
             }
 
             // Fallback: search user across all tenants by email
-            $user = User::withoutGlobalScopes()->where('email', $googleUser->getEmail())->first();
+            $user = User::withoutGlobalScopes()->select('id', 'email', 'tenant_id', 'google_id')->where('email', $googleUser->getEmail())->first();
             if ($user) {
                 TenantContext::set($user->tenant_id);
                 // Ensure tenant record exists
@@ -101,7 +101,7 @@ class GoogleController extends Controller
             ]);
 
             // Store google_id in both tenant user and tenants table
-            $user = User::where('email', $googleUser->getEmail())->first();
+            $user = User::select('id', 'email')->where('email', $googleUser->getEmail())->first();
             if ($user) {
                 $user->update(['google_id' => $googleId]);
             }

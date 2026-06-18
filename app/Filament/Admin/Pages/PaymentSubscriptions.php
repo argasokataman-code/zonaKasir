@@ -66,7 +66,8 @@ class PaymentSubscriptions extends Page
         $tenantNames = $this->buildTenantNameMap();
 
         // Recent invoices for the list
-        $invoices = Invoice::with('subscription.plan')
+        $invoices = Invoice::select('id', 'tenant_id', 'subscription_id', 'number', 'amount', 'status', 'payment_method', 'created_at')
+            ->with('subscription.plan:id,name')
             ->orderBy('created_at', 'desc')
             ->limit(50)
             ->get();
@@ -180,11 +181,12 @@ class PaymentSubscriptions extends Page
             : 0;
 
         // Expiring Soon: subscriptions ending within 7 days
-        $this->expiringSoon = Subscription::where('subscriptions.status', 'active')
+        $this->expiringSoon = Subscription::select('id', 'tenant_id', 'plan_id', 'status', 'ends_at')
+            ->where('subscriptions.status', 'active')
             ->whereNotNull('ends_at')
             ->where('ends_at', '>', now())
             ->where('ends_at', '<=', now()->addDays(7))
-            ->with('plan')
+            ->with('plan:id,name')
             ->get()
             ->map(fn ($sub) => [
                 'tenant_name' => $tenantNames[$sub->tenant_id] ?? $sub->tenant_id,
@@ -195,7 +197,8 @@ class PaymentSubscriptions extends Page
             ->toArray();
 
         // Failed Payments: last 10 failed invoices
-        $this->failedPayments = Invoice::where('invoices.status', 'failed')
+        $this->failedPayments = Invoice::select('id', 'tenant_id', 'number', 'amount', 'notes', 'created_at')
+            ->where('invoices.status', 'failed')
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get()
@@ -240,7 +243,7 @@ class PaymentSubscriptions extends Page
      */
     private function buildTenantNameMap(): array
     {
-        $tenants = Tenant::all();
+        $tenants = Tenant::select('id', 'data', 'tenancy_email')->get();
         $map = [];
 
         foreach ($tenants as $t) {
