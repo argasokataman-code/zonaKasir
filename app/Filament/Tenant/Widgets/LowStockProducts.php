@@ -15,22 +15,13 @@ class LowStockProducts extends BaseWidget
 
     public function table(Table $table): Table
     {
-        $products = Product::with('stocks')
-            ->get()
-            ->filter(function (Product $product) {
-                $stockIn = $product->stocks->where('type', 'in')->sum('stock');
-                $stockOut = $product->stocks->where('type', 'out')->sum('stock');
-                $remaining = $stockIn - $stockOut;
-
-                return $remaining > 0 && $remaining <= 5;
+        $products = Product::select('id', 'name')
+            ->whereHas('stocks', function ($query) {
+                $query->where('type', 'in')->where('stock', '>', 0)->where('stock', '<=', 5);
             })
-            ->sortBy(function (Product $product) {
-                $stockIn = $product->stocks->where('type', 'in')->sum('stock');
-                $stockOut = $product->stocks->where('type', 'out')->sum('stock');
-                return $stockIn - $stockOut;
-            })
+            ->with(['stocks' => fn ($q) => $q->select('product_id', 'stock', 'type')->where('type', 'in')])
             ->take(10)
-            ->values();
+            ->get();
 
         return $table
             ->query(

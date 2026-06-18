@@ -28,7 +28,8 @@ class SellingService
             SellingCreated::dispatch($selling, $data);
 
             /** @var Collection<Product> $products */
-            $products = Product::whereIn('id', $selling->sellingDetails->pluck('product_id'))->get();
+            $products = Product::select('id', 'selling_price', 'initial_price')
+                ->whereIn('id', $selling->sellingDetails->pluck('product_id'))->get();
             RecalculateEvent::dispatch($products, $data);
 
             DB::commit();
@@ -53,16 +54,25 @@ class SellingService
             $total_discount_per_item = 0;
             $total_cost = 0;
             $productsCollection = collect($data['products']);
+
+            // Bulk load to avoid N+1 in loop
+            $productIds = $productsCollection->pluck('product_id')->filter()->unique();
+            $priceUnitIds = $productsCollection->pluck('price_unit_id')->filter()->unique();
+            $productsMap = Product::select('id', 'selling_price', 'initial_price')
+                ->whereIn('id', $productIds)->get()->keyBy('id');
+            $priceUnitsMap = PriceUnit::select('id', 'selling_price')
+                ->whereIn('id', $priceUnitIds)->get()->keyBy('id');
+
             $productsCollection->each(
-                function ($product) use (&$total_price, &$total_cost, &$total_price_after_discount, &$total_discount_per_item) {
+                function ($product) use (&$total_price, &$total_cost, &$total_price_after_discount, &$total_discount_per_item, $productsMap, $priceUnitsMap) {
                     if (isset($product['price_unit_id']) && $product['price_unit_id'] != null) {
-                        $product['price'] = PriceUnit::whereId($product['price_unit_id'])->first()->selling_price * $product['qty'];
+                        $product['price'] = ($priceUnitsMap->get($product['price_unit_id'])?->selling_price ?? 0) * $product['qty'];
                     }
-                    $modelProduct = Product::find($product['product_id']);
-                    $total_price += $product['price'] ?? $modelProduct->selling_price * $product['qty'];
+                    $modelProduct = $productsMap->get($product['product_id']);
+                    $total_price += $product['price'] ?? ($modelProduct->selling_price ?? 0) * $product['qty'];
                     $total_discount_per_item += ($product['discount_price'] ?? 0);
                     $total_price_after_discount = $total_price - ($product['discount_price'] ?? 0);
-                    $total_cost += $modelProduct->initial_price * $product['qty'];
+                    $total_cost += ($modelProduct->initial_price ?? 0) * $product['qty'];
                 }
             );
             $total_price = ($tax_price = $total_price * ($tax = $data['tax'] ?? 0) / 100) + $total_price;
