@@ -20,8 +20,8 @@ class FillTheUserIdInSellingWithOwnerUserId extends Command
      */
     public function handle()
     {
-        Selling::all()->each(function (Selling $selling) {
-            $user = User::first();
+        Selling::select('id')->each(function (Selling $selling) {
+            $user = User::select('id')->first();
             $selling->user()->associate($user);
             $selling->save();
         });

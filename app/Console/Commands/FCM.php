@@ -31,7 +31,7 @@ class FCM extends Command
             ->values();
 
         if ($runsOutStock->count() > 0) {
-            $users = User::get();
+            $users = User::select('id')->get();
             foreach ($users as $user) {
                 $user->notify(new StockRunsOut($runsOutStock->toArray()));
             }

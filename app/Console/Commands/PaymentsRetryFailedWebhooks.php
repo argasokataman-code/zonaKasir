@@ -13,7 +13,8 @@ class PaymentsRetryFailedWebhooks extends Command
 
     public function handle(): int
     {
-        $failed = MidtransPayment::where('status', 'pending')
+        $failed = MidtransPayment::select('id', 'order_id', 'notification_payload', 'status')
+            ->where('status', 'pending')
             ->where('created_at', '<', now()->subMinutes(10))
             ->where('notification_payload', '!=', null)
             ->limit(50)

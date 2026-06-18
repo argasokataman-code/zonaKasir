@@ -19,7 +19,9 @@ class FillSellingMissingValue extends Command
      */
     public function handle()
     {
-        Selling::all()->each(function ($selling) {
+        Selling::select('id')
+            ->with(['sellingDetails:id,selling_id,product_id,qty', 'sellingDetails.product:id,initial_price'])
+            ->each(function ($selling) {
             $total_net_price = 0;
             $selling->sellingDetails->each(function ($sellingDetail) use (&$total_net_price) {
                 $net_price = $sellingDetail->product->initial_price * $sellingDetail->qty;

@@ -15,7 +15,8 @@ class BackfillSettlementLedger extends Command
 
     public function handle(): int
     {
-        $settlements = MidtransPayment::where('status', 'settlement')
+        $settlements = MidtransPayment::select('id', 'order_id', 'selling_id', 'gross_amount', 'status')
+            ->where('status', 'settlement')
             ->where('selling_id', '>', 0)
             ->get();
 
