@@ -52,7 +52,7 @@ trait HasProductForm
     {
         return Select::make('category_id')
             ->translateLabel()
-            ->options(Category::pluck('name', 'id'))
+            ->options(Category::select('id', 'name')->pluck('name', 'id'))
             ->native(false)
             ->required()
             ->createOptionForm([

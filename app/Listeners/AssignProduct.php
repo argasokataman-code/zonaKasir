@@ -29,11 +29,12 @@ class AssignProduct
             /** @var ?PriceUnit $priceUnit */
             $priceUnit = null;
             if (isset($productRequest['price_unit_id']) && $productRequest['price_unit_id'] != null) {
-                $priceUnit = PriceUnit::find($productRequest['price_unit_id']);
+                $priceUnit = PriceUnit::select('id', 'stock', 'selling_price')->find($productRequest['price_unit_id']);
             }
 
             /** @var Product $product */
-            $product = Product::find($productRequest['product_id']);
+            $product = Product::select('id', 'is_non_stock', 'selling_price', 'initial_price')
+                ->find($productRequest['product_id']);
             if (! $product->is_non_stock) {
                 if ($priceUnit) {
                     $this->reduceStock($product, $priceUnit->stock * $productRequest['qty']);

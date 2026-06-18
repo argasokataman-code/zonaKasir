@@ -14,16 +14,16 @@ class SellingReportService
 {
     public function generate(array $data)
     {
-        $timezone = Profile::first()?->timezone ?? 'UTC';
-        $about = About::first();
+        $timezone = Profile::select('timezone')->first()?->timezone ?? 'UTC';
+        $about = About::select('id', 'shop_name', 'shop_location', 'business_type', 'owner_name')->first();
         $startDate = Carbon::parse($data['start_date'], $timezone)->setTimezone('UTC');
         $endDate = Carbon::parse($data['end_date'], $timezone)->addDay()->setTimezone('UTC');
 
         $sellings = Selling::query()
-            ->select()
+            ->select('id', 'code', 'discount_price', 'date', 'created_at')
             ->with(
                 'sellingDetails:id,selling_id,product_id,qty,price,cost,discount_price',
-                'sellingDetails.product:id,name,initial_price,selling_price,sku',
+                'sellingDetails.product:id,name,sku',
                 'user:id,name,email'
             )
             ->when($data['start_date'] && $data['end_date'], function (Builder $query) use ($startDate, $endDate) {

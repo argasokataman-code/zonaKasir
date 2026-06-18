@@ -56,7 +56,11 @@ class SyncController extends Controller
 
         $products = $products
             ->select('id', 'name', 'sku', 'selling_price', 'is_non_stock', 'category_id', 'hero_images', 'updated_at')
-            ->with(['category:id,name', 'primaryBarcode:product_id,code'])
+            ->with([
+                'category:id,name',
+                'primaryBarcode:product_id,code',
+                'stocks:product_id,stock,type,initial_price,selling_price,date,created_at',
+            ])
             ->get()
             ->map(fn (Product $p) => [
                 'id' => $p->id,
@@ -84,7 +88,7 @@ class SyncController extends Controller
 
         $settings = [
             'currency' => Setting::get('currency', 'IDR'),
-            'locale' => Profile::select('locale')->first()->locale ?? 'en',
+            'locale' => Profile::select('locale')->first()?->locale ?? 'en',
             'default_tax' => (float) Setting::get('default_tax', 0),
         ];
 

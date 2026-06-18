@@ -26,7 +26,7 @@ class TransactionSellingStoreRequest extends FormRequest
     public function authorize(): bool
     {
         if (Setting::get('cash_drawer_enabled', false)) {
-            $lastOpenedCashDrawer = CashDrawer::lastOpened()->first();
+            $lastOpenedCashDrawer = CashDrawer::lastOpened()->select('id')->first();
             if (! $lastOpenedCashDrawer) {
                 throw ValidationException::withMessages([
                     'cash_drawer' => 'Cash drawer is not opened',
@@ -71,7 +71,7 @@ class TransactionSellingStoreRequest extends FormRequest
     public function rules(): array
     {
         $request = $this->all();
-        $pMethod = PaymentMethod::find($request['payment_method_id'] ?? null);
+        $pMethod = PaymentMethod::select('id', 'is_credit')->find($request['payment_method_id'] ?? null);
         $totalPrice = ($request['total_price'] ?? 0) - ($request['discount_price'] ?? 0) - ($request['total_discount_per_item'] ?? 0);
 
         return [

@@ -56,7 +56,7 @@ trait PaymentHandler
             })->toArray(),
         ]);
 
-        $pMethod = PaymentMethod::find($request['payment_method_id']);
+        $pMethod = PaymentMethod::select('id', 'name', 'is_credit', 'payment_type')->find($request['payment_method_id']);
 
         Log::info('PaymentMethod check', [
             'payment_method_id' => $request['payment_method_id'] ?? null,

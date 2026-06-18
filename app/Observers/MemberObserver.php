@@ -10,14 +10,8 @@ class MemberObserver
 {
     public function creating(Member $member)
     {
-        $members = Member::all();
-        $lastCount = $members->count();
-        $lastMember = Member::orderBy('code', 'desc')->first();
-        if ($lastMember) {
-            $lastCount = (int) substr($lastMember->code, 3);
-        } else {
-            $lastCount = 0;
-        }
+        $lastMember = Member::select('code')->orderBy('code', 'desc')->first();
+        $lastCount = $lastMember ? (int) substr($lastMember->code, 3) : 0;
 
         if (! $member->code) {
             // Generate the new customer code
@@ -27,7 +21,7 @@ class MemberObserver
 
     public function created(Member $member): void
     {
-        User::all()->each(function ($user) use ($member) {
+        User::select('id')->each(function ($user) use ($member) {
             $user->notify(new MemberRegistered($member));
         });
     }

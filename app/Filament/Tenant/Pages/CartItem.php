@@ -27,7 +27,12 @@ class CartItem extends Page
 
     public function refreshCart(): void
     {
-        $this->cartItems = TenantsCartItem::with('product')->get();
+        $this->cartItems = TenantsCartItem::select('id', 'product_id', 'qty', 'price', 'discount_price', 'price_unit_id')
+            ->with([
+                'product:id,name,sku,selling_price,is_non_stock,hero_images',
+                'priceUnit:id,selling_price',
+            ])
+            ->get();
     }
 
     public function incrementQuantity(Product $product): void

@@ -19,7 +19,8 @@ class LowStockProducts extends BaseWidget
             ->whereHas('stocks', function ($query) {
                 $query->where('type', 'in')->where('stock', '>', 0)->where('stock', '<=', 5);
             })
-            ->with(['stocks' => fn ($q) => $q->select('product_id', 'stock', 'type')->where('type', 'in')])
+            ->with(['stocks' => fn ($q) => $q->select('product_id', 'stock', 'type')
+                ->whereIn('type', ['in', 'out'])])
             ->take(10)
             ->get();
 

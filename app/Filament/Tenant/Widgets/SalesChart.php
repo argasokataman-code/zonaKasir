@@ -45,7 +45,7 @@ class SalesChart extends ChartWidget
         for ($i = 6; $i >= 0; $i--) {
             $date = now($timezone)->subDays($i)->startOfDay()->format('Y-m-d');
             $labels[] = now($timezone)->subDays($i)->startOfDay()->format('d M');
-            $revenue[] = round(($dailyData->get($date)->net_revenue ?? 0) / 1000);
+            $revenue[] = round(($dailyData->get($date)?->net_revenue ?? 0) / 1000);
         }
 
         return [
