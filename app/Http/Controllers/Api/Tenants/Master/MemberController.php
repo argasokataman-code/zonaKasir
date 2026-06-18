@@ -16,6 +16,7 @@ class MemberController extends Controller
     public function index(): JsonResponse
     {
         $members = QueryBuilder::for(Member::class)
+            ->select('id', 'name', 'email', 'code', 'phone', 'point', 'created_at')
             ->allowedFilters(['name', 'email'])
             ->orderByDesc('created_at')
             ->simplePaginate($this->resolvePerPage(request()) ?? 15);

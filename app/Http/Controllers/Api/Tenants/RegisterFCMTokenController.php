@@ -20,7 +20,7 @@ class RegisterFCMTokenController extends Controller
         try {
             DB::beginTransaction();
 
-            $user = User::find(auth()->id());
+            $user = User::select('id', 'fcm_token')->find(auth()->id());
             $user->fill($request->only('fcm_token'));
             $user->save();
 

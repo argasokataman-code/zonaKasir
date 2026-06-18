@@ -16,6 +16,7 @@ class CategoryController extends Controller
     public function index(): JsonResponse
     {
         $categories = QueryBuilder::for(Category::class)
+            ->select('id', 'name', 'created_at')
             ->allowedFilters(['name'])
             ->orderByDesc('created_at')
             ->simplePaginate($this->resolvePerPage(request()) ?? 15);

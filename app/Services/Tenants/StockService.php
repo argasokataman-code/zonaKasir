@@ -67,7 +67,7 @@ class StockService
         $stock = new Stock();
         $data['init_stock'] = $data['stock'];
         $stock->fill($data);
-        $stock->product()->associate(Product::find($data['product_id']));
+        $stock->product()->associate(Product::select('id')->find($data['product_id']));
         if ($purchasing) {
             $stock->purchasing()->associate($purchasing);
         }
@@ -80,7 +80,7 @@ class StockService
     {
         $data['init_stock'] = $data['stock'];
         $stock->fill($data);
-        $stock->product()->associate(Product::find($data['product_id']));
+        $stock->product()->associate(Product::select('id')->find($data['product_id']));
         if ($purchasing) {
             $stock->purchasing()->associate($purchasing);
         }

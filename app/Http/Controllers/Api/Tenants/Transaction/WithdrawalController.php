@@ -17,6 +17,7 @@ class WithdrawalController extends Controller
     public function index(Request $request): JsonResponse
     {
         $withdrawals = Withdrawal::query()
+            ->select('id', 'amount', 'status', 'bank_name', 'bank_account_name', 'bank_code', 'fee_amount', 'created_at', 'processed_at')
             ->orderBy('created_at', 'desc')
             ->paginate($request->get('per_page', 15));
 

@@ -62,7 +62,7 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->query(fn (): Builder => Product::query()->with('stocks', 'category')->latest())
+            ->query(fn (): Builder => Product::query()->select('id', 'name', 'sku', 'selling_price', 'initial_price', 'stock', 'show', 'type', 'unit', 'is_non_stock', 'category_id', 'created_at')->with(['stocks:product_id,stock,type,is_ready,date,created_at', 'category:id,name'])->latest())
             ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('id')

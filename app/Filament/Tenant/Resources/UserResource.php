@@ -63,7 +63,7 @@ class UserResource extends Resource
     {
         return $table
             ->query(function () {
-                return User::query()->whereNot('id', auth()->id());
+                return User::query()->select('id', 'name', 'email', 'is_owner')->whereNot('id', auth()->id());
             })
             ->defaultSort('created_at', 'desc')
             ->columns([

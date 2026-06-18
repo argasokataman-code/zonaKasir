@@ -34,7 +34,7 @@ class PurchasingService
 
     public function update(mixed $id, $data): Purchasing
     {
-        $purchasing = Purchasing::find($id);
+        $purchasing = Purchasing::select('id', 'total_initial_price', 'total_selling_price')->find($id);
         $purchasing->update($data);
 
         return $purchasing;

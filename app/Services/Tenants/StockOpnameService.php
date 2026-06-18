@@ -69,7 +69,7 @@ class StockOpnameService
                     $this->stockService->reduceStock($soItem->product, $soItem->missing_stock);
                 }
             }
-            RecalculateEvent::dispatch(Product::whereIn('id', $so->stockOpnameItems->pluck('product_id'))->get(), []);
+            RecalculateEvent::dispatch(Product::select('id', 'stock', 'initial_price', 'selling_price')->whereIn('id', $so->stockOpnameItems->pluck('product_id'))->get(), []);
         }
         $so->save();
     }

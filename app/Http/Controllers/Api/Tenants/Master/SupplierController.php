@@ -25,6 +25,7 @@ class SupplierController extends HasCrudActionAbstract implements WithSimplePagi
     {
         $perPage = request()->query('per_page', 15);
         $suppliers = QueryBuilder::for(Supplier::class)
+            ->select('id', 'name', 'phone_number', 'email', 'address', 'city', 'country', 'created_at')
             ->allowedFilters($this->filter())
             ->simplePaginate($perPage);
 

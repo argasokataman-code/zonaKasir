@@ -36,7 +36,7 @@ class WithdrawalService
             throw new \InvalidArgumentException('idempotency_key is required');
         }
 
-        $about = About::first();
+        $about = About::select('id', 'bank_name', 'bank_account_name', 'bank_account_number', 'bank_code')->first();
         if (! $about) {
             throw new \InvalidArgumentException('Tenant bank info not configured');
         }
@@ -184,7 +184,8 @@ class WithdrawalService
      */
     public function approve(int $withdrawalId, int $approvedBy): Withdrawal
     {
-        $withdrawal = Withdrawal::where('id', $withdrawalId)
+        $withdrawal = Withdrawal::select('id', 'status', 'amount', 'approved_by', 'bank_code', 'bank_account_number', 'bank_account_name', 'bank_name', 'idempotency_key', 'fee_amount')
+            ->where('id', $withdrawalId)
             ->lockForUpdate()
             ->firstOrFail();
 
@@ -311,7 +312,7 @@ class WithdrawalService
     public function reject(int $withdrawalId, int $rejectedBy, string $reason): Withdrawal
     {
         return DB::transaction(function () use ($withdrawalId, $rejectedBy, $reason) {
-            $withdrawal = Withdrawal::findOrFail($withdrawalId);
+            $withdrawal = Withdrawal::select('id', 'status')->findOrFail($withdrawalId);
             abort_if($withdrawal->status !== 'pending', 400, 'Already processed');
 
             $withdrawal->update([

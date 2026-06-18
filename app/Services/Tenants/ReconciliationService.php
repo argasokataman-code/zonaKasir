@@ -23,7 +23,8 @@ class ReconciliationService
         $yesterday = now()->subDay()->startOfDay();
 
         $midtransTxs = $this->fetchMidtransTransactions($yesterday);
-        $ourTxs = MidtransPayment::whereDate('paid_at', $yesterday)
+        $ourTxs = MidtransPayment::select('id', 'order_id', 'gross_amount', 'status')
+            ->whereDate('paid_at', $yesterday)
             ->where('status', 'settlement')
             ->get();
 
@@ -76,9 +77,6 @@ class ReconciliationService
         return $mismatches;
     }
 
-        return $mismatches;
-    }
-
     /**
      * Generate settlement report for a date range.
      */
@@ -113,7 +111,7 @@ class ReconciliationService
 
     private function fetchMidtransTransactions(\Carbon\Carbon $date): array
     {
-        $about = \App\Models\Tenants\About::first();
+        $about = \App\Models\Tenants\About::select('id', 'midtrans_server_key', 'midtrans_merchant_id')->first();
         $all = [];
         $token = null;
 

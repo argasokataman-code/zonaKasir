@@ -17,7 +17,7 @@ class TodaysBestSellingProduct extends BaseWidget
 
         $bestSellingProduct = SellingDetail::query()
             ->select(
-                '*',
+                'product_id',
                 DB::raw('SUM(qty) as total_qty')
             )
             ->whereHas('selling', function ($query) use ($startDate, $endDate) {
@@ -26,7 +26,7 @@ class TodaysBestSellingProduct extends BaseWidget
             ->limit(5)
             ->groupBy('product_id')
             ->orderBy('total_qty', 'desc')
-            ->with('product', 'selling');
+            ->with('product:id,name');
 
         return $table
             ->query(

@@ -18,6 +18,7 @@ class SellingController extends Controller
     public function index(Request $request): JsonResponse
     {
         $sellings = QueryBuilder::for(Selling::class)
+            ->select('id', 'code', 'date', 'total_price', 'grand_total_price', 'total_qty', 'total_cost', 'discount_price', 'total_discount_per_item', 'tax_price', 'payed_money', 'money_changes', 'is_paid', 'fee', 'member_id', 'payment_method_id', 'user_id', 'created_at')
             ->allowedFilters([
                 'code',
                 'member_id',
@@ -31,7 +32,13 @@ class SellingController extends Controller
                 'updated_at',
                 'sellingDetails.product_id',
             ])
-            ->with(['member', 'paymentMethod', 'sellingDetails.product', 'user'])
+            ->with([
+                'member:id,name',
+                'paymentMethod:id,name,is_credit,payment_type',
+                'sellingDetails:id,selling_id,product_id,qty,price,cost,discount_price',
+                'sellingDetails.product:id,name,sku',
+                'user:id,name',
+            ])
             ->isPaid()
             ->defaultSort('-created_at')
             ->simplePaginate($request->get('per_page', 10));
@@ -48,7 +55,13 @@ class SellingController extends Controller
             DB::beginTransaction();
 
             $selling = $request->store();
-            $selling->load(['member', 'paymentMethod', 'sellingDetails.product', 'user']);
+            $selling->load([
+                'member:id,name',
+                'paymentMethod:id,name,is_credit,payment_type',
+                'sellingDetails:id,selling_id,product_id,qty,price,cost,discount_price',
+                'sellingDetails.product:id,name,sku',
+                'user:id,name',
+            ]);
 
             // Handle Midtrans payment (digital payment methods)
             $response = new SellingCollection($selling);
@@ -88,7 +101,13 @@ class SellingController extends Controller
 
     public function show(Selling $selling): JsonResponse
     {
-        $selling->load(['member', 'paymentMethod', 'sellingDetails', 'user']);
+        $selling->load([
+            'member:id,name',
+            'paymentMethod:id,name,is_credit,payment_type',
+            'sellingDetails:id,selling_id,product_id,qty,price,cost,discount_price',
+            'sellingDetails.product:id,name,sku',
+            'user:id,name',
+        ]);
 
         return $this->buildResponse()
             ->setData(new SellingCollection($selling))

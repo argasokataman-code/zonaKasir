@@ -89,7 +89,8 @@ class LedgerService
 
     public function getTransactions($from, $to): \Illuminate\Database\Eloquent\Collection
     {
-        return LedgerEntry::whereBetween('created_at', [$from, $to])
+        return LedgerEntry::select('id', 'entry_type', 'amount', 'balance_before', 'balance_after', 'description', 'reference_type', 'reference_id', 'created_at')
+            ->whereBetween('created_at', [$from, $to])
             ->orderBy('id')
             ->get();
     }

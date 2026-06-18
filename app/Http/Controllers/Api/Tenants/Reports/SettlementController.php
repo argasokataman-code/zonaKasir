@@ -12,6 +12,7 @@ class SettlementController extends Controller
     public function index(Request $request): JsonResponse
     {
         $settlements = Settlement::query()
+            ->select('id', 'period_start', 'period_end', 'total_gross', 'total_fee_midtrans', 'total_fee_platform', 'total_net', 'transaction_count', 'status', 'created_at')
             ->orderBy('created_at', 'desc')
             ->paginate($request->get('per_page', 15));
 
