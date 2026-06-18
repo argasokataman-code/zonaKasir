@@ -73,7 +73,7 @@ class Barcode extends Model
     {
         $barcode = static::active()
             ->byCode($code)
-            ->with('product')
+            ->with('product:id,name,sku,unit')
             ->first();
 
         return $barcode?->product;

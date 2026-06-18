@@ -226,6 +226,7 @@ class Product extends Model
 
                 return $this
                     ->stocks()
+                    ->select('id', 'stock', 'initial_price', 'selling_price', 'expired', 'date', 'created_at')
                     ->where('stock', '>', 0)
                     ->whereDate('expired', '<=', $nearestExpired)->latest()->first();
             }

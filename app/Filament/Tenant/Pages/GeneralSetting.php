@@ -60,7 +60,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
 
     public function mount(): void
     {
-        $about = About::first()?->toArray() ?? $this->about;
+        $about = About::select('id', 'shop_name', 'shop_location', 'business_type', 'other_business_type', 'owner_name', 'bank_name', 'bank_account_name', 'bank_account_number', 'bank_code', 'photo')->first()?->toArray() ?? $this->about;
         if ($about) {
             $about['preview_image'] = $about['photo'];
             // Guard: skip corrupted photo values (empty, array, '[]', etc.)
@@ -356,7 +356,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
                 $photoVal = array_values($this->profile['photo'])[0];
                 if ($photoVal instanceof TemporaryUploadedFile) {
                     $uploadedId = $this->storeAsUploadedFile($photoVal);
-                    $tmpFile = UploadedFile::find($uploadedId);
+                    $tmpFile = UploadedFile::select('id', 'name', 'relative_path', 'url', 'disk', 'path')->find($uploadedId);
                     if ($tmpFile) {
                         $relativePath = $tmpFile->moveToPublic('profile', $profile->photo ?: null);
                         $profileData['photo'] = $relativePath;
@@ -365,7 +365,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
                     $profileData['photo'] = $photoVal;
                     // Buat/update UploadedFile record agar mount() temukan di refresh
                     $uploadDisk = config('filesystems.upload_disk');
-                    $existing = UploadedFile::where('relative_path', $photoVal)->first();
+                    $existing = UploadedFile::select('id', 'relative_path')->where('relative_path', $photoVal)->first();
                     if (! $existing) {
                         // Hapus UploadedFile lama jika ada (ganti foto)
                         if ($profile->photo && $profile->photo !== $photoVal) {
@@ -385,8 +385,8 @@ class GeneralSetting extends Page implements HasActions, HasForms
             } elseif (isset($this->profile['photo']) && (empty($this->profile['photo']) || $this->profile['photo'] === null)) {
                 // Hapus foto jika dihapus di UI
                 if ($profile->photo) {
-                    $tmpFile = UploadedFile::where('relative_path', $profile->photo)->first()
-                        ?? UploadedFile::where('url', $profile->photo)->first();
+                    $tmpFile = UploadedFile::select('id', 'name', 'relative_path', 'url', 'disk', 'path')->where('relative_path', $profile->photo)->first()
+                        ?? UploadedFile::select('id', 'name', 'relative_path', 'url', 'disk', 'path')->where('url', $profile->photo)->first();
                     if ($tmpFile) {
                         $tmpFile->deleteFromPublic('profile');
                     } else {

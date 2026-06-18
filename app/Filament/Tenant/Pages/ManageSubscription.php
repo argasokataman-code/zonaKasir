@@ -241,7 +241,8 @@ class ManageSubscription extends Page
 
     public function getAvailablePlans(): array
     {
-        return Plan::where('is_active', true)
+        return Plan::select('id', 'name', 'price_monthly', 'price_yearly', 'features', 'max_stores', 'max_users')
+            ->where('is_active', true)
             ->where('price_monthly', '>', 0)
             ->orderBy('price_monthly')
             ->get()
@@ -252,7 +253,8 @@ class ManageSubscription extends Page
     {
         $tenantId = auth()->user()->tenant_id;
 
-        return Invoice::where('tenant_id', $tenantId)
+        return Invoice::select('id', 'tenant_id', 'subscription_id', 'status', 'target_plan_id', 'amount', 'midtrans_redirect_url', 'created_at')
+            ->where('tenant_id', $tenantId)
             ->latest()
             ->get()
             ->toArray();

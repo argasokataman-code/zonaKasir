@@ -67,7 +67,7 @@ class ProductController extends Controller
 
     public function show($product): JsonResponse
     {
-        $modelById = Product::find($product);
+        $modelById = Product::select('id', 'name', 'sku', 'selling_price', 'initial_price', 'type', 'unit', 'stock', 'is_non_stock', 'category_id', 'hero_images', 'show')->find($product);
         $modelByCode = Product::findByBarcodeOrSku($product);
 
         if ($modelById && $modelByCode && $modelById->getKey() !== $modelByCode->getKey()) {

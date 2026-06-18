@@ -52,7 +52,7 @@ class PurchasingResource extends Resource
                     ->native(false)
                     ->required()
                     ->createOptionForm(Supplier::form())
-                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('supplier_phone_number', Supplier::find($state)?->phone_number ?? ''))
+                    ->afterStateUpdated(fn (Set $set, ?string $state) => $set('supplier_phone_number', Supplier::select('id', 'phone_number')->find($state)?->phone_number ?? ''))
                     ->live(),
                 Select::make('payment_method_id')
                     ->relationship(name: 'paymentMethod', titleAttribute: 'name')

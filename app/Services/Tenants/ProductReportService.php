@@ -19,11 +19,13 @@ class ProductReportService
         $endDate = Carbon::parse($data['end_date'], $timezone)->addDay()->setTimezone('UTC');
 
         $products = Product::query()
+            ->select('id', 'sku', 'name')
             ->with(
                 ['sellingDetails' => function ($builder) use ($startDate, $endDate) {
-                    $builder->whereHas('selling', function ($query) use ($startDate, $endDate) {
-                        $query->whereBetween('date', [$startDate, $endDate]);
-                    });
+                    $builder->select('id', 'product_id', 'selling_id', 'price', 'qty', 'cost', 'discount_price')
+                        ->whereHas('selling', function ($query) use ($startDate, $endDate) {
+                            $query->whereBetween('date', [$startDate, $endDate]);
+                        });
                 }],
             )
             ->whereHas('sellingDetails', function ($query) use ($startDate, $endDate) {

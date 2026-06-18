@@ -29,7 +29,7 @@ class ReceivableService
                 'subtotal' => $item['price'],
                 'amount' => $item['qty'],
             ]);
-            $receivableItem->product()->associate(Product::find($item['product_id']));
+            $receivableItem->product()->associate(Product::select('id')->find($item['product_id']));
             $receivableItem->receivable()->associate($receivable);
             $receivableItem->save();
         });

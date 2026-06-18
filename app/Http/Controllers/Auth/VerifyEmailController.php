@@ -14,7 +14,7 @@ class VerifyEmailController extends Controller
      */
     public function __invoke(Request $request, $id, $hash)
     {
-        $user = User::find($id);
+        $user = User::select('id', 'email', 'email_verified_at')->find($id);
 
         if (!$user) {
             return response()->json(['message' => 'Not Found'], 404);
