@@ -18,7 +18,8 @@ class CheckBilling extends Command
         $this->info('Checking subscriptions...');
 
         // Expire trialing subscriptions that have ended
-        $expiredTrials = Subscription::where('status', 'trialing')
+        $expiredTrials = Subscription::select('id', 'status', 'tenant_id', 'trial_ends_at')
+            ->where('status', 'trialing')
             ->whereNotNull('trial_ends_at')
             ->where('trial_ends_at', '<', now())
             ->get();
@@ -29,7 +30,8 @@ class CheckBilling extends Command
         }
 
         // Expire active subscriptions that have ended
-        $ended = Subscription::where('status', 'active')
+        $ended = Subscription::select('id', 'status', 'tenant_id', 'ends_at')
+            ->where('status', 'active')
             ->whereNotNull('ends_at')
             ->where('ends_at', '<', now())
             ->get();
@@ -41,7 +43,8 @@ class CheckBilling extends Command
 
         // Generate invoices for active subscriptions that expire within 7 days
         // Skip if already has a pending invoice created this week
-        $renewing = Subscription::where('status', 'active')
+        $renewing = Subscription::select('id', 'tenant_id', 'plan_id', 'status', 'ends_at', 'billing_cycle')
+            ->where('status', 'active')
             ->whereNotNull('plan_id')
             ->whereNotNull('ends_at')
             ->where('ends_at', '>', now())

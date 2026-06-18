@@ -34,7 +34,7 @@ class SwitchDiskCommand extends Command
         $fromDisk = Storage::disk($from);
         $toDisk = Storage::disk($to);
 
-        $files = UploadedFile::where('disk', $from)->get();
+        $files = UploadedFile::select('id', 'relative_path', 'disk')->where('disk', $from)->get();
 
         if ($files->isEmpty()) {
             $this->info("No files found on disk '{$from}'.");

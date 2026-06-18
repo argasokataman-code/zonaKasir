@@ -12,6 +12,6 @@ class RecalculateAllProduct extends Command
 
     public function handle()
     {
-        RecalculateEvent::dispatch(Product::all(), []);
+        RecalculateEvent::dispatch(Product::select('id', 'stock', 'initial_price', 'selling_price')->get(), []);
     }
 }

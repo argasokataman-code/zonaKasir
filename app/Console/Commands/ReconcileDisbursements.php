@@ -26,7 +26,7 @@ class ReconcileDisbursements extends Command
             $query->where('id', $id);
         }
 
-        $withdrawals = $query->get();
+        $withdrawals = $query->select('id', 'status', 'disburse_id', 'amount')->get();
 
         if ($withdrawals->isEmpty()) {
             $this->info('No stuck disbursements found.');

@@ -92,7 +92,7 @@ class MigrateUrlsCommand extends Command
             $this->warn('  --force: re-running migration for ALL uploaded_files records.');
         }
 
-        $files = $query->get();
+        $files = $query->select('id', 'url', 'relative_path', 'name', 'disk')->get();
         $this->info("\n[uploaded_files] Processing {$files->count()} record(s)...");
 
         $updated = 0;
@@ -118,7 +118,7 @@ class MigrateUrlsCommand extends Command
 
     private function migrateProductsHeroImages(bool $force): void
     {
-        $products = Product::whereNotNull('hero_images')->get();
+        $products = Product::select('id', 'hero_images')->whereNotNull('hero_images')->get();
         $this->info("\n[products] Processing {$products->count()} product(s)...");
 
         $updated = 0;
@@ -137,7 +137,7 @@ class MigrateUrlsCommand extends Command
                     continue;
                 }
 
-                $uploadedFile = UploadedFile::where('url', $url)->first();
+                $uploadedFile = UploadedFile::select('id', 'url', 'disk')->where('url', $url)->first();
                 $disk = $uploadedFile?->disk ?? 'public';
 
                 $relativePaths[] = $this->stripUrl($url, $disk);
@@ -155,7 +155,7 @@ class MigrateUrlsCommand extends Command
 
     private function migrateProfilesPhoto(bool $force): void
     {
-        $profiles = Profile::whereNotNull('photo')->get();
+        $profiles = Profile::select('id', 'photo')->whereNotNull('photo')->get();
         $this->info("\n[profiles] Processing {$profiles->count()} profile(s)...");
 
         $updated = 0;
@@ -165,7 +165,7 @@ class MigrateUrlsCommand extends Command
                 continue;
             }
 
-            $uploadedFile = UploadedFile::where('url', $photo)->first();
+            $uploadedFile = UploadedFile::select('id', 'url', 'disk')->where('url', $photo)->first();
             $disk = $uploadedFile?->disk ?? 'public';
             $relativePath = $this->stripUrl($photo, $disk);
 
@@ -181,7 +181,7 @@ class MigrateUrlsCommand extends Command
 
     private function migrateAboutsPhoto(bool $force): void
     {
-        $abouts = About::whereNotNull('photo')->get();
+        $abouts = About::select('id', 'photo')->whereNotNull('photo')->get();
         $this->info("\n[abouts] Processing {$abouts->count()} about record(s)...");
 
         $updated = 0;
@@ -191,7 +191,7 @@ class MigrateUrlsCommand extends Command
                 continue;
             }
 
-            $uploadedFile = UploadedFile::where('url', $photo)->first();
+            $uploadedFile = UploadedFile::select('id', 'url', 'disk')->where('url', $photo)->first();
             $disk = $uploadedFile?->disk ?? 'public';
             $relativePath = $this->stripUrl($photo, $disk);
 
