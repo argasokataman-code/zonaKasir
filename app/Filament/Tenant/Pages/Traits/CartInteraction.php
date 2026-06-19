@@ -100,7 +100,19 @@ trait CartInteraction
     public function deleteCart(Product $product)
     {
         CartItem::where('product_id', $product->getKey())->cashier()->delete();
-        $this->refreshCart();
+
+        // Lightweight removal: update in-memory collection + totals only.
+        // Skip full refreshCart() which re-queries all 64+ items (slow).
+        $this->cartItems = $this->cartItems->reject(fn ($i) => $i->product_id === $product->getKey());
+        $this->cartCount = $this->cartItems->count();
+        $this->calculateTotalPrice();
+
+        $this->dispatch('cart-data-updated', [
+            'cartItems' => $this->cartItems->pluck('qty', 'product_id')->toArray(),
+            'cartCount' => $this->cartCount,
+            'totalPrice' => $this->total_price,
+            'subTotal' => $this->sub_total,
+        ]);
     }
 
     public function addDiscountPricePerItem(CartItem $cartItem, $value)
