@@ -11,7 +11,7 @@ $showMoneyChanges = $showMoneyChanges ?? true;
 <div class="space-y-3">
   <div class="flex justify-between">
     <p>{{ __('Sub total') }}</p>
-    <p class="font-bold text-zonakasir-primary">{{ price_format($sub_total) }}</p>
+    <p class="font-bold text-zonakasir-primary"><span x-text="moneyFormat(subTotal)">{{ price_format($sub_total) }}</span></p>
   </div>
   @feature(SellingTax::class)
     <div class="flex justify-between">
@@ -28,7 +28,7 @@ $showMoneyChanges = $showMoneyChanges ?? true;
   <hr/>
   <div class="flex justify-between">
     <p class="font-bold">{{ __('Total') }}</p>
-    <p class="font-bold text-zonakasir-primary" x-ref="total" data-value="{{ $total_price }}">{{ price_format($total_price) }}</p>
+    <p class="font-bold text-zonakasir-primary" x-ref="total" data-value="{{ $total_price }}"><span x-text="moneyFormat(totalPrice)">{{ price_format($total_price) }}</span></p>
   </div>
   @if($showMoneyChanges)
     <div class="flex justify-between"

@@ -10,23 +10,19 @@ use Filament\Notifications\Notification;
 trait CartInteraction
 {
     /**
-     * Ultra-lightweight cart refresh: only dispatch Alpine event.
-     * Do NOT update $this->cartItems — that triggers full Livewire template
-     * re-render of ALL 64 items. Alpine handles display via cart-data-updated.
+     * Zero-Livewire-refresh: only dispatch Alpine event.
+     * Do NOT update any Livewire property — that triggers full template render.
+     * Alpine manages display (badges, totals, count) via cart-data-updated.
      */
-    private function softRefresh(Product $product): void
+    private function softRefresh(): void
     {
-        $this->cartCount = CartItem::cashier()->count();
-        $this->calculateTotalPrice();
-
         $this->dispatch('cart-data-updated', [
-            'cartItems' => CartItem::where('product_id', $product->getKey())
-                ->cashier()
-                ->pluck('qty', 'product_id')
-                ->toArray(),
-            'cartCount' => $this->cartCount,
-            'totalPrice' => $this->total_price,
-            'subTotal' => $this->sub_total,
+            'cartCount' => CartItem::cashier()->count(),
+            'subTotal' => CartItem::cashier()->sum('price') - CartItem::cashier()->sum('discount_price'),
+            'totalPrice' => CartItem::cashier()
+                ->get()
+                ->sum(fn ($i) => $i->price - ($i->discount_price ?? 0)),
+            'taxAmount' => 0, // tax calculated by Livewire on full refresh
         ]);
     }
     private function validateStock(Product $product, $qty): bool
@@ -59,7 +55,7 @@ trait CartInteraction
             $qty = (int) $data['_bulk'];
             if ($qty <= 0) {
                 CartItem::where('product_id', $product->getKey())->cashier()->delete();
-                $this->softRefresh($product);
+                $this->softRefresh();
                 return;
             }
         } elseif (! $data['amount']) {
@@ -85,7 +81,7 @@ trait CartInteraction
                 ]
             );
 
-        $this->softRefresh($product);
+        $this->softRefresh();
     }
 
     public function reduceCart(Product $product)
@@ -95,13 +91,13 @@ trait CartInteraction
             ->cashier()
             ->first();
         if (! $cartItem) {
-            $this->softRefresh($product);
+            $this->softRefresh();
             return;
         }
         $qty = $cartItem->qty - 1;
         if ($qty == 0) {
             $cartItem->delete();
-            $this->softRefresh($product);
+            $this->softRefresh();
             return;
         }
         $price = $product->selling_price * ($qty);
@@ -110,13 +106,13 @@ trait CartInteraction
             'price' => $price,
         ]);
         $cartItem->save();
-        $this->softRefresh($product);
+        $this->softRefresh();
     }
 
     public function deleteCart(Product $product)
     {
         CartItem::where('product_id', $product->getKey())->cashier()->delete();
-        $this->softRefresh($product);
+        $this->softRefresh();
     }
 
     public function addDiscountPricePerItem(CartItem $cartItem, $value)
