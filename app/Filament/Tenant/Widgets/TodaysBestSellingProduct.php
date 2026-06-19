@@ -6,10 +6,16 @@ use App\Models\Tenants\SellingDetail;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class TodaysBestSellingProduct extends BaseWidget
 {
+    public function getTableRecordKey(Model $record): string
+    {
+        return (string) $record->product_id;
+    }
+
     public function table(Table $table): Table
     {
         $startDate = today()->startOfDay();
