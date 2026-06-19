@@ -1,20 +1,10 @@
 import defaultTheme from "tailwindcss/defaultTheme";
 import forms from "@tailwindcss/forms";
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
-
-// Filament preset — available only after composer install (not on Vercel build)
-let filamentPreset = {};
-try {
-  filamentPreset = require('./vendor/filament/support/tailwind.config.preset');
-} catch {
-  // vendor/ not available (Vercel build or fresh clone)
-}
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  presets: [filamentPreset].filter(Boolean),
+  presets: [],
+  content: [
   content: [
     // Laravel
     "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
