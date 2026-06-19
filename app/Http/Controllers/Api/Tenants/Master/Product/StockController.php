@@ -54,7 +54,7 @@ class StockController extends Controller
 
     public function destroy(Product $product, Stock $stock): JsonResponse
     {
-        abort_unless($stock->product_id === $product->id, 404);
+        abort_unless((int) $stock->product_id === $product->id, 404);
 
         try {
             DB::beginTransaction();

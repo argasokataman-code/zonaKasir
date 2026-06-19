@@ -22,7 +22,7 @@ trait CartInteraction
         $updated = CartItem::where('product_id', $product->getKey())
             ->with(['product:id,name,sku', 'priceUnit:id,selling_price'])
             ->cashier()->first();
-        $this->cartItems = $this->cartItems->reject(fn ($i) => $i->product_id === $product->getKey());
+        $this->cartItems = $this->cartItems->reject(fn ($i) => (int) $i->product_id === $product->getKey());
         if ($updated) $this->cartItems->push($updated);
         $this->cartCount = $this->cartItems->count();
         $this->calculateTotalPrice();
