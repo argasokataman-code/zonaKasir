@@ -20,6 +20,7 @@ window.__cashierShared = () => ({
       this.loadOfflineData();
     });
     if (this.isPWA && !navigator.onLine) { this.cartOpen = false; this.loadOfflineData(); }
-    if (this.isPWA) this.runStartupSync();
+    // Small delay ensures Livewire ($wire) is fully initialized
+    if (this.isPWA) setTimeout(() => this.runStartupSync(), 300);
   },
 });
