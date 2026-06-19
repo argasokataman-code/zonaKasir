@@ -148,7 +148,7 @@
           class="flex flex-1 items-center justify-between rounded-lg bg-zonakasir-primary px-4 py-3 min-h-[48px] text-white">
           <span class="font-semibold">{{ __('View Cart') }}</span>
           <span class="flex items-center gap-2">
-            <span class="rounded-full bg-white/20 px-2 py-0.5 text-sm">{{ $cartCount }}</span>
+            <span class="rounded-full bg-white/20 px-2 py-0.5 text-sm" x-text="cartCount">{{ $cartCount }}</span>
             <x-heroicon-o-chevron-up class="h-5 w-5" />
           </span>
         </button>

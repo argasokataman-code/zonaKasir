@@ -1,5 +1,8 @@
 window.__cashierOnline = () => ({
   cartQty: {{ Js::from(collect($cartItems)->pluck('qty', 'product_id')->toArray()) }},
+  subTotal: {{ $sub_total }},
+  totalPrice: {{ $total_price }},
+  cartCount: {{ $cartCount }},
   debounceTimers: {},
 
   instantAdd(productId) {
@@ -39,5 +42,9 @@ window.__cashierOnline = () => ({
         this.cartQty[id] = qty;
       }
     }
+    // Update totals via Alpine — no Livewire re-render needed
+    if (data.subTotal !== undefined) this.subTotal = data.subTotal;
+    if (data.totalPrice !== undefined) this.totalPrice = data.totalPrice;
+    if (data.cartCount !== undefined) this.cartCount = data.cartCount;
   },
 });
