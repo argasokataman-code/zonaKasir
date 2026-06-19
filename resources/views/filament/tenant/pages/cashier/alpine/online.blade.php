@@ -29,6 +29,15 @@ window.__cashierOnline = () => ({
   handleCartDataUpdated(event) {
     const raw = event.detail;
     const data = Array.isArray(raw) ? raw[0] : raw;
-    this.cartQty = data?.cartItems || {};
+    const serverCart = data?.cartItems || {};
+    const localCart = this.cartQty;
+    // Merge: server is source of truth, but preserve locally-pending adds
+    // that server hasn't processed yet (local qty exceeds server qty).
+    this.cartQty = { ...serverCart };
+    for (const [id, qty] of Object.entries(localCart)) {
+      if (qty > (this.cartQty[id] || 0)) {
+        this.cartQty[id] = qty;
+      }
+    }
   },
 });
