@@ -111,30 +111,43 @@ window.__cashierOffline = () => ({
       const lastPrefetch = await new Promise(r => { req.onsuccess = () => r(req.result); req.onerror = () => r(null); });
       if (lastPrefetch && lastPrefetch.value) {
         const age = Date.now() - new Date(lastPrefetch.value).getTime();
-        if (age < 30 * 60 * 1000) return;
+        if (age < 30 * 60 * 1000) {
+          console.log('[PWA] Skipping sync, data is fresh');
+          this.loadOfflineData();
+          return;
+        }
       }
     } catch(e) {}
     this.showSyncSplash = true;
     this.syncProgress = 0;
     this.syncStatus = 'Syncing data...';
     try {
+      // Use $wire.call to fetch via Livewire (server has auth context)
       const data = await $wire.call('getOfflineSyncData');
       this.syncProgress = 60;
+      this.syncStatus = 'Caching data...';
       const stores = [
         { key: 'products', items: data.products || [] },
         { key: 'categories', items: data.categories || [] },
         { key: 'members', items: data.members || [] },
         { key: 'payment_methods', items: data.payment_methods || [] },
-        { key: 'about', items: data.about ? [data.about] : [], single: true },
+        { key: 'about', items: data.about ? (Array.isArray(data.about) ? data.about : [data.about]) : [] },
       ];
       for (const store of stores) {
         const tx = db.transaction(store.key, 'readwrite');
         const objStore = tx.objectStore(store.key);
         objStore.clear();
-        store.items.forEach(item => objStore.put(item));
+        for (const item of store.items) {
+          objStore.put(item);
+        }
+        await new Promise((resolve, reject) => {
+          tx.oncomplete = () => resolve();
+          tx.onerror = () => reject(tx.error);
+        });
       }
       const metaTx = db.transaction('meta', 'readwrite');
       metaTx.objectStore('meta').put({ key: 'last_prefetch', value: new Date().toISOString() });
+      await new Promise(r => { metaTx.oncomplete = r; });
       this.syncProgress = 100;
       this.syncStatus = 'Ready!';
       await new Promise(r => setTimeout(r, 500));
@@ -142,6 +155,33 @@ window.__cashierOffline = () => ({
       this.loadOfflineData();
     } catch(e) {
       console.error('[PWA] Sync failed:', e);
+      // Fallback: save server-rendered data already on page to IndexedDB
+      try {
+        var serverProducts = window.__initialProducts;
+        var serverCategories = window.__initialCategories;
+        if ((serverProducts && serverProducts.length) || (serverCategories && serverCategories.length)) {
+          this.syncStatus = 'Using page data...';
+          var fallbackStores = [
+            { key: 'products', items: serverProducts || [] },
+            { key: 'categories', items: serverCategories || [] },
+          ];
+          for (var s of fallbackStores) {
+            if (!s.items.length) continue;
+            var txn = db.transaction(s.key, 'readwrite');
+            var os = txn.objectStore(s.key);
+            os.clear();
+            s.items.forEach(function(it) { os.put(it); });
+            await new Promise(function(res, rej) { txn.oncomplete = res; txn.onerror = rej; });
+          }
+          var mTx = db.transaction('meta', 'readwrite');
+          mTx.objectStore('meta').put({ key: 'last_prefetch', value: new Date().toISOString() });
+          await new Promise(function(r) { mTx.oncomplete = r; });
+          console.log('[PWA] Fallback cache from page data OK');
+          this.loadOfflineData();
+        }
+      } catch(fbErr) {
+        console.error('[PWA] Fallback cache failed:', fbErr);
+      }
       this.syncStatus = 'Sync failed';
       await new Promise(r => setTimeout(r, 1000));
       this.showSyncSplash = false;
