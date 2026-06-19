@@ -3,26 +3,7 @@
   use App\Features\{PaymentShortcutButton, SellingTax, Discount};
 
 @endphp
-<div x-data="cashier" x-on:cart-data-updated.window="handleCartDataUpdated"
-  x-init="
-    // Expose server-rendered data for PWA offline fallback cache
-    window.__initialProducts = {{ Js::from($products?->map(fn($p) => [
-      'id' => $p->id,
-      'name' => $p->name,
-      'sku' => $p->sku,
-      'barcode' => $p->primaryBarcode->first()?->code ?? null,
-      'selling_price' => $p->selling_price,
-      'selling_price_calculate' => $p->sellingPriceCalculate ?? $p->selling_price,
-      'stock_calculate' => $p->stockCalculate,
-      'stock' => $p->stock,
-      'is_non_stock' => $p->is_non_stock,
-      'category_id' => $p->category_id,
-      'category_name' => $p->category?->name ?? '',
-      'hero_images_url' => $p->heroImage,
-    ])->values()->toArray() ?? []) }};
-    window.__initialCategories = {{ Js::from($categories?->map(fn($c) => ['id' => $c->id, 'name' => $c->name])->values()->toArray() ?? []) }};
-  "
->
+<div x-data="cashier" x-on:cart-data-updated.window="handleCartDataUpdated">
 
   {{-- ═══ SYNC SPLASH SCREEN (PWA only) ═══ --}}
   <div x-show="showSyncSplash" x-cloak
