@@ -58,30 +58,30 @@
         </template>
       </div>
 
-      <div class="flex flex-1 flex-col justify-between p-3">
-        <div>
-          <p class="text-xs font-medium text-gray-500 dark:text-gray-400" x-text="product.sku"></p>
-          <h3 class="mt-0.5 text-sm font-semibold leading-tight text-gray-900 dark:text-white line-clamp-2" x-text="product.name"></h3>
+      <div class="flex flex-1 flex-col justify-between p-3 min-w-0">
+        <div class="min-w-0">
+          <p class="text-xs font-medium text-gray-500 dark:text-gray-400 truncate" x-text="product.sku"></p>
+          <h3 class="mt-0.5 text-sm font-semibold leading-tight text-gray-900 dark:text-white line-clamp-2 break-words" x-text="product.name"></h3>
         </div>
-        <div class="mt-2 flex flex-wrap items-center gap-x-1">
+        <div class="mt-2 flex flex-wrap items-center gap-x-1 min-w-0">
           <span class="text-sm font-bold text-zonakasir-primary whitespace-nowrap" x-text="'Rp ' + (product.selling_price_calculate || product.selling_price || 0).toLocaleString('id-ID')"></span>
-          <div class="ml-auto flex items-center justify-end min-h-[44px]">
+          <div class="flex items-center justify-end min-h-[44px] min-w-0">
             <template x-if="!offlineCart[product.id] || offlineCart[product.id].qty === 0">
               <button @click="offlineAddToCart(product.id)"
-                class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
-                <x-heroicon-o-plus class="h-5 w-5" />
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                <x-heroicon-o-plus class="h-4 w-4" />
               </button>
             </template>
             <template x-if="offlineCart[product.id] && offlineCart[product.id].qty > 0">
-              <div class="flex items-center gap-1">
+              <div class="flex items-center gap-0.5">
                 <button @click="offlineRemoveFromCart(product.id)"
-                  class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
-                  <x-heroicon-o-minus-small class="h-5 w-5" />
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300">
+                  <x-heroicon-o-minus-small class="h-4 w-4" />
                 </button>
-                <span class="w-8 text-center text-sm font-semibold text-zonakasir-primary" x-text="offlineCart[product.id].qty"></span>
+                <span class="w-7 text-center text-sm font-semibold text-zonakasir-primary shrink-0" x-text="offlineCart[product.id].qty"></span>
                 <button @click="offlineAddToCart(product.id)"
-                  class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
-                  <x-heroicon-o-plus-small class="h-5 w-5" />
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
+                  <x-heroicon-o-plus-small class="h-4 w-4" />
                 </button>
               </div>
             </template>
