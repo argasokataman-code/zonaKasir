@@ -17,7 +17,7 @@ class AboutController extends Controller
     public function index(): JsonResponse
     {
         return $this->buildResponse()
-            ->setData(new AboutResource(About::select('id', 'shop_name', 'shop_location', 'business_type', 'owner_name', 'photo')->first()))
+            ->setData(new AboutResource(About::select('id', 'shop_name', 'shop_location', 'business_type', 'photo')->first()))
             ->present();
     }
 

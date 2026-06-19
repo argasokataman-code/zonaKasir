@@ -60,7 +60,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
 
     public function mount(): void
     {
-        $about = About::select('id', 'shop_name', 'shop_location', 'business_type', 'other_business_type', 'owner_name', 'bank_name', 'bank_account_name', 'bank_account_number', 'bank_code', 'photo')->first()?->toArray() ?? $this->about;
+        $about = About::select('id', 'shop_name', 'shop_location', 'business_type', 'other_business_type', 'bank_name', 'bank_account_name', 'bank_account_number', 'bank_code', 'photo')->first()?->toArray() ?? $this->about;
         if ($about) {
             $about['preview_image'] = $about['photo'];
             // Guard: skip corrupted photo values (empty, array, '[]', etc.)

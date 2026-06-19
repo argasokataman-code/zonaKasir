@@ -5,6 +5,7 @@ namespace App\Services\Tenants;
 use App\Models\Tenants\About;
 use App\Models\Tenants\Profile;
 use App\Models\Tenants\Selling;
+use App\Models\Tenants\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Number;
@@ -14,7 +15,7 @@ class CashierReportService
     public function generate(array $data)
     {
         $timezone = Profile::select('timezone')->first()?->timezone ?? 'UTC';
-        $about = About::select('id', 'shop_name', 'shop_location', 'business_type', 'owner_name')->first();
+        $about = About::select('id', 'shop_name', 'shop_location', 'business_type')->first();
         $tzName = Carbon::parse($data['start_date'])->getTimezone()->getName();
         $startDate = Carbon::parse($data['start_date'], $timezone)->setTimezone('UTC');
         $endDate = Carbon::parse($data['end_date'], $timezone)->addDay()->setTimezone('UTC');
@@ -35,7 +36,7 @@ class CashierReportService
             'shop_name' => $about?->shop_name,
             'shop_location' => $about?->shop_location,
             'business_type' => $about?->business_type,
-            'owner_name' => $about?->owner_name,
+            'owner_name' => User::select('id', 'name')->owner()->first()?->name ?? '',
             'start_date' => $startDate->setTimezone($timezone)->format('d F Y'),
             'end_date' => $endDate->subDay()->setTimezone($timezone)->format('d F Y'),
         ];
