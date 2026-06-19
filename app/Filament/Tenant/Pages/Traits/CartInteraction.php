@@ -10,26 +10,20 @@ use Filament\Notifications\Notification;
 trait CartInteraction
 {
     /**
-     * Lightweight cart refresh: query ONLY affected item + update collection.
-     * Skips full refreshCart() which re-queries + re-renders ALL items.
+     * Ultra-lightweight cart refresh: only dispatch Alpine event.
+     * Do NOT update $this->cartItems — that triggers full Livewire template
+     * re-render of ALL 64 items. Alpine handles display via cart-data-updated.
      */
     private function softRefresh(Product $product): void
     {
-        $updated = \App\Models\Tenants\CartItem::where('product_id', $product->getKey())
-            ->with(['product:id,name,sku,selling_price,is_non_stock,hero_images', 'priceUnit:id,selling_price'])
-            ->cashier()
-            ->first();
-
-        // Remove old entry, add updated one
-        $this->cartItems = $this->cartItems->reject(fn ($i) => $i->product_id === $product->getKey());
-        if ($updated) {
-            $this->cartItems->push($updated);
-        }
-        $this->cartCount = $this->cartItems->count();
+        $this->cartCount = CartItem::cashier()->count();
         $this->calculateTotalPrice();
 
         $this->dispatch('cart-data-updated', [
-            'cartItems' => $this->cartItems->pluck('qty', 'product_id')->toArray(),
+            'cartItems' => CartItem::where('product_id', $product->getKey())
+                ->cashier()
+                ->pluck('qty', 'product_id')
+                ->toArray(),
             'cartCount' => $this->cartCount,
             'totalPrice' => $this->total_price,
             'subTotal' => $this->sub_total,
