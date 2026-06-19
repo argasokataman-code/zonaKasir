@@ -16,13 +16,13 @@ trait CartInteraction
      */
     private function softRefresh(): void
     {
+        $items = CartItem::query()->cashier()->get();
+        $subTotal = $items->sum('price');
+        $discount = $items->sum('discount_price');
         $this->dispatch('cart-data-updated', [
-            'cartCount' => CartItem::cashier()->count(),
-            'subTotal' => CartItem::cashier()->sum('price') - CartItem::cashier()->sum('discount_price'),
-            'totalPrice' => CartItem::cashier()
-                ->get()
-                ->sum(fn ($i) => $i->price - ($i->discount_price ?? 0)),
-            'taxAmount' => 0, // tax calculated by Livewire on full refresh
+            'cartCount' => $items->count(),
+            'subTotal' => $subTotal,
+            'totalPrice' => $subTotal - $discount,
         ]);
     }
     private function validateStock(Product $product, $qty): bool
