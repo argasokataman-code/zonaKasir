@@ -65,7 +65,7 @@
         </div>
         <div class="mt-2 flex items-center">
           <span class="text-sm font-bold text-zonakasir-primary" x-text="'Rp ' + (product.selling_price_calculate || product.selling_price || 0).toLocaleString('id-ID')"></span>
-          <div class="ml-auto flex items-center justify-end min-w-[128px] min-h-[44px]">
+          <div class="ml-auto flex items-center justify-end min-w-[100px] min-h-[44px]">
             <template x-if="!offlineCart[product.id] || offlineCart[product.id].qty === 0">
               <button @click="offlineAddToCart(product.id)"
                 class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
