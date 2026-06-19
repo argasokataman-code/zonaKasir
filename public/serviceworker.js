@@ -1,4 +1,4 @@
-const CACHE_VERSION = '25f14ae8'; // bumped: simplified flow, refreshCart in same request
+const CACHE_VERSION = '1e596d6e'; // bumped: fix PWA offline blank modal popup
 const STATIC_CACHE = `zonakasir-static-${CACHE_VERSION}`;
 const PAGES_CACHE = `zonakasir-pages-${CACHE_VERSION}`;
 const API_CACHE = `zonakasir-api-${CACHE_VERSION}`;
@@ -138,22 +138,17 @@ function getLoginRedirect(request) {
 }
 
 async function handlePageRequest(event) {
-  // Livewire POST: passthrough — bypass SW entirely
+  // Livewire POST: let fail naturally offline.
+  // SW returning fake 200 {components:[],assets:{}} makes Livewire
+  // call handleSuccess([]) which can clear component DOM.
+  // Native fetch error → handleFailure() → preserves existing state.
   if (isLivewireUpdate(event)) {
     return fetch(event.request).then(resp => {
-      // Intercept 401/403 from Livewire — redirect to login
       if (resp.status === 401 || resp.status === 403) {
         return getLoginRedirect(event.request);
       }
       return resp;
-    }).catch(() =>
-      // Return 200 with empty Livewire response — tells Livewire "nothing to update".
-      // This prevents the iframe error modal and the 419 reload loop entirely.
-      // Livewire parses {"components":[],"assets":{}} → no DOM changes → no flickering.
-      new Response(JSON.stringify({ components: [], assets: {} }), {
-        status: 200, headers: { 'Content-Type': 'application/json' },
-      })
-    );
+    });
   }
 
   // Network-first for navigation — check auth status
@@ -327,6 +322,10 @@ self.addEventListener('fetch', event => {
   // Never cache auth-related pages — allows account switching
   // Also skip SW probe requests (used by 419 handler to check real network)
   if (url.includes('/login') || url.includes('/logout') || url.includes('/auth/google') || url.includes('/member/offline') || url.includes('_swprobe=')) return;
+
+  // Don't intercept Livewire POST — let native fetch fail offline.
+  // SW returning 408 triggers showFailureModal('') → dark iframe blank popup.
+  if (isLivewireUpdate(event)) return;
 
   if (isApiRoute(url)) event.respondWith(handleApiRequest(event));
   else if (isNavigationRequest(event)) event.respondWith(handlePageRequest(event));
