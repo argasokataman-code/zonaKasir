@@ -9,6 +9,32 @@ use Filament\Notifications\Notification;
 
 trait CartInteraction
 {
+    /**
+     * Lightweight cart refresh: query ONLY affected item + update collection.
+     * Skips full refreshCart() which re-queries + re-renders ALL items.
+     */
+    private function softRefresh(Product $product): void
+    {
+        $updated = \App\Models\Tenants\CartItem::where('product_id', $product->getKey())
+            ->with(['product:id,name,sku,selling_price,is_non_stock,hero_images', 'priceUnit:id,selling_price'])
+            ->cashier()
+            ->first();
+
+        // Remove old entry, add updated one
+        $this->cartItems = $this->cartItems->reject(fn ($i) => $i->product_id === $product->getKey());
+        if ($updated) {
+            $this->cartItems->push($updated);
+        }
+        $this->cartCount = $this->cartItems->count();
+        $this->calculateTotalPrice();
+
+        $this->dispatch('cart-data-updated', [
+            'cartItems' => $this->cartItems->pluck('qty', 'product_id')->toArray(),
+            'cartCount' => $this->cartCount,
+            'totalPrice' => $this->total_price,
+            'subTotal' => $this->sub_total,
+        ]);
+    }
     private function validateStock(Product $product, $qty): bool
     {
         $available = $product->stock_calculate;
@@ -39,13 +65,11 @@ trait CartInteraction
             $qty = (int) $data['_bulk'];
             if ($qty <= 0) {
                 CartItem::where('product_id', $product->getKey())->cashier()->delete();
-                $this->refreshCart();
-
+                $this->softRefresh($product);
                 return;
             }
         } elseif (! $data['amount']) {
             $this->deleteCart($product);
-
             return;
         } else {
             $qty = (int) $data['amount'];
@@ -67,7 +91,7 @@ trait CartInteraction
                 ]
             );
 
-        $this->refreshCart();
+        $this->softRefresh($product);
     }
 
     public function reduceCart(Product $product)
@@ -77,15 +101,13 @@ trait CartInteraction
             ->cashier()
             ->first();
         if (! $cartItem) {
-            $this->refreshCart();
-
+            $this->softRefresh($product);
             return;
         }
         $qty = $cartItem->qty - 1;
         if ($qty == 0) {
             $cartItem->delete();
-            $this->refreshCart();
-
+            $this->softRefresh($product);
             return;
         }
         $price = $product->selling_price * ($qty);
@@ -94,25 +116,13 @@ trait CartInteraction
             'price' => $price,
         ]);
         $cartItem->save();
-        $this->refreshCart();
+        $this->softRefresh($product);
     }
 
     public function deleteCart(Product $product)
     {
         CartItem::where('product_id', $product->getKey())->cashier()->delete();
-
-        // Lightweight removal: update in-memory collection + totals only.
-        // Skip full refreshCart() which re-queries all 64+ items (slow).
-        $this->cartItems = $this->cartItems->reject(fn ($i) => $i->product_id === $product->getKey());
-        $this->cartCount = $this->cartItems->count();
-        $this->calculateTotalPrice();
-
-        $this->dispatch('cart-data-updated', [
-            'cartItems' => $this->cartItems->pluck('qty', 'product_id')->toArray(),
-            'cartCount' => $this->cartCount,
-            'totalPrice' => $this->total_price,
-            'subTotal' => $this->sub_total,
-        ]);
+        $this->softRefresh($product);
     }
 
     public function addDiscountPricePerItem(CartItem $cartItem, $value)
