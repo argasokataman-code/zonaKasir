@@ -155,33 +155,6 @@ window.__cashierOffline = () => ({
       this.loadOfflineData();
     } catch(e) {
       console.error('[PWA] Sync failed:', e);
-      // Fallback: save server-rendered data already on page to IndexedDB
-      try {
-        var serverProducts = window.__initialProducts;
-        var serverCategories = window.__initialCategories;
-        if ((serverProducts && serverProducts.length) || (serverCategories && serverCategories.length)) {
-          this.syncStatus = 'Using page data...';
-          var fallbackStores = [
-            { key: 'products', items: serverProducts || [] },
-            { key: 'categories', items: serverCategories || [] },
-          ];
-          for (var s of fallbackStores) {
-            if (!s.items.length) continue;
-            var txn = db.transaction(s.key, 'readwrite');
-            var os = txn.objectStore(s.key);
-            os.clear();
-            s.items.forEach(function(it) { os.put(it); });
-            await new Promise(function(res, rej) { txn.oncomplete = res; txn.onerror = rej; });
-          }
-          var mTx = db.transaction('meta', 'readwrite');
-          mTx.objectStore('meta').put({ key: 'last_prefetch', value: new Date().toISOString() });
-          await new Promise(function(r) { mTx.oncomplete = r; });
-          console.log('[PWA] Fallback cache from page data OK');
-          this.loadOfflineData();
-        }
-      } catch(fbErr) {
-        console.error('[PWA] Fallback cache failed:', fbErr);
-      }
       this.syncStatus = 'Sync failed';
       await new Promise(r => setTimeout(r, 1000));
       this.showSyncSplash = false;
