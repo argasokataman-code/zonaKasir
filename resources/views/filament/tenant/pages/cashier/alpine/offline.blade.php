@@ -54,26 +54,20 @@ window.__cashierOffline = () => ({
   offlineAddToCart(productId) {
     const id = Number(productId);
     const p = this.offlineProducts.find(x => Number(x.id) === id);
-    if (!p || (!p.is_non_stock && (p.stock_calculate !== undefined ? p.stock_calculate : p.stock || 0) <= 0)) return;
-    const existing = this.offlineCart[id];
-    if (!existing) {
-      this.offlineCart = { ...this.offlineCart, [id]: { id, name: p.name, price: p.selling_price_calculate || p.selling_price || 0, qty: 1, discount_price: 0 } };
-    } else {
-      this.offlineCart = { ...this.offlineCart, [id]: { ...existing, qty: existing.qty + 1 } };
-    }
+    if (!p) return;
+    const cart = this.offlineCart;
+    cart[id] = cart[id] || { id, name: p.name, price: p.selling_price_calculate || p.selling_price || 0, qty: 0, discount_price: 0 };
+    cart[id].qty++;
+    this.offlineCart = { ...cart };
   },
 
   offlineRemoveFromCart(productId) {
     const id = Number(productId);
-    if (!this.offlineCart[id]) return;
-    const existing = this.offlineCart[id];
-    if (existing.qty <= 1) {
-      const updated = { ...this.offlineCart };
-      delete updated[id];
-      this.offlineCart = updated;
-    } else {
-      this.offlineCart = { ...this.offlineCart, [id]: { ...existing, qty: existing.qty - 1 } };
-    }
+    const cart = this.offlineCart;
+    if (!cart[id]) return;
+    cart[id].qty--;
+    if (cart[id].qty <= 0) delete cart[id];
+    this.offlineCart = { ...cart };
   },
 
   get offlineCartCount() {
