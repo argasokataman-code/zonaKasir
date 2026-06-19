@@ -511,6 +511,14 @@ The `bg-white` class does not exist
 
 ## 9. Vercel CLI — Setup & Usage
 
+> **Catatan:** Semua contoh di bawah menggunakan placeholder `<team>`, `<project>`, `<token>`.
+> Ganti dengan nilai dari akun Vercel kamu masing-masing.
+>
+> Contoh riil dari repo ini:
+> - Team: `argasokataman-codes-projects`
+> - Project: `zona-kasir`
+> - Token: (lihat dari https://vercel.com/account/tokens)
+
 ### 9.1 Install Vercel CLI
 
 ```bash
@@ -525,38 +533,41 @@ yarn global add vercel
 ```bash
 vercel login
 # Buka link yang muncul, login via browser
+# Akan terhubung ke AKUN VERCEL KAMU SENDIRI
 ```
 
 #### Cara B: Login dengan token (CI/CD)
 ```bash
-vercel login --token=<token>
+# Token dari https://vercel.com/account/tokens
+vercel login --token=<your-vercel-token>
 ```
 
 ### 9.3 Token Vercel
 
-Token di-generate dari dashboard: https://vercel.com/account/tokens
+Generate di https://vercel.com/account/tokens
 
 ```bash
 # Cek status login
-vercel whoami --token=<token>
+vercel whoami --token=<your-vercel-token>
 
-# Output: argasokataman-code
+# Output akan berbeda tergantung akun kamu, contoh:
+# argasokataman-code
 ```
 
 ### 9.4 Link Project
 
 ```bash
 # Dari root repo
-vercel link --token=<token> --yes
+vercel link --token=<your-vercel-token> --yes
 
-# Output: ✓ Linked to argasokataman-codes-projects/zona-kasir
+# Output: ✓ Linked to <your-team>/<your-project>
 ```
 
 ### 9.5 Deploy Branch `vercel` to Production
 
 ```bash
 # Deployment langsung (upload archive)
-vercel deploy --token=<token> --prod --archive=tgz --yes
+vercel deploy --prod --archive=tgz --yes
 
 # Output:
 #   Inspect    https://vercel.com/.../xxx
@@ -574,30 +585,30 @@ Vercel Dashboard → Settings → Git → Production Branch → pilih branch
 ### 9.7 List Deployments
 
 ```bash
-vercel list --token=<token>
+vercel list --token=<your-vercel-token>
 ```
 
 ### 9.8 Check Deployment Status
 
 ```bash
-vercel inspect <deployment-url> --token=<token>
+vercel inspect <deployment-url> --token=<your-vercel-token>
 ```
 
 ### 9.9 View Build Logs
 
 ```bash
-vercel logs <deployment-url> --token=<token>
+vercel logs <deployment-url> --token=<your-vercel-token>
 ```
 
 ### 9.10 Environment Variables via CLI
 
 ```bash
 # Pull env dari Vercel ke .env.local
-vercel env pull --token=<token>
+vercel env pull --token=<your-vercel-token>
 
 # Set env via API (example)
 curl -s -X POST "https://api.vercel.com/v10/projects/<project-id>/env" \
-  -H "Authorization: Bearer <token>" \
+  -H "Authorization: Bearer <your-vercel-token>" \
   -H "Content-Type: application/json" \
   -d '{"key":"DB_CONNECTION","value":"pgsql","target":["production","preview"],"type":"encrypted"}'
 ```
@@ -619,16 +630,16 @@ DELETE /v1/projects/<project>/env/<id> → Delete env variable
 
 | Tujuan | Perintah |
 |--------|----------|
-| Login | `vercel login --token=<token>` |
-| Cek login | `vercel whoami --token=<token>` |
-| Link project | `vercel link --token=<token> --yes` |
-| Deploy production | `vercel deploy --token=<token> --prod --archive=tgz --yes` |
-| Deploy preview | `vercel deploy --token=<token> --archive=tgz --yes` |
-| List deployments | `vercel list --token=<token>` |
-| Inspect deployment | `vercel inspect <url> --token=<token>` |
-| View logs | `vercel logs <url> --token=<token>` |
-| Set env | `vercel env add <key> --token=<token>` |
-| Pull env | `vercel env pull --token=<token>` |
+| Login | `vercel login --token=<your-vercel-token>` |
+| Cek login | `vercel whoami --token=<your-vercel-token>` |
+| Link project | `vercel link --token=<your-vercel-token> --yes` |
+| Deploy production | `vercel deploy --token=<your-vercel-token> --prod --archive=tgz --yes` |
+| Deploy preview | `vercel deploy --token=<your-vercel-token> --archive=tgz --yes` |
+| List deployments | `vercel list --token=<your-vercel-token>` |
+| Inspect deployment | `vercel inspect <url> --token=<your-vercel-token>` |
+| View logs | `vercel logs <url> --token=<your-vercel-token>` |
+| Set env | `vercel env add <key> --token=<your-vercel-token>` |
+| Pull env | `vercel env pull --token=<your-vercel-token>` |
 
 ### 9.13 ⚠️ Catatan Penting
 
