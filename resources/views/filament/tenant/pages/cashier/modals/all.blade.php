@@ -37,7 +37,7 @@
               </template>
             </div>
             <div class="mb-4">
-              @include('filament.tenant.pages.cashier.total')
+              @include('filament.tenant.pages.cashier.partials.total')
             </div>
             @php
               $isCreditSelected = true;
@@ -200,7 +200,7 @@
               <p class="error w-full text-center text-lg text-danger-500">{{ $error }}</p>
             @endforeach
           @endif
-          @include('filament.tenant.pages.cashier.items')
+          @include('filament.tenant.pages.cashier.partials.items')
         </div>
         {{-- Mobile: collapsible cart summary --}}
         <details class="md:hidden mt-2 border rounded-lg">
@@ -208,7 +208,7 @@
             {{ __('Order items') }} ({{ count($cartItems) }})
           </summary>
           <div class="px-3 pb-2">
-            @include('filament.tenant.pages.cashier.items')
+            @include('filament.tenant.pages.cashier.partials.items')
           </div>
         </details>
       </div>
