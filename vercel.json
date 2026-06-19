@@ -2,7 +2,7 @@
     "$schema": "https://openapi.vercel.sh/vercel.json",
     "functions": {
         "api/index.php": {
-            "runtime": "vercel-php@0.7.0",
+            "runtime": "vercel-php@0.6.0",
             "memory": 512
         }
     },
@@ -12,6 +12,8 @@
             "dest": "/api/index.php"
         }
     ],
-    "buildCommand": "composer install --no-dev --optimize-autoloader --no-interaction && npm run build",
-    "outputDirectory": "public"
+    "framework": null,
+    "buildCommand": "yarn run build",
+    "outputDirectory": "public",
+    "installCommand": "yarn install"
 }
