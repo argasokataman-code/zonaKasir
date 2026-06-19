@@ -63,9 +63,9 @@
           <p class="text-xs font-medium text-gray-500 dark:text-gray-400" x-text="product.sku"></p>
           <h3 class="mt-0.5 text-sm font-semibold leading-tight text-gray-900 dark:text-white line-clamp-2" x-text="product.name"></h3>
         </div>
-        <div class="mt-2 flex items-center">
-          <span class="text-sm font-bold text-zonakasir-primary" x-text="'Rp ' + (product.selling_price_calculate || product.selling_price || 0).toLocaleString('id-ID')"></span>
-          <div class="ml-auto flex items-center justify-end min-w-[100px] min-h-[44px]">
+        <div class="mt-2 flex flex-wrap items-center gap-x-1">
+          <span class="text-sm font-bold text-zonakasir-primary whitespace-nowrap" x-text="'Rp ' + (product.selling_price_calculate || product.selling_price || 0).toLocaleString('id-ID')"></span>
+          <div class="ml-auto flex items-center justify-end min-h-[44px]">
             <template x-if="!offlineCart[product.id] || offlineCart[product.id].qty === 0">
               <button @click="offlineAddToCart(product.id)"
                 class="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-zonakasir-primary text-white transition-colors hover:bg-zonakasir-primary/90">
