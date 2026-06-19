@@ -257,54 +257,40 @@
         <div class="max-h-[40vh] min-h-32 overflow-auto" wire:loading.class="opacity-20"
           wire:target="addCart,reduceCart,deleteCart,addDiscountPricePerItem,addCartUsingScanner">
           @forelse($cartItems as $item)
-            <div class="mb-2 rounded-lg border bg-white px-3 py-2 dark:border-gray-900 dark:bg-gray-900"
-              id="cart-item-{{ $item->id }}" key="cart-item-{{ $item->id }}">
-              <div class="grid items-center space-x-3">
-                <div class="flex justify-between">
-                  <p class="font-semibold text-sm"> {{ $item->product?->name ?? __('Deleted product') }}</p>
-                  <p class="font-semibold text-sm text-zonakasir-primary">{{ $item->price_format_money }}</p>
+            <div wire:key="cart-item-{{ $item->id }}" class="mb-2 rounded-lg border bg-white px-3 py-2 dark:border-gray-900 dark:bg-gray-900">
+              <div class="flex justify-between items-center">
+                <div class="min-w-0 flex-1">
+                  <p class="font-semibold text-sm truncate"> {{ $item->product?->name ?? __('Deleted product') }}</p>
+                  <p class="text-xs text-zonakasir-primary font-semibold">{{ $item->price_format_money }}</p>
                 </div>
-              </div>
-              <div class="grid grid-cols-2 items-center space-y-1 py-1 text-right">
-                <div class="col-span-2">
-                  @feature(Discount::class)
-                    <div class="mb-1 flex justify-end">
-                      <x-filament::input.wrapper class="w-1/2">
-                        <x-filament::input type="text" id="discount-{{ $item->id }}"
-                          value="{{ $item->discount_price == 0 ? '' : $item->discount_price }}"
-                          wire:keyup.debounce.500ms="addDiscountPricePerItem({{ $item }}, parseFloat($event.target.value.replace(/,/g, '')))"
-                          placeholder="{{ __('Discount') }}" class="w-1/2 text-right text-sm" inputMode="numeric"
-                          x-mask:dynamic="$money($input)" />
-                      </x-filament::input.wrapper>
-                    </div>
-                  @endfeature
-                  @if ($item->discount_price && $item->discount_price > 0)
-                    <p class="font-semibold text-sm text-zonakasir-primary">{{ $item->final_price_format }}</p>
+                <div class="flex items-center gap-1 shrink-0 ml-2">
+                  <button class="flex h-7 w-7 items-center justify-center rounded-lg bg-zonakasir-primary text-white text-sm font-bold"
+                    wire:click.stop="addCart( {{ $item->product_id }} )" wire:loading.attr="disabled">+</button>
+                  <input type="text" value="{{ $item->qty }}"
+                    x-on:keyup.debounce.500ms="(e) => add('{{ $item->product_id }}', e.target.value)"
+                    class="w-10 rounded border border-gray-300 px-1 py-0.5 text-center text-xs dark:border-gray-600 dark:bg-gray-800"
+                    inputMode="numeric" />
+                  <button class="flex h-7 w-7 items-center justify-center rounded-lg bg-gray-100 text-gray-600 text-sm font-bold dark:bg-gray-700"
+                    x-on:click="$wire.reduceCart({{ $item->product_id }});" wire:loading.attr="disabled">−</button>
+                  <button class="flex h-7 w-7 items-center justify-center rounded-lg bg-red-100 text-red-600 text-sm"
+                    wire:click.stop="deleteCart({{ $item->product_id }})" wire:loading.attr="disabled" type="button">×</button>
+                  @if($item->product && $item->product->priceUnits()->exists())
+                    <livewire:price-setting :cart-item="$item" wire:key="ps-{{ $item->id }}" />
                   @endif
                 </div>
               </div>
-              <div class="flex h-7 space-x-2">
-                <button class="rounded-lg !bg-zonakasir-primary px-2 py-0.5 text-sm"
-                  wire:click.stop="addCart( {{ $item->product_id }} )" wire:loading.attr="disabled">
-                  <x-heroicon-o-plus-small class="h-3.5 w-3.5 !text-white" />
-                </button>
-                <x-filament::input.wrapper class="w-16">
-                  <x-filament::input type="text"
-                    id="cart-qty-{{ $item->id }}"
-                    data-value="{{ $item->qty }}" value="{{ $item->qty }}"
-                    x-on:keyup.debounce.500ms="(e) => add('{{ $item->product_id }}', e.target.value)"
-                    placeholder="{{ __('Qty') }}" class="w-1/2 text-right text-sm" inputMode="numeric" />
-                </x-filament::input.wrapper>
-                <button class="rounded-lg !bg-gray-100 px-2 py-0.5"
-                  x-on:click="$wire.reduceCart({{ $item->product_id }});" wire:loading.attr="disabled">
-                  <x-heroicon-o-minus-small class="h-3.5 w-3.5 !text-green-900" />
-                </button>
-                <button class="rounded-lg !bg-danger-100 px-2 py-0.5" wire:click.stop="deleteCart({{ $item->product_id }})"
-                  wire:loading.attr="disabled" type="button">
-                  <x-heroicon-o-trash class="h-3.5 w-3.5 !text-danger-900" />
-                </button>
-                <livewire:price-setting :cart-item="$item" key="{{ $item->id }}" />
-              </div>
+              @feature(Discount::class)
+                @if($item->discount_price > 0)
+                  <div class="mt-1 text-right">
+                    <input type="text" value="{{ $item->discount_price }}"
+                      wire:keyup.debounce.500ms="addDiscountPricePerItem({{ $item }}, parseFloat($event.target.value.replace(/,/g, '')))"
+                      placeholder="{{ __('Discount') }}"
+                      class="w-24 rounded border border-gray-300 px-2 py-0.5 text-right text-xs dark:border-gray-600 dark:bg-gray-800"
+                      inputMode="numeric" x-mask:dynamic="$money($input)" />
+                    <p class="text-xs font-semibold text-zonakasir-primary">{{ $item->final_price_format }}</p>
+                  </div>
+                @endif
+              @endfeature
             </div>
           @empty
             <div
