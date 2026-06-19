@@ -124,7 +124,7 @@ class PaymentSubscriptions extends Page
         $this->monthlyTrend = Invoice::where('invoices.status', 'paid')
             ->where('invoices.paid_at', '>=', now()->subMonths(6))
             ->select(
-                DB::raw("DATE_FORMAT(invoices.paid_at, '%Y-%m') as month"),
+                DB::raw("TO_CHAR(invoices.paid_at, 'YYYY-MM') as month"),
                 DB::raw('SUM(invoices.amount) as total_amount'),
                 DB::raw('COUNT(*) as invoice_count')
             )
@@ -164,7 +164,7 @@ class PaymentSubscriptions extends Page
         // Avg Days to Payment: avg(paid_at - created_at)
         $avgDays = Invoice::where('invoices.status', 'paid')
             ->whereNotNull('invoices.paid_at')
-            ->selectRaw('AVG(DATEDIFF(invoices.paid_at, invoices.created_at)) as avg_days')
+            ->selectRaw('AVG(EXTRACT(EPOCH FROM (invoices.paid_at - invoices.created_at)) / 86400) as avg_days')
             ->value('avg_days');
         $this->avgDaysToPayment = round($avgDays ?? 0, 1);
 

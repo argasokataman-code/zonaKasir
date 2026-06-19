@@ -37,7 +37,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->string('barcode')->nullable()->after('sku');
+            $table->string('barcode')->nullable();
         });
 
         $barcodes = DB::table('barcodes')

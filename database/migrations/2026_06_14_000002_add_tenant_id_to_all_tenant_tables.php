@@ -31,7 +31,7 @@ return new class extends Migration
             }
 
             Schema::table($table, function (Blueprint $t) use ($table) {
-                $t->string('tenant_id')->nullable()->after('id');
+                $t->string('tenant_id')->nullable();
                 $t->index('tenant_id');
             });
         }

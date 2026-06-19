@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sellings', function (Blueprint $table) {
-            $table->double('total_discount_per_item')->default(0)->after('total_cost');
+            $table->double('total_discount_per_item')->default(0);
         });
     }
 

@@ -4,6 +4,7 @@ use App\Constants\VoucherType;
 use App\Events\RecalculateEvent;
 use App\Models\Tenants\CashDrawer;
 use App\Models\Tenants\Member;
+use App\Models\Tenants\PaymentMethod;
 use App\Models\Tenants\Product;
 use App\Models\Tenants\Setting;
 use App\Models\Tenants\Stock;
@@ -181,7 +182,7 @@ test('cashier can create the sellings transaction with normal selling method wit
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
-        'payment_method_id' => 1,
+        'user_id' => $user->id,
     ]);
 });
 
@@ -210,7 +211,7 @@ test('cashier can create the sellings transaction with normal selling method wit
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
-        'payment_method_id' => 1,
+        'user_id' => $user->id,
     ]);
 });
 
@@ -239,7 +240,7 @@ test('cashier can create the sellings transaction with normal selling method wit
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
-        'payment_method_id' => 1,
+        'user_id' => $user->id,
     ]);
 });
 
@@ -495,6 +496,7 @@ test('cashier cannot create the sellig with expired voucher', function () {
 
 beforeEach(function () {
     Setting::set('selling_method', 'fifo');
+    Setting::set('cash_drawer_enabled', false); // Reset to prevent test pollution
     Cache::clear();
     $product = Product::factory()
         ->create([

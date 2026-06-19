@@ -12,16 +12,16 @@ return new class extends Migration
         if (Schema::hasTable('tenants')) {
             Schema::table('tenants', function (Blueprint $table) {
                 if (! Schema::hasColumn('tenants', 'data')) {
-                    $table->longText('data')->nullable()->after('tenancy_email');
+                    $table->longText('data')->nullable();
                 }
                 if (! Schema::hasColumn('tenants', 'is_active')) {
-                    $table->boolean('is_active')->default(true)->after('data');
+                    $table->boolean('is_active')->default(true);
                 }
                 if (! Schema::hasColumn('tenants', 'suspended_at')) {
-                    $table->timestamp('suspended_at')->nullable()->after('is_active');
+                    $table->timestamp('suspended_at')->nullable();
                 }
                 if (! Schema::hasColumn('tenants', 'suspension_reason')) {
-                    $table->text('suspension_reason')->nullable()->after('suspended_at');
+                    $table->text('suspension_reason')->nullable();
                 }
             });
         }

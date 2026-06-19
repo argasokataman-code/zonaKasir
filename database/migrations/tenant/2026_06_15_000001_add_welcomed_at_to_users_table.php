@@ -10,7 +10,7 @@ return new class extends Migration
     {
         if (Schema::hasTable('users') && ! Schema::hasColumn('users', 'welcomed_at')) {
             Schema::table('users', function (Blueprint $table) {
-                $table->timestamp('welcomed_at')->nullable()->after('google_id');
+                $table->timestamp('welcomed_at')->nullable();
             });
         }
     }

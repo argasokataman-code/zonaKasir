@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('purchasings', function (Blueprint $table) {
             $table->date('date')->change();
             $table->date('due_date')->change();
-            $table->dateTime('approved_at')->nullable()->after('due_date');
+            $table->dateTime('approved_at')->nullable();
         });
     }
 

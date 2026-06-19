@@ -9,10 +9,10 @@ services:
   appserver:
     xdebug: false
   database:
-    portforward: 3305
+    portforward: 5432
 config:
   via: nginx
-  php: '8.2'
+  php: '8.4'
   webroot: public
   composer_version: '2.2.12'
-  database: mysql
+  database: postgres

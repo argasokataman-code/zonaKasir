@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('stock_opnames', function (Blueprint $table) {
-            $table->string('status')->default('pending')->after('id');
+            $table->string('status')->default('pending');
         });
     }
 

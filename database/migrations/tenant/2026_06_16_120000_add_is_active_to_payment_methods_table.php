@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('payment_methods', function (Blueprint $table) {
-            $table->boolean('is_active')->default(true)->after('icon');
+            $table->boolean('is_active')->default(true);
         });
     }
 

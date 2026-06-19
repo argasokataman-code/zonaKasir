@@ -15,10 +15,16 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        if (DB::getDriverName() !== 'sqlite') {
+        $driver = DB::getDriverName();
+        if ($driver === 'mysql') {
             DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        } elseif ($driver === 'pgsql') {
+            DB::statement('SET CONSTRAINTS ALL DISABLE');
         }
         Category::truncate();
+        if ($driver === 'pgsql') {
+            DB::statement('SET CONSTRAINTS ALL ENABLE');
+        }
         Category::create([
             'name' => "UMUM"
         ]);

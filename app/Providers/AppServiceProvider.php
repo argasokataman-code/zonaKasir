@@ -35,14 +35,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Enforce runtime DB driver to be MySQL outside of automated tests.
-        if (! $this->app->runningUnitTests()) {
-            $default = config('database.default');
-            $driver = config("database.connections.{$default}.driver");
-            if ($driver !== 'mysql') {
-                throw new \RuntimeException("Runtime database driver must be MySQL; current: {$driver} (connection: {$default}).");
-            }
-        }
         Builder::macro('filter', function (Request $request) {
             /* WIP:  <07-08-22, sheenazien8> */
             $columns = $request->filters;

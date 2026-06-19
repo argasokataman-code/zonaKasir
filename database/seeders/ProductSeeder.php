@@ -11,8 +11,11 @@ class ProductSeeder extends Seeder
 {
     public function run()
     {
-        if (config('database.default') !== 'sqlite') {
+        $driver = DB::getDriverName();
+        if ($driver === 'mysql') {
             DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        } elseif ($driver === 'pgsql') {
+            DB::statement('SET CONSTRAINTS ALL DISABLE');
         }
 
         Product::truncate();
@@ -102,8 +105,10 @@ class ProductSeeder extends Seeder
             ]);
         }
 
-        if (config('database.default') !== 'sqlite') {
+        if ($driver === 'mysql') {
             DB::statement('SET FOREIGN_KEY_CHECKS=1');
+        } elseif ($driver === 'pgsql') {
+            DB::statement('SET CONSTRAINTS ALL ENABLE');
         }
     }
 }

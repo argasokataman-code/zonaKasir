@@ -11,7 +11,7 @@ return new class extends Migration
     {
         Schema::table('tenants', function (Blueprint $table) {
             if (!Schema::hasColumn('tenants', 'google_id')) {
-                $table->string('google_id')->nullable()->unique()->after('id');
+                $table->string('google_id')->nullable()->unique();
             }
         });
     }

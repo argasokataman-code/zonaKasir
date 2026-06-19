@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('purchasings', function (Blueprint $table) {
-            $table->foreignId('payment_method_id')->after('id')->nullable()->constrained();
-            $table->boolean('payment_status')->after('status')->default(false);
+            $table->foreignId('payment_method_id')->nullable()->constrained();
+            $table->boolean('payment_status')->default(false);
         });
     }
 

@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('ledger_entries', function (Blueprint $table) {
             $table->id();
             $table->morphs('ledgerable');
-            $table->enum('entry_type', ['credit', 'debit']);
+            $table->string('entry_type', 20);
             $table->double('amount');
             $table->double('balance_before');
             $table->double('balance_after');

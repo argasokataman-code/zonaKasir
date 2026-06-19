@@ -13,14 +13,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sellings', function (Blueprint $table) {
-            $table->boolean('friend_price')->default(false)->after('total_price');
-            $table->after('friend_price', function (Blueprint $table) {
-                $table->foreignIdFor(PaymentMethod::class, 'payment_method_id')
-                    ->nullable()
-                    ->constrained()
-                    ->onDelete('cascade');
-                $table->double('tax')->default(0);
-            });
+            $table->boolean('friend_price')->default(false);
+            $table->foreignIdFor(PaymentMethod::class, 'payment_method_id')
+                ->nullable()
+                ->constrained()
+                ->onDelete('cascade');
+            $table->double('tax')->default(0);
         });
     }
 
