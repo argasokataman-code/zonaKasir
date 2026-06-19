@@ -52,16 +52,18 @@ window.__cashierOffline = () => ({
   },
 
   offlineAddToCart(productId) {
-    const p = this.offlineProducts.find(x => x.id === productId);
+    const id = Number(productId);
+    const p = this.offlineProducts.find(x => Number(x.id) === id);
     if (!p || (!p.is_non_stock && (p.stock_calculate !== undefined ? p.stock_calculate : p.stock || 0) <= 0)) return;
-    if (!this.offlineCart[productId]) this.offlineCart[productId] = { id: productId, name: p.name, price: p.selling_price_calculate || p.selling_price || 0, qty: 0, discount_price: 0 };
-    this.offlineCart[productId].qty++;
+    if (!this.offlineCart[id]) this.offlineCart[id] = { id, name: p.name, price: p.selling_price_calculate || p.selling_price || 0, qty: 0, discount_price: 0 };
+    this.offlineCart[id].qty++;
   },
 
   offlineRemoveFromCart(productId) {
-    if (!this.offlineCart[productId]) return;
-    this.offlineCart[productId].qty--;
-    if (this.offlineCart[productId].qty <= 0) delete this.offlineCart[productId];
+    const id = Number(productId);
+    if (!this.offlineCart[id]) return;
+    this.offlineCart[id].qty--;
+    if (this.offlineCart[id].qty <= 0) delete this.offlineCart[id];
   },
 
   get offlineCartCount() {
