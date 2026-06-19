@@ -1,5 +1,15 @@
 @script()
 <script>
+  @include('filament.tenant.pages.cashier.alpine.shared')
+  @include('filament.tenant.pages.cashier.alpine.online')
+  @include('filament.tenant.pages.cashier.alpine.offline')
+
+  Alpine.data('cashier', () => ({
+    ...window.__cashierShared(),
+    ...window.__cashierOnline(),
+    ...window.__cashierOffline(),
+  }));
+
   window.zonakasirCurrency = @js($currency);
   window.zonakasirLocale = @js($locale);
   if (typeof window.getPrinter !== 'function') {

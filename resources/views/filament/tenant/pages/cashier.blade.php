@@ -3,232 +3,7 @@
   use App\Features\{PaymentShortcutButton, SellingTax, Discount};
 
 @endphp
-<div class="" x-data="{
-  cartOpen: $persist(false).as('cashier_cartOpen'),
-  isOffline: !navigator.onLine,
-  isPWA: window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true,
-  offlineProducts: [],
-  offlineCategories: [],
-  offlineCart: {},
-  offlineSelectedCategory: null,
-  offlineSearch: '',
-  offlineDb: null,
-  paymentModalOpen: false,
-  selectedPaymentMethod: null,
-  offlineCartNote: '',
-  offlineCartDiscount: 0,
-  offlinePaymentMethod: 'cash',
-  syncProgress: 0,
-  syncStatus: '',
-  showSyncSplash: false,
-  // Cart badge qty map — product_id => qty (optimistic, updated instantly)
-   cartQty: {{ Js::from(collect($cartItems)->pluck('qty', 'product_id')->toArray()) }},
-   debounceTimers: {},
-
-   // Instant add — update badge instantly, sync server in background
-   instantAdd(productId) {
-     this.cartQty[productId] = (this.cartQty[productId] || 0) + 1;
-     clearTimeout(this.debounceTimers[productId]);
-     this.debounceTimers[productId] = setTimeout(() => {
-       if (navigator.onLine) {
-         $wire.addCart(productId, { _bulk: this.cartQty[productId] });
-       }
-     }, 300);
-   },
-
-   instantReduce(productId) {
-     if ((this.cartQty[productId] || 0) > 0) {
-       this.cartQty[productId]--;
-       if (this.cartQty[productId] <= 0) delete this.cartQty[productId];
-     }
-     clearTimeout(this.debounceTimers[productId]);
-     this.debounceTimers[productId] = setTimeout(() => {
-       if (navigator.onLine) {
-         const qty = this.cartQty[productId] || 0;
-         $wire.addCart(productId, { _bulk: qty });
-       }
-     }, 300);
-   },
-
-   // Sync badge from server after Livewire action completes
-   handleCartDataUpdated(event) {
-     // Livewire v3 detail = [ {cartItems} ]; fallback for bare {cartItems}
-     const raw = event.detail;
-     const data = Array.isArray(raw) ? raw[0] : raw;
-     this.cartQty = data?.cartItems || {};
-   },
-
-   async initOfflineDb() {
-    if (this.offlineDb) return this.offlineDb;
-    return new Promise((resolve, reject) => {
-      const req = indexedDB.open('zonakasir_offline', 2);
-      req.onsuccess = (e) => { this.offlineDb = e.target.result; resolve(this.offlineDb); };
-      req.onerror = (e) => reject(e.target.error);
-      req.onupgradeneeded = (e) => {
-        const db = e.target.result;
-        ['products','categories','members','payment_methods','about','settings','pending_sales','meta'].forEach(n => {
-          if (!db.objectStoreNames.contains(n)) db.createObjectStore(n, { keyPath: n === 'pending_sales' ? 'temp_id' : n === 'settings' ? 'key' : n === 'meta' ? 'key' : 'id' });
-        });
-      };
-    });
-  },
-
-  async loadOfflineData() {
-    try {
-      const db = await this.initOfflineDb();
-      const tx = db.transaction('products', 'readonly');
-      const req = tx.objectStore('products').getAll();
-      req.onsuccess = () => { this.offlineProducts = req.result || []; };
-    } catch(e) { console.error('[Offline] Load products error:', e); }
-    try {
-      const db = await this.initOfflineDb();
-      const tx = db.transaction('categories', 'readonly');
-      const req = tx.objectStore('categories').getAll();
-      req.onsuccess = () => { this.offlineCategories = req.result || []; };
-    } catch(e) { console.error('[Offline] Load categories error:', e); }
-  },
-
-  get filteredOfflineProducts() {
-    let filtered = this.offlineProducts;
-    if (this.offlineSelectedCategory) filtered = filtered.filter(p => p.category_id === this.offlineSelectedCategory);
-    if (this.offlineSearch) {
-      const q = this.offlineSearch.toLowerCase();
-      filtered = filtered.filter(p => (p.name && p.name.toLowerCase().includes(q)) || (p.sku && p.sku.toLowerCase().includes(q)) || (p.barcode && p.barcode.toLowerCase().includes(q)));
-    }
-    return filtered;
-  },
-
-  offlineAddToCart(productId) {
-    const p = this.offlineProducts.find(x => x.id === productId);
-    if (!p || (!p.is_non_stock && (p.stock_calculate !== undefined ? p.stock_calculate : p.stock || 0) <= 0)) return;
-    if (!this.offlineCart[productId]) this.offlineCart[productId] = { id: productId, name: p.name, price: p.selling_price_calculate || p.selling_price || 0, qty: 0, discount_price: 0 };
-    this.offlineCart[productId].qty++;
-  },
-
-  offlineRemoveFromCart(productId) {
-    if (!this.offlineCart[productId]) return;
-    this.offlineCart[productId].qty--;
-    if (this.offlineCart[productId].qty <= 0) delete this.offlineCart[productId];
-  },
-
-  get offlineCartCount() {
-    return Object.values(this.offlineCart).reduce((sum, item) => sum + item.qty, 0);
-  },
-
-  get offlineCartSubtotal() {
-    return Object.values(this.offlineCart).reduce((sum, item) => sum + (item.price * item.qty), 0);
-  },
-
-  async saveOfflineSale() {
-    const db = await this.initOfflineDb();
-    const tx = db.transaction('pending_sales', 'readwrite');
-    const entry = {
-      temp_id: 'offline_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-      products: Object.values(this.offlineCart),
-      total_price: this.offlineCartSubtotal - this.offlineCartDiscount,
-      total_qty: this.offlineCartCount,
-      payed_money: 0,
-      money_changes: 0,
-      discount_price: this.offlineCartDiscount,
-      note: this.offlineCartNote,
-      payment_method_id: this.selectedPaymentMethod,
-      status: 'pending',
-      created_at: new Date().toISOString(),
-      synced: false
-    };
-    tx.objectStore('pending_sales').put(entry);
-    this.offlineCart = {};
-    this.offlineCartDiscount = 0;
-    this.offlineCartNote = '';
-    this.paymentModalOpen = false;
-  },
-
-  async runStartupSync() {
-    if (!this.isPWA || !navigator.onLine) return;
-
-    // Init DB first — fail gracefully if unavailable
-    let db;
-    try {
-      db = await this.initOfflineDb();
-    } catch(e) {
-      console.error('[PWA] IndexedDB unavailable, skipping sync:', e);
-      return;
-    }
-
-    // Check if data is already fresh (< 30 min old)
-    try {
-      const tx = db.transaction('meta', 'readonly');
-      const req = tx.objectStore('meta').get('last_prefetch');
-      const lastPrefetch = await new Promise(r => { req.onsuccess = () => r(req.result); req.onerror = () => r(null); });
-      if (lastPrefetch && lastPrefetch.value) {
-        const age = Date.now() - new Date(lastPrefetch.value).getTime();
-        if (age < 30 * 60 * 1000) return; // fresh, skip sync
-      }
-    } catch(e) {}
-
-    // Show splash
-    this.showSyncSplash = true;
-    this.syncProgress = 0;
-    this.syncStatus = 'Syncing data...';
-
-    try {
-      // Single Livewire call — uses session auth + tenant context
-      const data = await $wire.call('getOfflineSyncData');
-      this.syncProgress = 60;
-
-      // Write each dataset to IndexedDB
-      const stores = [
-        { key: 'products', items: data.products || [] },
-        { key: 'categories', items: data.categories || [] },
-        { key: 'members', items: data.members || [] },
-        { key: 'payment_methods', items: data.payment_methods || [] },
-        { key: 'about', items: data.about ? [data.about] : [], single: true },
-      ];
-
-      for (const store of stores) {
-        const tx = db.transaction(store.key, 'readwrite');
-        const objStore = tx.objectStore(store.key);
-        objStore.clear();
-        if (store.single) {
-          store.items.forEach(item => objStore.put(item));
-        } else {
-          store.items.forEach(item => objStore.put(item));
-        }
-      }
-
-      // Save sync timestamp
-      const metaTx = db.transaction('meta', 'readwrite');
-      metaTx.objectStore('meta').put({ key: 'last_prefetch', value: new Date().toISOString() });
-
-      this.syncProgress = 100;
-      this.syncStatus = 'Ready!';
-      await new Promise(r => setTimeout(r, 500));
-      this.showSyncSplash = false;
-      this.loadOfflineData();
-    } catch(e) {
-      console.error('[PWA] Sync failed:', e);
-      this.syncStatus = 'Sync failed';
-      await new Promise(r => setTimeout(r, 1000));
-      this.showSyncSplash = false;
-    }
-  },
-
-  init: function() {
-    if (!navigator.onLine && !this.isPWA) {
-      window.location.href = '/network-error';
-      return;
-    }
-    window.addEventListener('online', () => { this.isOffline = false; });
-    window.addEventListener('offline', () => {
-      this.isOffline = true;
-      if (this.isPWA) { this.loadOfflineData(); }
-      else { window.location.href = '/network-error'; }
-    });
-    if (this.isPWA && !navigator.onLine) this.loadOfflineData();
-    if (this.isPWA) this.runStartupSync();
-  },
-
-}" x-on:cart-data-updated.window="handleCartDataUpdated">
+<div x-data="cashier" x-on:cart-data-updated.window="handleCartDataUpdated">
 
   {{-- ═══ SYNC SPLASH SCREEN (PWA only) ═══ --}}
   <div x-show="showSyncSplash" x-cloak
@@ -272,7 +47,7 @@
         </a>
       </div>
       {{-- Search --}}
-      <div class="mb-4 px-1">
+      <div x-show="!isOffline" class="mb-4 px-1">
         <div class="relative">
           <x-heroicon-o-magnifying-glass class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
           <input type="text" wire:model.live.debounce.300ms="search"
@@ -282,7 +57,7 @@
       </div>
 
       {{-- Categories --}}
-      <div class="mb-4 flex gap-2 overflow-x-auto px-1">
+      <div x-show="!isOffline" class="mb-4 flex gap-2 overflow-x-auto px-1">
         <button wire:click="$set('selectedCategory', null)"
           class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors {{ is_null($selectedCategory) ? 'bg-zonakasir-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300' }}">
           {{ __('All') }}
@@ -362,12 +137,12 @@
         @endforelse
       </div>
 
-      @include('filament.tenant.pages.cashier._offline')
+      @include('filament.tenant.pages.cashier.pwa.ui')
     </div>
 
     {{-- Mobile: cart toggle button with scan --}}
     <div class="fixed bottom-0 left-0 right-0 z-50 border-t bg-white px-3 pb-[env(safe-area-inset-bottom)] pt-3 shadow-lg dark:border-gray-800 dark:bg-gray-900 lg:hidden"
-      x-show="!cartOpen">
+      x-show="!cartOpen && !isOffline">
       <div class="flex gap-2">
         <button @click="cartOpen = true"
           class="flex flex-1 items-center justify-between rounded-lg bg-zonakasir-primary px-4 py-3 min-h-[48px] text-white">
@@ -398,7 +173,7 @@
     </div>
 
     {{-- Sidebar: always visible on desktop, bottom sheet on mobile --}}
-    <div class="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white shadow-2xl transition-transform duration-300 dark:bg-gray-900 lg:fixed lg:left-auto lg:right-0 lg:top-0 lg:bottom-auto lg:z-auto lg:h-screen lg:w-[40%] xl:w-1/3 lg:max-h-none lg:rounded-none lg:shadow-none"
+    <div x-show="!isOffline" class="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-white shadow-2xl transition-transform duration-300 dark:bg-gray-900 lg:fixed lg:left-auto lg:right-0 lg:top-0 lg:bottom-auto lg:z-auto lg:h-screen lg:w-[40%] xl:w-1/3 lg:max-h-none lg:rounded-none lg:shadow-none"
       x-bind:class="cartOpen ? 'translate-y-0' : 'translate-y-full lg:translate-y-0'"
       x-cloak>
       <div class="flex items-center justify-between border-b p-3 dark:border-gray-800 lg:hidden">
@@ -542,21 +317,21 @@
         <div>
           <div
             class="w-full rounded-lg border bg-white px-3 py-1.5 text-sm text-gray-600 dark:border-gray-900 dark:bg-gray-900 dark:text-white">
-            @include('filament.tenant.pages.cashier.detail')
+            @include('filament.tenant.pages.cashier.partials.detail')
           </div>
         </div>
         <div>
           <div
             class="w-full rounded-lg border bg-white px-3 py-1.5 text-sm text-gray-600 dark:border-gray-900 dark:bg-gray-900 dark:text-white">
-            @include('filament.tenant.pages.cashier.total')
+            @include('filament.tenant.pages.cashier.partials.total')
           </div>
         </div>
         <button class="w-full rounded-lg bg-zonakasir-primary px-2 py-3 text-sm font-semibold text-white"
-          x-on:mousedown="if(isOffline) { $dispatch('open-modal', {id: 'offline-payment-confirm'}); } else { cartOpen = false; $dispatch('open-modal', {id: 'proceed-the-payment'}); }">{{ __('Proceed to payment') }}</button>
+          x-on:mousedown="cartOpen = false; $dispatch('open-modal', {id: 'proceed-the-payment'});">{{ __('Proceed to payment') }}</button>
       </div>
     </div>
   </div>
-  @include('filament.tenant.pages.cashier._modals')
+  @include('filament.tenant.pages.cashier.modals.all')
 </div>
 
-@include('filament.tenant.pages.cashier._scripts')
+@include('filament.tenant.pages.cashier.scripts')
