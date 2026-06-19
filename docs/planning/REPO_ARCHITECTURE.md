@@ -303,6 +303,212 @@ Tidak. `main` aman — tidak tersenggol.
 
 ---
 
-**Dokumen Version:** 1.0
+## 6. Runtime Architecture
+
+### 6.1 Runtime `main` — VPS / Docker / Local
+
+```
+Request → Nginx (port 80)
+              ↓
+         PHP-FPM (8.2)
+              ↓
+       Laravel App
+              ↓
+    ┌───────┴───────┐
+    ▼               ▼
+  MySQL 8.0       Redis
+  (port 3306)    (port 6379)
+```
+
+**File system:** Read-write (`storage/`, `public/`)  
+**Queue:** `php artisan queue:work` (background supervisor)  
+**Websockets:** Pusher / Laravel Reverb  
+**File upload:** Local `storage/app/public`  
+**Cron:** `php artisan schedule:run`  
+**Session:** Database / Redis  
+**Cache:** Redis / File  
+
+**Docker Compose services:**
+```
+app     → PHP-FPM + Nginx + Supervisor
+mysql   → 8.0
+redis   → alpine
+mailpit → SMTP debug
+```
+
+**Request lifecycle (VPS):**
+```
+1. Browser → nginx:80
+2. nginx → public/index.php → Laravel Kernel
+3. Kernel → middleware → route → controller → service → model
+4. DB query → MySQL
+5. Response → JSON / Blade / Filament
+6. Kernel terminate
+```
+
+**Supervisor processes (VPS):**
+```
+nginx
+php-fpm
+queue:work (laravel-worker)
+```
+
+---
+
+### 6.2 Runtime `vercel` — Vercel Serverless
+
+```
+Request → Vercel Edge Network
+              ↓
+         vercel-php@0.9.0
+         (Node.js 18 → PHP 8.4)
+              ↓
+       api/index.php (entry point)
+              ↓
+    ┌───────┴───────┐
+    ▼               ▼
+  PostgreSQL      Redis (Upstash)
+  (Neon)          (external)
+```
+
+**Vercel Function Structure (Lambda):**
+```
+Lambda (max 250MB uncompressed):
+├── PHP binary (~40MB)
+│   ├── php, php-fpm
+│   └── extensions (pdo_pgsql, gd, mbstring, etc.)
+├── Composer vendor (~150MB —no-dev)
+│   ├── laravel/framework
+│   ├── filament/filament
+│   ├── spatie/*
+│   └── 161 packages
+├── App code (~10MB)
+│   ├── app/, config/, resources/, routes/, public/
+└── Node build (~10MB)
+    └── vite, tailwindcss, etc.
+```
+
+**Request lifecycle (Vercel):**
+```
+1. Browser → Vercel Edge → lambda (cold start ~5-10s)
+2. api/index.php bootstrap:
+   a. Set VERCEL env flag
+   b. Create /tmp/storage/{logs,cache,sessions,views}
+   c. Bootstrap Laravel with STORAGE_PATH=/tmp/storage
+   d. Handle request via Laravel Kernel
+3. Kernel → middleware → route → controller → service → model
+4. DB query → PostgreSQL (Neon pooled connection)
+5. Response → JSON / HTML
+6. Lambda cold → next request starts fresh
+```
+
+**File system:** Read-only (`/var/task/`), only `/tmp` is writable  
+**Queue:** ❌ Tidak bisa  
+**Websockets:** ❌ Tidak bisa  
+**File upload:** ❌ Perlu S3/R2  
+**Cron:** ❌ Tidak bisa  
+**Session:** Harus Redis  
+**Cache:** Harus Redis  
+**Log:** `/tmp/storage/logs` (hilang setelah cold start)  
+
+**Limitations per Platform:**
+
+| Feature | VPS (main) | Vercel (vercel) |
+|---------|------------|-----------------|
+| Queue (queue:work) | ✅ | ❌ |
+| File storage | ✅ Local | ❌ S3/R2 needed |
+| Cron (schedule:run) | ✅ | ❌ |
+| Websockets | ✅ Pusher/Reverb | ❌ |
+| Cold start | ❌ N/A | ⚠️ 5-10s |
+| Function size | Unlimited | ⚠️ 250MB max |
+| Log persistence | ✅ Forever | ⚠️ /tmp hilang |
+| Session | ✅ DB/Redis | ✅ Redis only |
+
+**Kesimpulan:** Vercel hanya cocok untuk **stateless API**. Queue, storage, cron tetap butuh VPS / Vapor / Railway.
+
+---
+
+## 7. Environment Variables
+
+### 7.1 `main` (VPS / Local)
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=zonakasir
+DB_USERNAME=root
+DB_PASSWORD=
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+QUEUE_CONNECTION=redis
+```
+
+### 7.2 `vercel` (PostgreSQL)
+```
+DB_CONNECTION=pgsql
+DATABASE_URL=postgresql://user:pass@host:5432/db?sslmode=require
+DB_HOST=postgres
+DB_PORT=5432
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+QUEUE_CONNECTION=sync
+```
+
+### 7.3 Vercel Dashboard Env (if attempting deploy)
+| Key | Value | Notes |
+|-----|-------|-------|
+| `APP_KEY` | `base64:...` | `php artisan key:generate --show` |
+| `APP_ENV` | `production` | |
+| `APP_DEBUG` | `false` | |
+| `DB_CONNECTION` | `pgsql` | |
+| `DATABASE_URL` | `postgresql://...` | Neon/Supabase |
+| `SESSION_DRIVER` | `redis` | |
+| `CACHE_DRIVER` | `redis` | |
+| `QUEUE_CONNECTION` | `sync` | |
+| `REDIS_URL` | `redis://...` | Upstash |
+| `COMPOSER_FLAGS` | `--no-dev --optimize-autoloader` | Already set |
+| `VERCEL_ANALYZE_BUILD_OUTPUT` | `1` | Already set |
+
+---
+
+## 8. Troubleshooting
+
+### 8.1 Vercel Build — 250MB Limit
+```
+Error: A Serverless Function has exceeded the unzipped maximum size of 250 MB.
+```
+**Penyebab:** Laravel (~150MB) + PHP runtime (~90MB) + app (~10MB) = >250MB.  
+**Solusi:** Gunakan VPS / Railway / Laravel Vapor.
+
+### 8.2 Vercel Storage Read-Only
+```
+There is no existing directory at "/var/task/user/storage/logs"
+```
+**Penyebab:** Vercel filesystem read-only.  
+**Fix:** `api/index.php` handle otomatis — create `/tmp/storage/` di bootstrap.
+
+### 8.3 PDO::MYSQL_ATTR_SSL_CA Deprecated
+```
+Deprecated: Constant PDO::MYSQL_ATTR_SSL_CA is deprecated since PHP 8.5
+```
+**Penyebab:** PHP 8.4+ deprecation. Cuma warning, aman.
+
+### 8.4 Tailwind Build — Missing Vendor Preset
+```
+[vite:css] [postcss] Cannot find module './vendor/filament/support/tailwind.config.preset'
+```
+**Penyebab:** Import dari vendor/ gak ada di Vercel build.  
+**Fix:** Branch `vercel` sudah pakai `presets: []`.
+
+### 8.5 Tailwind @apply — Class Not Found
+```
+The `bg-white` class does not exist
+```
+**Penyebab:** `@apply` with Filament classes (no preset loaded).  
+**Fix:** Branch `vercel` sudah ganti ke plain CSS.
+
+---
+
+**Dokumen Version:** 2.0 — Full Runtime Architecture
 **Last Updated:** 2026-06-19
 **Branch:** `main` & `vercel`
