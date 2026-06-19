@@ -104,7 +104,7 @@ class SyncController extends Controller
             'members' => $members->get(),
             'payment_methods' => $paymentMethods->get(),
             'vouchers' => $vouchers,
-            'about' => About::select('id', 'shop_name', 'shop_location', 'business_type', 'owner_name')->first(),
+            'about' => About::select('id', 'shop_name', 'shop_location', 'business_type')->first(),
             'settings' => $settings,
             'tables' => $tables,
             'is_delta' => $isDelta,
