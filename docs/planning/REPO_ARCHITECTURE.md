@@ -509,6 +509,139 @@ The `bg-white` class does not exist
 
 ---
 
-**Dokumen Version:** 2.0 — Full Runtime Architecture
+## 9. Vercel CLI — Setup & Usage
+
+### 9.1 Install Vercel CLI
+
+```bash
+npm install -g vercel
+# or
+yarn global add vercel
+```
+
+### 9.2 Login (2 cara)
+
+#### Cara A: Login interaktif (browser)
+```bash
+vercel login
+# Buka link yang muncul, login via browser
+```
+
+#### Cara B: Login dengan token (CI/CD)
+```bash
+vercel login --token=<token>
+```
+
+### 9.3 Token Vercel
+
+Token di-generate dari dashboard: https://vercel.com/account/tokens
+
+```bash
+# Cek status login
+vercel whoami --token=<token>
+
+# Output: argasokataman-code
+```
+
+### 9.4 Link Project
+
+```bash
+# Dari root repo
+vercel link --token=<token> --yes
+
+# Output: ✓ Linked to argasokataman-codes-projects/zona-kasir
+```
+
+### 9.5 Deploy Branch `vercel` to Production
+
+```bash
+# Deployment langsung (upload archive)
+vercel deploy --token=<token> --prod --archive=tgz --yes
+
+# Output:
+#   Inspect    https://vercel.com/.../xxx
+#   Production https://zona-kasir-xxx.vercel.app
+#   Building...
+```
+
+### 9.6 Deploy via Git (auto-deploy)
+
+Vercel auto-deploy ketika push ke **Production Branch**. Setting di Dashboard:
+```
+Vercel Dashboard → Settings → Git → Production Branch → pilih branch
+```
+
+### 9.7 List Deployments
+
+```bash
+vercel list --token=<token>
+```
+
+### 9.8 Check Deployment Status
+
+```bash
+vercel inspect <deployment-url> --token=<token>
+```
+
+### 9.9 View Build Logs
+
+```bash
+vercel logs <deployment-url> --token=<token>
+```
+
+### 9.10 Environment Variables via CLI
+
+```bash
+# Pull env dari Vercel ke .env.local
+vercel env pull --token=<token>
+
+# Set env via API (example)
+curl -s -X POST "https://api.vercel.com/v10/projects/<project-id>/env" \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"key":"DB_CONNECTION","value":"pgsql","target":["production","preview"],"type":"encrypted"}'
+```
+
+### 9.11 Project API (for automation)
+
+Base URL: `https://api.vercel.com`
+
+```
+GET    /v9/projects/<project>          → Get project config
+PATCH  /v9/projects/<project>          → Update project config
+POST   /v10/projects/<project>/env     → Add env variable
+GET    /v10/projects/<project>/env     → List env variables
+POST   /v1/projects/<project>/link     → Link git repository
+DELETE /v1/projects/<project>/env/<id> → Delete env variable
+```
+
+### 9.12 Commands Cheat Sheet
+
+| Tujuan | Perintah |
+|--------|----------|
+| Login | `vercel login --token=<token>` |
+| Cek login | `vercel whoami --token=<token>` |
+| Link project | `vercel link --token=<token> --yes` |
+| Deploy production | `vercel deploy --token=<token> --prod --archive=tgz --yes` |
+| Deploy preview | `vercel deploy --token=<token> --archive=tgz --yes` |
+| List deployments | `vercel list --token=<token>` |
+| Inspect deployment | `vercel inspect <url> --token=<token>` |
+| View logs | `vercel logs <url> --token=<token>` |
+| Set env | `vercel env add <key> --token=<token>` |
+| Pull env | `vercel env pull --token=<token>` |
+
+### 9.13 ⚠️ Catatan Penting
+
+| Hal | Detail |
+|-----|--------|
+| **Token bersifat rahasia** | Jangan commit token ke repo. Gunakan environment variable `VERCEL_TOKEN` |
+| **Token expire** | Token Vercel tidak expire kecuali di-revoke manual |
+| **250MB limit** | Laravel + PHP runtime >250MB. Vercel tidak cocok untuk Laravel monolith |
+| **Biaya** | Hobby (free): 250MB function limit. Pro ($20/bln): same 250MB limit |
+| **Region** | Build default di `iad1` (US East). Bisa diubah di project settings |
+
+---
+
+**Dokumen Version:** 2.1 — + Vercel CLI Guide
 **Last Updated:** 2026-06-19
 **Branch:** `main` & `vercel`
