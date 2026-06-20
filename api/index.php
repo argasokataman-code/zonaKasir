@@ -34,13 +34,15 @@ if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
     $app = require_once $projectRoot . '/bootstrap/app.php';
 }
 
-// Auto-run pending migrations once per deploy (Vercel only)
+// Auto-run pending migrations + clear cache once per deploy (Vercel only)
 $flagFile = '/tmp/storage/migrated.flag';
 if (! file_exists($flagFile) && (getenv('VERCEL') || isset($_ENV['VERCEL']))) {
     try {
         $artisan = $app->make(Illuminate\Contracts\Console\Kernel::class);
+        $artisan->call('route:clear');
+        $log = 'route:clear OK' . "\n";
         $artisan->call('migrate', ['--force' => true]);
-        $log = $artisan->output();
+        $log .= $artisan->output();
         $artisan->call('filament:assets');
         $log .= "\n" . $artisan->output();
         @file_put_contents('/tmp/storage/migrate.log', $log);
