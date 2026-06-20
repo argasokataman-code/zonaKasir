@@ -50,21 +50,11 @@ if (! file_exists($flagFile) && (getenv('VERCEL') || isset($_ENV['VERCEL']))) {
 
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 
-// TEMP: Diagnostic endpoint
+// TEMP: Remove after verification — auto-migrate on cold start
 if (strpos($requestUri, '__check=1') !== false) {
-    $lines = ['VERCEL: ' . (getenv('VERCEL') ?: 'not set')];
-    $lines[] = 'VERCEL_ENV: ' . (getenv('VERCEL_ENV') ?: 'not set');
-    $lines[] = 'MIGRATE_FLAG: ' . (file_exists('/tmp/storage/migrated.flag') ? file_get_contents('/tmp/storage/migrated.flag') : 'NOT FOUND');
-    $lines[] = 'MIGRATE_LOG: ' . (file_exists('/tmp/storage/migrate.log') ? substr(file_get_contents('/tmp/storage/migrate.log'), 0, 500) : 'NOT FOUND');
+    $lines = ['MIGRATE_FLAG: ' . (file_exists('/tmp/storage/migrated.flag') ? file_get_contents('/tmp/storage/migrated.flag') : 'NOT FOUND')];
+    $lines[] = 'MIGRATE_LOG: ' . (file_exists('/tmp/storage/migrate.log') ? substr(file_get_contents('/tmp/storage/migrate.log'), 0, 300) : 'NOT FOUND');
     $lines[] = 'MIGRATE_ERROR: ' . (file_exists('/tmp/storage/migrate.error') ? file_get_contents('/tmp/storage/migrate.error') : 'none');
-    // Show prod schema for withdrawals
-    try {
-        $db = $app->make('db');
-        $cols = $db->getSchemaBuilder()->getColumnListing('withdrawals');
-        $lines[] = 'PROD_COLS: ' . implode(', ', $cols);
-    } catch (\Throwable $e) {
-        $lines[] = 'PROD_COLS_ERROR: ' . $e->getMessage();
-    }
     echo implode("\n", $lines);
     exit(0);
 }
