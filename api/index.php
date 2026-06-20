@@ -59,7 +59,8 @@ if (strpos($requestUri, '__check=1') !== false) {
     $lines[] = 'MIGRATE_ERROR: ' . (file_exists('/tmp/storage/migrate.error') ? file_get_contents('/tmp/storage/migrate.error') : 'none');
     // Show prod schema for withdrawals
     try {
-        $cols = $app['db']->getSchemaBuilder()->getColumnListing('withdrawals');
+        $db = $app->make('db');
+        $cols = $db->getSchemaBuilder()->getColumnListing('withdrawals');
         $lines[] = 'PROD_COLS: ' . implode(', ', $cols);
     } catch (\Throwable $e) {
         $lines[] = 'PROD_COLS_ERROR: ' . $e->getMessage();
