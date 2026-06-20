@@ -42,30 +42,19 @@ graph TB
 
 ---
 
-## 2. Branch Architecture
+## 2. Branch Strategy
 
 ```mermaid
 graph LR
-    subgraph VERCEL["vercel (default)"]
-        direction TB
-        V1[PHP 8.4]
-        V2[PostgreSQL 15]
-        V3[Vercel Serverless / Local]
-        V1 --- V2 --- V3
-    end
+    VERCEL["vercel (default)"]
+    MAIN["main (archived)"]
 
-    subgraph MAIN["main (legacy/archived)"]
-        direction TB
-        M1[PHP 8.4]
-        M2[PostgreSQL 15]
-        M3[VPS Docker]
-        M1 --- M2 --- M3
-    end
+    VERCEL -->|Auto-deploy| STAGING[zonakasir.jogjatourdrive.com]
+    VERCEL -->|Deploy| VERCEL_DEPLOY[.vercel.app]
 
-    VERCEL -->|Manual deploy| VERCEL_DEPLOY[.vercel.app]
-
-    style MAIN fill:#e1f5fe,stroke:#01579b
-    style VERCEL fill:#fff3e0,stroke:#e65100
+    style VERCEL fill:#e8f5e9,stroke:#2e7d32
+    style MAIN fill:#f5f5f5,stroke:#9e9e9e,stroke-dasharray: 5 5
+    style STAGING fill:#e3f2fd,stroke:#1565c0
 ```
 
 ---

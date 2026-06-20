@@ -171,20 +171,19 @@ php artisan sail:install
 | **Filament Dashboard** | `{host}/app` | Admin/Tenant role |
 
 ### Staging
-- **URL**: `https://jogjatourdrive.com`
-- **SSH**: `ssh -p 2223 jogn3455@jogjatourdrive.com`
-- Auto-deploy on push to `main` branch
+- **URL**: `https://zonakasir.jogjatourdrive.com`
+- Auto-deploy on push to `vercel` branch
 
 ## Branch Strategy
 
 | Branch | Hosting | Purpose |
 |--------|---------|---------|
-| `vercel` | Vercel (serverless) / Local | Active development |
-| `main` | VPS (Docker) | Legacy staging (archived) |
+| `vercel` | Vercel (serverless) / Local | **Default & only active branch** |
+| `main` | — | Historical archive (frozen) |
 | `feat/*` | — | Feature branches |
 | `fix/*` | — | Bug fix branches |
 
-> ⚠️ **Both branches use PostgreSQL** — `main` is legacy, `vercel` is default.
+> ✅ **PostgreSQL only.** `vercel` is the single source of truth.
 
 ## Architecture Diagrams
 
@@ -241,12 +240,10 @@ vendor/bin/pest --filter="test name"
 We welcome contributions! Please follow:
 
 1. **Fork** the repository.
-2. **Branch**: Create from the right base:
-   - MySQL changes → branch off `main`
-   - PostgreSQL changes → branch off `vercel`
+2. **Branch**: Create from `vercel` (default).
 3. **Develop**: `git checkout -b feat/your-feature`
 4. **Test**: Ensure `php artisan test` passes.
-5. **PR**: Submit against the same base branch.
+5. **PR**: Submit against `vercel`.
 
 See [docs/README.md](docs/README.md) for full contribution guidelines.
 
