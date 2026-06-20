@@ -71,6 +71,18 @@ if (preg_match('#^/api/auth/login#', $requestUri)) {
     exit;
 }
 
+// TEMP: Debug env
+if (strpos($requestUri, '__env') !== false) {
+    header('Content-Type: application/json');
+    echo json_encode([
+        'app_url' => config('app.url'),
+        'app_env' => config('app.env'),
+        'db_host' => config('database.connections.pgsql.host'),
+        'routes_count' => count(app()->router->getRoutes()->getRoutes()),
+    ]);
+    exit;
+}
+
 // Change working directory to Laravel public folder
 chdir($projectRoot . '/public');
 
