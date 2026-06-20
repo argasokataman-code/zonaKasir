@@ -8,8 +8,12 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (Schema::hasColumn('withdrawals', 'type')) {
+            return;
+        }
+
         Schema::table('withdrawals', function (Blueprint $table) {
-            $table->string('type', 20)->default('tenant_request')->after('amount');
+            $table->string('type', 20)->default('tenant_request');
         });
     }
 
