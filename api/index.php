@@ -50,6 +50,18 @@ if (! file_exists($flagFile) && (getenv('VERCEL') || isset($_ENV['VERCEL']))) {
 
 // Handle Google OAuth discovery (Google Identity Services pings this)
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+
+// TEMP: Diagnostic endpoint
+if ($requestUri === '/__check') {
+    header('Content-Type: text/plain');
+    echo "VERCEL: " . (getenv('VERCEL') ?: 'not set') . "\n";
+    echo "VERCEL_ENV: " . (getenv('VERCEL_ENV') ?: 'not set') . "\n";
+    echo "MIGRATE_FLAG: " . (file_exists('/tmp/storage/migrated.flag') ? file_get_contents('/tmp/storage/migrated.flag') : 'NOT FOUND') . "\n";
+    echo "MIGRATE_LOG: " . (file_exists('/tmp/storage/migrate.log') ? substr(file_get_contents('/tmp/storage/migrate.log'), 0, 500) : 'NOT FOUND') . "\n";
+    echo "MIGRATE_ERROR: " . (file_exists('/tmp/storage/migrate.error') ? file_get_contents('/tmp/storage/migrate.error') : 'none') . "\n";
+    exit;
+}
+
 if (preg_match('#^/api/auth/login#', $requestUri)) {
     http_response_code(200);
     header('Content-Type: application/json');
