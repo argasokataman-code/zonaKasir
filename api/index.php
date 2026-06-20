@@ -52,8 +52,20 @@ if (! file_exists($flagFile) && (getenv('VERCEL') || isset($_ENV['VERCEL']))) {
 
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 
+// TEMP: Show request URI for debugging
+if (strpos($requestUri, '__debug') !== false) {
+    header('Content-Type: text/plain');
+    echo 'REQUEST_URI: ' . ($_SERVER['REQUEST_URI'] ?? 'NOT SET') . "\n";
+    echo 'SCRIPT_NAME: ' . ($_SERVER['SCRIPT_NAME'] ?? 'NOT SET') . "\n";
+    echo 'PHP_SELF: ' . ($_SERVER['PHP_SELF'] ?? 'NOT SET') . "\n";
+    echo 'VERCEL: ' . (getenv('VERCEL') ?: 'NOT SET') . "\n";
+    echo 'APP_URL: ' . config('app.url') . "\n";
+    exit;
+}
+
 // TEMP: Diagnostic endpoint — list all tables for comparison
 if (strpos($requestUri, '__tables') !== false) {
+
     try {
         $artisan = $app->make(Illuminate\Contracts\Console\Kernel::class);
         $artisan->call('db:show');
