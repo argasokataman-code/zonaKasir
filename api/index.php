@@ -50,12 +50,15 @@ if (! file_exists($flagFile) && (getenv('VERCEL') || isset($_ENV['VERCEL']))) {
 
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 
-// TEMP: Remove after verification — auto-migrate on cold start
-if (strpos($requestUri, '__check=1') !== false) {
-    $lines = ['MIGRATE_FLAG: ' . (file_exists('/tmp/storage/migrated.flag') ? file_get_contents('/tmp/storage/migrated.flag') : 'NOT FOUND')];
-    $lines[] = 'MIGRATE_LOG: ' . (file_exists('/tmp/storage/migrate.log') ? substr(file_get_contents('/tmp/storage/migrate.log'), 0, 300) : 'NOT FOUND');
-    $lines[] = 'MIGRATE_ERROR: ' . (file_exists('/tmp/storage/migrate.error') ? file_get_contents('/tmp/storage/migrate.error') : 'none');
-    echo implode("\n", $lines);
+// TEMP: Diagnostic endpoint — list all tables for comparison
+if (strpos($requestUri, '__tables') !== false) {
+    try {
+        $artisan = $app->make(Illuminate\Contracts\Console\Kernel::class);
+        $artisan->call('db:show');
+        echo $artisan->output();
+    } catch (\Throwable $e) {
+        echo 'ERROR: ' . $e->getMessage();
+    }
     exit(0);
 }
 
