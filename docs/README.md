@@ -6,6 +6,11 @@ Complete documentation for the zonaKasir POS application. All resources are orga
 
 ## 📚 Documentation Sections
 
+### 🏗️ **Architecture & Visual Docs** (NEW ✅)
+- [Architecture Overview](architecture/OVERVIEW.md) — System architecture, layer stack, request lifecycle, branch topology
+- [DB Schema (ERD)](architecture/DB_SCHEMA.md) — 7 entity-relationship diagrams (sales, inventory, members, payments, auth)
+- [Business Flowcharts](architecture/FLOWCHART.md) — POS transaction, auth, stock opname, purchasing, receivable, Midtrans flows
+
 ### 🔍 **Reports & Audits** (6-Phase Comprehensive Audit - COMPLETE ✅)
 
 **Start Here:** [AUDIT_SYNTHESIS.md](reports/AUDIT_SYNTHESIS.md) ⭐ — Master summary of all 6 audit phases with production readiness plan (20 min read)
@@ -34,6 +39,10 @@ Complete documentation for the zonaKasir POS application. All resources are orga
 ### 📋 **Planning & Roadmap**
 - [Midtrans Payment Integration](planning/MIDTRANS_PAYMENT_INTEGRATION_PLAN.md) — Complete spec v1.3
 - [Rebranding Plan](REBRANDING_PLAN.md) — Lakasir → zonaKasir migration tracking
+- [Performance Optimization PRD](planning/PERFORMANCE_OPTIMIZATION_PRD.md) — Load times, SQL, caching
+- [Single DB Architecture](planning/SINGLE_DB_ARCHITECTURE.md) — Multi-tenancy shared DB design
+- [MySQL → PostgreSQL Migration](planning/MYSQL_TO_POSTGRESQL_MIGRATION.md) — Full migration plan & completion report
+- [Repo Architecture Guide](planning/REPO_ARCHITECTURE.md) — Dual-branch strategy (main vs vercel), runtime, Vercel CLI
 
 ### 🚀 **Development Guides**
 - [Server Access](guides/SERVER_ACCESS.md) — Staging SSH, commands, GitHub Actions
@@ -54,7 +63,7 @@ Complete documentation for the zonaKasir POS application. All resources are orga
 - [.opencode/rules/02-security.mdc](.opencode/rules/02-security.mdc) — Security, CI/CD, git conventions
 
 **Current Status:**
-- Test Suite: 🟢 52 passed, 0 failed
+- Test Suite: 🟢 63 test files (46 Feature, 7 Unit, 10+ helpers)
 - Code Quality: 🟢 Good (high priority items resolved)
 - Production Ready: 🟡 Medium (E2E tests, rate limiting, audit logging remain)
 

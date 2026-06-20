@@ -20,7 +20,7 @@ return new class extends Migration
 
         if (! Schema::hasColumn('tenants', 'tenancy_email')) {
             Schema::table('tenants', function (Blueprint $table) {
-                $table->string('tenancy_email')->nullable()->after('id');
+                $table->string('tenancy_email')->nullable();
             });
         }
     }

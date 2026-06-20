@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('purchasings', function (Blueprint $table) {
-            $table->string('status')->default('pending')->after('tax');
+            $table->string('status')->default('pending');
         });
     }
 

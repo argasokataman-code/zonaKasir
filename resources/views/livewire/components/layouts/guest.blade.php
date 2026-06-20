@@ -11,14 +11,14 @@
     <meta property="og:title" content="zonaKasir - Aplikasi Point of Sale (POS) Gratis">
     <meta property="og:description" content="zonaKasir merupakan aplikasi point of sale (POS) yang memudahkan pengelolaan bisnis Anda. unduh secara gratis">
     <meta property="og:url" content="{{ env('APP_URL') }}">
-    <meta property="og:image" content="{{ env('APP_URL') }}/assets/logo/logo.svg">
+    <meta property="og:image" content="{{ asset('assets/logo/logo.svg') }}">
     <meta property="og:type" content="website">
 
     <meta name="twitter:card" content="zonaKasir - Aplikasi Point of Sale (POS) Gratis">
     <meta name="twitter:site" content="@yourtwitterhandle">
     <meta name="twitter:title" content="zonaKasir - Aplikasi Point of Sale (POS) Gratis">
     <meta name="twitter:description" content="zonaKasir merupakan aplikasi point of sale (POS) yang memudahkan pengelolaan bisnis Anda. unduh secara gratis">
-    <meta name="twitter:image" content="{{ env('APP_URL') }}/assets/logo/logo.svg">
+    <meta name="twitter:image" content="{{ asset('assets/logo/logo.svg') }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     @filamentStyles

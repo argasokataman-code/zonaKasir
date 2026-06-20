@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 ARG WWWUSER=1000
 ARG WWWGROUP=1000
@@ -18,15 +18,18 @@ RUN apk add --no-cache \
     libxml2-dev \
     oniguruma-dev \
     icu-dev \
+    libpq-dev \
+    postgresql-client \
     nodejs \
     npm \
-    mysql-client \
     redis
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
     gd \
     pdo_mysql \
+    pdo_pgsql \
+    pgsql \
     mysqli \
     mbstring \
     xml \

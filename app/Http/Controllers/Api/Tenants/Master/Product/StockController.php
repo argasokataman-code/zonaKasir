@@ -20,6 +20,7 @@ class StockController extends Controller
         $perPage = $this->resolvePerPage($request);
 
         $stocks = $product->stocks()
+            ->with('product')
             ->orderByDesc('created_at')
             ->simplePaginate($perPage ?? (new Stock())->getPerPage());
 

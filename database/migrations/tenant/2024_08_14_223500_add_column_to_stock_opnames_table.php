@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('stock_opnames', function (Blueprint $table) {
             $table->date('date')->change();
-            $table->dateTime('approved_at')->nullable()->after('date');
+            $table->dateTime('approved_at')->nullable();
         });
     }
 

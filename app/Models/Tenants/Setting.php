@@ -2,6 +2,8 @@
 
 namespace App\Models\Tenants;
 
+use App\Models\Traits\HasTenant;
+use App\Services\TenantContext;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
@@ -12,29 +14,28 @@ use Illuminate\Support\Facades\Cache;
 class Setting extends Model
 {
     use HasFactory;
+    use HasTenant;
 
     protected $fillable = ['key', 'value'];
 
     public static function get($key, $default = null)
     {
-        $cacheKey = 'setting_'.$key;
-        $result = null;
-        if (! Cache::get('setting_'.$key)) {
-            $setting = self::select('id', 'key', 'value')->where('key', $key)->first();
-
-            $result = $setting ? $setting->value ?? $default : $default;
-
-            Cache::put($cacheKey, $result, now()->addMinutes(3 * 60));
-
-            return $result;
+        $tenantId = TenantContext::get();
+        if (! $tenantId) {
+            return $default;
         }
+        $cacheKey = 'setting_'.$tenantId.'_'.$key;
 
-        return Cache::get($cacheKey);
+        return Cache::remember($cacheKey, now()->addMinutes(3 * 60), function () use ($key, $default) {
+            return self::where('key', $key)->value('value') ?? $default;
+        });
     }
 
     public static function set($key, $value)
     {
-        $old = self::select('id', 'key', 'value')->where('key', $key)->first();
+        $tenantId = TenantContext::get();
+
+        $old = self::where('key', $key)->first();
 
         self::updateOrCreate(
             ['key' => $key],
@@ -50,7 +51,8 @@ class Setting extends Model
             ])
             ->log("Setting updated: {$key}");
 
-        $cacheKey = 'setting_'.$key;
-        Cache::put($cacheKey, $value, now()->addMinutes(3 * 60));
+        if ($tenantId) {
+            Cache::put('setting_'.$tenantId.'_'.$key, $value, now()->addMinutes(3 * 60));
+        }
     }
 }

@@ -16,7 +16,7 @@ class StockCollection extends JsonResource
     {
         return [
             'id' => $this->id,
-            'product' => $this->product->name,
+            'product' => $this->whenLoaded('product', fn () => $this->product->name),
             'stock' => $this->stock,
             'init_stock' => $this->init_stock,
             'initial_price' => $this->initial_price,

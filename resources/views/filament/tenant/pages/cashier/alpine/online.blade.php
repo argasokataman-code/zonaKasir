@@ -12,7 +12,7 @@ window.__cashierOnline = () => ({
       if (navigator.onLine) {
         $wire.addCart(productId, { _bulk: this.cartQty[productId] });
       }
-    }, 300);
+    }, 100);
   },
 
   instantReduce(productId) {
@@ -26,19 +26,26 @@ window.__cashierOnline = () => ({
         const qty = this.cartQty[productId] || 0;
         $wire.addCart(productId, { _bulk: qty });
       }
-    }, 300);
+    }, 100);
   },
 
   handleCartDataUpdated(event) {
     const raw = event.detail;
     const data = Array.isArray(raw) ? raw[0] : raw;
     const serverCart = data?.cartItems || {};
-    const localQty = this.cartQty;
-    // Server is truth: items NOT in serverCart were deleted (remove).
-    // Items in serverCart: keep local qty if user clicked faster than server.
-    this.cartQty = {};
+    const localQty = { ...this.cartQty };
+    // Merge server data without resetting cartQty (avoids flicker).
+    // Items NOT in serverCart were deleted — remove them.
+    for (const id of Object.keys(localQty)) {
+      if (!(id in serverCart)) delete this.cartQty[id];
+    }
     for (const [id, qty] of Object.entries(serverCart)) {
       this.cartQty[id] = Math.max(qty, localQty[id] || 0);
+    }
+    // Replace cart sidebar HTML with server-rendered content
+    if (data.cartHtml) {
+      const container = document.getElementById('cart-items-container');
+      if (container) container.innerHTML = data.cartHtml;
     }
     // Update totals via Alpine
     if (data.subTotal !== undefined) this.subTotal = data.subTotal;

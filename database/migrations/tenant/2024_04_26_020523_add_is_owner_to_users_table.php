@@ -12,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->after('fcm_token', function (Blueprint $table) {
-                $table->boolean('is_owner')->default(false);
-            });
+            $table->boolean('is_owner')->default(false);
         });
     }
 

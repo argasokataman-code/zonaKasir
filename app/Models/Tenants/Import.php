@@ -15,6 +15,8 @@ class Import extends ModelsImport
     use HasTenant;
     use HasFactory, HasTenant;
 
+    protected $guarded = ['id'];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

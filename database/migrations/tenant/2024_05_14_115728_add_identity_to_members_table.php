@@ -12,11 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->after('name', function (Blueprint $table) {
-                $table->string('identity_type')->nullable();
-                $table->string('identity_number')->nullable();
-                $table->dateTime('joined_date')->nullable();
-            });
+            $table->string('identity_type')->nullable();
+            $table->string('identity_number')->nullable();
+            $table->dateTime('joined_date')->nullable();
         });
     }
 

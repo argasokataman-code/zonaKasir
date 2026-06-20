@@ -4,14 +4,20 @@
 
 ---
 
-## 🚨 WAJIB SEBELUM MULAI TASK APAPUN
+## 🚨 LOCK: WAJIB BACA RULES — TANPA TERKECUALI
 
-**Baca ketiga file ini SEKALI SEKALI di awal task:**
-1. `.opencode/rules/00-task-framework.mdc` — 6-phase framework + MCP server verification
-2. `.opencode/rules/01-code-style.mdc` — code style, naming, build/test commands
-3. `.opencode/rules/02-security.mdc` — security, deploy, CI/CD, git conventions
+**🔒 Sebelum tugas APAPUN dimulai, agent WAJIB baca 3 file ini:**
+1. `.opencode/rules/00-task-framework.mdc` — 6-phase framework + MCP + Context7 + DB validation
+2. `.opencode/rules/01-code-style.mdc` — code style, build/test
+3. `.opencode/rules/02-security.mdc` — **branch strategy, deploy, CI/CD**
 
-**Tanpa baca rules = TUGAS TIDAK BOLEH DIMULAI.**
+**🔒 Output WAJIB di baris pertama setiap task:**
+```
+🧱 LOCK: Rules read — Branch strategy: [main/vercel/other]
+```
+**🔒 Jika agent tidak output LOCK di atas → TUGAS HARUS DIHENTIKAN.**
+
+**🔒 Tanpa baca rules = TUGAS TIDAK BOLEH DIMULAI. No exceptions.**
 
 ## 🎯 CEK ROLE: ADMIN vs TENANT — WAJIB SEBELUM FASE 1
 
@@ -31,9 +37,11 @@
 
 ---
 
-## 🎯 MCP SERVER VERIFICATION — WAJIB CEK SERVER PAKAI MCP
+## 🎯 MCP SERVER & DATABASE VERIFICATION — WAJIB CEK SERVER + DATA REAL via MCP
 
-**MCP server `markfetch` sudah terpasang.** WAJIB pakai untuk cek server local/staging — jangan pernah halusinasi status server.
+**MCP server `markfetch` sudah terpasang.** WAJIB pakai untuk semua validasi — jangan pernah halusinasi.
+
+### 🌐 Server Status Verification
 
 | Konteks | Jenis server | Cara cek via MCP |
 |---------|-------------|------------------|
@@ -50,20 +58,72 @@
 
 **Rule: JIKA SERVER STATUS DIBUTUHKAN, HARUS via MCP `markfetch`. No exceptions.**
 
+### 🗄️ Database Data Validation — WAJIB CEK DATA REAL
+
+**Validasi data langsung ke database** untuk memastikan data real sesuai ekspektasi.
+
+| Metode | Tool | Cara Pakai | Use Case |
+|--------|------|-----------|----------|
+| **API via markfetch** | MCP `markfetch` | Hit endpoint API Laravel (`/api/...`) | Verifikasi response, data transform, logic layer |
+| **DB direct query** | MCP database server | Query SQL langsung (`SELECT * FROM ...`) | Verifikasi raw data, debug, cross-check API vs DB |
+
+**Aturan API via markfetch:**
+1. Hit endpoint API real yang query database
+2. Cek response JSON sesuai expected structure
+3. Validasi data count, values, relationships
+
+**Aturan DB direct query:**
+1. Gunakan MCP `db-pgsql` untuk query langsung ke PostgreSQL
+2. Query SQL langsung ke database (`SELECT` only)
+3. Validasi data real, jangan asumsi
+
+**Rule: JIKA TASK BUTUH VALIDASI DATA, HARUS via MCP — API atau DB direct. No exceptions.**
+
+---
+
+## 📚 CONTEXT7 TECHNOLOGY VALIDATION — WAJIB CEK SEBELUM NGODING
+
+**Context7 WAJIB dipakai untuk validasi teknologi/library API sebelum generate code apapun.**
+
+| Langkah | Tool MCP | Cara |
+|---------|---------|------|
+| **1. Cari library ID** | `context7_resolve-library-id` | `resolve-library-id("library-name", "query")` → dapatkan `/org/project` ID |
+| **2. Query docs** | `context7_query-docs` | `query-docs(libraryId, "what i need")` → dapatkan API docs terbaru |
+| **3. Generate code** | — | Pakai info dari Context7, jangan asumsi API |
+
+**Aturan:**
+1. Sebelum generate code yang pakai library/framework/API → **WAJIB panggil Context7** via MCP tools
+2. Jangan pernah andalkan training data — bisa outdated
+3. Cari library ID via `context7_resolve-library-id`, lalu query docs via `context7_query-docs`
+4. Untuk versi spesifik, sebutkan di query (e.g., "Laravel 11", "Filament 3", "Pest 3")
+5. Context7 juga dipakai untuk resolve library ID before query — 2-step process
+
+**Contoh:**
+```
+context7_resolve-library-id(query: "Filament 3 table columns", libraryName: "filament")
+→ Dapat /filament/filament
+
+context7_query-docs(libraryId: "/filament/filament", query: "how to add table columns in v3")
+→ Dapat API docs terbaru, parameter, contoh code
+```
+
+**Rule: JIKA ADA CODE YANG PAKAI LIBRARY EKSTERNAL, HARUS via Context7 dulu. No exceptions.**
+
 ---
 
 ## 🔄 CONTINUOUS PROMPTING — 6 Fase Per Task
 
 Setiap kali task diberikan, WAJIB jalanin urutan ini. **No skip.**
 
-### 🔴 STEP 0: BACA RULES + TASK TYPE CLASSIFICATION (WAJIB)
+### 🔴 STEP 0: BACA RULES + LOCK + CLASSIFICATION (WAJIB)
 
 **Setiap BARIS PERTAMA dari respons agent WAJIB diawali dengan:**
 ```
+🧱 LOCK: Rules read — Branch strategy: [main/vercel/other]
 Classification: [Audit/Bugfix/Feature/Refactor/Question/FixingBug/Docs/Other]
 Role: [Admin/Tenant/Both]
 ```
-Ini WAJIB ditulis di setiap percakapan baru, sebelum Fase 1. **No skip. Jika tidak ada, berarti agent belum menjalankan Step 0.**
+**LOCK WAJIB ada.** Ini WAJIB ditulis di setiap percakapan baru, sebelum Fase 1. **No skip. Jika tidak ada LOCK, berarti agent belum baca rules dan TUGAS HARUS DIHENTIKAN.**
 
 ### ⏸️ FASE 1: STOP & PAHAMI (Jangan langsung kode)
 - Baca task 2x dengan teliti
@@ -204,9 +264,13 @@ Jawab pertanyaan:
 
 | Phase | Rule | Consequence |
 |-------|------|-------------|
-| 0 | **CLASSIFICATION: WAJIB tulis Classification + Role di baris pertama setiap percakapan baru** | Agent skip Step 0, classification hilang |
+| 0 | **🔒 LOCK: WAJIB output `🧱 LOCK: Rules read — Branch strategy: ...` di baris pertama** | Agent skip baca rules |
+| 0 | **CLASSIFICATION: WAJIB tulis Classification + Role di baris pertama setiap percakapan baru** | Agent skip Step 0 |
 | 0 | **CEK ROLE: Admin vs Tenant sebelum Fase 1** | Scope bleed, code di role salah |
+| 0 | **CEK BRANCH: Tahu lagi di branch apa (main/vercel) sebelum kode** | Deploy ke environment salah |
 | 0 | **CEK SERVER: Wajib via MCP `markfetch` jika butuh status** | Halusinasi server status |
+| 0 | **CEK DB: Wajib via MCP (API markfetch / DB direct query) jika butuh data** | Halusinasi data DB |
+| 0 | **CEK CONTEXT7: Wajib via Context7 MCP sebelum code pakai library** | Hallusination API library |
 | 1 | If ambiguous → **Ask, don't assume** | Scope creep, regressions |
 | 2 | Verify dari **source code**, bukan docs aja | Hallucination, wrong implementation |
 | 3 | Define scope **SEBELUM** code phase | Touch unrelated files, break things |
@@ -218,9 +282,12 @@ Jawab pertanyaan:
 
 ## ❌ NEVER (Anti-hallucination Checklist)
 
+- ❌ **Langsung code tanpa LOCK output — berarti belum baca rules**
 - ❌ Langsung code tanpa Fase 1-3
 - ❌ **Code tanpa cek role (admin vs tenant) — root cause #1 scope bleed**
 - ❌ Asumsi server status tanpa MCP verification (`markfetch`) — root cause #1 halusinasi
+- ❌ Asumsi data DB tanpa MCP verification (API via markfetch / DB direct query)
+- ❌ Generate code pakai library tanpa Context7 validation — API bisa berubah
 - ❌ Asumsi behavior tanpa verifikasi source code
 - ❌ Ubah file di luar scope (dari Fase 3)
 - ❌ Skip test verification
@@ -321,8 +388,12 @@ docs/                    ← Project docs (by domain)
 ## 🎯 CHECKLIST BEFORE CLAIM "DONE"
 
 **Development Work:**
+- [ ] **🔒 LOCK: Output `🧱 LOCK: Rules read — Branch strategy: ...` di baris pertama**
+- [ ] **CEK BRANCH: Lagi di branch apa? (main/vercel)**
 - [ ] **CEK ROLE: Admin vs Tenant (WAJIB sebelum Fase 1)**
 - [ ] **CEK SERVER via MCP `markfetch` (jika task butuh verifikasi server)**
+- [ ] **CEK DB via MCP (API markfetch / DB direct query) (jika task butuh validasi data)**
+- [ ] **CEK CONTEXT7 via Context7 MCP (jika task pakai library eksternal)**
 - [ ] Fase 1: Task understood, no ambiguity
 - [ ] Fase 2: Source verified dari code, bukan asumsi
 - [ ] Fase 3: Scope tertulis jelas, senggolan dimapped

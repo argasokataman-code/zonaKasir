@@ -20,7 +20,7 @@ return new class extends Migration
             $table->index(['causer_id', 'causer_type'], 'causer');
             $table->json('properties')->nullable();
             $table->uuid('batch_uuid')->nullable();
-            $table->enum('event', ['created', 'updated', 'deleted', 'login', 'logout'])->nullable();
+            $table->string('event', 20)->nullable();
             $table->timestamps();
             $table->index('log_name');
             $table->index('batch_uuid');

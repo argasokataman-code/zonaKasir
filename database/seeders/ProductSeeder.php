@@ -11,7 +11,10 @@ class ProductSeeder extends Seeder
 {
     public function run()
     {
-        if (config('database.default') !== 'sqlite') {
+        $driver = DB::getDriverName();
+        if ($driver === 'pgsql') {
+            DB::statement('SET session_replication_role = replica');
+        } else {
             DB::statement('SET FOREIGN_KEY_CHECKS=0');
         }
 
@@ -99,10 +102,13 @@ class ProductSeeder extends Seeder
                 'init_stock' => $p['stock'],
                 'product_id' => $product->id,
                 'type' => 'in',
+                'date' => now()->format('Y-m-d'),
             ]);
         }
 
-        if (config('database.default') !== 'sqlite') {
+        if ($driver === 'pgsql') {
+            DB::statement('SET session_replication_role = origin');
+        } else {
             DB::statement('SET FOREIGN_KEY_CHECKS=1');
         }
     }

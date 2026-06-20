@@ -55,11 +55,17 @@ Format: `type(scope): description`
 
 ## Branch Naming
 
-**Strategy:** Primarily trunk-based on `main`. Use feature/fix branches for parallel or risky work.
+**Strategy:** Dual-branch: `main` (VPS/MySQL/production) and `vercel` (PostgreSQL/Vercel test). **Never merge `vercel` into `main`** — branches are separate forever.
 
-| Branch | Purpose | Auto-deploy |
-|--------|---------|-------------|
-| `main` | Production-ready staging | ✅ Yes |
-| `feat/*` | Feature branches (remote only, delete after merge) | ❌ No |
-| `fix/*` | Bug fix branches (remote only, delete after merge) | ❌ No |
-| `1.x` | Maintenance branch for v1.x | ❌ No |
+| Branch | DB | Hosting | Purpose | Auto-deploy |
+|--------|----|---------|---------|-------------|
+| `main` | MySQL 8.0 | VPS (Docker) | Production-ready staging | ✅ VPS via GHA |
+| `vercel` | PostgreSQL 15 | Vercel (serverless) | Vercel deployment testing (⚠️ 250MB limit) | ❌ Manual via CLI |
+| `feat/*` | — | — | Feature branches (delete after merge) | ❌ No |
+| `fix/*` | — | — | Bug fix branches (delete after merge) | ❌ No |
+| `1.x` | MySQL | — | Maintenance branch for v1.x | ❌ No |
+
+**Dead remote branches (orphaned after history rewrite — delete on next cleanup):**
+- `origin/vercel-deploy` — old Vercel experiment
+- `origin/vercel-v2` — old Vercel experiment
+- `origin/vercel-test-2` — old Vercel experiment

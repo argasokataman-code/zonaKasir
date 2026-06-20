@@ -10,7 +10,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('payment_methods', function (Blueprint $table) {
-            $table->string('payment_type', 30)->nullable()->after('is_wallet')
+            $table->string('payment_type', 30)->nullable()
                 ->comment('Midtrans payment type: credit_card, gopay, shopeepay, qris, bank_transfer, indomaret, alfamart, kredivo, akulaku');
         });
 

@@ -12,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('stocks', function (Blueprint $table) {
-            $table->after('stock', function ($table) {
-                $table->double('init_stock')->default(0);
-            });
+            $table->double('init_stock')->default(0);
         });
     }
 

@@ -1,7 +1,8 @@
 @php
   use Filament\Facades\Filament;
   use App\Features\{PaymentShortcutButton, SellingTax, Discount};
-
+  use Illuminate\Support\Number;
+  $formatPrice = fn ($val) => Number::currency($val, $currency, $locale ?? 'en');
 @endphp
 <div x-data="cashier" x-on:cart-data-updated.window="handleCartDataUpdated">
 
@@ -73,7 +74,7 @@
       {{-- Product Cards Grid --}}
       <div wire:loading.class="opacity-60" wire:target="search,selectedCategory" x-show="!isOffline" class="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
         @forelse ($products as $product)
-          <div class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
+          <div wire:key="product-{{ $product->id }}" class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
             {{-- Image --}}
             <div class="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-gray-700">
               @php $heroImage = $product->heroImage; @endphp
@@ -93,7 +94,7 @@
                       <span class="rounded-md bg-red-600 px-2 py-1 text-xs font-bold text-white">{{ __('Out of stock') }}</span>
                     </div>
                   @else
-                    <span class="absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-xs font-bold text-white shadow-sm {{ $stock < \App\Models\Tenants\Setting::get('minimum_stock_nofication', 10) ? 'bg-amber-500' : 'bg-zonakasir-primary' }}">{{ $stock }} {{ __('Stock') }}</span>
+                    <span class="absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-xs font-bold text-white shadow-sm {{ $stock < $minimumStockNotification ? 'bg-amber-500' : 'bg-zonakasir-primary' }}">{{ $stock }} {{ __('Stock') }}</span>
                   @endif
                 @endif
 
@@ -108,7 +109,7 @@
                 <h3 class="mt-0.5 text-xs font-semibold leading-tight text-gray-900 dark:text-white line-clamp-2 break-words">{{ $product->name }}</h3>
               </div>
               <div class="mt-1 flex items-center justify-between gap-1 min-w-0">
-                <span class="text-xs font-bold text-zonakasir-primary truncate">{{ price_format($product->sellingPriceCalculate) }}</span>
+                <span class="text-xs font-bold text-zonakasir-primary truncate">{{ $formatPrice($product->sellingPriceCalculate) }}</span>
                 <div class="flex items-center shrink-0">
                   <button x-show="!cartQty[{{ $product->id }}]" @click="instantAdd({{ $product->id }})"
                     class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zonakasir-primary text-white">
@@ -254,57 +255,9 @@
           <p class="mb-1 hidden text-xl font-semibold lg:block">{{ __('Current Orders') }}</p>
           <div class="flex gap-x-1"></div>
         </div>
-        <div class="max-h-[40vh] min-h-32 overflow-auto" wire:loading.class="opacity-20"
+        <div id="cart-items-container" class="max-h-[40vh] min-h-32 overflow-auto" wire:loading.class="opacity-20"
           wire:target="addCart,reduceCart,deleteCart,addDiscountPricePerItem,addCartUsingScanner">
-          @forelse($cartItems as $item)
-            <div wire:key="cart-item-{{ $item->id }}" class="mb-2 rounded-lg border bg-white px-3 py-2 dark:border-gray-900 dark:bg-gray-900">
-              <div class="flex justify-between items-center">
-                <div class="min-w-0 flex-1">
-                  <p class="font-semibold text-sm truncate"> {{ $item->product?->name ?? __('Deleted product') }}</p>
-                  <p class="text-xs text-zonakasir-primary font-semibold">{{ $item->price_format_money }}</p>
-                </div>
-                <div class="flex items-center gap-1 shrink-0 ml-2">
-                  <button class="flex h-7 w-7 items-center justify-center rounded-lg bg-zonakasir-primary text-white text-sm font-bold"
-                    wire:click.stop="addCart( {{ $item->product_id }} )" wire:loading.attr="disabled">+</button>
-                  <input type="text" value="{{ $item->qty }}"
-                    x-on:keyup.debounce.500ms="(e) => add('{{ $item->product_id }}', e.target.value)"
-                    class="w-10 rounded border border-gray-300 px-1 py-0.5 text-center text-xs dark:border-gray-600 dark:bg-gray-800"
-                    inputMode="numeric" />
-                  <button class="flex h-7 w-7 items-center justify-center rounded-lg bg-gray-100 text-gray-600 text-sm font-bold dark:bg-gray-700"
-                    x-on:click="$wire.reduceCart({{ $item->product_id }});" wire:loading.attr="disabled">−</button>
-                  <button class="flex h-7 w-7 items-center justify-center rounded-lg bg-red-100 text-red-600 text-sm relative"
-                    x-on:click="$el.closest('.mb-2').style.display='none'"
-                    wire:click.stop="deleteCart({{ $item->product_id }})"
-                    wire:loading.class="opacity-50"
-                    wire:target="deleteCart({{ $item->product_id }})"
-                    type="button">
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg>
-                  </button>
-                  @if($item->product && $item->product->priceUnits()->exists())
-                    <livewire:price-setting :cart-item="$item" wire:key="ps-{{ $item->id }}" />
-                  @endif
-                </div>
-              </div>
-              @feature(Discount::class)
-                @if($item->discount_price > 0)
-                  <div class="mt-1 text-right">
-                    <input type="text" value="{{ $item->discount_price }}"
-                      wire:keyup.debounce.500ms="addDiscountPricePerItem({{ $item }}, parseFloat($event.target.value.replace(/,/g, '')))"
-                      placeholder="{{ __('Discount') }}"
-                      class="w-24 rounded border border-gray-300 px-2 py-0.5 text-right text-xs dark:border-gray-600 dark:bg-gray-800"
-                      inputMode="numeric" x-mask:dynamic="$money($input)" />
-                    <p class="text-xs font-semibold text-zonakasir-primary">{{ $item->final_price_format }}</p>
-                  </div>
-                @endif
-              @endfeature
-            </div>
-          @empty
-            <div
-              class="flex h-32 items-center justify-center rounded-lg border bg-white dark:border-gray-900 dark:bg-gray-900">
-              <x-heroicon-o-x-mark class="hidden h-8 w-8 text-gray-900 dark:text-white lg:block" />
-              <p class="text-lg text-gray-600 dark:text-white lg:text-2xl">{{ __('No item') }}</p>
-            </div>
-          @endforelse
+          @include('filament.tenant.pages.cashier.partials.cart-items')
         </div>
         <div>
           <div

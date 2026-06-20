@@ -16,16 +16,16 @@ services:
         networks:
             - zonakasir
         depends_on:
-            mysql:
+            postgres:
                 condition: service_healthy
             redis:
                 condition: service_healthy
         environment:
-            DB_HOST: mysql
-            DB_PORT: 3306
-            DB_DATABASE: ${DB_DATABASE:-zonakasir}
-            DB_USERNAME: ${DB_USERNAME:-zonakasir}
-            DB_PASSWORD: ${DB_PASSWORD:-secret}
+            DB_HOST: postgres
+            DB_PORT: 5432
+            DB_DATABASE: zonakasir
+            DB_USERNAME: zonakasir
+            DB_PASSWORD: secret
             REDIS_HOST: redis
             REDIS_PORT: 6379
             CACHE_DRIVER: redis
@@ -34,23 +34,21 @@ services:
             MAIL_HOST: mailpit
             MAIL_PORT: 1025
 
-    mysql:
+    postgres:
         restart: unless-stopped
-        image: mysql:8.0
+        image: postgres:15-alpine
         ports:
-            - '${FORWARD_DB_PORT:-3307}:3306'
+            - '${FORWARD_DB_PORT:-5432}:5432'
         environment:
-            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
-            MYSQL_ROOT_HOST: '%'
-            MYSQL_DATABASE: ${DB_DATABASE:-zonakasir}
-            MYSQL_USER: ${DB_APP_USER:-${DB_USERNAME:-zonakasir}}
-            MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+            POSTGRES_DB: zonakasir
+            POSTGRES_USER: zonakasir
+            POSTGRES_PASSWORD: secret
         volumes:
-            - zonakasir-mysql:/var/lib/mysql
+            - zonakasir-postgres:/var/lib/postgresql/data
         networks:
             - zonakasir
         healthcheck:
-            test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-p${DB_PASSWORD:-secret}']
+            test: ['CMD-SHELL', 'pg_isready -U ${DB_USERNAME:-zonakasir}']
             retries: 3
             timeout: 5s
             interval: 5s
@@ -84,7 +82,7 @@ networks:
         driver: bridge
 
 volumes:
-    zonakasir-mysql:
+    zonakasir-postgres:
         driver: local
     zonakasir-redis:
         driver: local

@@ -30,7 +30,7 @@ describe('Plan E2E Flow', function () {
 
         expect($plan)->toBeInstanceOf(Plan::class);
         expect($plan->name)->toBe('Starter');
-        expect($plan->price_monthly)->toBe(99000);
+        expect($plan->price_monthly)->toEqual(99000);
     });
 
     it('plan can be created via factory', function () {
@@ -51,7 +51,7 @@ describe('Plan E2E Flow', function () {
         ]);
 
         expect($plan->fresh()->name)->toBe('Pro Updated');
-        expect((string) $plan->fresh()->price_monthly)->toBe('199000.00');
+        expect((int) $plan->fresh()->price_monthly)->toEqual(199000);
     });
 
     it('plan can be deleted', function () {
@@ -81,7 +81,7 @@ describe('Plan E2E Flow', function () {
     it('free plan factory creates valid free plan', function () {
         $plan = Plan::factory()->free()->create(['slug' => 'free-' . uniqid()]);
 
-        expect($plan->price_monthly)->toBe(0);
+        expect($plan->price_monthly)->toEqual(0);
         expect($plan->price_yearly)->toBeNull();
         expect((int) $plan->max_stores)->toBe(1);
         expect($plan->features)->toContain('pos');
@@ -90,7 +90,7 @@ describe('Plan E2E Flow', function () {
     it('enterprise plan factory creates enterprise plan', function () {
         $plan = Plan::factory()->enterprise()->create(['slug' => 'enterprise-' . uniqid()]);
 
-        expect($plan->price_monthly)->toBe(500000);
+        expect($plan->price_monthly)->toEqual(500000);
         expect((int) $plan->max_stores)->toBe(99);
         expect($plan->features)->toContain('multi_store');
     });

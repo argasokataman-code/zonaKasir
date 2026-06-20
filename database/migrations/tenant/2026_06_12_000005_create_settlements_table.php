@@ -17,7 +17,7 @@ return new class extends Migration
             $table->double('total_fee_platform');
             $table->double('total_net');
             $table->unsignedBigInteger('transaction_count');
-            $table->enum('status', ['pending', 'approved', 'partial', 'disbursed', 'failed'])->default('pending');
+            $table->string('status', 20)->default('pending');
             $table->text('notes')->nullable();
             $table->timestamp('approved_at')->nullable();
             $table->timestamp('disbursed_at')->nullable();

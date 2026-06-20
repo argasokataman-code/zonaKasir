@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,16 +17,20 @@ class LocalizationMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! Schema::hasTable('users')) {
-            return $next($request);
+        try {
+            if (! Schema::hasTable('users')) {
+                return $next($request);
+            }
+            $locale = 'en';
+            $user = auth()->user();
+            if ($user) {
+                $locale = $user->profile->locale ?? 'en';
+            }
+            config(['app.locale' => $locale]);
+            app()->setLocale($locale);
+        } catch (Exception $e) {
+            // DB not available — skip locale detection
         }
-        $locale = 'en';
-        $user = auth()->user();
-        if ($user) {
-            $locale = $user->profile->locale ?? 'en';
-        }
-        config(['app.locale' => $locale]);
-        app()->setLocale($locale);
 
         return $next($request);
     }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('bank_account_name');
             $table->string('bank_account_number');
             $table->string('bank_code', 10);
-            $table->enum('status', ['pending', 'approved', 'rejected', 'processing', 'completed', 'failed'])->default('pending');
+            $table->string('status', 20)->default('pending');
             $table->string('idempotency_key')->unique()->index()->nullable();
             $table->string('disburse_id')->nullable();
             $table->json('disburse_response')->nullable();

@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -43,39 +43,19 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
-        'mysql' => [
-            'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'strict' => false,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-        ],
-
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'url' => env('DATABASE_URL', env('POSTGRES_URL_NON_POOLING')),
+            'host' => env('DB_HOST', env('POSTGRES_HOST', '127.0.0.1')),
+            'port' => env('DB_PORT', env('POSTGRES_PORT', '5432')),
+            'database' => env('DB_DATABASE', env('POSTGRES_DATABASE', 'forge')),
+            'username' => env('DB_USERNAME', env('POSTGRES_USER', 'forge')),
+            'password' => env('DB_PASSWORD', env('POSTGRES_PASSWORD', '')),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
             'search_path' => 'public',
-            'sslmode' => 'prefer',
+            'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
         'sqlsrv' => [
@@ -94,7 +74,7 @@ return [
         ],
 
         'testing' => (function () {
-            $driver = env('DB_TESTING_DRIVER', 'mysql');
+            $driver = env('DB_TESTING_DRIVER', 'pgsql');
             if ($driver === 'sqlite') {
                 return [
                     'driver' => 'sqlite',
@@ -103,45 +83,48 @@ return [
                     'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
                 ];
             }
+            if ($driver === 'pgsql') {
+                return [
+                    'driver' => 'pgsql',
+                    'url' => env('DATABASE_URL'),
+                    'host' => env('DB_HOST', '127.0.0.1'),
+                    'port' => env('DB_PORT', '5432'),
+                    'database' => env('DB_DATABASE_TESTING', 'testing'),
+                    'username' => env('DB_USERNAME_TESTING', env('DB_USERNAME', 'postgres')),
+                    'password' => env('DB_PASSWORD_TESTING', env('DB_PASSWORD', '')),
+                    'prefix' => '',
+                    'prefix_indexes' => true,
+                    'search_path' => 'public',
+                    'sslmode' => 'prefer',
+                ];
+            }
             return [
                 'driver' => $driver,
                 'url' => env('DATABASE_URL'),
                 'host' => env('DB_HOST', '127.0.0.1'),
-                'port' => env('DB_PORT', '3306'),
+                'port' => env('DB_PORT', '5432'),
                 'database' => env('DB_DATABASE_TESTING', 'testing'),
-                'username' => env('DB_USERNAME_TESTING', env('DB_USERNAME', 'root')),
+                'username' => env('DB_USERNAME_TESTING', env('DB_USERNAME', 'postgres')),
                 'password' => env('DB_PASSWORD_TESTING', ''),
-                'unix_socket' => env('DB_SOCKET', ''),
-                'charset' => 'utf8mb4',
-                'collation' => 'utf8mb4_unicode_ci',
                 'prefix' => '',
                 'prefix_indexes' => true,
-                'strict' => true,
-                'engine' => null,
-                'options' => extension_loaded('pdo_mysql') ? array_filter([
-                    PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-                ]) : [],
+                'search_path' => 'public',
+                'sslmode' => 'prefer',
             ];
         })(),
 
-        'mysql_activity_log' => [
-            'driver' => 'mysql',
+        'activity_log' => [
+            'driver' => env('DB_CONNECTION', 'pgsql'),
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
+            'port' => env('DB_PORT', '5432'),
             'database' => env('ACTIVITY_LOG_DB_DATABASE', env('DB_DATABASE', 'forge')),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'prefix_indexes' => true,
-            'strict' => false,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
+            'search_path' => 'public',
+            'sslmode' => 'prefer',
         ],
     ],
 

@@ -12,10 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sellings', function (Blueprint $table) {
-            $table->after('fee', function (Blueprint $table) {
-                $table->string('voucher')->nullable();
-                $table->double('discount_price')->nullable();
-            });
+            $table->string('voucher')->nullable();
+            $table->double('discount_price')->nullable();
         });
     }
 

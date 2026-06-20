@@ -1,0 +1,13 @@
+vendor
+node_modules
+.git
+storage
+bootstrap/cache/config.php
+bootstrap/cache/blade-icons.php
+tests
+docs
+.agents
+.opencode
+*.md
+.env
+.env.*

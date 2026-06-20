@@ -12,7 +12,7 @@ return new class extends Migration
             $table->dropForeign(['selling_id']);
             $table->foreignId('selling_id')->nullable()->change();
             $table->foreign('selling_id')->references('id')->on('sellings')->onDelete('cascade');
-            $table->json('cart_data')->nullable()->after('notification_payload');
+            $table->json('cart_data')->nullable();
         });
     }
 

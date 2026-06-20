@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('uploaded_files', function (Blueprint $table) {
-            $table->string('relative_path')->nullable()->after('path');
+            $table->string('relative_path')->nullable();
             $table->index('relative_path');
         });
     }

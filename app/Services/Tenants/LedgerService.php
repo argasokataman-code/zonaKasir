@@ -11,7 +11,7 @@ class InsufficientBalanceException extends \RuntimeException {}
 class LedgerService
 {
     /**
-     * Create ledger entry with MySQL GET_LOCK for row-level concurrency safety.
+     * Create ledger entry with database-level advisory lock for row-level concurrency safety.
      */
     public function entry(
         string $ledgerableType,  // Selling::class, Withdrawal::class
@@ -27,8 +27,8 @@ class LedgerService
     {
         $lockName = 'ledger_' . Str::slug($ledgerableType) . '_' . $ledgerableId;
 
-        // MySQL application-level lock
-        DB::select("SELECT GET_LOCK(?, 5) AS lock_acquired", [$lockName]);
+        // Database-level advisory lock (works on both MySQL and PostgreSQL)
+        $this->acquireLock($lockName, 5);
 
         try {
             return DB::transaction(function () use (
@@ -63,7 +63,7 @@ class LedgerService
                 ]);
             });
         } finally {
-            DB::select("SELECT RELEASE_LOCK(?)", [$lockName]);
+            $this->releaseLock($lockName);
         }
     }
 
@@ -73,17 +73,17 @@ class LedgerService
     }
 
     /**
-     * Get current balance with MySQL GET_LOCK to prevent concurrent reads.
+     * Get current balance with advisory lock to prevent concurrent reads.
      */
     public function getCurrentBalanceWithLock(): int
     {
         $lockName = 'ledger_balance_lock';
-        DB::select("SELECT GET_LOCK(?, 10) AS lock_acquired", [$lockName]);
+        $this->acquireLock($lockName, 10);
 
         try {
             return $this->getCurrentBalance();
         } finally {
-            DB::select("SELECT RELEASE_LOCK(?)", [$lockName]);
+            $this->releaseLock($lockName);
         }
     }
 
@@ -93,5 +93,37 @@ class LedgerService
             ->whereBetween('created_at', [$from, $to])
             ->orderBy('id')
             ->get();
+    }
+
+    /**
+     * Acquire advisory lock (supports both MySQL and PostgreSQL).
+     */
+    private function acquireLock(string $lockName, int $timeout): void
+    {
+        $driver = config('database.connections.' . config('database.default') . '.driver');
+
+        if ($driver === 'pgsql') {
+            // PostgreSQL: use pg_advisory_lock with crc32 hash
+            DB::select("SELECT pg_advisory_lock(?) AS lock_acquired", [crc32($lockName)]);
+        } else {
+            // MySQL: use GET_LOCK
+            DB::select("SELECT GET_LOCK(?, ?) AS lock_acquired", [$lockName, $timeout]);
+        }
+    }
+
+    /**
+     * Release advisory lock (supports both MySQL and PostgreSQL).
+     */
+    private function releaseLock(string $lockName): void
+    {
+        $driver = config('database.connections.' . config('database.default') . '.driver');
+
+        if ($driver === 'pgsql') {
+            // PostgreSQL: use pg_advisory_unlock
+            DB::select("SELECT pg_advisory_unlock(?)", [crc32($lockName)]);
+        } else {
+            // MySQL: use RELEASE_LOCK
+            DB::select("SELECT RELEASE_LOCK(?)", [$lockName]);
+        }
     }
 }

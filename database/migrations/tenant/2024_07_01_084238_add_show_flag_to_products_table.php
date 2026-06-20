@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->boolean('show')->default(true)->after('hero_images');
+            $table->boolean('show')->default(true);
         });
     }
 

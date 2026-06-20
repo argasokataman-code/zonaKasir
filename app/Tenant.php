@@ -37,23 +37,26 @@ class Tenant extends Model
         // ISOLATED DATABASE — switch to tenant-specific DB
         $originalConnection = config('database.default');
         $tenantDb = $this->tenancy_db_name;
+        $currentDriver = config("database.connections.{$originalConnection}.driver");
 
         // Create temporary connection pointing to tenant DB
+        $tenantConfig = [
+            'driver' => $currentDriver,
+            'host' => config("database.connections.{$originalConnection}.host"),
+            'port' => config("database.connections.{$originalConnection}.port"),
+            'database' => $tenantDb,
+            'username' => config("database.connections.{$originalConnection}.username"),
+            'password' => config("database.connections.{$originalConnection}.password"),
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ];
+
+        // Add driver-specific config (pgsql only)
+        $tenantConfig['search_path'] = 'public';
+        $tenantConfig['sslmode'] = 'prefer';
+
         config([
-            'database.connections.tenant_runtime' => [
-                'driver' => 'mysql',
-                'host' => config('database.connections.mysql.host'),
-                'port' => config('database.connections.mysql.port'),
-                'database' => $tenantDb,
-                'username' => config('database.connections.mysql.username'),
-                'password' => config('database.connections.mysql.password'),
-                'unix_socket' => config('database.connections.mysql.unix_socket'),
-                'charset' => 'utf8mb4',
-                'collation' => 'utf8mb4_unicode_ci',
-                'prefix' => '',
-                'prefix_indexes' => true,
-                'strict' => false,
-            ],
+            'database.connections.tenant_runtime' => $tenantConfig,
         ]);
         config(['database.default' => 'tenant_runtime']);
         DB::purge('tenant_runtime');

@@ -12,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('profiles', function (Blueprint $table) {
-            $table->after('locale', function (Blueprint $table) {
-                $table->string('timezone')->nullable();
-            });
+            $table->string('timezone')->nullable();
         });
     }
 

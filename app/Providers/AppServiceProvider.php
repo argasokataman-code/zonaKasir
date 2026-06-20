@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Tenants\User;
+use App\Services\PaymentSettingService;
 use App\Services\Tenants\DisbursementProvider;
 use App\Services\Tenants\FlipPayoutProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -23,6 +24,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(Authenticatable::class, User::class);
         $this->app->bind(DisbursementProvider::class, FlipPayoutProvider::class);
 
+        // Force HTTPS on Vercel (must be in register, before boot)
+        if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         if ($this->app->environment('local', 'development') && class_exists(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class)) {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }
@@ -35,14 +41,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Enforce runtime DB driver to be MySQL outside of automated tests.
-        if (! $this->app->runningUnitTests()) {
-            $default = config('database.default');
-            $driver = config("database.connections.{$default}.driver");
-            if ($driver !== 'mysql') {
-                throw new \RuntimeException("Runtime database driver must be MySQL; current: {$driver} (connection: {$default}).");
-            }
-        }
         Builder::macro('filter', function (Request $request) {
             /* WIP:  <07-08-22, sheenazien8> */
             $columns = $request->filters;
@@ -82,6 +80,8 @@ class AppServiceProvider extends ServiceProvider
 
         Feature::resolveScopeUsing(fn ($driver) => auth()->user()?->tenant_id);
         Feature::discover();
+
+        app(PaymentSettingService::class)->boot();
 
         config([
             'livewire.temporary_file_upload.disk' => config('upload.tmp_disk'),
