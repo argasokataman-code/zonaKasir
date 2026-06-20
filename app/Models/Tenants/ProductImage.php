@@ -16,7 +16,7 @@ class ProductImage extends Model
     use HasTenant;
     use HasFactory, HasTenant;
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
 
     public function product()
     {

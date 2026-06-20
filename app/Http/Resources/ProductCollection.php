@@ -21,7 +21,7 @@ class ProductCollection extends JsonResource
             'is_non_stock' => (bool) $this->is_non_stock,
             'hero_images' => $this->hero_images_url,
             'sku' => $this->sku,
-            'barcode' => $this->barcodes()->primary()->active()->value('code'),
+            'barcode' => $this->whenLoaded('primaryBarcode', fn () => $this->primaryBarcode->first()?->code),
             'show' => $this->show,
             'stocks' => $this->whenLoaded('stocks'),
         ];

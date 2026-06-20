@@ -72,6 +72,8 @@ class Cashier extends Page implements HasForms
 
     public ?int $selectedCategory = null;
 
+    public float $minimumStockNotification = 10;
+
     private float $discount_price = 0;
 
     protected $queryString = [
@@ -94,10 +96,13 @@ class Cashier extends Page implements HasForms
 
         $this->locale = Profile::select('locale')->first()?->locale ?? 'en';
 
+        $this->minimumStockNotification = (float) Setting::get('minimum_stock_nofication', 10);
+
         $this->cartItems = CartItem::query()
             ->select('id', 'product_id', 'qty', 'price', 'discount_price', 'price_unit_id', 'created_at')
             ->with([
                 'product:id,name,sku,selling_price,is_non_stock,hero_images',
+                'product.priceUnits:id,product_id,selling_price',
                 'priceUnit:id,selling_price',
             ])
             ->orderByDesc('created_at')

@@ -13,4 +13,6 @@ class Notification extends Model
 {
     use HasTenant;
     use HasFactory, HasTenant;
+
+    protected $guarded = ['id'];
 }

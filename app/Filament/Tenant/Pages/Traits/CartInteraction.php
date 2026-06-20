@@ -27,11 +27,17 @@ trait CartInteraction
         $this->cartCount = $this->cartItems->count();
         $this->calculateTotalPrice();
 
+        // Render cart items HTML for Alpine to inject — avoids full Livewire re-render
+        $cartHtml = view('filament.tenant.pages.cashier.partials.cart-items', [
+            'cartItems' => $this->cartItems,
+        ])->render();
+
         $this->dispatch('cart-data-updated', [
             'cartItems' => $this->cartItems->pluck('qty', 'product_id')->toArray(),
             'cartCount' => $this->cartCount,
             'subTotal' => $this->sub_total,
             'totalPrice' => $this->total_price,
+            'cartHtml' => $cartHtml,
         ]);
     }
     private function validateStock(Product $product, $qty): bool
@@ -54,6 +60,8 @@ trait CartInteraction
     {
         $auth = Filament::auth()->id();
 
+        $product->load('stocks');
+
         if (! $data) {
             $qty = (
                 CartItem::whereProductId($product->getKey())
@@ -65,7 +73,7 @@ trait CartInteraction
             $qty = (int) $data['_bulk'];
             if ($qty <= 0) {
                 CartItem::where('product_id', $product->getKey())->cashier()->delete();
-                $this->softRefresh($product);
+                $this->refreshCart();
                 return;
             }
         } elseif (! $data['amount']) {
@@ -102,13 +110,13 @@ trait CartInteraction
             ->cashier()
             ->first();
         if (! $cartItem) {
-            $this->softRefresh($product);
+            $this->refreshCart();
             return;
         }
         $qty = $cartItem->qty - 1;
         if ($qty == 0) {
             $cartItem->delete();
-            $this->softRefresh($product);
+            $this->refreshCart();
             return;
         }
         $price = $product->selling_price * ($qty);
@@ -117,7 +125,7 @@ trait CartInteraction
             'price' => $price,
         ]);
         $cartItem->save();
-        $this->softRefresh($product);
+        $this->refreshCart();
     }
 
     #[Renderless]

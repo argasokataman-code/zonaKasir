@@ -17,7 +17,7 @@ class Category extends Model
     use HasTenant;
     use HasFactory, LogsActivity;
 
-    protected $guarded = [];
+    protected $guarded = ['id'];
     protected static $recordEvents = ['created', 'updated', 'deleted'];
 
     public function products(): HasMany

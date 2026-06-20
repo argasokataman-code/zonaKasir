@@ -17,6 +17,8 @@ class Role extends ModelsRole
     use HasTenant;
     use LogsActivity;
 
+    protected $guarded = ['id'];
+
     /**
      * Permission groups mapped to Filament navigation structure.
      * Each group contains permission name suffixes that belong to it.

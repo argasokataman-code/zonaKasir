@@ -7,6 +7,11 @@
       "enabled": true,
       "env": {}
     },
+    "supabase": {
+      "type": "remote",
+      "url": "https://mcp.supabase.com/mcp?project_ref=fojgbgwgtxdmcowmybdl&read_only=true",
+      "enabled": true
+    },
     "db-pgsql": {
       "type": "local",
       "command": ["node", ".opencode/mcp/db-server.mjs"],

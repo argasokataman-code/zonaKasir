@@ -36,7 +36,7 @@ class ProductController extends Controller
                 AllowedFilter::custom('global', new SearchFields, 'name,sku,barcodes.code'),
             ])
             ->allowedIncludes(['category', 'images'])
-            ->with(['category:id,name', 'stocks:product_id,stock,type,is_ready,date,created_at'])
+            ->with(['category:id,name', 'stocks:product_id,stock,type,is_ready,date,created_at', 'primaryBarcode'])
             ->orderByDesc('created_at')
             ->simplePaginate($perPage ?? (new Product())->getPerPage());
 
@@ -50,7 +50,7 @@ class ProductController extends Controller
         try {
             $request->created();
             $product = Product::latest()->first();
-            $product->load(['category:id,name', 'stocks:product_id,stock,type,is_ready,date,created_at']);
+            $product->load(['category:id,name', 'stocks:product_id,stock,type,is_ready,date,created_at', 'primaryBarcode']);
 
             return $this->buildResponse()
                 ->setData(new ProductCollection($product))
@@ -79,7 +79,7 @@ class ProductController extends Controller
             abort(404, 'Product not found');
         }
 
-        $model->load(['category:id,name', 'stocks:product_id,stock,type,is_ready,date,created_at']);
+        $model->load(['category:id,name', 'stocks:product_id,stock,type,is_ready,date,created_at', 'primaryBarcode']);
         $model = new ProductCollection($model);
 
         return $this->buildResponse()
@@ -92,7 +92,7 @@ class ProductController extends Controller
         try {
             $request->updated();
             $product = Product::findorfail($request->route('product'));
-            $product->load(['category:id,name', 'stocks:product_id,stock,type,is_ready,date,created_at']);
+            $product->load(['category:id,name', 'stocks:product_id,stock,type,is_ready,date,created_at', 'primaryBarcode']);
 
             return $this->buildResponse()
                 ->setData(new ProductCollection($product))
