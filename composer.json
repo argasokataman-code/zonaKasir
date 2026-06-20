@@ -63,6 +63,9 @@
         }
     },
     "scripts": {
+        "vercel": [
+            "@php artisan migrate --force"
+        ],
         "dusk": "php artisan dusk",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

@@ -34,17 +34,6 @@ if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
     $app = require_once $projectRoot . '/bootstrap/app.php';
 }
 
-// Run pending tenant migrations on Vercel deploy
-$migrateFlag = '/tmp/storage/migrated.flag';
-if (! file_exists($migrateFlag) && (isset($_ENV['VERCEL']) || getenv('VERCEL'))) {
-    try {
-        $app->make(Illuminate\Contracts\Console\Kernel::class)->call('migrate', ['--force' => true, '--path' => 'database/migrations/tenant']);
-        file_put_contents($migrateFlag, now()->toIso8601String());
-    } catch (\Throwable $e) {
-        // silent — migration may fail on concurrent cold starts
-    }
-}
-
 // Handle Google OAuth discovery (Google Identity Services pings this)
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 if (preg_match('#^/api/auth/login#', $requestUri)) {
