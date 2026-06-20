@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Tenants\User;
+use App\Services\PaymentSettingService;
 use App\Services\Tenants\DisbursementProvider;
 use App\Services\Tenants\FlipPayoutProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -79,6 +80,8 @@ class AppServiceProvider extends ServiceProvider
 
         Feature::resolveScopeUsing(fn ($driver) => auth()->user()?->tenant_id);
         Feature::discover();
+
+        app(PaymentSettingService::class)->boot();
 
         config([
             'livewire.temporary_file_upload.disk' => config('upload.tmp_disk'),
