@@ -517,7 +517,7 @@ The `bg-white` class does not exist
 > Contoh riil dari repo ini:
 > - Team: `argasokataman-codes-projects`
 > - Project: `zona-kasir`
-> - Token: (lihat dari https://vercel.com/account/tokens)
+> - Token: disimpan di file `.vercel-token` (root repo, sudah di `.gitignore`)
 
 ### 9.1 Install Vercel CLI
 
