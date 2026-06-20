@@ -57,8 +57,13 @@ if (strpos($requestUri, '__check=1') !== false) {
     $lines[] = 'MIGRATE_FLAG: ' . (file_exists('/tmp/storage/migrated.flag') ? file_get_contents('/tmp/storage/migrated.flag') : 'NOT FOUND');
     $lines[] = 'MIGRATE_LOG: ' . (file_exists('/tmp/storage/migrate.log') ? substr(file_get_contents('/tmp/storage/migrate.log'), 0, 500) : 'NOT FOUND');
     $lines[] = 'MIGRATE_ERROR: ' . (file_exists('/tmp/storage/migrate.error') ? file_get_contents('/tmp/storage/migrate.error') : 'none');
-    http_response_code(200);
-    header('Content-Type: text/plain');
+    // Show prod schema for withdrawals
+    try {
+        $cols = \Illuminate\Support\Facades\Schema::getColumnListing('withdrawals');
+        $lines[] = 'PROD_COLS: ' . implode(', ', $cols);
+    } catch (\Throwable $e) {
+        $lines[] = 'PROD_COLS_ERROR: ' . $e->getMessage();
+    }
     echo implode("\n", $lines);
     exit(0);
 }
