@@ -128,7 +128,7 @@ class PaymentSubscriptions extends Page
                 DB::raw('SUM(invoices.amount) as total_amount'),
                 DB::raw('COUNT(*) as invoice_count')
             )
-            ->groupBy('month')
+            ->groupBy(DB::raw("TO_CHAR(invoices.paid_at, 'YYYY-MM')"))
             ->orderBy('month')
             ->get()
             ->toArray();

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "markfetch": {
+      "type": "local",
+      "command": ["npx", "-y", "markfetch"],
+      "enabled": true,
+      "env": {}
+    },
+    "db-pgsql": {
+      "type": "local",
+      "command": ["node", ".opencode/mcp/db-server.mjs"],
+      "enabled": true,
+      "env": {
+        "DB_TYPE": "pgsql",
+        "DB_HOST": "127.0.0.1",
+        "DB_PORT": "5432",
+        "DB_DATABASE": "zonakasir",
+        "DB_USER": "zonakasir",
+        "DB_PASSWORD": "secret"
+      }
+    },
+    "db-mysql": {
+      "type": "local",
+      "command": ["node", ".opencode/mcp/db-server.mjs"],
+      "enabled": false,
+      "env": {
+        "DB_TYPE": "mysql",
+        "DB_HOST": "localhost",
+        "DB_PORT": "3306",
+        "DB_DATABASE": "zonakasir_pos",
+        "DB_USER": "root",
+        "DB_PASSWORD": ""
+      }
+    }
+  }
+}

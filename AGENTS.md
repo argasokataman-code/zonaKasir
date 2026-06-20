@@ -22,11 +22,23 @@
 ## 🚨 WAJIB: SETIAP KALI DAPAT TASK, BACA DULU INI
 
 Sebelum mengerjakan task apapun, WAJIB:
-1. **Baca `.opencode/rules/00-task-framework.mdc`** — 6-phase task execution
+1. **Baca `.opencode/rules/00-task-framework.mdc`** — 6-phase task execution + MCP + Context7 + DB validation
 2. **Baca `.opencode/rules/01-code-style.mdc`** — code style, build commands
 3. **Baca `.opencode/rules/02-security.mdc`** — security, deploy, git rules
+4. **Context7 — validasi teknologi/library API sebelum code** (WAJIB jika pakai library eksternal)
+5. **MCP server — validasi server status + data real DB** (API via `markfetch` / DB direct query)
 
 **Jika tidak membaca rules di atas, tugas tidak boleh dimulai.**
+
+## 🚨 HARD-STOP: Context7 + MCP Server — WAJIB SEBELUM NGODING
+
+| Validasi | Tool | Kapan Wajib |
+|----------|------|-------------|
+| **Teknologi** | Context7 (`resolve-library-id` + `query-docs`) | Sebelum generate code pakai library/framework/API |
+| **Server status** | MCP `markfetch` | Jika task butuh cek kondisi server |
+| **Data DB** | MCP `markfetch` (API) / DB MCP (direct SQL) | Jika task butuh validasi data real |
+
+**Tanpa Context7 → halusinasi API library. Tanpa MCP → halusinasi server/data. No exceptions.**
 
 ## 🔄 Quick Reference
 

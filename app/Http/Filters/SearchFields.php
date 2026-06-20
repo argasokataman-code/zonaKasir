@@ -4,6 +4,7 @@ namespace App\Http\Filters;
 
 use Spatie\QueryBuilder\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class SearchFields implements Filter
 {
@@ -11,19 +12,17 @@ class SearchFields implements Filter
     {
         if (!is_array($fields)) $fields = explode(',', $fields);
 
-        $query->where(function($query) use ($fields, $value) {
+        $like = DB::getDriverName() === 'pgsql' ? 'ILIKE' : 'LIKE';
+
+        $query->where(function($query) use ($fields, $value, $like) {
             foreach ($fields as $field) {
-                // Process nested relationship searches differently
                 if (stripos($field, '.')) {
                     $els = explode('.', $field);
-                    $relation = $els[0];
-                    $col = $els[1];
-
-                    $query->orWhereHas($relation, function($query) use ($value, $col) {
-                        $query->where($col, 'LIKE', "%$value%");
+                    $query->orWhereHas($els[0], function($query) use ($value, $els, $like) {
+                        $query->where($els[1], $like, "%$value%");
                     });
                 } else {
-                    $query->orWhere($field, 'LIKE', "%$value%");
+                    $query->orWhere($field, $like, "%$value%");
                 }
             }
         });

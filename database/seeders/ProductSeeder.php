@@ -12,10 +12,10 @@ class ProductSeeder extends Seeder
     public function run()
     {
         $driver = DB::getDriverName();
-        if ($driver === 'mysql') {
+        if ($driver === 'pgsql') {
+            DB::statement('SET session_replication_role = replica');
+        } else {
             DB::statement('SET FOREIGN_KEY_CHECKS=0');
-        } elseif ($driver === 'pgsql') {
-            DB::statement('SET CONSTRAINTS ALL DISABLE');
         }
 
         Product::truncate();
@@ -102,13 +102,14 @@ class ProductSeeder extends Seeder
                 'init_stock' => $p['stock'],
                 'product_id' => $product->id,
                 'type' => 'in',
+                'date' => now()->format('Y-m-d'),
             ]);
         }
 
-        if ($driver === 'mysql') {
+        if ($driver === 'pgsql') {
+            DB::statement('SET session_replication_role = origin');
+        } else {
             DB::statement('SET FOREIGN_KEY_CHECKS=1');
-        } elseif ($driver === 'pgsql') {
-            DB::statement('SET CONSTRAINTS ALL ENABLE');
         }
     }
 }

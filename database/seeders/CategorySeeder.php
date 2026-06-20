@@ -15,15 +15,14 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        $driver = DB::getDriverName();
-        if ($driver === 'mysql') {
+        if (DB::getDriverName() === 'pgsql') {
+            DB::statement('SET session_replication_role = replica');
+            Category::truncate();
+            DB::statement('SET session_replication_role = origin');
+        } else {
             DB::statement('SET FOREIGN_KEY_CHECKS=0');
-        } elseif ($driver === 'pgsql') {
-            DB::statement('SET CONSTRAINTS ALL DISABLE');
-        }
-        Category::truncate();
-        if ($driver === 'pgsql') {
-            DB::statement('SET CONSTRAINTS ALL ENABLE');
+            Category::truncate();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
         }
         Category::create([
             'name' => "UMUM"
