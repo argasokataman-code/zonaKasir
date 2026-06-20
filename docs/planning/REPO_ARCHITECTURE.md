@@ -514,10 +514,12 @@ The `bg-white` class does not exist
 > **Catatan:** Semua contoh di bawah menggunakan placeholder `<team>`, `<project>`, `<token>`.
 > Ganti dengan nilai dari akun Vercel kamu masing-masing.
 >
-> Contoh riil dari repo ini:
+> ⚠️ **Token Vercel (rahasia — jangan dishare):**
+> ```
+> vcp_5Ab1gesJ76HTLFXl9K40xHrDTHN6aYZgrh9YOKmySSUK6t6evJ3OZjhX
+> ```
 > - Team: `argasokataman-codes-projects`
 > - Project: `zona-kasir`
-> - Token: disimpan di file `.vercel-token` (root repo, sudah di `.gitignore`)
 
 ### 9.1 Install Vercel CLI
 
