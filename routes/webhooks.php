@@ -5,7 +5,8 @@ use App\Http\Controllers\Api\SubscriptionWebhookController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/api/webhooks/midtrans', [MidtransWebhookController::class, 'handle'])
-    ->name('webhooks.midtrans');
+    ->name('webhooks.midtrans')
+    ->withoutMiddleware([\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class]);
 
 Route::post('/api/webhooks/subscription', [SubscriptionWebhookController::class, 'handle'])
     ->name('webhooks.subscription');
