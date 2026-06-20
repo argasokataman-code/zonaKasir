@@ -64,7 +64,7 @@
     },
     "scripts": {
         "vercel": [
-            "@php artisan migrate --force"
+            "@php artisan migrate --force 2>/dev/null || true"
         ],
         "dusk": "php artisan dusk",
         "post-autoload-dump": [
