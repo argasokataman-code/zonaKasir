@@ -41,6 +41,8 @@ if (! file_exists($flagFile) && (getenv('VERCEL') || isset($_ENV['VERCEL']))) {
         $artisan = $app->make(Illuminate\Contracts\Console\Kernel::class);
         $artisan->call('migrate', ['--force' => true]);
         $log = $artisan->output();
+        $artisan->call('filament:assets');
+        $log .= "\n" . $artisan->output();
         @file_put_contents('/tmp/storage/migrate.log', $log);
         @file_put_contents($flagFile, date('c'));
     } catch (\Throwable $e) {
