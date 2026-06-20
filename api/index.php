@@ -89,6 +89,8 @@ if (preg_match('#^/api/auth/login#', $requestUri)) {
     exit;
 }
 
+
+
 // TEMP: Debug env
 if (strpos($requestUri, '__env') !== false) {
     header('Content-Type: application/json');

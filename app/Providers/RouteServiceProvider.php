@@ -21,6 +21,7 @@ class RouteServiceProvider extends ServiceProvider
             $this->mapApiRoutes();
             $this->mapTenantRoutes();
             $this->mapStorageRoutes();
+            $this->mapWebhookRoutes();
         });
     }
 
@@ -49,6 +50,12 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware('web')
             ->group(base_path('routes/storage.php'));
+    }
+
+    protected function mapWebhookRoutes()
+    {
+        Route::middleware('api')
+            ->group(base_path('routes/webhooks.php'));
     }
 
     protected function mapTenantRoutes()
