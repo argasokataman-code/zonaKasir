@@ -34,6 +34,15 @@ if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
     $app = require_once $projectRoot . '/bootstrap/app.php';
 }
 
+// TEMP: run migration on Vercel deploy
+if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
+    try {
+        $app->make(Illuminate\Contracts\Console\Kernel::class)->call('migrate', ['--force' => true]);
+    } catch (\Throwable $e) {
+        // silent
+    }
+}
+
 // Handle Google OAuth discovery (Google Identity Services pings this)
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 if (preg_match('#^/api/auth/login#', $requestUri)) {

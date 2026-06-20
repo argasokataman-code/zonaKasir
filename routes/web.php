@@ -29,9 +29,6 @@ Route::get('/serviceworker.js', function () {
 Route::get('/auth/register', RegisterTenantForm::class)
     ->name('auth.register');
 
-// TEMP: remove after running migration on prod
-require base_path('routes/migrate.php');
-
 Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])
     ->name('google.redirect');
 Route::get('/auth/google/callback', [GoogleController::class, 'callback'])
