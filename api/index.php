@@ -52,7 +52,7 @@ if (! file_exists($flagFile) && (getenv('VERCEL') || isset($_ENV['VERCEL']))) {
 
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 
-// TEMP: Show request URI for debugging
+// TEMP: Show request URI + route list for debugging
 if (strpos($requestUri, '__debug') !== false) {
     header('Content-Type: text/plain');
     echo 'REQUEST_URI: ' . ($_SERVER['REQUEST_URI'] ?? 'NOT SET') . "\n";
@@ -60,6 +60,12 @@ if (strpos($requestUri, '__debug') !== false) {
     echo 'PHP_SELF: ' . ($_SERVER['PHP_SELF'] ?? 'NOT SET') . "\n";
     echo 'VERCEL: ' . (getenv('VERCEL') ?: 'NOT SET') . "\n";
     echo 'APP_URL: ' . config('app.url') . "\n";
+    echo "\n=== ROUTES ===\n";
+    $routes = app()->router->getRoutes()->getRoutes();
+    foreach ($routes as $route) {
+        $methods = implode('|', $route->methods());
+        echo $methods . ' ' . $route->uri() . ' domain=' . ($route->domain() ?? '*') . "\n";
+    }
     exit;
 }
 
