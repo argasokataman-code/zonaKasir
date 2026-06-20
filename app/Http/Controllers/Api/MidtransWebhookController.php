@@ -45,7 +45,7 @@ class MidtransWebhookController extends Controller
             }
         }
 
-        return response()->json(['status' => 'not_found'], 404);
+        return response()->json(['status' => 'ok', 'message' => 'no handler for this order'], 200);
     }
 
     private function handleSubscription(array $payload): JsonResponse
