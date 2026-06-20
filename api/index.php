@@ -34,6 +34,17 @@ if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
     $app = require_once $projectRoot . '/bootstrap/app.php';
 }
 
+// Auto-run pending migrations once per deploy (Vercel only)
+$flagFile = '/tmp/storage/migrated.flag';
+if (! file_exists($flagFile) && (getenv('VERCEL') || isset($_ENV['VERCEL']))) {
+    try {
+        $app->make(Illuminate\Contracts\Console\Kernel::class)->call('migrate', ['--force' => true]);
+        @file_put_contents($flagFile, date('c'));
+    } catch (\Throwable $e) {
+        // silent — retry next cold start
+    }
+}
+
 // Handle Google OAuth discovery (Google Identity Services pings this)
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
 if (preg_match('#^/api/auth/login#', $requestUri)) {
