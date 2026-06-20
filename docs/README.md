@@ -34,6 +34,10 @@ Complete documentation for the zonaKasir POS application. All resources are orga
 ### 📋 **Planning & Roadmap**
 - [Midtrans Payment Integration](planning/MIDTRANS_PAYMENT_INTEGRATION_PLAN.md) — Complete spec v1.3
 - [Rebranding Plan](REBRANDING_PLAN.md) — Lakasir → zonaKasir migration tracking
+- [Performance Optimization PRD](planning/PERFORMANCE_OPTIMIZATION_PRD.md) — Load times, SQL, caching
+- [Single DB Architecture](planning/SINGLE_DB_ARCHITECTURE.md) — Multi-tenancy shared DB design
+- [MySQL → PostgreSQL Migration](planning/MYSQL_TO_POSTGRESQL_MIGRATION.md) — Full migration plan & completion report
+- [Repo Architecture Guide](planning/REPO_ARCHITECTURE.md) — Dual-branch strategy (main vs vercel), runtime, Vercel CLI
 
 ### 🚀 **Development Guides**
 - [Server Access](guides/SERVER_ACCESS.md) — Staging SSH, commands, GitHub Actions
