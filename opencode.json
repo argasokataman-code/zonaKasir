@@ -19,19 +19,6 @@
         "DB_USER": "zonakasir",
         "DB_PASSWORD": "secret"
       }
-    },
-    "db-mysql": {
-      "type": "local",
-      "command": ["node", ".opencode/mcp/db-server.mjs"],
-      "enabled": false,
-      "env": {
-        "DB_TYPE": "mysql",
-        "DB_HOST": "localhost",
-        "DB_PORT": "3306",
-        "DB_DATABASE": "zonakasir_pos",
-        "DB_USER": "root",
-        "DB_PASSWORD": ""
-      }
     }
   }
 }

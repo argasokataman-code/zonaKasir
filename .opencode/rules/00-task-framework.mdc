@@ -73,15 +73,9 @@
 3. Validasi data count, values, relationships
 
 **Aturan DB direct query:**
-1. Pilih MCP database server sesuai branch:
-   - `main` branch → MySQL MCP (DB: `zonakasir_pos`)
-   - `vercel` branch → PostgreSQL MCP (DB: `verceldb`)
-2. Query SQL langsung ke database
+1. Gunakan MCP `db-pgsql` untuk query langsung ke PostgreSQL
+2. Query SQL langsung ke database (`SELECT` only)
 3. Validasi data real, jangan asumsi
-
-**Branch-aware DB access:**
-- **main (MySQL):** `SELECT * FROM ...` via MySQL MCP
-- **vercel (PostgreSQL):** `SELECT * FROM ...` via PostgreSQL MCP
 
 **Rule: JIKA TASK BUTUH VALIDASI DATA, HARUS via MCP — API atau DB direct. No exceptions.**
 

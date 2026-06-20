@@ -51,16 +51,9 @@ class Tenant extends Model
             'prefix_indexes' => true,
         ];
 
-        // Add driver-specific config
-        if ($currentDriver === 'mysql') {
-            $tenantConfig['unix_socket'] = config("database.connections.{$originalConnection}.unix_socket");
-            $tenantConfig['charset'] = 'utf8mb4';
-            $tenantConfig['collation'] = 'utf8mb4_unicode_ci';
-            $tenantConfig['strict'] = false;
-        } elseif ($currentDriver === 'pgsql') {
-            $tenantConfig['search_path'] = 'public';
-            $tenantConfig['sslmode'] = 'prefer';
-        }
+        // Add driver-specific config (pgsql only)
+        $tenantConfig['search_path'] = 'public';
+        $tenantConfig['sslmode'] = 'prefer';
 
         config([
             'database.connections.tenant_runtime' => $tenantConfig,

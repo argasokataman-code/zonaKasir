@@ -19,12 +19,10 @@
 | Dependency | Version | Notes |
 |-----------|---------|-------|
 | **PHP** | ^8.4 | with extensions: BCMath, Ctype, Fileinfo, JSON, Mbstring, OpenSSL, PDO, Tokenizer, XML |
-| **MySQL** | 5.7+ | Used on `main` branch (VPS production) |
-| **PostgreSQL** | 15+ | Used on `vercel` branch (local dev / Vercel) |
+| **PostgreSQL** | 15+ | Primary database |
 | **Node.js** | 18+ | For frontend build (Vite) |
 
-> 💡 **Dual-branch strategy:** `main` = MySQL (VPS/Docker), `vercel` = PostgreSQL (Vercel serverless).
-> Never merge branches — they use different databases and hosting.
+> 💡 **Single database:** PostgreSQL 15+ is the only database engine.
 
 ## Features
 
@@ -88,7 +86,7 @@
 | **Backend** | [Laravel](https://laravel.com) | ^11.9 |
 | **Admin Panel** | [Filament](https://filamentphp.com) | ^3.2 |
 | **Frontend** | [Livewire](https://livewire.laravel.com) | ^3.0 |
-| **Database** | MySQL 5.7+ / PostgreSQL 15+ | Dual-branch |
+| **Database** | PostgreSQL 15+ | — |
 | **Build** | [Vite](https://vitejs.dev) | — |
 | **Testing** | [Pest PHP](https://pestphp.com) | ^2.35 |
 
@@ -113,7 +111,7 @@
 
 ### Prerequisites
 - PHP ^8.4 with required extensions
-- MySQL 5.7+ (for `main` branch) OR PostgreSQL 15+ (for `vercel` branch)
+- PostgreSQL 15+
 - Composer, Node.js 18+, npm
 
 ### Setup
@@ -179,14 +177,14 @@ php artisan sail:install
 
 ## Branch Strategy
 
-| Branch | Database | Hosting | Purpose |
-|--------|----------|---------|---------|
-| `main` | MySQL 8.0 | VPS (Docker) | Production-ready staging |
-| `vercel` | PostgreSQL 15 | Vercel (serverless) | Vercel deployment test |
-| `feat/*` | — | — | Feature branches |
-| `fix/*` | — | — | Bug fix branches |
+| Branch | Hosting | Purpose |
+|--------|---------|---------|
+| `vercel` | Vercel (serverless) / Local | Active development |
+| `main` | VPS (Docker) | Legacy staging (archived) |
+| `feat/*` | — | Feature branches |
+| `fix/*` | — | Bug fix branches |
 
-> ⚠️ **Never merge `vercel` into `main`** — branches are separate with different DB schemas.
+> ⚠️ **Both branches use PostgreSQL** — `main` is legacy, `vercel` is default.
 
 ## Architecture Diagrams
 

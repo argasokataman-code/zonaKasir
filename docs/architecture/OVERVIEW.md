@@ -26,8 +26,7 @@ graph TB
     end
 
     subgraph DB["Data Layer"]
-        DB_M[MySQL 5.7+<br/>main branch]
-        DB_P[PostgreSQL 15+<br/>vercel branch]
+        DB_P[PostgreSQL 15+]
         RD[Redis<br/>Cache / Queue]
     end
 
@@ -36,7 +35,6 @@ graph TB
     A -->|REST| MP
     A -->|HTTP| FB
     A -->|SMTP| SMTP
-    A -->|SQL| DB_M
     A -->|SQL| DB_P
     A -->|TCP| RD
     A -->|File| S3
@@ -48,30 +46,26 @@ graph TB
 
 ```mermaid
 graph LR
-    subgraph MAIN["main branch"]
-        direction TB
-        M1[PHP 8.4]
-        M2[MySQL 8.0]
-        M3[VPS Docker]
-        M4[Vite + Filament full]
-        M1 --- M2 --- M3 --- M4
-    end
-
-    subgraph VERCEL["vercel branch"]
+    subgraph VERCEL["vercel (default)"]
         direction TB
         V1[PHP 8.4]
         V2[PostgreSQL 15]
-        V3[Vercel Serverless]
-        V4[Vite + Fallback UI]
-        V1 --- V2 --- V3 --- V4
+        V3[Vercel Serverless / Local]
+        V1 --- V2 --- V3
     end
 
-    MAIN -->|Auto-deploy| STAGING[staging.jogjatourdrive.com]
+    subgraph MAIN["main (legacy/archived)"]
+        direction TB
+        M1[PHP 8.4]
+        M2[PostgreSQL 15]
+        M3[VPS Docker]
+        M1 --- M2 --- M3
+    end
+
     VERCEL -->|Manual deploy| VERCEL_DEPLOY[.vercel.app]
 
     style MAIN fill:#e1f5fe,stroke:#01579b
     style VERCEL fill:#fff3e0,stroke:#e65100
-    style STAGING fill:#e8f5e9,stroke:#2e7d32
 ```
 
 ---
