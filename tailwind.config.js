@@ -4,7 +4,6 @@ import forms from "@tailwindcss/forms";
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-  content: [
     // Laravel
     "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
     // App views & Filament resources

@@ -9,8 +9,7 @@ Route::get('/', function () {
 });
 
 Route::get('/landing', function () {
-    return response()->file(public_path('landing/index.html'))
-        ->header('Content-Type', 'text/html');
+    return response()->file(public_path('landing/index.html'));
 });
 
 Route::view('/privacy', 'privacy-policy');
@@ -19,9 +18,12 @@ Route::view('/terms', 'terms-of-service');
 Route::view('/offline', 'offline');
 Route::view('/network-error', 'network-error');
 
+
+
 Route::get('/serviceworker.js', function () {
-    return response()->file(public_path('serviceworker.js'))
-        ->header('Content-Type', 'application/javascript');
+    return response(file_get_contents(public_path('serviceworker.js')), 200, [
+        'Content-Type' => 'application/javascript',
+    ]);
 });
 
 Route::get('/auth/register', RegisterTenantForm::class)
@@ -46,4 +48,8 @@ Route::middleware(['web', 'auth:admin'])->group(function () {
     Route::delete('/admin/tenants/{id}/destroy', [\App\Http\Controllers\TenantExportController::class, 'destroy'])
         ->name('admin.tenants.destroy');
 });
+
+
+
+
 

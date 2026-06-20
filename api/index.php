@@ -12,6 +12,14 @@ declare(strict_types=1);
 // Resolve the project root (one level up from api/)
 $projectRoot = dirname(__DIR__);
 
+// Register Composer autoloader
+require $projectRoot . '/vendor/autoload.php';
+
+// Suppress PDO deprecation warnings on PHP 8.5+
+if (PHP_VERSION_ID >= 80500) {
+    error_reporting(error_reporting() & ~E_DEPRECATED);
+}
+
 // Vercel: use /tmp for writable storage
 if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
     $tmpDir = '/tmp/storage';
@@ -20,10 +28,19 @@ if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
     @mkdir($tmpDir . '/framework/views', 0777, true);
     @mkdir($tmpDir . '/framework/sessions', 0777, true);
 
-    $app = require $projectRoot . '/bootstrap/app.php';
+    $app = require_once $projectRoot . '/bootstrap/app.php';
     $app->useStoragePath($tmpDir);
 } else {
-    $app = require $projectRoot . '/bootstrap/app.php';
+    $app = require_once $projectRoot . '/bootstrap/app.php';
+}
+
+// Handle Google OAuth discovery (Google Identity Services pings this)
+$requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+if (preg_match('#^/api/auth/login#', $requestUri)) {
+    http_response_code(200);
+    header('Content-Type: application/json');
+    echo '{}';
+    exit;
 }
 
 // Change working directory to Laravel public folder

@@ -44,3 +44,6 @@ version.txt
 # Private/public keys
 *.pem
 .vercel-token
+
+# Vercel local project config
+.vercel/

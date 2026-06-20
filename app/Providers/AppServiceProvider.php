@@ -23,6 +23,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(Authenticatable::class, User::class);
         $this->app->bind(DisbursementProvider::class, FlipPayoutProvider::class);
 
+        // Force HTTPS on Vercel (must be in register, before boot)
+        if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         if ($this->app->environment('local', 'development') && class_exists(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class)) {
             $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
         }

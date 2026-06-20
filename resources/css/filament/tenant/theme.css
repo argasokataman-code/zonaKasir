@@ -1,4 +1,4 @@
-/* @import '/vendor/filament/filament/resources/css/theme.css'; — skipped on Vercel, served at runtime */
+@import '/vendor/filament/filament/resources/css/theme.css';
 @config '../../../../tailwind.config.js';
 
 

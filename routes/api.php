@@ -25,6 +25,11 @@ Route::post('/webhooks/flip', [App\Http\Controllers\Api\Webhooks\FlipWebhookCont
 Route::get('/pricing', [\App\Http\Controllers\Api\PlanController::class, 'index'])
     ->name('pricing');
 
+// Google OAuth discovery (required by Google Identity Services library)
+Route::get('/auth/login', function () {
+    return response()->json([], 200);
+});
+
 Route::get('/test', function ()
 {
     return response()->json([

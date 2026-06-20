@@ -152,7 +152,7 @@ class TenantPanelProvider extends PanelProvider
                 Js::make('html5-qrcode', 'https://unpkg.com/html5-qrcode'),
                 Js::make('session-timeout', resource_path('js/session-timeout.js')),
             ])
-            ->favicon(url('favicon.ico'))
+            ->favicon('/favicon.ico')
             ->spa(config('app.spa_mode'))
             ->authGuard('web')
             ->path('/member')
