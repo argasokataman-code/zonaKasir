@@ -2,7 +2,12 @@
 
 use App\Http\Controllers\Api\MidtransWebhookController;
 use App\Http\Controllers\Api\SubscriptionWebhookController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/api/webhooks/test', function (Request $request) {
+    return response()->json(['status' => 'ok', 'data' => $request->all()]);
+});
 
 Route::post('/api/webhooks/midtrans', [MidtransWebhookController::class, 'handle'])
     ->name('webhooks.midtrans')
