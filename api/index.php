@@ -34,12 +34,14 @@ if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
     $app = require_once $projectRoot . '/bootstrap/app.php';
 }
 
-// TEMP: run migration on Vercel deploy
-if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
+// Run pending tenant migrations on Vercel deploy
+$migrateFlag = '/tmp/storage/migrated.flag';
+if (! file_exists($migrateFlag) && (isset($_ENV['VERCEL']) || getenv('VERCEL'))) {
     try {
-        $app->make(Illuminate\Contracts\Console\Kernel::class)->call('migrate', ['--force' => true]);
+        $app->make(Illuminate\Contracts\Console\Kernel::class)->call('migrate', ['--force' => true, '--path' => 'database/migrations/tenant']);
+        file_put_contents($migrateFlag, now()->toIso8601String());
     } catch (\Throwable $e) {
-        // silent
+        // silent — migration may fail on concurrent cold starts
     }
 }
 
