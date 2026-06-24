@@ -77,4 +77,40 @@ describe('Authentication E2E Flow', function () {
         expect($profileResponse->json()['data'])->toHaveKey('email');
         expect($profileResponse->json()['data']['email'])->toBe($user->email);
     });
+
+    it('GET api/auth/login redirects to member/login', function () {
+        $response = $this->get('/api/auth/login');
+        
+        // Web-browser redirect to login page
+        expect($response->status())->toBe(Response::HTTP_FOUND);
+        expect($response->headers->get('Location'))->toContain('/member/login');
+    });
+
+    it('unauthenticated web visit to member page redirects to /member/login', function () {
+        $response = $this->get('/member/subscription');
+        
+        expect($response->status())->toBe(Response::HTTP_FOUND);
+        expect($response->headers->get('Location'))->toContain('/member/login');
+    });
+
+    it('unauthenticated API visit returns 401 JSON', function () {
+        $response = $this->getJson('/api/auth/me');
+        
+        expect($response->status())->toBe(Response::HTTP_UNAUTHORIZED);
+        expect($response->json())->toHaveKey('message');
+    });
+
+    it('login rate limit prevents excessive attempts', function () {
+        // The custom rate limiter in LoginRequest allows 5 attempts
+        for ($i = 0; $i < 6; $i++) {
+            $response = $this->postJson('/api/auth/login', [
+                'email' => 'rate-limited@test.com',
+                'password' => 'wrong',
+            ]);
+        }
+        
+        // 6th attempt should be rate limited
+        expect($response->status())->toBe(Response::HTTP_UNPROCESSABLE_ENTITY);
+        expect($response->json('errors.email'))->toHaveCount(1);
+    });
 });

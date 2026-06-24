@@ -86,7 +86,9 @@ if (strpos($requestUri, '__tables') !== false) {
     exit(0);
 }
 
-if (preg_match('#^/api/auth/login#', $requestUri)) {
+// Vercel PHP runtime bypass: ensure POST login reaches Laravel on some cold starts.
+// GET requests pass through to Laravel for proper redirect handling.
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && preg_match('#^/api/auth/login#', $requestUri)) {
     http_response_code(200);
     header('Content-Type: application/json');
     echo '{}';

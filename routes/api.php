@@ -14,10 +14,11 @@ Route::group(['prefix' => 'domain'], function ()
 Route::get('/pricing', [\App\Http\Controllers\Api\PlanController::class, 'index'])
     ->name('pricing');
 
-// Google OAuth discovery (required by Google Identity Services library)
+// Redirect unauthenticated web requests to Filament tenant login
+// Used when auth middleware redirects to route('login') via GET
 Route::get('/auth/login', function () {
-    return response()->json([], 200);
-});
+    return redirect('/member/login');
+})->name('login.get');
 
 Route::get('/test', function ()
 {
