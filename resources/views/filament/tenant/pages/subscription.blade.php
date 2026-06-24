@@ -1,5 +1,6 @@
-<x-filament-panels::page class="relative overflow-hidden">
-    <div class="absolute inset-0 z-0 parallax-bg"></div>
+<x-filament-panels::page>
+    <div class="relative overflow-hidden h-full">
+    <div class="absolute inset-0 parallax-bg"></div>
     <div class="relative z-10">
     {{-- Back navigation --}}
     <div class="mb-4">
@@ -378,4 +379,5 @@
             to { transform: scale(1.08) translate(-2%, -1%); }
         }
     </style>
+    </div>
 </x-filament-panels::page>
