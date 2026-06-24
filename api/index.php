@@ -94,32 +94,22 @@ if (preg_match('#^/api/auth/login#', $requestUri)) {
 // Direct webhook handling — bypasses Laravel routing for Midtrans/Flip/Subscription
 // Vercel PHP runtime + Laravel domain constraints can cause 404 on POST routes.
 // This ensures webhooks from payment gateways are always reachable.
-$webhookHandlers = [
-    '#^/api/webhooks/midtrans$#' => function () use ($app) {
-        $controller = $app->make(\App\Http\Controllers\Api\MidtransWebhookController::class);
-        $request = \Illuminate\Http\Request::capture();
-        return $controller->handle($request);
+$webhookPaths = [
+    '/api/webhooks/midtrans' => function () use ($app) {
+        return $app->make(\App\Http\Controllers\Api\MidtransWebhookController::class)->handle(\Illuminate\Http\Request::capture());
     },
-    '#^/api/webhooks/flip$#' => function () use ($app) {
-        $controller = $app->make(\App\Http\Controllers\Api\Webhooks\FlipWebhookController::class);
-        $request = \Illuminate\Http\Request::capture();
-        return $controller->handle($request);
+    '/api/webhooks/flip' => function () use ($app) {
+        return $app->make(\App\Http\Controllers\Api\Webhooks\FlipWebhookController::class)->handle(\Illuminate\Http\Request::capture());
     },
-    '#^/api/webhooks/subscription$#' => function () use ($app) {
-        $controller = $app->make(\App\Http\Controllers\Api\SubscriptionWebhookController::class);
-        $request = \Illuminate\Http\Request::capture();
-        return $controller->handle($request);
+    '/api/webhooks/subscription' => function () use ($app) {
+        return $app->make(\App\Http\Controllers\Api\SubscriptionWebhookController::class)->handle(\Illuminate\Http\Request::capture());
     },
 ];
-foreach ($webhookHandlers as $pattern => $handler) {
-    if (preg_match($pattern, $requestUri) && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $response = $handler();
-        if ($response instanceof \Illuminate\Http\JsonResponse) {
-            $response->send();
-        } else {
-            header('Content-Type: application/json');
-            echo json_encode(['status' => 'ok']);
-        }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $path = parse_url($requestUri, PHP_URL_PATH);
+    if (isset($webhookPaths[$path])) {
+        $response = $webhookPaths[$path]();
+        ($response instanceof \Illuminate\Http\JsonResponse ? $response : response()->json(['status' => 'ok']))->send();
         exit;
     }
 }
