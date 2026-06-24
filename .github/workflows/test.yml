@@ -42,21 +42,19 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate
-          cat >> .env << 'EOF'
-          APP_ENV=testing
-          DB_CONNECTION=testing
-          DB_TESTING_DRIVER=sqlite
-          DB_DATABASE_TESTING=:memory:
-          SESSION_DRIVER=array
-          CACHE_DRIVER=array
-          QUEUE_CONNECTION=sync
-          MAIL_MAILER=array
-          EOF
 
       - name: Run tests (SQLite) + JUnit report
         run: |
           mkdir -p reports
           php artisan test --reporter=junit --log-junit=reports/junit.xml 2>&1 | tee reports/test-output.txt && exit ${PIPESTATUS[0]}
+        env:
+          DB_CONNECTION: testing
+          DB_TESTING_DRIVER: sqlite
+          DB_DATABASE_TESTING: ':memory:'
+          SESSION_DRIVER: array
+          CACHE_DRIVER: array
+          QUEUE_CONNECTION: sync
+          MAIL_MAILER: array
 
       - name: Publish test report
         uses: dorny/test-reporter@v1
@@ -112,23 +110,21 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate
-          cat >> .env << 'EOF'
-          APP_ENV=testing
-          DB_CONNECTION=testing
-          DB_TESTING_DRIVER=pgsql
-          DB_DATABASE_TESTING=lakasir_test
-          DB_USERNAME_TESTING=zonakasir
-          DB_PASSWORD_TESTING=secret
-          SESSION_DRIVER=array
-          CACHE_DRIVER=array
-          QUEUE_CONNECTION=sync
-          MAIL_MAILER=array
-          EOF
 
       - name: Run tests (PostgreSQL)
         run: |
           mkdir -p reports
           php artisan test --reporter=junit --log-junit=reports/junit.xml 2>&1 | tee reports/test-output.txt && exit ${PIPESTATUS[0]}
+        env:
+          DB_CONNECTION: testing
+          DB_TESTING_DRIVER: pgsql
+          DB_DATABASE_TESTING: lakasir_test
+          DB_USERNAME_TESTING: zonakasir
+          DB_PASSWORD_TESTING: secret
+          SESSION_DRIVER: array
+          CACHE_DRIVER: array
+          QUEUE_CONNECTION: sync
+          MAIL_MAILER: array
         env:
           DB_TESTING_DRIVER: pgsql
           DB_DATABASE_TESTING: lakasir_test
