@@ -55,9 +55,8 @@ jobs:
 
       - name: Run tests (SQLite) + JUnit report
         run: |
-          set -o pipefail
           mkdir -p reports
-          php artisan test --reporter=junit --log-junit=reports/junit.xml 2>&1 | tee reports/test-output.txt
+          php artisan test --reporter=junit --log-junit=reports/junit.xml 2>&1 | tee reports/test-output.txt && exit ${PIPESTATUS[0]}
 
       - name: Publish test report
         uses: dorny/test-reporter@v1
@@ -128,9 +127,8 @@ jobs:
 
       - name: Run tests (PostgreSQL)
         run: |
-          set -o pipefail
           mkdir -p reports
-          php artisan test --reporter=junit --log-junit=reports/junit.xml 2>&1 | tee reports/test-output.txt
+          php artisan test --reporter=junit --log-junit=reports/junit.xml 2>&1 | tee reports/test-output.txt && exit ${PIPESTATUS[0]}
         env:
           DB_TESTING_DRIVER: pgsql
           DB_DATABASE_TESTING: lakasir_test
