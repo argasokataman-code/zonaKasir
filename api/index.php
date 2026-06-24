@@ -41,6 +41,8 @@ if (! file_exists($flagFile) && (getenv('VERCEL') || isset($_ENV['VERCEL']))) {
         $artisan = $app->make(Illuminate\Contracts\Console\Kernel::class);
         $artisan->call('route:clear');
         $log = 'route:clear OK' . "\n";
+        $artisan->call('view:clear');
+        $log .= 'view:clear OK' . "\n";
         $artisan->call('migrate', ['--force' => true]);
         $log .= $artisan->output();
         $artisan->call('filament:assets');
