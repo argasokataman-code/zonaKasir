@@ -253,7 +253,7 @@ class ManageSubscription extends Page
     {
         $tenantId = auth()->user()->tenant_id;
 
-        return Invoice::select('id', 'tenant_id', 'subscription_id', 'status', 'target_plan_id', 'amount', 'midtrans_redirect_url', 'created_at')
+        return Invoice::select('id', 'tenant_id', 'subscription_id', 'status', 'target_plan_id', 'amount', 'number', 'midtrans_redirect_url', 'created_at')
             ->where('tenant_id', $tenantId)
             ->latest()
             ->get()
