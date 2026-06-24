@@ -54,9 +54,7 @@ class RouteServiceProvider extends ServiceProvider
 
     protected function mapWebhookRoutes()
     {
-        Route::middleware('api')
-            ->withoutMiddleware(\Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class)
-            ->group(base_path('routes/webhooks.php'));
+        Route::group([], base_path('routes/webhooks.php'));
     }
 
     protected function mapTenantRoutes()
