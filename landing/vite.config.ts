@@ -11,6 +11,11 @@ export default defineConfig({
       '@': path.resolve(__dirname, '.'),
     },
   },
+  server: {
+    proxy: {
+      '/api': 'http://localhost:8000',
+    },
+  },
   build: {
     outDir: '../public/landing',
     emptyOutDir: true,

@@ -326,7 +326,7 @@ export default function DeviceLaptop({ interactive = true }: DeviceLaptopProps) 
                           </div>
 
                           <div className="h-44 w-full select-none text-[9px]">
-                            <ResponsiveContainer width="100%" height="100%">
+                            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
                               <AreaChart data={HOURLY_SALES} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                                 <defs>
                                   <linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1">
