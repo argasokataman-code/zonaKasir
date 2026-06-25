@@ -1,5 +1,3 @@
-vendor
-node_modules
 .git
 storage
 bootstrap/cache/config.php
@@ -11,3 +9,13 @@ docs
 *.md
 .env
 .env.*
+node_modules
+npm-debug.log
+yarn-error.log
+.idea
+.vscode
+.editorconfig
+.phpunit.cache
+reports
+*.sql
+*.sqlite
