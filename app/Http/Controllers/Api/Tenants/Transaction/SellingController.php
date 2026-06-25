@@ -18,7 +18,7 @@ class SellingController extends Controller
     public function index(Request $request): JsonResponse
     {
         $sellings = QueryBuilder::for(Selling::class)
-            ->select('id', 'code', 'date', 'total_price', 'grand_total_price', 'total_qty', 'total_cost', 'discount_price', 'total_discount_per_item', 'tax_price', 'payed_money', 'money_changes', 'is_paid', 'fee', 'member_id', 'payment_method_id', 'user_id', 'created_at')
+            ->select('id', 'code', 'date', 'total_price', 'total_qty', 'total_cost', 'discount_price', 'total_discount_per_item', 'tax_price', 'payed_money', 'money_changes', 'is_paid', 'fee', 'member_id', 'payment_method_id', 'user_id', 'created_at')
             ->allowedFilters([
                 'code',
                 'member_id',

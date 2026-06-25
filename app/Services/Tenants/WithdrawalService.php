@@ -47,7 +47,7 @@ class WithdrawalService
 
         $autoMax = config('flip.withdrawal_approval.auto_approve_max', 5000000);
         $singleAdminMax = config('flip.withdrawal_approval.single_admin_max', 25000000);
-        $tenantAge = $about->created_at->diffInDays(now());
+        $tenantAge = $about->created_at ? $about->created_at->diffInDays(now()) : 999;
 
         $isAutoApprove = $amount <= $autoMax && $tenantAge >= 30 && $amount <= $singleAdminMax;
 
@@ -312,7 +312,7 @@ class WithdrawalService
     public function reject(int $withdrawalId, int $rejectedBy, string $reason): Withdrawal
     {
         return DB::transaction(function () use ($withdrawalId, $rejectedBy, $reason) {
-            $withdrawal = Withdrawal::select('id', 'status')->findOrFail($withdrawalId);
+            $withdrawal = Withdrawal::select('id', 'status', 'amount', 'fee_amount')->findOrFail($withdrawalId);
             abort_if($withdrawal->status !== 'pending', 400, 'Already processed');
 
             $withdrawal->update([

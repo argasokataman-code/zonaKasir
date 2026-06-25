@@ -5,22 +5,36 @@ namespace Tests\Feature\E2E;
 use App\Models\Tenants\User;
 use App\Models\Tenants\CartItem;
 use App\Models\Tenants\Member;
+use App\Models\Tenants\PaymentMethod;
 use App\Models\Tenants\Product;
 use App\Models\Tenants\Selling;
+use App\Models\Tenants\Stock;
 use Illuminate\Http\Response;
 use Tests\RefreshDatabaseWithTenant;
 
 uses(RefreshDatabaseWithTenant::class);
 
 describe('Transaction & POS E2E Flow', function () {
-    
+
     describe('Selling Transaction', function () {
         it('can create selling transaction', function () {
             $user = User::first();
-            $product = Product::factory()->create();
-            
+            $product = Product::factory()->create(['stock' => 0]);
+            Stock::create([
+                'product_id' => $product->id,
+                'stock' => 10,
+                'type' => 'in',
+                'initial_price' => $product->initial_price,
+                'selling_price' => $product->selling_price,
+                'date' => now(),
+                'tenant_id' => $user->tenant_id,
+            ]);
+            $pmId = PaymentMethod::first()->id;
+
             $response = $this->actingAs($user, 'sanctum')
                 ->postJson('/api/transaction/selling', [
+                    'payment_method_id' => $pmId,
+                    'payed_money' => 999999,
                     'selling_details' => [
                         [
                             'product_id' => $product->id,
@@ -28,7 +42,7 @@ describe('Transaction & POS E2E Flow', function () {
                             'price' => $product->selling_price * 2,
                         ],
                     ],
-                    'payment_method_id' => 1,
+                    'payment_method_id' => $pmId,
                     'total_price' => $product->selling_price * 2,
                     'sub_total' => $product->selling_price * 2,
                     'tax' => 0,

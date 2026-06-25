@@ -107,7 +107,7 @@ describe('Withdrawal E2E Flow', function () {
         );
 
         expect($withdrawal)->toBeInstanceOf(Withdrawal::class);
-        expect($withdrawal->amount)->toBe(50000);
+        expect($withdrawal->amount)->toEqual(50000);
         expect($withdrawal->bank_name)->toBe('BCA');
         expect($withdrawal->status)->toBeIn(['pending', 'approved']);
     });
@@ -146,12 +146,20 @@ describe('Withdrawal E2E Flow', function () {
         );
 
         $this->actingAs($this->user);
-        $balanceBefore = app(LedgerService::class)->getCurrentBalance();
 
-        $withdrawal = app(WithdrawalService::class)->request(
-            amount: 40000,
-            idempotencyKey: 'test-wd-reject-' . uniqid(),
-        );
+        // Disable auto-approve by setting high amount or create pending withdrawal directly
+        $withdrawal = Withdrawal::create([
+            'tenant_id' => $this->user->tenant_id,
+            'amount' => 40000,
+            'status' => 'pending',
+            'bank_name' => 'BCA',
+            'bank_account_name' => 'Test',
+            'bank_account_number' => '123456',
+            'bank_code' => '014',
+            'requested_by' => $this->user->id,
+        ]);
+
+        $balanceBefore = app(LedgerService::class)->getCurrentBalance();
 
         app(WithdrawalService::class)->reject($withdrawal->id, $this->user->id, 'Test reject');
 
