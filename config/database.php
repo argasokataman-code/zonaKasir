@@ -75,14 +75,6 @@ return [
 
         'testing' => (function () {
             $driver = env('DB_TESTING_DRIVER', 'pgsql');
-            if ($driver === 'sqlite') {
-                return [
-                    'driver' => 'sqlite',
-                    'database' => env('DB_DATABASE_TESTING', ':memory:'),
-                    'prefix' => '',
-                    'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-                ];
-            }
             if ($driver === 'pgsql') {
                 return [
                     'driver' => 'pgsql',
