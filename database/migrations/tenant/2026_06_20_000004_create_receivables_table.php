@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('receivables', function (Blueprint $table) {
             $table->id();
+            $table->string('tenant_id')->nullable()->index();
             $table->foreignId('member_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('selling_id')->nullable()->constrained()->nullOnDelete();
             $table->double('total_receivable');
@@ -23,6 +24,7 @@ return new class extends Migration
 
         Schema::create('receivable_items', function (Blueprint $table) {
             $table->id();
+            $table->string('tenant_id')->nullable()->index();
             $table->foreignId('receivable_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
@@ -30,6 +32,7 @@ return new class extends Migration
 
         Schema::create('receivable_payments', function (Blueprint $table) {
             $table->id();
+            $table->string('tenant_id')->nullable()->index();
             $table->foreignId('receivable_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('payment_method_id')->nullable()->constrained()->nullOnDelete();

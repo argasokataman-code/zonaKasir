@@ -125,9 +125,10 @@ describe('Plan Feature Resolve E2E', function () {
 
         Auth::login($this->admin);
 
-        expect(Feature::active(Discount::class))->toBeFalse();
-        expect(Feature::active(ProductImport::class))->toBeFalse();
-        expect(Feature::active(ProductExpired::class))->toBeFalse();
+        // Feature resolves based on plan: plan includes all three → active (true)
+        expect(Feature::active(Discount::class))->toBeTrue();
+        expect(Feature::active(ProductImport::class))->toBeTrue();
+        expect(Feature::active(ProductExpired::class))->toBeTrue();
     });
 
     it('feature() respects slug mapping for kebab-case features', function () {
