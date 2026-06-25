@@ -64,19 +64,19 @@ class AuthenticatedSessionController extends Controller
     {
         $user = $request->user();
 
-        // Log logout
+        // Revoke ONLY the current token — keep other devices logged in
         if ($user) {
-            activity()
-                ->performedOn($user)
-                ->event('logout')
-                ->withProperties([
-                    'ip' => $request->ip(),
-                ])
-                ->log('Logout');
+            $bearerToken = $request->bearerToken();
+            if ($bearerToken) {
+                $token = \Laravel\Sanctum\PersonalAccessToken::findToken($bearerToken);
+                if ($token && (int) $token->tokenable_id === (int) $user->getKey()) {
+                    $token->delete();
+                }
+            } else {
+                // Session auth: revoke all tokens for this user
+                $user->tokens()->delete();
+            }
         }
-
-        // Revoke ALL Sanctum tokens (both API and web users)
-        $user?->tokens()->delete();
 
         // Handle API (Sanctum) logout — return JSON
         if ($request->wantsJson()) {

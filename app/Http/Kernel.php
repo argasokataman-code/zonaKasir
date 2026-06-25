@@ -52,6 +52,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             LocalizationMiddleware::class,
             TenantIsolationMiddleware::class,
+            \App\Http\Middleware\CheckSanctumTokenExpiry::class,
         ],
         'universal' => [
             // UniversalRoutes::class,

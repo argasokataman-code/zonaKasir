@@ -31,8 +31,11 @@ Set di **Project Settings → Environment Variables** untuk **Production**:
 | `APP_DEBUG` | `false` |
 | `DB_CONNECTION` | `pgsql` |
 | `DB_SSLMODE` | `require` |
+| `SESSION_DRIVER` | `cookie` |
 
 Database vars (`POSTGRES_*`, `SUPABASE_*`) sudah otomatis dari Supabase integration.
+
+> **Important:** `SESSION_DRIVER=cookie` prevents 419 CSRF errors. Vercel uses `/tmp` for file storage which resets on cold starts. Cookie driver stores session data encrypted on the client side — no server-side storage needed.
 
 ## Build
 - Build command: `yarn run build`
