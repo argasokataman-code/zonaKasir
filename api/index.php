@@ -130,6 +130,10 @@ if (strpos($requestUri, '__env') !== false) {
     exit;
 }
 
+// Fix Vercel SCRIPT_NAME mismatch (Vercel sets SCRIPT_NAME = REQUEST_URI)
+// This prevents Symfony from incorrectly stripping the base path.
+$_SERVER['SCRIPT_NAME'] = '/api/index.php';
+
 // Change working directory to Laravel public folder
 chdir($projectRoot . '/public');
 
