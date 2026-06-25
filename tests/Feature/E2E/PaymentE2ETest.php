@@ -17,6 +17,7 @@ describe('Payment & Invoice E2E Flow', function () {
     beforeEach(function () {
         $this->admin = User::first();
         $this->tid = $this->admin->tenant_id;
+        Subscription::where('tenant_id', $this->tid)->delete();
     });
 
     it('createInvoice generates pending invoice from subscription', function () {
