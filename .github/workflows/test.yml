@@ -46,7 +46,7 @@ jobs:
       - name: Run tests (SQLite) + JUnit report
         run: |
           mkdir -p reports
-          php artisan test --reporter=junit --log-junit=reports/junit.xml > reports/test-output.txt 2>&1
+          php artisan test > reports/test-output.txt 2>&1
         env:
           DB_CONNECTION: testing
           DB_TESTING_DRIVER: sqlite
@@ -114,7 +114,7 @@ jobs:
       - name: Run tests (PostgreSQL)
         run: |
           mkdir -p reports
-          php artisan test --reporter=junit --log-junit=reports/junit.xml > reports/test-output.txt 2>&1
+          php artisan test > reports/test-output.txt 2>&1
         env:
           DB_CONNECTION: testing
           DB_TESTING_DRIVER: pgsql
