@@ -76,7 +76,7 @@ class MidtransWebhookController extends Controller
             return response()->json(['error' => 'Subscription not found'], 404);
         }
 
-        $invoice = $subscription->invoices()->select('id', 'midtrans_order_id', 'midtrans_transaction_id', 'midtrans_notification_payload', 'status')->latest()->first();
+        $invoice = $subscription->invoices()->select('id', 'midtrans_order_id', 'midtrans_transaction_id', 'midtrans_notification_payload', 'status', 'target_plan_id')->latest()->first();
 
         if (! $invoice) {
             Log::error('Invoice not found for subscription', [
@@ -94,13 +94,19 @@ class MidtransWebhookController extends Controller
         if (in_array($transactionStatus, ['settlement', 'capture'])) {
             app(InvoiceService::class)->markAsPaid($invoice);
 
-            $subscription->update([
+            $updateData = [
                 'status' => 'active',
                 'starts_at' => $subscription->ends_at && $subscription->ends_at->isPast() ? now() : ($subscription->starts_at ?? now()),
                 'ends_at' => $subscription->billing_cycle === 'yearly'
                     ? now()->addYear()
                     : now()->addMonth(),
-            ]);
+            ];
+
+            if ($invoice->target_plan_id) {
+                $updateData['plan_id'] = $invoice->target_plan_id;
+            }
+
+            $subscription->update($updateData);
 
             Log::info('Subscription invoice paid, subscription extended', [
                 'invoice_id' => $invoice->id,
