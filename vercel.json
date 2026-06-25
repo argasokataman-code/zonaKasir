@@ -53,7 +53,7 @@
         }
     ],
     "framework": null,
-    "buildCommand": "yarn run build",
+    "buildCommand": "yarn run build && yarn landing:build",
     "outputDirectory": "public",
     "installCommand": "yarn install",
     "ignoreCommand": "exit 1"
