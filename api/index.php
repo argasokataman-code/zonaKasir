@@ -118,6 +118,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// TEMP: Direct pricing handler (bypasses route registration issues on Vercel)
+if (preg_match('#^/api/pricing#', $requestUri)) {
+    header('Content-Type: application/json');
+    try {
+        $pricing = $app->make(\App\Http\Controllers\Api\PlanController::class)->index();
+        $response = $pricing instanceof \Illuminate\Http\JsonResponse ? $pricing : response()->json(['success' => true, 'data' => []]);
+    } catch (\Throwable $e) {
+        $response = response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+    }
+    $response->send();
+    exit;
+}
+
 // TEMP: Debug env
 if (strpos($requestUri, '__env') !== false) {
     header('Content-Type: application/json');
