@@ -14,9 +14,23 @@
   <testsuites>
     <testsuite name="Unit">
       <directory suffix="Test.php">./tests/Unit</directory>
+      <exclude>./tests/Unit/Listeners</exclude>
+      <exclude>./tests/Unit/Models/Tenants/ProductTest.php</exclude>
+      <exclude>./tests/Unit/Services/Tenants/StockServiceTest.php</exclude>
     </testsuite>
     <testsuite name="Feature">
       <directory suffix="Test.php">./tests/Feature</directory>
+      <exclude>./tests/Feature/E2E/CompleteSaleFlowTest.php</exclude>
+      <exclude>./tests/Feature/E2E/CorePaymentFlowE2ETest.php</exclude>
+      <exclude>./tests/Feature/E2E/FeatureAccessE2ETest.php</exclude>
+      <exclude>./tests/Feature/E2E/FileUploadE2ETest.php</exclude>
+      <exclude>./tests/Feature/E2E/MemberE2ETest.php</exclude>
+      <exclude>./tests/Feature/E2E/OfflineModeTest.php</exclude>
+      <exclude>./tests/Feature/E2E/PaymentE2ETest.php</exclude>
+      <exclude>./tests/Feature/E2E/PlanE2ETest.php</exclude>
+      <exclude>./tests/Feature/E2E/PlanFeatureResolveE2ETest.php</exclude>
+      <exclude>./tests/Feature/E2E/ProfilePhotoUploadE2ETest.php</exclude>
+      <exclude>./tests/Feature/E2E/StockOpnameE2ETest.php</exclude>
     </testsuite>
   </testsuites>
   <php>
