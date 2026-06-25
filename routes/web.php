@@ -53,3 +53,4 @@ Route::middleware(['web', 'auth:admin'])->group(function () {
 
 
 
+Route::get('/api/test-web', function() { return response()->json(['ok' => true]); });
