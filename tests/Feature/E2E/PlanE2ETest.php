@@ -6,14 +6,18 @@ use App\Models\Plan;
 use App\Models\Subscription;
 use App\Services\SubscriptionService;
 use Illuminate\Database\UniqueConstraintViolationException;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
-uses(TestCase::class, RefreshDatabase::class)->in('Feature/E2E/PlanE2ETest.php');
+uses(TestCase::class, DatabaseMigrations::class)->in('Feature/E2E/PlanE2ETest.php');
 
 describe('Plan E2E Flow', function () {
     beforeEach(function () {
         $this->slug = fn () => 'plan-' . uniqid();
+        // Force migrate on each test for SQLite in-memory
+        if (\Illuminate\Support\Facades\Schema::hasTable('plans') === false) {
+            $this->artisan('migrate:fresh', ['--force' => true]);
+        }
     });
 
     it('plan can be created', function () {
