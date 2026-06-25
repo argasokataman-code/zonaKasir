@@ -22,7 +22,7 @@ describe('File Upload E2E', function () {
             ->post('/api/temp/upload', ['file' => $file]);
 
         expect($response->status())->toBe(Response::HTTP_OK);
-        expect($response->json())->toHaveKey('id');
+        expect($response->json('data'))->toHaveKey('id');
     });
 
     it('validates file type on upload', function () {
