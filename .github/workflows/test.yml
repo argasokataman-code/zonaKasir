@@ -125,11 +125,6 @@ jobs:
           CACHE_DRIVER: array
           QUEUE_CONNECTION: sync
           MAIL_MAILER: array
-        env:
-          DB_TESTING_DRIVER: pgsql
-          DB_DATABASE_TESTING: lakasir_test
-          DB_USERNAME_TESTING: zonakasir
-          DB_PASSWORD_TESTING: secret
 
       - name: Publish test report
         uses: dorny/test-reporter@v1
