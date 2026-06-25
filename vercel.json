@@ -53,8 +53,8 @@
         }
     ],
     "framework": null,
-    "buildCommand": "npm run build && npm run landing:build",
+    "buildCommand": "yarn run build",
     "outputDirectory": "public",
-    "installCommand": "npm install",
+    "installCommand": "yarn install",
     "ignoreCommand": "exit 1"
 }
