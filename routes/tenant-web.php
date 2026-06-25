@@ -58,3 +58,4 @@ Route::middleware([
         return response()->json(['status' => 'ok']);
     })->middleware('auth')->name('welcome.dismiss');
 });
+Route::get('/api/tenant-test', function() { return response()->json(['ok' => true]); });
