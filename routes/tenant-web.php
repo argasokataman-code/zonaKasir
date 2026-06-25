@@ -59,3 +59,4 @@ Route::middleware([
     })->middleware('auth')->name('welcome.dismiss');
 });
 Route::get('/api/tenant-test', function() { return response()->json(['ok' => true]); });
+Route::get('/public-api/pricing', [\App\Http\Controllers\Api\PlanController::class, 'index']);
