@@ -32,6 +32,7 @@ class SellingFactory extends Factory
         return [
             'member_id' => $member->id,
             'date' => now(),
+            'code' => 'SELL-' . uniqid(),
             'payed_money' => $payedMoney,
             'money_changes' => $payedMoney - $totalPrice,
             'total_price' => $totalPrice,
