@@ -30,6 +30,7 @@ beforeEach(function () {
 describe('StockService addStock (Bug #16)', function () {
     test('addStock increases stock on the last entry when stock entry exists', function () {
         $stock = Stock::factory()->createQuietly([
+            'tenant_id' => \App\Services\TenantContext::get(),
             'product_id' => $this->product->id,
             'stock' => 5,
             'initial_price' => 10000,
@@ -60,6 +61,7 @@ describe('StockService addStock (Bug #16)', function () {
         // Previously addStock would call reduceStock when stock < qty,
         // which DECREASED total stock instead of increasing it.
         $stock = Stock::factory()->createQuietly([
+            'tenant_id' => \App\Services\TenantContext::get(),
             'product_id' => $this->product->id,
             'stock' => 2,
             'initial_price' => 10000,
@@ -78,6 +80,7 @@ describe('StockService addStock (Bug #16)', function () {
 
     test('addStock adds large quantity correctly', function () {
         $stock = Stock::factory()->createQuietly([
+            'tenant_id' => \App\Services\TenantContext::get(),
             'product_id' => $this->product->id,
             'stock' => 3,
             'initial_price' => 10000,
@@ -95,6 +98,7 @@ describe('StockService addStock (Bug #16)', function () {
 
     test('addStock never reduces total available stock (Bug #16 regression)', function () {
         $stock = Stock::factory()->createQuietly([
+            'tenant_id' => \App\Services\TenantContext::get(),
             'product_id' => $this->product->id,
             'stock' => 5,
             'initial_price' => 10000,
@@ -123,6 +127,7 @@ describe('StockService addStock (Bug #16)', function () {
 
     test('addStock with multiple calls accumulates correctly', function () {
         $stock = Stock::factory()->createQuietly([
+            'tenant_id' => \App\Services\TenantContext::get(),
             'product_id' => $this->product->id,
             'stock' => 5,
             'initial_price' => 10000,
@@ -143,6 +148,7 @@ describe('StockService addStock (Bug #16)', function () {
 describe('StockService reduceStock', function () {
     test('reduceStock reduces stock on the last entry', function () {
         $stock = Stock::factory()->createQuietly([
+            'tenant_id' => \App\Services\TenantContext::get(),
             'product_id' => $this->product->id,
             'stock' => 10,
             'initial_price' => 10000,

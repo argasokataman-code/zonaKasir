@@ -6,11 +6,23 @@ use App\Models\Tenants\Category;
 use App\Models\Tenants\Product;
 use App\Models\Tenants\Setting;
 use App\Models\Tenants\Stock;
+use App\Services\TenantContext;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Tests\RefreshDatabaseWithTenant;
 
 uses(RefreshDatabaseWithTenant::class);
+
+function stk($productId, array $overrides = []): Stock
+{
+    return Stock::create(array_merge([
+        'product_id' => $productId,
+        'type' => 'in',
+        'is_ready' => true,
+        'date' => now()->format('Y-m-d'),
+        'tenant_id' => TenantContext::get(),
+    ], $overrides));
+}
 
 beforeEach(function () {
     Setting::set('selling_method', 'fifo');
@@ -31,7 +43,7 @@ beforeEach(function () {
 
 describe('AdjustProduct handles Collection correctly (Bug #11)', function () {
     test('AdjustProduct recalculates stock for a single product passed as Collection', function () {
-        Stock::factory()->createQuietly([
+        stk($this->product->id, [
             'product_id' => $this->product->id,
             'stock' => 15,
             'initial_price' => 10000,
@@ -39,7 +51,7 @@ describe('AdjustProduct handles Collection correctly (Bug #11)', function () {
             'type' => 'in',
             'is_ready' => true,
             'date' => now()->format('Y-m-d'),
-        ]);
+    ]);
 
         expect($this->product->fresh()->stock)->toBe(0.0);
 
@@ -58,9 +70,9 @@ describe('AdjustProduct handles Collection correctly (Bug #11)', function () {
             'is_non_stock' => false,
             'type' => 'product',
             'show' => true,
-        ]);
+    ]);
 
-        Stock::factory()->createQuietly([
+        stk($this->product->id, [
             'product_id' => $this->product->id,
             'stock' => 10,
             'initial_price' => 10000,
@@ -68,9 +80,9 @@ describe('AdjustProduct handles Collection correctly (Bug #11)', function () {
             'type' => 'in',
             'is_ready' => true,
             'date' => now()->format('Y-m-d'),
-        ]);
+    ]);
 
-        Stock::factory()->createQuietly([
+        stk($this->product->id, [
             'product_id' => $product2->id,
             'stock' => 20,
             'initial_price' => 5000,
@@ -78,7 +90,7 @@ describe('AdjustProduct handles Collection correctly (Bug #11)', function () {
             'type' => 'in',
             'is_ready' => true,
             'date' => now()->format('Y-m-d'),
-        ]);
+    ]);
 
         RecalculateEvent::dispatch(collect([$this->product, $product2]), []);
 
@@ -87,7 +99,7 @@ describe('AdjustProduct handles Collection correctly (Bug #11)', function () {
     });
 
     test('AdjustProduct defensively handles a single Model instead of Collection (Bug #11 regression)', function () {
-        Stock::factory()->createQuietly([
+        stk($this->product->id, [
             'product_id' => $this->product->id,
             'stock' => 25,
             'initial_price' => 10000,
@@ -95,7 +107,7 @@ describe('AdjustProduct handles Collection correctly (Bug #11)', function () {
             'type' => 'in',
             'is_ready' => true,
             'date' => now()->format('Y-m-d'),
-        ]);
+    ]);
 
         // Create a second product that should NOT be affected
         $product2 = Product::factory()->create([
@@ -107,7 +119,7 @@ describe('AdjustProduct handles Collection correctly (Bug #11)', function () {
             'is_non_stock' => false,
             'type' => 'product',
             'show' => true,
-        ]);
+    ]);
 
         // Pass a single Model (the old bug behavior)
         RecalculateEvent::dispatch($this->product, []);
@@ -118,7 +130,7 @@ describe('AdjustProduct handles Collection correctly (Bug #11)', function () {
     });
 
     test('AdjustProduct updates selling_price and initial_price', function () {
-        Stock::factory()->createQuietly([
+        stk($this->product->id, [
             'product_id' => $this->product->id,
             'stock' => 10,
             'initial_price' => 8000,
@@ -126,7 +138,7 @@ describe('AdjustProduct handles Collection correctly (Bug #11)', function () {
             'type' => 'in',
             'is_ready' => true,
             'date' => now()->format('Y-m-d'),
-        ]);
+    ]);
 
         RecalculateEvent::dispatch(collect([$this->product]), []);
 
@@ -150,7 +162,7 @@ describe('RecalculateEvent type safety (Bug #11)', function () {
     });
 
     test('AdjustProduct normalizes Model to Collection and recalculates correctly', function () {
-        Stock::factory()->createQuietly([
+        stk($this->product->id, [
             'product_id' => $this->product->id,
             'stock' => 30,
             'initial_price' => 10000,
@@ -158,7 +170,7 @@ describe('RecalculateEvent type safety (Bug #11)', function () {
             'type' => 'in',
             'is_ready' => true,
             'date' => now()->format('Y-m-d'),
-        ]);
+    ]);
 
         $listener = new AdjustProduct();
         $event = new RecalculateEvent($this->product, ['some' => 'data']);
