@@ -34,6 +34,14 @@ Route::middleware([
     Route::get('/reset-password/{token}', ResetPassword::class)
         ->middleware('guest')
         ->name('reset-password.index');
+    // Explicit GET route for login page — Filament auto-generates this from the
+    // PanelProvider, but on Vercel/PHP 8.5 the auto-registration may not fire
+    // due to bootstrap order, causing RouteNotFoundException for the named route.
+    // Defining it explicitly guarantees the route exists in all environments.
+    Route::get('/member/login', \App\Filament\Tenant\Pages\TenantLogin::class)
+        ->middleware('guest')
+        ->name('filament.tenant.auth.login');
+
     // Support traditional form POST to the Filament tenant login page so non-JS
     // form submissions don't hit a 405. API logins should continue to use
     // `POST /api/auth/login`.

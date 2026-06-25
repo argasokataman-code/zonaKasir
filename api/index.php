@@ -35,18 +35,37 @@ if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
 }
 
 // Auto-run pending migrations + clear cache once per deploy (Vercel only)
+// WARNING: using $artisan->call() on the shared $app bootstraps all providers,
+// then the HTTP kernel skips re-bootstrapping, which can cause missing routes.
+// Fix: delete cache files directly + run artisan in subprocess for migrations.
 $flagFile = '/tmp/storage/migrated.flag';
 if (! file_exists($flagFile) && (getenv('VERCEL') || isset($_ENV['VERCEL']))) {
     try {
-        $artisan = $app->make(Illuminate\Contracts\Console\Kernel::class);
-        $artisan->call('route:clear');
-        $log = 'route:clear OK' . "\n";
-        $artisan->call('view:clear');
-        $log .= 'view:clear OK' . "\n";
-        $artisan->call('migrate', ['--force' => true]);
-        $log .= $artisan->output();
-        $artisan->call('filament:assets');
-        $log .= "\n" . $artisan->output();
+        // 1. Delete cached route/view files directly — no artisan bootstrap needed
+        foreach (['routes-v7.php', 'packages.php', 'services.php', 'config.php'] as $cache) {
+            @unlink($projectRoot . '/bootstrap/cache/' . $cache);
+        }
+        foreach (glob($tmpDir . '/framework/views/*') as $view) {
+            @unlink($view);
+        }
+
+        // 2. Run migrations in a subprocess to avoid contaminating the $app state
+        $migrateCmd = sprintf(
+            'cd %s && php artisan migrate --force 2>&1',
+            escapeshellarg($projectRoot)
+        );
+        $migrateOutput = shell_exec($migrateCmd) ?? '';
+
+        // 3. Run filament:assets similarly
+        $assetsCmd = sprintf(
+            'cd %s && php artisan filament:assets 2>&1',
+            escapeshellarg($projectRoot)
+        );
+        $assetsOutput = shell_exec($assetsCmd) ?? '';
+
+        $log = 'Cache cleared via file ops' . "\n"
+            . $migrateOutput . "\n"
+            . $assetsOutput;
         @file_put_contents('/tmp/storage/migrate.log', $log);
         @file_put_contents($flagFile, date('c'));
     } catch (\Throwable $e) {

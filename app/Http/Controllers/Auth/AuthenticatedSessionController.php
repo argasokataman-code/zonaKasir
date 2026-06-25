@@ -95,7 +95,9 @@ class AuthenticatedSessionController extends Controller
 
         // Force-clear the session cookie from browser
         $sessionName = config('session.cookie', 'laravel_session');
-        $response = redirect()->route('filament.tenant.auth.login');
+        $response = app('router')->has('filament.tenant.auth.login')
+            ? redirect()->route('filament.tenant.auth.login')
+            : redirect('/member/login');
         $response->headers->setCookie(cookie()->forget($sessionName));
 
         return $response;
