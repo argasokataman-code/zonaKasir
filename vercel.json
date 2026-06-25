@@ -55,5 +55,6 @@
     "framework": null,
     "buildCommand": "yarn run build",
     "outputDirectory": "public",
-    "installCommand": "yarn install"
+    "installCommand": "yarn install",
+    "ignoreCommand": "exit 1"
 }
