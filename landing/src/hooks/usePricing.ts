@@ -14,7 +14,8 @@ export interface Plan {
   is_on_premise?: boolean;
 }
 
-const API_URL = '/api/pricing';
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? '';
+const API_URL = API_BASE ? `${API_BASE}/api/pricing` : '/api/pricing';
 const CACHE_KEY = 'pricing_cache_v4';
 
 const FALLBACK_PLANS: Plan[] = [
