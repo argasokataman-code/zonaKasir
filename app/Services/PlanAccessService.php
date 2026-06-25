@@ -45,7 +45,7 @@ class PlanAccessService
     public function getActiveSubscription(string $tenant): ?Subscription
     {
         return Subscription::select('id', 'tenant_id', 'plan_id', 'status')
-            ->with('plan:id,name,slug')
+            ->with('plan:id,name,slug,max_stores,max_users,features')
             ->where('tenant_id', $tenant)
             ->whereIn('status', ['trialing', 'active'])
             ->latest()
