@@ -222,6 +222,24 @@ class ManageSubscription extends Page
         $sub = $access->getActiveSubscription($tenantId);
 
         if (! $plan) {
+            // Trial without a plan — show generic info
+            if ($sub && $sub->status === 'trialing') {
+                $trialEndsAt = $sub->trial_ends_at;
+                return [
+                    'id' => null,
+                    'name' => __('Trial'),
+                    'price_monthly' => 0,
+                    'price_yearly' => 0,
+                    'features' => [],
+                    'max_stores' => 1,
+                    'max_users' => 1,
+                    'billing_cycle' => $sub->billing_cycle ?? 'monthly',
+                    'status' => 'trialing',
+                    'is_on_trial' => true,
+                    'trial_ends_at' => $trialEndsAt?->format('d M Y'),
+                ];
+            }
+
             return null;
         }
 
