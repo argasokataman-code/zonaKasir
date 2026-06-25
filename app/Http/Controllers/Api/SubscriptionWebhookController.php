@@ -91,7 +91,10 @@ class SubscriptionWebhookController extends Controller
                 'new_ends_at' => $subscription->fresh()->ends_at,
             ]);
         } elseif (in_array($transactionStatus, ['deny', 'expire', 'cancel'])) {
-            $invoice->update(['status' => 'failed']);
+            // Don't overwrite a paid invoice — Midtrans may send stale webhooks
+            if ($invoice->status !== 'paid') {
+                $invoice->update(['status' => 'failed']);
+            }
 
             Log::info('Subscription payment failed', [
                 'invoice_id' => $invoice->id,

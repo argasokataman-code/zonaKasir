@@ -3,6 +3,7 @@
 use App\Models\Tenants\Category;
 use App\Models\Tenants\Member;
 use App\Models\Tenants\Product;
+use App\Models\Tenants\Stock;
 use App\Models\Tenants\User;
 use Tests\RefreshDatabaseWithTenant;
 
@@ -17,8 +18,17 @@ beforeEach(function () {
         'name' => 'Test Product',
         'initial_price' => 10000,
         'selling_price' => 25000,
-        'stock' => 10,
+        'stock' => 0,
         'category_id' => $category->id,
+    ]);
+    // Create stock entries for validation (stock_calculate uses stocks relation, not column)
+    Stock::create([
+        'product_id' => $this->product->id,
+        'stock' => 10,
+        'type' => 'in',
+        'initial_price' => 10000,
+        'selling_price' => 25000,
+        'date' => now(),
     ]);
     $this->member = Member::factory()->create();
 });
