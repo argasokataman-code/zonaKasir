@@ -53,8 +53,8 @@
         }
     ],
     "framework": null,
-    "buildCommand": "composer install --no-dev --optimize-autoloader --no-interaction && yarn run build",
+    "buildCommand": "yarn run build",
     "outputDirectory": "public",
-    "installCommand": "composer install --no-dev --optimize-autoloader --no-interaction && yarn install",
+    "installCommand": "yarn install",
     "ignoreCommand": "exit 1"
 }
