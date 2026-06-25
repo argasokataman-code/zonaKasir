@@ -47,3 +47,4 @@ version.txt
 
 # Vercel local project config
 .vercel/
+reports/
