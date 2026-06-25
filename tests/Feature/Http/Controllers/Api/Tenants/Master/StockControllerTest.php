@@ -1,17 +1,20 @@
 <?php
 
 use App\Events\RecalculateEvent;
+use App\Features\ProductStock;
 use App\Models\Tenants\Category;
 use App\Models\Tenants\Product;
 use App\Models\Tenants\Setting;
 use App\Models\Tenants\Stock;
 use App\Models\Tenants\User;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Pennant\Feature;
 use Tests\RefreshDatabaseWithTenant;
 
 uses(RefreshDatabaseWithTenant::class);
 
 beforeEach(function () {
+    Feature::activate(ProductStock::class);
     Setting::set('selling_method', 'fifo');
     Cache::clear();
 
@@ -31,7 +34,7 @@ beforeEach(function () {
 describe('StockController index pagination', function () {
     test('can control stock pagination size with per_page query', function () {
         $user = User::first();
-        Stock::factory()->count(20)->createQuietly([
+        Stock::factory()->count(20)->create([
             'product_id' => $this->product->id,
             'is_ready' => true,
             'type' => 'in',
@@ -47,7 +50,7 @@ describe('StockController index pagination', function () {
 
     test('can fall back to default pagination when per_page is invalid', function () {
         $user = User::first();
-        Stock::factory()->count(20)->createQuietly([
+        Stock::factory()->count(20)->create([
             'product_id' => $this->product->id,
             'is_ready' => true,
             'type' => 'in',
@@ -112,7 +115,7 @@ describe('StockController destroy dispatches RecalculateEvent (Bug #13)', functi
     test('deleting stock via API dispatches RecalculateEvent and recalculates product stock', function () {
         $user = User::first();
 
-        $stock1 = Stock::factory()->createQuietly([
+        $stock1 = Stock::factory()->create([
             'product_id' => $this->product->id,
             'stock' => 10,
             'initial_price' => 10000,
@@ -122,7 +125,7 @@ describe('StockController destroy dispatches RecalculateEvent (Bug #13)', functi
             'date' => now()->format('Y-m-d'),
         ]);
 
-        $stock2 = Stock::factory()->createQuietly([
+        $stock2 = Stock::factory()->create([
             'product_id' => $this->product->id,
             'stock' => 5,
             'initial_price' => 12000,
@@ -148,7 +151,7 @@ describe('StockController destroy dispatches RecalculateEvent (Bug #13)', functi
     test('deleting all stock entries sets product stock to 0', function () {
         $user = User::first();
 
-        $stock = Stock::factory()->createQuietly([
+        $stock = Stock::factory()->create([
             'product_id' => $this->product->id,
             'stock' => 10,
             'initial_price' => 10000,
@@ -201,7 +204,7 @@ describe('Stock replenishment after depletion (core bug scenario)', function () 
         $user = User::first();
 
         // Add initial stock
-        $stock = Stock::factory()->createQuietly([
+        $stock = Stock::factory()->create([
             'product_id' => $this->product->id,
             'stock' => 10,
             'initial_price' => 10000,
@@ -247,7 +250,7 @@ describe('Stock replenishment after depletion (core bug scenario)', function () 
 
     test('selling price does not become null after stock depletion (Bug #17)', function () {
         // Set up an initial stock entry and deplete it
-        Stock::factory()->createQuietly([
+        Stock::factory()->create([
             'product_id' => $this->product->id,
             'stock' => 0,
             'initial_price' => 8000,

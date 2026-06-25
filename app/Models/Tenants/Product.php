@@ -111,7 +111,10 @@ class Product extends Model
      */
     public function cacheStockLatest(): void
     {
-        $this->_cachedStockLatest = $this->stockLatestCalculateIn()->get();
+        $result = $this->stockLatestCalculateIn();
+        $this->_cachedStockLatest = $result instanceof \Illuminate\Support\Collection
+            ? $result
+            : $result->get();
     }
 
     public function stockCalculate(): Attribute
