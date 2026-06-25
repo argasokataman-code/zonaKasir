@@ -24,6 +24,7 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Page;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -390,9 +391,19 @@ class GeneralSetting extends Page implements HasActions, HasForms
                     if ($tmpFile) {
                         $tmpFile->deleteFromPublic('profile');
                     } else {
-                        $uploadDisk = config('filesystems.upload_disk');
-                        if (Storage::disk($uploadDisk)->exists($profile->photo)) {
-                            Storage::disk($uploadDisk)->delete($profile->photo);
+                        $projectRef = config('services.supabase.project_ref') ?: env('SUPABASE_PROJECT_REF');
+                        $serviceRole = config('services.supabase.service_role') ?: env('SUPABASE_SERVICE_ROLE');
+                        if ($projectRef && $serviceRole) {
+                            $bucket = env('SUPABASE_BUCKET', 'zonakasir');
+                            Http::withToken($serviceRole)
+                                ->delete("https://{$projectRef}.supabase.co/storage/v1/object/{$bucket}", [
+                                    'prefixes' => [$profile->photo],
+                                ]);
+                        } else {
+                            $uploadDisk = config('filesystems.upload_disk');
+                            if (Storage::disk($uploadDisk)->exists($profile->photo)) {
+                                Storage::disk($uploadDisk)->delete($profile->photo);
+                            }
                         }
                     }
                     $profileData['photo'] = null;

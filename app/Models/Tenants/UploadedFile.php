@@ -5,6 +5,7 @@ namespace App\Models\Tenants;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -69,6 +70,12 @@ class UploadedFile extends Model
         $diskName = $disk ?: config('filesystems.upload_disk');
         $relativePath = ltrim($relativePath, '/');
 
+        $projectRef = config('services.supabase.project_ref') ?: env('SUPABASE_PROJECT_REF');
+        if ($projectRef) {
+            $bucket = env('SUPABASE_BUCKET', 'zonakasir');
+            return "https://{$projectRef}.supabase.co/storage/v1/object/public/{$bucket}/{$relativePath}";
+        }
+
         $diskConfig = config('filesystems.disks.' . $diskName, []);
         $driver = $diskConfig['driver'] ?? 'local';
 
@@ -107,20 +114,45 @@ class UploadedFile extends Model
     {
         $uploadDisk = config('filesystems.upload_disk');
         $tmpDisk = config('filesystems.tmp_disk');
+        $projectRef = config('services.supabase.project_ref') ?: env('SUPABASE_PROJECT_REF');
+        $serviceRole = config('services.supabase.service_role') ?: env('SUPABASE_SERVICE_ROLE');
 
         if (! Storage::disk($tmpDisk)->exists($this->name)) {
             throw new Exception('File in temp directory is not found');
         }
 
         $relativePath = $directory . '/' . $this->name;
-        Storage::disk($uploadDisk)->putFileAs(
-            $directory,
-            Storage::disk($tmpDisk)->path($this->name),
-            $this->name
-        );
+
+        if ($projectRef && $serviceRole) {
+            // Upload to Supabase Storage via REST API
+            $fileContents = Storage::disk($tmpDisk)->get($this->name);
+            $bucket = env('SUPABASE_BUCKET', 'zonakasir');
+            $response = Http::withToken($serviceRole)
+                ->withHeaders(['Content-Type' => $this->mime_type ?: 'application/octet-stream'])
+                ->send('POST', "https://{$projectRef}.supabase.co/storage/v1/object/{$bucket}/{$relativePath}", [
+                    'body' => $fileContents,
+                ]);
+            if ($response->failed()) {
+                throw new Exception('Failed to upload to Supabase: ' . $response->body());
+            }
+        } else {
+            Storage::disk($uploadDisk)->putFileAs(
+                $directory,
+                Storage::disk($tmpDisk)->path($this->name),
+                $this->name
+            );
+        }
 
         if ($existingRelativePath) {
-            Storage::disk($uploadDisk)->delete($existingRelativePath);
+            if ($projectRef && $serviceRole) {
+                $bucket = env('SUPABASE_BUCKET', 'zonakasir');
+                Http::withToken($serviceRole)
+                    ->delete("https://{$projectRef}.supabase.co/storage/v1/object/{$bucket}", [
+                        'prefixes' => [$existingRelativePath],
+                    ]);
+            } else {
+                Storage::disk($uploadDisk)->delete($existingRelativePath);
+            }
             static::where('relative_path', $existingRelativePath)->delete();
         }
 
@@ -148,14 +180,22 @@ class UploadedFile extends Model
      */
     public function deleteFromPublic(string $directory): void
     {
-        $uploadDisk = $this->disk ?: config('filesystems.upload_disk');
+        $projectRef = config('services.supabase.project_ref') ?: env('SUPABASE_PROJECT_REF');
+        $serviceRole = config('services.supabase.service_role') ?: env('SUPABASE_SERVICE_ROLE');
 
-        if ($this->relative_path) {
-            if (Storage::disk($uploadDisk)->exists($this->relative_path)) {
-                Storage::disk($uploadDisk)->delete($this->relative_path);
+        $path = $this->relative_path ?: $directory . '/' . $this->name;
+
+        if ($projectRef && $serviceRole && $path) {
+            $bucket = env('SUPABASE_BUCKET', 'zonakasir');
+            Http::withToken($serviceRole)
+                ->delete("https://{$projectRef}.supabase.co/storage/v1/object/{$bucket}", [
+                    'prefixes' => [$path],
+                ]);
+        } else {
+            $uploadDisk = $this->disk ?: config('filesystems.upload_disk');
+            if (Storage::disk($uploadDisk)->exists($path)) {
+                Storage::disk($uploadDisk)->delete($path);
             }
-        } elseif ($this->name) {
-            Storage::disk($uploadDisk)->delete($directory . '/' . $this->name);
         }
 
         $this->delete();
