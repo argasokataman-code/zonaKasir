@@ -34,38 +34,15 @@ if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
     $app = require_once $projectRoot . '/bootstrap/app.php';
 }
 
-// Auto-run pending migrations + clear cache once per deploy (Vercel only)
-// WARNING: using $artisan->call() on the shared $app bootstraps all providers,
-// then the HTTP kernel skips re-bootstrapping, which can cause missing routes.
-// Fix: delete cache files directly + run artisan in subprocess for migrations.
+// Auto-run pending migrations + switch-disk once per deploy (Vercel only)
 $flagFile = '/tmp/storage/migrated.flag';
 if (! file_exists($flagFile) && (getenv('VERCEL') || isset($_ENV['VERCEL']))) {
     try {
-        // 1. Delete cached route/view files directly — no artisan bootstrap needed
-        foreach (['routes-v7.php', 'packages.php', 'services.php', 'config.php'] as $cache) {
-            @unlink($projectRoot . '/bootstrap/cache/' . $cache);
-        }
-        foreach (glob($tmpDir . '/framework/views/*') as $view) {
-            @unlink($view);
-        }
-
-        // 2. Run migrations in a subprocess to avoid contaminating the $app state
-        $migrateCmd = sprintf(
-            'cd %s && php artisan migrate --force 2>&1',
-            escapeshellarg($projectRoot)
-        );
-        $migrateOutput = shell_exec($migrateCmd) ?? '';
-
-        // 3. Run filament:assets similarly
-        $assetsCmd = sprintf(
-            'cd %s && php artisan filament:assets 2>&1',
-            escapeshellarg($projectRoot)
-        );
-        $assetsOutput = shell_exec($assetsCmd) ?? '';
-
-        $log = 'Cache cleared via file ops' . "\n"
-            . $migrateOutput . "\n"
-            . $assetsOutput;
+        $artisan = $app->make(Illuminate\Contracts\Console\Kernel::class);
+        $artisan->call('migrate', ['--force' => true]);
+        $log = $artisan->output();
+        $artisan->call('storage:switch-disk', ['from' => 'public', 'to' => 's3', '--force' => true]);
+        $log .= "\n" . $artisan->output();
         @file_put_contents('/tmp/storage/migrate.log', $log);
         @file_put_contents($flagFile, date('c'));
     } catch (\Throwable $e) {
@@ -74,36 +51,6 @@ if (! file_exists($flagFile) && (getenv('VERCEL') || isset($_ENV['VERCEL']))) {
 }
 
 $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
-
-// TEMP: Show request URI + route list for debugging
-if (strpos($requestUri, '__debug') !== false) {
-    header('Content-Type: text/plain');
-    echo 'REQUEST_URI: ' . ($_SERVER['REQUEST_URI'] ?? 'NOT SET') . "\n";
-    echo 'SCRIPT_NAME: ' . ($_SERVER['SCRIPT_NAME'] ?? 'NOT SET') . "\n";
-    echo 'PHP_SELF: ' . ($_SERVER['PHP_SELF'] ?? 'NOT SET') . "\n";
-    echo 'VERCEL: ' . (getenv('VERCEL') ?: 'NOT SET') . "\n";
-    echo 'APP_URL: ' . config('app.url') . "\n";
-    echo "\n=== ROUTES ===\n";
-    $routes = app()->router->getRoutes()->getRoutes();
-    foreach ($routes as $route) {
-        $methods = implode('|', $route->methods());
-        echo $methods . ' ' . $route->uri() . ' domain=' . ($route->domain() ?? '*') . "\n";
-    }
-    exit;
-}
-
-// TEMP: Diagnostic endpoint — list all tables for comparison
-if (strpos($requestUri, '__tables') !== false) {
-
-    try {
-        $artisan = $app->make(Illuminate\Contracts\Console\Kernel::class);
-        $artisan->call('db:show');
-        echo $artisan->output();
-    } catch (\Throwable $e) {
-        echo 'ERROR: ' . $e->getMessage();
-    }
-    exit(0);
-}
 
 // Vercel PHP runtime bypass: ensure POST login reaches Laravel on some cold starts.
 // GET requests pass through to Laravel for proper redirect handling.
@@ -136,35 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
-
-// TEMP: Direct pricing handler (bypasses route registration issues on Vercel)
-if (preg_match('#^/api/pricing#', $requestUri)) {
-    header('Content-Type: application/json');
-    try {
-        $pricing = $app->make(\App\Http\Controllers\Api\PlanController::class)->index();
-        $response = $pricing instanceof \Illuminate\Http\JsonResponse ? $pricing : response()->json(['success' => true, 'data' => []]);
-    } catch (\Throwable $e) {
-        $response = response()->json(['success' => false, 'message' => $e->getMessage()], 500);
-    }
-    $response->send();
-    exit;
-}
-
-// TEMP: Debug env
-if (strpos($requestUri, '__env') !== false) {
-    header('Content-Type: application/json');
-    echo json_encode([
-        'app_url' => config('app.url'),
-        'app_env' => config('app.env'),
-        'db_host' => config('database.connections.pgsql.host'),
-        'routes_count' => count(app()->router->getRoutes()->getRoutes()),
-    ]);
-    exit;
-}
-
-// Fix Vercel SCRIPT_NAME mismatch (Vercel sets SCRIPT_NAME = REQUEST_URI)
-// This prevents Symfony from incorrectly stripping the base path.
-$_SERVER['SCRIPT_NAME'] = '/api/index.php';
 
 // Change working directory to Laravel public folder
 chdir($projectRoot . '/public');
