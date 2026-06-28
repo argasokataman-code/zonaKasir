@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Filesystem\SupabaseStorageAdapter;
 use App\Models\Tenants\User;
 use App\Services\PaymentSettingService;
 use App\Services\Tenants\DisbursementProvider;
@@ -9,8 +10,11 @@ use App\Services\Tenants\FlipPayoutProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Pennant\Feature;
+use Illuminate\Filesystem\FilesystemAdapter;
+use League\Flysystem\Filesystem;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -41,6 +45,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Storage::extend('supabase', function ($app, $config) {
+            $adapter = new SupabaseStorageAdapter($config);
+
+            return new FilesystemAdapter(
+                new Filesystem($adapter),
+                $adapter,
+                $config,
+            );
+        });
+
         Builder::macro('filter', function (Request $request) {
             /* WIP:  <07-08-22, sheenazien8> */
             $columns = $request->filters;
