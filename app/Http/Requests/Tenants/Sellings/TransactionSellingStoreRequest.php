@@ -74,12 +74,13 @@ class TransactionSellingStoreRequest extends FormRequest
         $pMethod = PaymentMethod::select('id', 'is_credit')->find($request['payment_method_id'] ?? null);
         $totalPrice = ($request['total_price'] ?? 0) - ($request['discount_price'] ?? 0) - ($request['total_discount_per_item'] ?? 0);
 
+
+
         return [
             'fee' => ['numeric'],
             'payed_money' => [
                 'required',
-                ($pMethod && ! $pMethod->is_credit) ? 'gte:'.$totalPrice : null,
-                $pMethod ? Rule::requiredIf(fn () => ! $pMethod->is_credit) : 'required',
+                ($pMethod && $pMethod->is_credit) ? null : 'gte:'.$totalPrice,
             ],
             'total_price' => ['required_if:friend_price,true', 'numeric'],
             'total_qty' => ['required_if:friend_price,true', 'numeric', new ShouldSameWithSellingDetail('qty', $this->products ?? [])],

@@ -12,7 +12,7 @@ beforeEach(function () {
 
 test('flip payout sends disbursement successfully', function () {
     Http::fake([
-        'bigflip.id/big_sandbox_api/v2/disbursement' => Http::response([
+        'bigflip.id/big_sandbox_api/v3/disbursement' => Http::response([
             'id' => '1234567890',
             'status' => 'pending',
             'amount' => 100000,
@@ -35,7 +35,7 @@ test('flip payout sends disbursement successfully', function () {
 
 test('flip payout throws exception on failure', function () {
     Http::fake([
-        'bigflip.id/big_sandbox_api/v2/disbursement' => Http::response([
+        'bigflip.id/big_sandbox_api/v3/disbursement' => Http::response([
             'message' => 'Insufficient balance',
         ], 400),
     ]);
@@ -53,7 +53,7 @@ test('flip payout throws exception on failure', function () {
 
 test('flip payout checks status', function () {
     Http::fake([
-        'bigflip.id/big_sandbox_api/v2/disbursement/123' => Http::response([
+        'bigflip.id/big_sandbox_api/v3/get-disbursement*' => Http::response([
             'id' => '123',
             'status' => 'DONE',
             'amount' => 100000,

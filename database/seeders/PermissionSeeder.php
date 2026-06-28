@@ -15,6 +15,15 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $this->deletePermission();
+
+        // Ensure admin role exists before assigning it
+        $adminRole = ModelsRole::firstOrCreate(
+            ['name' => Role::admin, 'guard_name' => 'web']
+        );
+        if ($tenantId = TenantContext::get()) {
+            $adminRole->update(['tenant_id' => $tenantId]);
+        }
+
         $permissions = $this->getPermissions();
         $permissions->each(fn ($roles) => $this->savePermission($roles));
 

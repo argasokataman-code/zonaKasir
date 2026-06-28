@@ -139,7 +139,7 @@ test('cashier cannnot create the selling transaction if the cash drawer enabled 
 test('cashier can create the selling transaction if the cash drawer enabled and opened', function () {
     Setting::set('cash_drawer_enabled', true);
     $user = User::first();
-    CashDrawer::create([
+    $drawer = CashDrawer::create([
         'opened_by' => $user->id,
         'cash' => 0,
     ]);
@@ -159,7 +159,7 @@ test('cashier can create the selling transaction if the cash drawer enabled and 
         ->assertJsonPath('message', 'success create selling');
 
     $this->assertDatabaseHas('sellings', [
-        'cash_drawer_id' => 1,
+        'cash_drawer_id' => $drawer->id,
     ]);
 });
 
@@ -248,26 +248,9 @@ test('cashier cannot create the sellings transaction with normal selling method 
     Setting::set('selling_method', 'normal');
     /** @var Product $product */
     $product = $this->product->replicate();
-    $product->save();
-    Stock::factory()
-        ->createQuietly([
-            'product_id' => $product->id,
-            'date' => now()->subDay(),
-            'stock' => 0,
-            'initial_price' => 20000,
-            'selling_price' => 30000,
-            'is_ready' => true,
-        ]);
-    Stock::factory()
-        ->createQuietly([
-            'product_id' => $product->id,
-            'date' => now()->subDay(),
-            'stock' => 20,
-            'initial_price' => 20000,
-            'selling_price' => 30000,
-            'is_ready' => true,
-        ]);
-    RecalculateEvent::dispatch(collect([$product]), []);
+    $product->saveQuietly();
+    // Set higher selling price than payed_money
+    $product->updateQuietly(['selling_price' => 30000]);
     $user = User::first();
 
     $response = actingAs($user)->postJson('/api/transaction/selling', [

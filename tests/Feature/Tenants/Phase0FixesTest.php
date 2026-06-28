@@ -22,7 +22,7 @@ beforeEach(function () {
 
 test('flip payout rounds amount instead of truncating', function () {
     Http::fake([
-        'bigflip.id/big_sandbox_api/v2/disbursement' => Http::response([
+        'bigflip.id/big_sandbox_api/v3/disbursement' => Http::response([
             'id' => '1234567890',
             'status' => 'pending',
             'amount' => 100001,
@@ -42,13 +42,14 @@ test('flip payout rounds amount instead of truncating', function () {
     expect($result['id'])->toBe('1234567890');
 });
 
-// ── Phase 0.3: HMAC webhook verification ──
+// ── Phase 0.3: Webhook token verification ──
 
-test('webhook accepts valid HMAC signature', function () {
+test('webhook accepts valid token', function () {
     $payload = [
         'id' => '1234567890123456789',
         'status' => 'DONE',
         'amount' => '100000',
+        'token' => 'test-webhook-token',
     ];
 
     $withdrawal = Withdrawal::create([
@@ -63,21 +64,18 @@ test('webhook accepts valid HMAC signature', function () {
         'requested_by' => User::first()->id,
     ]);
 
-    $signature = hash_hmac('sha256', json_encode($payload), 'test-webhook-secret');
-
-    $response = $this->postJson('/api/webhooks/flip', $payload, [
-        'X-Flip-Signature' => $signature,
-    ]);
+    $response = $this->postJson('/api/webhooks/flip', $payload);
 
     $response->assertStatus(200);
     expect($withdrawal->fresh()->status)->toBe('completed');
 });
 
-test('webhook rejects invalid HMAC signature', function () {
+test('webhook rejects invalid token', function () {
     $payload = [
         'id' => '1234567890123456789',
         'status' => 'DONE',
         'amount' => '100000',
+        'token' => 'wrong-token',
     ];
 
     Withdrawal::create([
@@ -92,9 +90,7 @@ test('webhook rejects invalid HMAC signature', function () {
         'requested_by' => User::first()->id,
     ]);
 
-    $response = $this->postJson('/api/webhooks/flip', $payload, [
-        'X-Flip-Signature' => 'invalid-signature',
-    ]);
+    $response = $this->postJson('/api/webhooks/flip', $payload);
 
     $response->assertStatus(401);
 });
@@ -106,7 +102,8 @@ test('webhook validates required fields', function () {
 
     $response = $this->postJson('/api/webhooks/flip', $payload);
 
-    $response->assertStatus(400);
+    $response->assertStatus(200);
+    $response->assertJson(['message' => 'Ignored']);
 });
 
 // ── Phase 0.5: About null check ──

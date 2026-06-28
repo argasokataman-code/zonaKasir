@@ -44,7 +44,7 @@ class RegisterTenant
         Artisan::call('db:seed', ['--class' => 'PaymentMethodSeeder']);
         Artisan::call('db:seed', ['--class' => 'CategorySeeder']);
 
-        $role = \Spatie\Permission\Models\Role::firstOrCreate(['name' => Role::admin]);
+        $role = \App\Models\Tenants\Role::firstOrCreate(['name' => Role::admin, 'guard_name' => 'web']);
         if ($name && ! $role->tenant_id) {
             $role->update(['tenant_id' => $name]);
         }

@@ -32,6 +32,10 @@ trait RefreshDatabaseWithTenant
             'tenant_id' => $tenantId,
             'shop_name' => 'Toko Testing',
             'business_type' => 'retail',
+            'bank_name' => 'BCA',
+            'bank_account_name' => 'Toko Testing',
+            'bank_account_number' => '1234567890',
+            'bank_code' => '014',
         ]);
 
         // Run seeders outside transaction to avoid PG "aborted transaction" issues

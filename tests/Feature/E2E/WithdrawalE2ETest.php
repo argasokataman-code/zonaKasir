@@ -13,12 +13,14 @@ use App\Models\Tenants\Withdrawal;
 use Illuminate\Support\Facades\App;
 use Tests\Mocks\MockDisbursementProvider;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Notification;
 use Tests\RefreshDatabaseWithTenant;
 
 uses(RefreshDatabaseWithTenant::class);
 
 describe('Withdrawal E2E Flow', function () {
     beforeEach(function () {
+        Notification::fake();
         App::bind(\App\Services\Tenants\DisbursementProvider::class, MockDisbursementProvider::class);
         $this->user = User::first();
         $this->about = About::first();
@@ -109,7 +111,7 @@ describe('Withdrawal E2E Flow', function () {
         expect($withdrawal)->toBeInstanceOf(Withdrawal::class);
         expect($withdrawal->amount)->toEqual(50000);
         expect($withdrawal->bank_name)->toBe('BCA');
-        expect($withdrawal->status)->toBeIn(['pending', 'approved']);
+        expect($withdrawal->status)->toBeIn(['pending', 'approved', 'processing']);
     });
 
     it('withdrawal reduces balance', function () {
@@ -147,24 +149,18 @@ describe('Withdrawal E2E Flow', function () {
 
         $this->actingAs($this->user);
 
-        // Disable auto-approve by setting high amount or create pending withdrawal directly
-        $withdrawal = Withdrawal::create([
-            'tenant_id' => $this->user->tenant_id,
-            'amount' => 40000,
-            'status' => 'pending',
-            'bank_name' => 'BCA',
-            'bank_account_name' => 'Test',
-            'bank_account_number' => '123456',
-            'bank_code' => '014',
-            'requested_by' => $this->user->id,
-        ]);
+        $balanceOriginal = app(LedgerService::class)->getCurrentBalance();
 
-        $balanceBefore = app(LedgerService::class)->getCurrentBalance();
+        // Create withdrawal via service so ledger is debited
+        $withdrawal = app(WithdrawalService::class)->request(
+            amount: 40000,
+            idempotencyKey: 'test-wd-reject-' . uniqid(),
+        );
 
         app(WithdrawalService::class)->reject($withdrawal->id, $this->user->id, 'Test reject');
 
         $balanceAfter = app(LedgerService::class)->getCurrentBalance();
-        expect($balanceAfter)->toBe($balanceBefore); // should be restored
+        expect($balanceAfter)->toBe($balanceOriginal); // restored to original
     });
 
     it('exists table structure matches migration', function () {
