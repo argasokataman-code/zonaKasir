@@ -4,10 +4,10 @@
     <div class="flex justify-between items-center">
       <div class="min-w-0 flex-1">
         <p class="font-semibold text-sm truncate"> {{ $item->product?->name ?? __('Deleted product') }}</p>
-        <p class="text-xs text-zonakasir-primary font-semibold">{{ $item->price_format_money }}</p>
+        <p class="text-xs text-primary-600 font-semibold">{{ $item->price_format_money }}</p>
       </div>
       <div class="flex items-center gap-1 shrink-0 ml-2">
-        <button class="flex h-7 w-7 items-center justify-center rounded-lg bg-zonakasir-primary text-white text-sm font-bold"
+        <button class="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-600 text-white text-sm font-bold"
           wire:click.stop="addCart( {{ $item->product_id }} )" wire:loading.attr="disabled">+</button>
         <input type="text" value="{{ $item->qty }}"
           x-on:keyup.debounce.500ms="(e) => add('{{ $item->product_id }}', e.target.value)"
@@ -35,7 +35,7 @@
             placeholder="{{ __('Discount') }}"
             class="w-24 rounded border border-gray-300 px-2 py-0.5 text-right text-xs dark:border-gray-600 dark:bg-gray-800"
             inputMode="numeric" x-mask:dynamic="$money($input)" />
-          <p class="text-xs font-semibold text-zonakasir-primary">{{ $item->final_price_format }}</p>
+          <p class="text-xs font-semibold text-primary-600">{{ $item->final_price_format }}</p>
         </div>
       @endif
     @endfeature

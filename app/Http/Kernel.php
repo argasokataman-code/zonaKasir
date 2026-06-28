@@ -44,6 +44,7 @@ class Kernel extends HttpKernel
             LocalizationMiddleware::class,
             \App\Http\Middleware\LogSqlQueries::class,
             TenantIsolationMiddleware::class,
+            \App\Http\Middleware\DynamicPwaManifest::class,
         ],
 
         'api' => [

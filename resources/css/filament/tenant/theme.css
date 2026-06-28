@@ -1,10 +1,8 @@
 @import '/vendor/filament/filament/resources/css/theme.css';
 @config '../../../../tailwind.config.js';
 
-
 /* Sidebar: fix scrolling on mobile + PWA */
 .fi-sidebar {
-  /* Force height containment so flex-grow nav calculates correctly */
   height: 100dvh;
   overflow: hidden;
   overscroll-behavior: contain;
@@ -22,7 +20,6 @@
   will-change: scroll-position;
 }
 
-/* Scrollbar styling */
 .fi-sidebar-nav::-webkit-scrollbar {
   width: 4px;
 }
@@ -33,34 +30,6 @@
 
 .fi-sidebar-item a {
   @apply py-1.5 px-2;
-}
-
-.fi-sidebar-item.fi-sidebar-item-active a {
-  @apply bg-zonakasir-primary;
-}
-
-.fi-sidebar-item.fi-sidebar-item-active a:hover {
-  @apply bg-zonakasir-primary;
-}
-
-.fi-sidebar-item.fi-sidebar-item-active svg {
-  @apply text-white;
-}
-
-.fi-sidebar-item:not(.fi-sidebar-item-active):hover a {
-  .fi-sidebar-item-label {
-    @apply text-white;
-  }
-
-  svg {
-    @apply text-white;
-  }
-
-  @apply bg-zonakasir-primary text-white;
-}
-
-.fi-sidebar-item-active .fi-sidebar-item-label {
-  @apply text-white dark:text-white;
 }
 
 .fi-tabs {

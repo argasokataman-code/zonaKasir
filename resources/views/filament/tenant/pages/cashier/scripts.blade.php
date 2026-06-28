@@ -388,7 +388,7 @@
       const button = document.createElement('button');
       button.textContent = numberFormat(suggestion);
       button.setAttribute('type', 'button');
-      button.className = 'flex min-h-[40px] items-center justify-center rounded-xl bg-zonakasir-primary/10 p-2 text-sm font-semibold text-zonakasir-primary shadow-sm ring-1 ring-zonakasir-primary/20 transition-all hover:bg-zonakasir-primary/20 active:scale-95 dark:bg-zonakasir-primary/20 dark:text-zonakasir-primary/90 dark:ring-zonakasir-primary/30';
+      button.className = 'flex min-h-[40px] items-center justify-center rounded-xl bg-primary-600/10 p-2 text-sm font-semibold text-primary-600 shadow-sm ring-1 ring-primary-500/20 transition-all hover:bg-primary-600/20 active:scale-95 dark:bg-primary-600/20 dark:text-primary-600/90 dark:ring-primary-500/30';
       button.addEventListener('click', () => {
         document.dispatchEvent(new CustomEvent('shortcut-payment', { detail: { amount: suggestion } }));
       });

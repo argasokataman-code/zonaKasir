@@ -93,10 +93,23 @@ class TenantPanelProvider extends PanelProvider
         try {
             if (function_exists('tenancy') && tenancy()->initialized) {
                 if (\Illuminate\Support\Facades\Schema::hasTable('abouts')) {
-                    $about = \App\Models\Tenants\About::select('id', 'shop_name')->first();
+                    $about = \App\Models\Tenants\About::select('id', 'shop_name', 'primary_color', 'logo', 'dark_mode')->first();
                     if ($about) {
-                        $panel->brandName($about->shop_name ?? 'Your Brand')
-                            ->brandLogo(asset('assets/logo/logo.svg'));
+                        $panel->brandName($about->shop_name ?? 'Your Brand');
+
+                        if ($about->logo) {
+                            $panel->brandLogo(asset('storage/' . $about->logo));
+                        } else {
+                            $panel->brandLogo(asset('assets/logo/logo.svg'));
+                        }
+
+                        if ($about->primary_color) {
+                            $panel->colors(['primary' => Color::hex($about->primary_color)]);
+                        }
+
+                        if ($about->dark_mode !== null) {
+                            $panel->darkMode($about->dark_mode);
+                        }
                     }
                 }
             }

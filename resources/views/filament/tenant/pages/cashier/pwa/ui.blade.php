@@ -9,7 +9,7 @@
     <div class="relative">
       <x-heroicon-o-magnifying-glass class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
       <input type="text" x-model="offlineSearch" placeholder="{{ __('Search products offline...') }}"
-        class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 focus:border-zonakasir-primary focus:outline-none focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white">
+        class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white">
     </div>
   </div>
 
@@ -17,13 +17,13 @@
   <div class="col-span-full mb-2 flex gap-2 overflow-x-auto">
     <button @click="offlineSelectedCategory = null"
       class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
-      :class="offlineSelectedCategory === null ? 'bg-zonakasir-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'">
+      :class="offlineSelectedCategory === null ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'">
       {{ __('All') }}
     </button>
     <template x-for="cat in offlineCategories" :key="cat.id">
       <button @click="offlineSelectedCategory = cat.id"
         class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
-        :class="offlineSelectedCategory === cat.id ? 'bg-zonakasir-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'"
+        :class="offlineSelectedCategory === cat.id ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'"
         x-text="cat.name"></button>
     </template>
   </div>
@@ -50,11 +50,11 @@
           <span class="absolute left-2 top-2 rounded-md bg-amber-500 px-1.5 py-0.5 text-xs font-bold text-white shadow-sm" x-text="(product.stock_calculate !== undefined ? product.stock_calculate : product.stock || 0) + ' {{ __("Stock") }}'"></span>
         </template>
         <template x-if="!product.is_non_stock && (product.stock_calculate !== undefined ? product.stock_calculate : product.stock || 0) > 10">
-          <span class="absolute left-2 top-2 rounded-md bg-zonakasir-primary px-1.5 py-0.5 text-xs font-bold text-white shadow-sm" x-text="(product.stock_calculate !== undefined ? product.stock_calculate : product.stock || 0) + ' {{ __("Stock") }}'"></span>
+          <span class="absolute left-2 top-2 rounded-md bg-primary-600 px-1.5 py-0.5 text-xs font-bold text-white shadow-sm" x-text="(product.stock_calculate !== undefined ? product.stock_calculate : product.stock || 0) + ' {{ __("Stock") }}'"></span>
         </template>
 
         <template x-if="offlineCart[product.id] && offlineCart[product.id].qty > 0">
-          <span class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm" x-text="offlineCart[product.id].qty"></span>
+          <span class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary-600 text-xs font-bold text-white shadow-sm" x-text="offlineCart[product.id].qty"></span>
         </template>
       </div>
 
@@ -64,11 +64,11 @@
           <h3 class="text-xs font-semibold leading-tight text-gray-900 dark:text-white line-clamp-2 break-words mt-0.5" x-text="product.name"></h3>
         </div>
         <div class="mt-1 flex items-center justify-between gap-1 min-w-0">
-          <span class="text-xs font-bold text-zonakasir-primary truncate" x-text="'Rp' + (product.selling_price_calculate || product.selling_price || 0).toLocaleString('id-ID')"></span>
+          <span class="text-xs font-bold text-primary-600 truncate" x-text="'Rp' + (product.selling_price_calculate || product.selling_price || 0).toLocaleString('id-ID')"></span>
           <div class="flex items-center shrink-0">
             <template x-if="!offlineCart[product.id] || offlineCart[product.id].qty === 0">
               <button @click="offlineAddToCart(product.id)"
-                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zonakasir-primary text-white">
+                class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-600 text-white">
                 <x-heroicon-o-plus class="h-3.5 w-3.5" />
               </button>
             </template>
@@ -78,9 +78,9 @@
                   class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
                   <x-heroicon-o-minus-small class="h-3.5 w-3.5" />
                 </button>
-                <span class="w-6 text-center text-xs font-semibold text-zonakasir-primary shrink-0" x-text="offlineCart[product.id].qty"></span>
+                <span class="w-6 text-center text-xs font-semibold text-primary-600 shrink-0" x-text="offlineCart[product.id].qty"></span>
                 <button @click="offlineAddToCart(product.id)"
-                  class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zonakasir-primary text-white">
+                  class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-600 text-white">
                   <x-heroicon-o-plus-small class="h-3.5 w-3.5" />
                 </button>
               </div>
@@ -103,7 +103,7 @@
 
 {{-- Offline: cart toggle button (mobile only) --}}
 <div x-show="isOffline && isPWA" class="fixed bottom-0 left-0 right-0 z-50 border-t bg-white px-3 pb-[env(safe-area-inset-bottom)] pt-3 shadow-lg dark:border-gray-800 dark:bg-gray-900 lg:hidden">
-  <button @click="cartOpen = true" class="flex w-full items-center justify-between rounded-lg bg-zonakasir-primary px-4 py-3 min-h-[48px] text-white">
+  <button @click="cartOpen = true" class="flex w-full items-center justify-between rounded-lg bg-primary-600 px-4 py-3 min-h-[48px] text-white">
     <span class="font-semibold">{{ __('View Cart') }}</span>
     <span class="flex items-center gap-2">
       <span x-text="offlineCartCount" class="rounded-full bg-white/20 px-2 py-0.5 text-sm"></span>
@@ -130,7 +130,7 @@
       <div class="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-gray-800">
         <div class="flex-1 min-w-0">
           <p class="text-sm font-medium text-gray-900 dark:text-white truncate" x-text="item.name"></p>
-          <p class="text-xs text-zonakasir-primary font-semibold" x-text="'Rp ' + item.price.toLocaleString('id-ID')"></p>
+          <p class="text-xs text-primary-600 font-semibold" x-text="'Rp ' + item.price.toLocaleString('id-ID')"></p>
         </div>
         <div class="flex items-center gap-1">
           <button @click="offlineRemoveFromCart(parseInt(productId))"
@@ -139,7 +139,7 @@
           </button>
           <span class="w-8 text-center text-sm font-semibold" x-text="item.qty"></span>
           <button @click="offlineAddToCart(parseInt(productId))"
-            class="w-8 h-8 rounded-full bg-zonakasir-primary flex items-center justify-center text-white">
+            class="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-white">
             <x-heroicon-o-plus-small class="h-4 w-4" />
           </button>
         </div>
@@ -155,10 +155,10 @@
       </div>
       <div class="flex justify-between text-lg font-bold mb-3">
         <span>{{ __('Total') }}</span>
-        <span class="text-zonakasir-primary" x-text="'Rp ' + offlineCartSubtotal.toLocaleString('id-ID')"></span>
+        <span class="text-primary-600" x-text="'Rp ' + offlineCartSubtotal.toLocaleString('id-ID')"></span>
       </div>
       <button @click="paymentModalOpen = true"
-        class="w-full rounded-lg bg-zonakasir-primary py-3 text-white font-semibold text-sm hover:bg-zonakasir-primary/90 transition-colors">
+        class="w-full rounded-lg bg-primary-600 py-3 text-white font-semibold text-sm hover:bg-primary-600/90 transition-colors">
         {{ __('Proceed to Payment') }}
       </button>
       <p class="text-xs text-gray-400 text-center mt-2">{{ __('Payment will sync when online') }}</p>
@@ -187,7 +187,7 @@
       <div class="flex gap-2">
         <button @click="offlinePaymentMethod = 'cash'"
           class="flex-1 rounded-lg border-2 py-3 text-sm font-semibold transition-all"
-          :class="offlinePaymentMethod === 'cash' ? 'border-zonakasir-primary bg-zonakasir-primary text-white' : 'border-gray-200 bg-white text-gray-600 dark:border-gray-700 dark:bg-gray-800'">
+          :class="offlinePaymentMethod === 'cash' ? 'border-primary-500 bg-primary-600 text-white' : 'border-gray-200 bg-white text-gray-600 dark:border-gray-700 dark:bg-gray-800'">
           💵 {{ __('Cash') }}
         </button>
         <button disabled class="flex-1 rounded-lg border-2 border-gray-100 bg-gray-50 py-3 text-sm font-semibold text-gray-300 cursor-not-allowed dark:border-gray-800 dark:bg-gray-900">
@@ -207,7 +207,7 @@
         {{ __('Cancel') }}
       </button>
       <button @click="saveOfflineSale()"
-        class="flex-1 rounded-lg bg-zonakasir-primary py-3 text-sm font-semibold text-white hover:bg-zonakasir-primary/90">
+        class="flex-1 rounded-lg bg-primary-600 py-3 text-sm font-semibold text-white hover:bg-primary-600/90">
         {{ __('Save Offline') }}
       </button>
     </div>

@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="flex items-center">
-        <p class="font-semibold text-zonakasir-primary">{{ $item->price_format_money }}</p>
+        <p class="font-semibold text-primary-600">{{ $item->price_format_money }}</p>
       </div>
     </div>
   @empty

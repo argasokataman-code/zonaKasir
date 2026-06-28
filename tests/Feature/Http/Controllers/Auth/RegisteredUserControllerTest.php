@@ -21,6 +21,13 @@ beforeEach(function () {
     if ($driver === 'mysql') {
         DB::statement('DROP DATABASE IF EXISTS lakasir_tokotest');
     }
+
+    \App\Models\Plan::create([
+        'name' => 'Default',
+        'slug' => 'default',
+        'price_monthly' => 100000,
+        'is_active' => true,
+    ]);
 });
 it('user can create the tenant account', function () {
     Notification::fake();

@@ -52,7 +52,7 @@
         <div class="relative">
           <x-heroicon-o-magnifying-glass class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
           <input type="text" wire:model.live.debounce.300ms="search"
-            class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 focus:border-zonakasir-primary focus:outline-none focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+            class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
             placeholder="{{ __('Search (SKU, name, barcode)') }}">
         </div>
       </div>
@@ -60,12 +60,12 @@
       {{-- Categories --}}
       <div x-show="!isOffline" class="mb-4 flex gap-2 overflow-x-auto px-1">
         <button wire:click="$set('selectedCategory', null)"
-          class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors {{ is_null($selectedCategory) ? 'bg-zonakasir-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300' }}">
+          class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors {{ is_null($selectedCategory) ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300' }}">
           {{ __('All') }}
         </button>
         @foreach ($categories as $category)
           <button wire:click="$set('selectedCategory', {{ $category->id }})"
-            class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors {{ $selectedCategory === $category->id ? 'bg-zonakasir-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300' }}">
+            class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors {{ $selectedCategory === $category->id ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300' }}">
             {{ $category->name }}
           </button>
         @endforeach
@@ -94,12 +94,12 @@
                       <span class="rounded-md bg-red-600 px-2 py-1 text-xs font-bold text-white">{{ __('Out of stock') }}</span>
                     </div>
                   @else
-                    <span class="absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-xs font-bold text-white shadow-sm {{ $stock < $minimumStockNotification ? 'bg-amber-500' : 'bg-zonakasir-primary' }}">{{ $stock }} {{ __('Stock') }}</span>
+                    <span class="absolute left-2 top-2 rounded-md px-1.5 py-0.5 text-xs font-bold text-white shadow-sm {{ $stock < $minimumStockNotification ? 'bg-amber-500' : 'bg-primary-600' }}">{{ $stock }} {{ __('Stock') }}</span>
                   @endif
                 @endif
 
               {{-- Cart quantity badge --}}
-              <span x-show="cartQty[{{ $product->id }}]" x-cloak class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-zonakasir-primary text-xs font-bold text-white shadow-sm" x-text="cartQty[{{ $product->id }}]"></span>
+              <span x-show="cartQty[{{ $product->id }}]" x-cloak class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary-600 text-xs font-bold text-white shadow-sm" x-text="cartQty[{{ $product->id }}]"></span>
             </div>
 
             {{-- Info --}}
@@ -109,10 +109,10 @@
                 <h3 class="mt-0.5 text-xs font-semibold leading-tight text-gray-900 dark:text-white line-clamp-2 break-words">{{ $product->name }}</h3>
               </div>
               <div class="mt-1 flex items-center justify-between gap-1 min-w-0">
-                <span class="text-xs font-bold text-zonakasir-primary truncate">{{ $formatPrice($product->sellingPriceCalculate) }}</span>
+                <span class="text-xs font-bold text-primary-600 truncate">{{ $formatPrice($product->sellingPriceCalculate) }}</span>
                 <div class="flex items-center shrink-0">
                   <button x-show="!cartQty[{{ $product->id }}]" @click="instantAdd({{ $product->id }})"
-                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zonakasir-primary text-white">
+                    class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-600 text-white">
                     <x-heroicon-o-plus class="h-3.5 w-3.5" />
                   </button>
                   <div x-show="cartQty[{{ $product->id }}]" x-cloak class="flex items-center gap-px">
@@ -120,9 +120,9 @@
                       class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
                       <x-heroicon-o-minus-small class="h-3.5 w-3.5" />
                     </button>
-                    <span class="w-6 text-center text-xs font-semibold text-zonakasir-primary shrink-0" x-text="cartQty[{{ $product->id }}]"></span>
+                    <span class="w-6 text-center text-xs font-semibold text-primary-600 shrink-0" x-text="cartQty[{{ $product->id }}]"></span>
                     <button @click="instantAdd({{ $product->id }})"
-                      class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-zonakasir-primary text-white">
+                      class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-600 text-white">
                       <x-heroicon-o-plus-small class="h-3.5 w-3.5" />
                     </button>
                   </div>
@@ -146,7 +146,7 @@
       x-show="!cartOpen && !isOffline">
       <div class="flex gap-2">
         <button @click="cartOpen = true"
-          class="flex flex-1 items-center justify-between rounded-lg bg-zonakasir-primary px-4 py-3 min-h-[48px] text-white">
+          class="flex flex-1 items-center justify-between rounded-lg bg-primary-600 px-4 py-3 min-h-[48px] text-white">
           <span class="font-semibold">{{ __('View Cart') }}</span>
           <span class="flex items-center gap-2">
             <span class="rounded-full bg-white/20 px-2 py-0.5 text-sm" x-text="cartCount">{{ $cartCount }}</span>
@@ -271,7 +271,7 @@
             @include('filament.tenant.pages.cashier.partials.total')
           </div>
         </div>
-        <button class="w-full rounded-lg bg-zonakasir-primary px-2 py-3 text-sm font-semibold text-white"
+        <button class="w-full rounded-lg bg-primary-600 px-2 py-3 text-sm font-semibold text-white"
           x-on:mousedown="cartOpen = false; $dispatch('open-modal', {id: 'proceed-the-payment'});">{{ __('Proceed to payment') }}</button>
       </div>
     </div>

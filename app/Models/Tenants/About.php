@@ -5,10 +5,13 @@ namespace App\Models\Tenants;
 use App\Filament\Tenant\Resources\Traits\HasUploadFileField;
 use Filament\Forms\Components\Actions;
 use Filament\Forms\Components\Actions\Action;
+use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Get;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -31,7 +34,7 @@ class About extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['shop_name', 'shop_location', 'business_type', 'other_business_type', 'bank_name', 'bank_account_name', 'bank_account_number', 'bank_code', 'photo'])
+            ->logOnly(['shop_name', 'shop_location', 'business_type', 'other_business_type', 'bank_name', 'bank_account_name', 'bank_account_number', 'bank_code', 'photo', 'primary_color', 'logo', 'dark_mode'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
     }
@@ -81,6 +84,47 @@ class About extends Model
                     ->translateLabel()
                     ->requiresConfirmation()
                     ->action('saveAbout'),
+            ]),
+        ];
+    }
+
+    public static function themeForm(): array
+    {
+        return [
+            Section::make(__('Theme'))
+                ->description(__('Customize colors, logo, and appearance for your shop'))
+                ->schema([
+                    ColorPicker::make('primary_color')
+                        ->label(__('Primary Color'))
+                        ->default('#FF6600')
+                        ->rgb(),
+                    FileUpload::make('logo')
+                        ->label(__('Logo'))
+                        ->disk(config('filesystems.upload_disk'))
+                        ->directory('logos')
+                        ->image()
+                        ->imageResizeMode('cover')
+                        ->imageCropAspectRatio('1:1')
+                        ->imageEditor()
+                        ->imageEditorMode(2)
+                        ->maxSize(2048)
+                        ->placeholder(__('Upload your shop logo (1:1 ratio recommended)'))
+                        ->getUploadedFileUsing(function ($file, string|array|null $storedFileNames, $component) {
+                            $static = new static;
+
+                            return $static->getUploadedFileUsing($component, $file, $storedFileNames);
+                        }),
+                    Toggle::make('dark_mode')
+                        ->label(__('Dark Mode'))
+                        ->helperText(__('Leave off to use system default'))
+                        ->onColor('primary')
+                        ->offColor('gray'),
+                ]),
+            Actions::make([
+                Action::make('Save Theme')
+                    ->translateLabel()
+                    ->requiresConfirmation()
+                    ->action('saveTheme'),
             ]),
         ];
     }

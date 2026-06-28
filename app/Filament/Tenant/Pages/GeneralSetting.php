@@ -124,6 +124,10 @@ class GeneralSetting extends Page implements HasActions, HasForms
                         ->statePath('about')
                         ->translateLabel()
                         ->schema(About::form()),
+                    Tabs\Tab::make('Theme')
+                        ->statePath('about')
+                        ->translateLabel()
+                        ->schema(About::themeForm()),
                     Tabs\Tab::make('App')
                         ->statePath('setting')
                         ->translateLabel()
@@ -280,6 +284,26 @@ class GeneralSetting extends Page implements HasActions, HasForms
 
         Notification::make()
             ->title(__('Success'))
+            ->success()
+            ->send();
+
+        $this->mount();
+    }
+
+    public function saveTheme(AboutService $aboutService): void
+    {
+        $data = array_filter([
+            'primary_color' => $this->about['primary_color'] ?? null,
+            'logo' => $this->about['logo'] ?? null,
+            'dark_mode' => $this->about['dark_mode'] ?? null,
+        ], fn ($v) => $v !== null);
+
+        if (filled($data)) {
+            $aboutService->createOrUpdate($data);
+        }
+
+        Notification::make()
+            ->title(__('Theme saved'))
             ->success()
             ->send();
 

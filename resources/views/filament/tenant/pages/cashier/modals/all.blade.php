@@ -24,7 +24,7 @@
                 <div
                   x-on:click="selectPayment(paymentMethod)"
                   class="flex cursor-pointer justify-center rounded-md border-none px-3 py-2 text-xs hover:scale-105 dark:text-white md:text-sm"
-                  :class="cartDetail['payment_method_id'] == paymentMethod.id ? 'bg-zonakasir-primary text-white' :
+                  :class="cartDetail['payment_method_id'] == paymentMethod.id ? 'bg-primary-600 text-white' :
                       'dark:bg-gray-900 bg-gray-300 '"
                    x-text="paymentMethod.name">
                 </div>
@@ -52,10 +52,10 @@
             {{-- Payment input display --}}
             <div class="relative mb-3">
               <input id="display" readonly autofocus
-                class="w-full rounded-xl border-2 bg-gray-50 p-4 pb-6 text-right text-2xl font-bold text-gray-900 focus:outline-none dark:bg-gray-800 dark:text-white @error('payed_money') border-red-500 @else border-gray-200 dark:border-gray-600 focus:border-zonakasir-primary @enderror"
+                class="w-full rounded-xl border-2 bg-gray-50 p-4 pb-6 text-right text-2xl font-bold text-gray-900 focus:outline-none dark:bg-gray-800 dark:text-white @error('payed_money') border-red-500 @else border-gray-200 dark:border-gray-600 focus:border-primary-500 @enderror"
                 x-ref="payedMoney" inputMode="none" tabindex="0" @keydown="handleKeydown($event)">
               <span class="absolute bottom-1 right-4 text-xs text-gray-400" x-show="rawValue > 0" x-cloak>
-                {{ __('Change') }}: <span class="font-semibold text-zonakasir-primary" x-text="moneyFormat(changeAmount > 0 ? changeAmount : 0)"></span>
+                {{ __('Change') }}: <span class="font-semibold text-primary-600" x-text="moneyFormat(changeAmount > 0 ? changeAmount : 0)"></span>
               </span>
             </div>
 
@@ -129,12 +129,12 @@
                 <div class="flex items-center justify-between mb-1">
                   <label class="text-xs font-medium text-gray-600 dark:text-gray-400">{{ __('Member') }} <span class="text-red-500">*</span></label>
                   <button type="button" x-on:click="$dispatch('open-modal', {id: 'modal-quick-member'})"
-                    class="text-xs font-semibold text-zonakasir-primary hover:underline">
+                    class="text-xs font-semibold text-primary-600 hover:underline">
                     + {{ __('Add member') }}
                   </button>
                 </div>
                 <select wire:model="cartDetail.member_id"
-                  class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-zonakasir-primary focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white">
+                  class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white">
                   <option value="">{{ __('Select member...') }}</option>
                   @foreach($members as $id => $memberName)
                     <option value="{{ $id }}">{{ $memberName }}</option>
@@ -145,7 +145,7 @@
               <div>
                 <label class="mb-1 block text-xs font-medium text-gray-600 dark:text-gray-400">{{ __('Due date') }} <span class="text-red-500">*</span></label>
                 <input type="date" wire:model="cartDetail.due_date"
-                  class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-zonakasir-primary focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
+                  class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white" />
               </div>
               {{-- DP / Partial payment --}}
               <div>
@@ -153,7 +153,7 @@
                 <div class="relative">
                   <span class="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">Rp</span>
                   <input type="text" wire:model.live="cartDetail.payed_money"
-                    class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-sm text-right text-gray-900 focus:border-zonakasir-primary focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                    class="w-full rounded-lg border border-gray-300 bg-white py-2.5 pl-10 pr-3 text-sm text-right text-gray-900 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
                     placeholder="0" />
                 </div>
                 <p x-show="cartDetail.payed_money > 0" x-cloak class="mt-1 text-xs text-gray-500 dark:text-gray-400">
@@ -178,7 +178,7 @@
                 </button>
                 {{-- Pay / Confirm Piutang --}}
                 <button wire:loading.attr="disabled" wire:target="proceedThePayment" type="submit"
-                  class="flex min-h-[48px] w-full items-center justify-center gap-x-2 rounded-xl bg-zonakasir-primary p-3 text-base font-bold text-white shadow-lg shadow-zonakasir-primary/30 transition-all hover:brightness-110 active:scale-95 disabled:opacity-50">
+                  class="flex min-h-[48px] w-full items-center justify-center gap-x-2 rounded-xl bg-primary-600 p-3 text-base font-bold text-white shadow-lg shadow-primary-600/30 transition-all hover:brightness-110 active:scale-95 disabled:opacity-50">
                   <span wire:loading.remove wire:target="proceedThePayment" x-show="paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.is_credit">{{ __('Confirm Piutang') }}</span>
                   <span wire:loading.remove wire:target="proceedThePayment" x-show="!paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.is_credit">{{ __('Pay now') }}</span>
                   <span wire:loading wire:target="proceedThePayment">
@@ -244,14 +244,14 @@
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Name') }} <span class="text-red-500">*</span></label>
         <input type="text" wire:model="newMemberName"
-          class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-zonakasir-primary focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+          class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
           placeholder="{{ __('Member name') }}" />
         @error('newMemberName') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
       </div>
       <div>
         <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">{{ __('Phone / Contact') }}</label>
         <input type="text" wire:model="newMemberPhone"
-          class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-zonakasir-primary focus:ring-1 focus:ring-zonakasir-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+          class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
           placeholder="{{ __('Phone or email') }}" />
       </div>
     </div>
@@ -272,8 +272,8 @@
     <div class="grid grid-cols-4 gap-4">
       @foreach ($tableOption as $table)
         <div x-on:click="$wire.cartDetail['table_id'] = {{ $table->id }};"
-          class="flex cursor-pointer justify-center rounded-md border border-zonakasir-primary px-4 py-2 text-sm hover:scale-105 dark:text-white"
-          :class="$wire.cartDetail['table_id'] == {{ $table->id }} ? 'bg-zonakasir-primary text-white' : 'dark:bg-gray-900 '">
+          class="flex cursor-pointer justify-center rounded-md border border-primary-500 px-4 py-2 text-sm hover:scale-105 dark:text-white"
+          :class="$wire.cartDetail['table_id'] == {{ $table->id }} ? 'bg-primary-600 text-white' : 'dark:bg-gray-900 '">
           {{ $table->number }}
         </div>
       @endforeach
