@@ -252,6 +252,7 @@ class TenantPanelProvider extends PanelProvider
     {
         return [
             \App\Http\Middleware\NoCacheResponse::class,
+            \App\Http\Middleware\DynamicPwaManifest::class,
             EncryptCookies::class,
             AddQueuedCookiesToResponse::class,
             StartSession::class,

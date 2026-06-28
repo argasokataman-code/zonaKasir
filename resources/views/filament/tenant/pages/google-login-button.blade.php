@@ -1,3 +1,4 @@
+@if (Route::has('google.redirect'))
 <div class="mt-4">
   <div class="relative">
     <div class="absolute inset-0 flex items-center">
@@ -21,3 +22,4 @@
     </a>
   </div>
 </div>
+@endif
