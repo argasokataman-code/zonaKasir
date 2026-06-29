@@ -118,15 +118,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 }
 
-// Safety net: register filament.tenant.auth.login directly so it's always
-// available even when tenant-web.php fails to load on Vercel/PHP 8.5.
-$router = $app->make('router');
-if (! $router->has('filament.tenant.auth.login')) {
-    $router->get('/member/login', \App\Filament\Tenant\Pages\TenantLogin::class)
-        ->middleware(['web', 'guest'])
-        ->name('filament.tenant.auth.login');
-}
-
 $webhookPaths = [
     '/api/webhooks/midtrans' => function () use ($app) {
         return $app->make(\App\Http\Controllers\Api\MidtransWebhookController::class)->handle(\Illuminate\Http\Request::capture());
