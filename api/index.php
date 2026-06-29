@@ -28,11 +28,10 @@ if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
     @mkdir($tmpDir . '/framework/views', 0777, true);
     @mkdir($tmpDir . '/framework/sessions', 0777, true);
 
-    // Override session driver to 'cookie' — file driver doesn't work on Vercel
-    // because each function invocation gets a fresh /tmp filesystem, so session
-    // data saved by the Google OAuth callback handler is lost by the time the
-    // subsequent dashboard request arrives (same browser, different container).
-    $_ENV['SESSION_DRIVER'] = 'cookie';
+    // Session driver: keep 'file' (from .env) — cookie driver would need manual
+    // CookieJar flush in the callback handler (AddQueuedCookiesToResponse
+    // middleware not in pipeline). File driver works for warm Vercel starts
+    // where /tmp persists across requests within the same container.
 
     $app = require_once $projectRoot . '/bootstrap/app.php';
     $app->useStoragePath($tmpDir);
@@ -90,9 +89,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         http_response_code(302);
         exit;
     }
-    // /auth/google/callback is now registered as a named route via $router
-    // below, so the kernel handles session and CSRF properly. No need to
-    // manually start sessions and set cookies here.
+    if ($path === '/auth/google/callback') {
+        $request = \Illuminate\Http\Request::capture();
+        $app->instance('request', $request);
+        // Start session so Auth::login() + session() helper work
+        $session = $app->make(\Illuminate\Session\SessionManager::class)->driver();
+        $session->start();
+        $app->instance('session.store', $session);
+        $request->setLaravelSession($session);
+        // Run the callback controller
+        $controller = $app->make(\App\Http\Controllers\Auth\GoogleController::class);
+        $response = $controller->callback();
+        // Save session data — for cookie driver this queues cookies on CookieJar
+        $session->save();
+        // Get all queued cookies (cookie driver writes data cookie here) and add
+        // to response. Without this, queued cookies from CookieSessionHandler::write()
+        // are lost because AddQueuedCookiesToResponse middleware is not in the pipeline.
+        foreach ($app->make(\Illuminate\Contracts\Cookie\QueueingFactory::class)->getQueuedCookies() as $queuedCookie) {
+            if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
+                $response->headers->setCookie($queuedCookie);
+            }
+        }
+        if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
+            $response->send();
+        } else {
+            response($response)->send();
+        }
+        exit;
+    }
 }
 
 // Safety net: all routes below use $router directly (not Route Facade) because
@@ -118,14 +142,6 @@ $router->post('/member/login', [\App\Http\Controllers\Auth\AuthenticatedSessionC
 $router->post('/livewire/update', [\Livewire\Mechanisms\HandleRequests\HandleRequests::class, 'handleUpdate'])
     ->middleware('web')
     ->name('default.livewire.update');
-
-// Google OAuth callback — must be before kernel handle so the route exists
-// when StartSession middleware needs to generate the login URL. The kernel
-// handles session, CSRF, and cookie management properly (avoids the fragile
-// manual session boot + cookie inject we had before).
-$router->get('/auth/google/callback', [\App\Http\Controllers\Auth\GoogleController::class, 'callback'])
-    ->middleware('web')
-    ->name('google.callback');
 
 // Force the UrlGenerator to use the current RouteCollection so subsequent
 // calls to route('filament.tenant.auth.login') from middleware find the route.
