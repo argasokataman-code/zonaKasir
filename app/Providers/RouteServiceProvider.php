@@ -57,10 +57,17 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapTenantRoutes()
     {
         // Web routes: `web` middleware ONLY (session, CSRF, cookies).
-        Route::group([], base_path('routes/tenant-web.php'));
+        // NOTE: use closure+require (not Route::group([], path)) because the
+        // path variant silently fails on Vercel/PHP 8.5 — routes intermittently
+        // go missing (RouteNotFoundException for all routes in the file).
+        Route::group([], function () {
+            require base_path('routes/tenant-web.php');
+        });
 
         // API routes: `api` middleware ONLY (Sanctum, throttle, bindings).
-        Route::group([], base_path('routes/tenant-api.php'));
+        Route::group([], function () {
+            require base_path('routes/tenant-api.php');
+        });
     }
 
     protected function centralDomains(): array
