@@ -120,12 +120,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 // Safety net: register filament.tenant.auth.login directly so it's always
 // available even when tenant-web.php fails to load on Vercel/PHP 8.5.
+// NOTE: unconditional (no `$router->has()` guard) — the check is unreliable
+// on Vercel where the router's internal route state may be inconsistent
+// during early bootstrap. The duplicate route override is harmless.
 $router = $app->make('router');
-if (! $router->has('filament.tenant.auth.login')) {
-    $router->get('/member/login', \App\Filament\Tenant\Pages\TenantLogin::class)
-        ->middleware(['web', 'guest'])
-        ->name('filament.tenant.auth.login');
-}
+$router->get('/member/login', \App\Filament\Tenant\Pages\TenantLogin::class)
+    ->middleware(['web', 'guest'])
+    ->name('filament.tenant.auth.login');
+// Force the UrlGenerator to use the current RouteCollection so subsequent
+// calls to route('filament.tenant.auth.login') from middleware find the route.
+$app->make('url')->setRoutes($router->getRoutes());
 
 $webhookPaths = [
     '/api/webhooks/midtrans' => function () use ($app) {
