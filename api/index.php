@@ -86,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             ->stateless()
             ->redirect()
             ->getTargetUrl();
+        header('X-Debug-Redirect-Uri: ' . $redirectUri);
         header('Location: ' . $redirectUrl);
         http_response_code(302);
         exit;
@@ -98,7 +99,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // Without this, GOOGLE_REDIRECT env var (pointing to old staging URL)
         // causes "redirect_uri_mismatch" error from Google.
         $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-        config(['services.google.redirect' => $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/auth/google/callback']);
+        $redirectUri = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/auth/google/callback';
+        config(['services.google.redirect' => $redirectUri]);
+        header('X-Debug-Callback-Redirect-Uri: ' . $redirectUri);
         // Start session so Auth::login() + session() helper work
         $session = $app->make(\Illuminate\Session\SessionManager::class)->driver();
         $session->start();
