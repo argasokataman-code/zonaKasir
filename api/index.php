@@ -93,6 +93,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if ($path === '/auth/google/callback') {
         $request = \Illuminate\Http\Request::capture();
         $app->instance('request', $request);
+        // Override redirect URL to match current host — Socialite uses this
+        // for the token exchange (must match the redirect_uri sent to Google).
+        // Without this, GOOGLE_REDIRECT env var (pointing to old staging URL)
+        // causes "redirect_uri_mismatch" error from Google.
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        config(['services.google.redirect' => $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/auth/google/callback']);
         // Start session so Auth::login() + session() helper work
         $session = $app->make(\Illuminate\Session\SessionManager::class)->driver();
         $session->start();
