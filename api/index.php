@@ -72,16 +72,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && preg_match('#^/api/auth/login#', $r
 
 // Google OAuth — bypass Laravel routing (tenant-web.php routes silently 404
 // on Vercel/PHP 8.5 regardless of middleware-group position).
-// NOTE: redirect URL must be dynamic — .env has staging URL hardcoded.
 $path = parse_url($requestUri, PHP_URL_PATH);
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if ($path === '/auth/google/redirect') {
-        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-        $redirectUri = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/auth/google/callback';
         $redirectUrl = \Laravel\Socialite\Facades\Socialite::driver('google')
             ->scopes(['openid', 'profile', 'email'])
             ->with(['prompt' => 'select_account'])
-            ->redirectUrl($redirectUri)
             ->stateless()
             ->redirect()
             ->getTargetUrl();
