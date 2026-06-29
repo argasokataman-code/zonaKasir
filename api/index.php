@@ -28,6 +28,12 @@ if (isset($_ENV['VERCEL']) || getenv('VERCEL')) {
     @mkdir($tmpDir . '/framework/views', 0777, true);
     @mkdir($tmpDir . '/framework/sessions', 0777, true);
 
+    // Override session driver to 'cookie' — file driver doesn't work on Vercel
+    // because each function invocation gets a fresh /tmp filesystem, so session
+    // data saved by the Google OAuth callback handler is lost by the time the
+    // subsequent dashboard request arrives (same browser, different container).
+    $_ENV['SESSION_DRIVER'] = 'cookie';
+
     $app = require_once $projectRoot . '/bootstrap/app.php';
     $app->useStoragePath($tmpDir);
 } else {
@@ -67,12 +73,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && preg_match('#^/api/auth/login#', $r
 
 // Google OAuth — bypass Laravel routing (tenant-web.php routes silently 404
 // on Vercel/PHP 8.5 regardless of middleware-group position).
+// NOTE: redirect URL must be dynamic — .env has staging URL hardcoded.
 $path = parse_url($requestUri, PHP_URL_PATH);
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if ($path === '/auth/google/redirect') {
+        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $redirectUri = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/auth/google/callback';
         $redirectUrl = \Laravel\Socialite\Facades\Socialite::driver('google')
             ->scopes(['openid', 'profile', 'email'])
             ->with(['prompt' => 'select_account'])
+            ->redirectUrl($redirectUri)
             ->stateless()
             ->redirect()
             ->getTargetUrl();
@@ -80,42 +90,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         http_response_code(302);
         exit;
     }
-    if ($path === '/auth/google/callback') {
-        $request = \Illuminate\Http\Request::capture();
-        $app->instance('request', $request);
-        // Start session so Auth::login() + session() helper work
-        // IMPORTANT: bind session.store explicitly — Auth::login() resolves it
-        // from the container, NOT from the request. Without binding, a new Store
-        // instance is created and our started session is lost.
-        $session = $app->make(\Illuminate\Session\SessionManager::class)->driver();
-        $session->start();
-        $app->instance('session.store', $session);
-        $request->setLaravelSession($session);
-        // Run the callback controller
-        $controller = $app->make(\App\Http\Controllers\Auth\GoogleController::class);
-        $response = $controller->callback();
-        // Save session data
-        $session->save();
-        // Ensure session cookie is set on the response
-        $cookie = new \Symfony\Component\HttpFoundation\Cookie(
-            $session->getName(),
-            $session->getId(),
-            time() + 43200, // 12 hours
-            '/',
-            null,
-            $request->isSecure(),
-            true,
-            false,
-            'lax'
-        );
-        if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
-            $response->headers->setCookie($cookie);
-            $response->send();
-        } else {
-            response($response)->withCookie($cookie)->send();
-        }
-        exit;
-    }
+    // /auth/google/callback is now registered as a named route via $router
+    // below, so the kernel handles session and CSRF properly. No need to
+    // manually start sessions and set cookies here.
 }
 
 // Safety net: all routes below use $router directly (not Route Facade) because
@@ -141,6 +118,14 @@ $router->post('/member/login', [\App\Http\Controllers\Auth\AuthenticatedSessionC
 $router->post('/livewire/update', [\Livewire\Mechanisms\HandleRequests\HandleRequests::class, 'handleUpdate'])
     ->middleware('web')
     ->name('default.livewire.update');
+
+// Google OAuth callback — must be before kernel handle so the route exists
+// when StartSession middleware needs to generate the login URL. The kernel
+// handles session, CSRF, and cookie management properly (avoids the fragile
+// manual session boot + cookie inject we had before).
+$router->get('/auth/google/callback', [\App\Http\Controllers\Auth\GoogleController::class, 'callback'])
+    ->middleware('web')
+    ->name('google.callback');
 
 // Force the UrlGenerator to use the current RouteCollection so subsequent
 // calls to route('filament.tenant.auth.login') from middleware find the route.
