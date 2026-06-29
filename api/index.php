@@ -118,15 +118,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 }
 
-// Safety net: register filament.tenant.auth.login directly so it's always
-// available even when tenant-web.php fails to load on Vercel/PHP 8.5.
-// NOTE: unconditional (no `$router->has()` guard) — the check is unreliable
-// on Vercel where the router's internal route state may be inconsistent
-// during early bootstrap. The duplicate route override is harmless.
+// Safety net: all routes below use $router directly (not Route Facade) because
+// the Route Facade silently fails on Vercel/PHP 8.5 during service provider boot
+// (RouteServiceProvider::boot(), LivewireServiceProvider::boot(), etc.).
+// The closure+require fix also fails — the Facade's internal resolution produces
+// a different Router state than direct $app->make('router') during early bootstrap.
 $router = $app->make('router');
+
+// Login page (GET)
 $router->get('/member/login', \App\Filament\Tenant\Pages\TenantLogin::class)
     ->middleware(['web', 'guest'])
     ->name('filament.tenant.auth.login');
+
+// Login form POST (Livewire uses /livewire/update, but support direct POST too)
+$router->post('/member/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store'])
+    ->middleware(['web', 'guest'])
+    ->name('filament.tenant.auth.login.post');
+
+// Livewire component update — registered here so it exists BEFORE Livewire's
+// own boot() runs (which would use the failing Route Facade). Livewire detects
+// the existing route and skips re-registration.
+$router->post('/livewire/update', [\Livewire\Mechanisms\HandleRequests\HandleRequests::class, 'handleUpdate'])
+    ->middleware('web')
+    ->name('default.livewire.update');
+
 // Force the UrlGenerator to use the current RouteCollection so subsequent
 // calls to route('filament.tenant.auth.login') from middleware find the route.
 $app->make('url')->setRoutes($router->getRoutes());
