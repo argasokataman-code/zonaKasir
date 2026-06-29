@@ -48,3 +48,5 @@ version.txt
 # Vercel local project config
 .vercel/
 reports/
+test-reports-pgsql/
+docs/planning/reseller-bundle.md

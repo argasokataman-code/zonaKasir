@@ -19,3 +19,4 @@ Route::post('/api/webhooks/subscription', [SubscriptionWebhookController::class,
 Route::post('/api/webhooks/flip', [App\Http\Controllers\Api\Webhooks\FlipWebhookController::class, 'handle'])
     ->middleware('throttle:100,1')
     ->name('webhooks.flip');
+

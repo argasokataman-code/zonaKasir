@@ -78,15 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/auth/google/redirect') {
     http_response_code(302);
     exit;
 }
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/auth/google/callback') {
-    // Capture request before kernel boots so controllers/helpers can use it
-    $request = \Illuminate\Http\Request::capture();
-    $app->instance('request', $request);
-    $controller = $app->make(\App\Http\Controllers\Auth\GoogleController::class);
-    $response = $controller->callback();
-    ($response instanceof \Symfony\Component\HttpFoundation\Response ? $response : response($response))->send();
-    exit;
-}
+
 $webhookPaths = [
     '/api/webhooks/midtrans' => function () use ($app) {
         return $app->make(\App\Http\Controllers\Api\MidtransWebhookController::class)->handle(\Illuminate\Http\Request::capture());

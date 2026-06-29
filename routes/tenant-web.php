@@ -65,7 +65,13 @@ Route::middleware([
         session()->forget(['welcome_type', 'welcome_data']);
         return response()->json(['status' => 'ok']);
     })->middleware('auth')->name('welcome.dismiss');
+
+    // Google OAuth — MUST be inside the FIRST middleware group.
+    // Routes outside it (file root level) silently 404 on Vercel/PHP 8.5
+    // due to a Route::group([], path) parsing bug.
+    Route::get('/auth/google/redirect', [\App\Http\Controllers\Auth\GoogleController::class, 'redirect'])
+        ->name('google.redirect');
+    Route::get('/auth/google/callback', [\App\Http\Controllers\Auth\GoogleController::class, 'callback'])
+        ->name('google.callback');
 });
-Route::get('/api/tenant-test', function() { return response()->json(['ok' => true]); });
-Route::get('/public-api/pricing', [\App\Http\Controllers\Api\PlanController::class, 'index']);
 
