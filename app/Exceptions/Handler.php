@@ -3,6 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -51,6 +53,22 @@ class Handler extends ExceptionHandler
         return str_contains($contentType, 'application/json');
     }
 
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * Catches RouteNotFoundException for filament.tenant.auth.login on Vercel
+     * where route-group loading may silently fail, and redirects to the login
+     * page instead of showing an Internal Server Error.
+     */
+    public function render($request, Throwable $e): Response
+    {
+        if ($e instanceof RouteNotFoundException
+            && str_contains($e->getMessage(), 'filament.tenant.auth.login')) {
+            return redirect('/member/login');
+        }
+
+        return parent::render($request, $e);
+    }
 
     /**
      * Register the exception handling callbacks for the application.
