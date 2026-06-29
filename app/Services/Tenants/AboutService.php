@@ -25,6 +25,8 @@ class AboutService
                 'bank_account_number',
                 'bank_code',
                 'photo',
+                'primary_color',
+                'logo',
             ]));
 
         $owner = User::select('id', 'name')->owner()->first();

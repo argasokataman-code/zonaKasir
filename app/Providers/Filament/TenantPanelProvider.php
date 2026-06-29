@@ -93,7 +93,7 @@ class TenantPanelProvider extends PanelProvider
         try {
             if (function_exists('tenancy') && tenancy()->initialized) {
                 if (\Illuminate\Support\Facades\Schema::hasTable('abouts')) {
-                    $about = \App\Models\Tenants\About::select('id', 'shop_name', 'primary_color', 'logo', 'dark_mode')->first();
+                    $about = \App\Models\Tenants\About::select('id', 'shop_name', 'primary_color', 'logo')->first();
                     if ($about) {
                         $panel->brandName($about->shop_name ?? 'Your Brand');
 
@@ -107,19 +107,35 @@ class TenantPanelProvider extends PanelProvider
                             $panel->colors(['primary' => Color::hex($about->primary_color)]);
                         }
 
-                        if ($about->dark_mode !== null) {
-                            $panel->darkMode($about->dark_mode);
-                        }
+                        // Dark mode: Filament enabled (Alpine + CSS), no user-menu toggle.
+                        // Profile.dark_mode synced → localStorage via HEAD script below.
+                        $panel->darkMode(true, false);
                     }
                 }
             }
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('TenantPanelProvider panel config error: ' . $e->getMessage(), [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
         }
 
-        // 6 render hooks: HEAD_END | SCRIPTS_BEFORE | TOPBAR_AFTER | GLOBAL_SEARCH_AFTER | BODY_START (merged) | BODY_END
+        // Sync profile.dark_mode (DB) → localStorage (Alpine) before Filament JS runs.
+        // Alpine reads localStorage on init and applies `.dark` class automatically.
+        // Also listens for real-time dark-mode-toggle events from Profile form.
         FilamentView::registerRenderHook(
             PanelsRenderHook::HEAD_END,
-            fn () => view('meta')
+            fn () => \Illuminate\Support\Facades\Blade::render('<script>
+                let dm = @json(auth()->user()?->profile?->dark_mode);
+                var shouldBeDark = dm === true || dm === "1" || dm === 1;
+                document.documentElement.classList.toggle("dark", shouldBeDark);
+                localStorage.setItem("darkMode", shouldBeDark ? "true" : "false");
+                window.addEventListener("dark-mode-toggle", function(e) {
+                    var isDark = e.detail?.dark === true;
+                    document.documentElement.classList.toggle("dark", isDark);
+                    localStorage.setItem("darkMode", isDark ? "true" : "false");
+                });
+            </script>') . view('meta')
         );
 
         // Global helpers — inline blocking script BEFORE @filamentScripts (Livewire/Alpine)
@@ -156,7 +172,6 @@ class TenantPanelProvider extends PanelProvider
         $panel
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->sidebarFullyCollapsibleOnDesktop()
-            ->darkMode(config('app.dark_mode', true))
             ->databaseNotifications()
             ->lazyLoadedDatabaseNotifications(false)
             ->id('tenant')

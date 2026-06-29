@@ -162,6 +162,7 @@ jobs:
             # Run central migrations (tenant migrations added by tenancy package)
             php artisan migrate --force 2>/dev/null || true
             php artisan db:seed --class=AdminSeeder --force 2>/dev/null || true
+            php artisan db:seed --class=PlanSeeder --force 2>/dev/null || true
 
             php artisan filament:upgrade 2>/dev/null || true
             php artisan app:version-sync 2>/dev/null || true

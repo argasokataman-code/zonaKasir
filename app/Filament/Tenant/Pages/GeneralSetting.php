@@ -51,6 +51,12 @@ class GeneralSetting extends Page implements HasActions, HasForms
     public $about = [
         'shop_location' => '',
         'photo' => [],
+        'primary_color' => '#FF6600',
+        'logo' => null,
+        'bank_name' => null,
+        'bank_account_name' => null,
+        'bank_account_number' => null,
+        'bank_code' => null,
     ];
 
     public $setting = [];
@@ -61,7 +67,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
 
     public function mount(): void
     {
-        $about = About::select('id', 'shop_name', 'shop_location', 'business_type', 'other_business_type', 'bank_name', 'bank_account_name', 'bank_account_number', 'bank_code', 'photo')->first()?->toArray() ?? $this->about;
+        $about = About::select('id', 'shop_name', 'shop_location', 'business_type', 'other_business_type', 'bank_name', 'bank_account_name', 'bank_account_number', 'bank_code', 'photo', 'primary_color', 'logo')->first()?->toArray() ?? $this->about;
         if ($about) {
             $about['preview_image'] = $about['photo'];
             // Guard: skip corrupted photo values (empty, array, '[]', etc.)
@@ -70,6 +76,13 @@ class GeneralSetting extends Page implements HasActions, HasForms
                 $about['photo'] = [$_aboutPhoto];
             } else {
                 $about['photo'] = null;
+            }
+            // FileUpload expects array format for existing files
+            $_aboutLogo = $about['logo'] ?? null;
+            if ($_aboutLogo && is_string($_aboutLogo) && $_aboutLogo !== '') {
+                $about['logo'] = [$_aboutLogo];
+            } else {
+                $about['logo'] = null;
             }
             foreach (config('setting.key') as $key) {
                 $this->setting[$key] = Setting::get($key);
@@ -112,6 +125,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
             'locale' => $profile?->locale ?? 'en',
             'timezone' => $profile?->timezone,
             'photo' => $photoState,
+            'dark_mode' => (bool) ($profile?->dark_mode ?? false),
         ];
     }
 
@@ -124,10 +138,6 @@ class GeneralSetting extends Page implements HasActions, HasForms
                         ->statePath('about')
                         ->translateLabel()
                         ->schema(About::form()),
-                    Tabs\Tab::make('Theme')
-                        ->statePath('about')
-                        ->translateLabel()
-                        ->schema(About::themeForm()),
                     Tabs\Tab::make('App')
                         ->statePath('setting')
                         ->translateLabel()
@@ -290,26 +300,6 @@ class GeneralSetting extends Page implements HasActions, HasForms
         $this->mount();
     }
 
-    public function saveTheme(AboutService $aboutService): void
-    {
-        $data = array_filter([
-            'primary_color' => $this->about['primary_color'] ?? null,
-            'logo' => $this->about['logo'] ?? null,
-            'dark_mode' => $this->about['dark_mode'] ?? null,
-        ], fn ($v) => $v !== null);
-
-        if (filled($data)) {
-            $aboutService->createOrUpdate($data);
-        }
-
-        Notification::make()
-            ->title(__('Theme saved'))
-            ->success()
-            ->send();
-
-        $this->mount();
-    }
-
     public function saveFeature(): void
     {
         if (! can('access feature flag')) {
@@ -373,6 +363,7 @@ class GeneralSetting extends Page implements HasActions, HasForms
             'address' => $this->profile['address'] ?? $profile->address,
             'locale' => $this->profile['locale'] ?? $profile->locale,
             'timezone' => $this->profile['timezone'] ?? $profile->timezone,
+            'dark_mode' => (bool) ($this->profile['dark_mode'] ?? false),
         ];
 
         // Handle upload photo baru

@@ -11,6 +11,8 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class CategoryResource extends Resource
 {
@@ -26,7 +28,12 @@ class CategoryResource extends Resource
             ->schema([
                 TextInput::make('name')
                     ->translateLabel()
-                    ->required(),
+                    ->required()
+                    ->rule(function ($record) {
+                        return Rule::unique('categories', 'name')
+                            ->where('tenant_id', Auth::user()?->tenant_id)
+                            ->ignore($record?->id);
+                    }),
 
             ]);
     }
