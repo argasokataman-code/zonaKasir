@@ -65,18 +65,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && preg_match('#^/api/auth/login#', $r
 // Vercel PHP runtime + Laravel domain constraints can cause 404 on POST routes.
 // This ensures webhooks from payment gateways are always reachable.
 
-// Google OAuth — bypass Laravel routing (route-group parsing fails on Vercel).
+// Google OAuth — bypass Laravel routing (tenant-web.php routes silently 404
+// on Vercel/PHP 8.5 regardless of middleware-group position).
 $path = parse_url($requestUri, PHP_URL_PATH);
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/auth/google/redirect') {
-    $redirectUrl = \Laravel\Socialite\Facades\Socialite::driver('google')
-        ->scopes(['openid', 'profile', 'email'])
-        ->with(['prompt' => 'select_account'])
-        ->stateless()
-        ->redirect()
-        ->getTargetUrl();
-    header('Location: ' . $redirectUrl);
-    http_response_code(302);
-    exit;
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if ($path === '/auth/google/redirect') {
+        $redirectUrl = \Laravel\Socialite\Facades\Socialite::driver('google')
+            ->scopes(['openid', 'profile', 'email'])
+            ->with(['prompt' => 'select_account'])
+            ->stateless()
+            ->redirect()
+            ->getTargetUrl();
+        header('Location: ' . $redirectUrl);
+        http_response_code(302);
+        exit;
+    }
+    if ($path === '/auth/google/callback') {
+        $request = \Illuminate\Http\Request::capture();
+        $app->instance('request', $request);
+        // Start session so Auth::login() + session() helper work
+        // IMPORTANT: bind session.store explicitly — Auth::login() resolves it
+        // from the container, NOT from the request. Without binding, a new Store
+        // instance is created and our started session is lost.
+        $session = $app->make(\Illuminate\Session\SessionManager::class)->driver();
+        $session->start();
+        $app->instance('session.store', $session);
+        $request->setLaravelSession($session);
+        // Run the callback controller
+        $controller = $app->make(\App\Http\Controllers\Auth\GoogleController::class);
+        $response = $controller->callback();
+        // Save session data
+        $session->save();
+        // Ensure session cookie is set on the response
+        $cookie = new \Symfony\Component\HttpFoundation\Cookie(
+            $session->getName(),
+            $session->getId(),
+            time() + 43200, // 12 hours
+            '/',
+            null,
+            $request->isSecure(),
+            true,
+            false,
+            'lax'
+        );
+        if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
+            $response->headers->setCookie($cookie);
+            $response->send();
+        } else {
+            response($response)->withCookie($cookie)->send();
+        }
+        exit;
+    }
 }
 
 $webhookPaths = [
