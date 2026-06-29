@@ -64,6 +64,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && preg_match('#^/api/auth/login#', $r
 // Direct webhook handling — bypasses Laravel routing for Midtrans/Flip/Subscription
 // Vercel PHP runtime + Laravel domain constraints can cause 404 on POST routes.
 // This ensures webhooks from payment gateways are always reachable.
+
+// Google OAuth — bypass Laravel routing (route-group parsing fails on Vercel).
+$path = parse_url($requestUri, PHP_URL_PATH);
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/auth/google/redirect') {
+    $redirectUrl = \Laravel\Socialite\Facades\Socialite::driver('google')
+        ->scopes(['openid', 'profile', 'email'])
+        ->with(['prompt' => 'select_account'])
+        ->stateless()
+        ->redirect()
+        ->getTargetUrl();
+    header('Location: ' . $redirectUrl);
+    http_response_code(302);
+    exit;
+}
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/auth/google/callback') {
+    // Capture request before kernel boots so controllers/helpers can use it
+    $request = \Illuminate\Http\Request::capture();
+    $app->instance('request', $request);
+    $controller = $app->make(\App\Http\Controllers\Auth\GoogleController::class);
+    $response = $controller->callback();
+    ($response instanceof \Symfony\Component\HttpFoundation\Response ? $response : response($response))->send();
+    exit;
+}
 $webhookPaths = [
     '/api/webhooks/midtrans' => function () use ($app) {
         return $app->make(\App\Http\Controllers\Api\MidtransWebhookController::class)->handle(\Illuminate\Http\Request::capture());
