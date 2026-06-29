@@ -11,6 +11,7 @@ docs
 .env
 .env.*
 node_modules
+landing/node_modules
 npm-debug.log
 yarn-error.log
 .idea
