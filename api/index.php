@@ -154,9 +154,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Change working directory to Laravel public folder
 chdir($projectRoot . '/public');
 
-// Handle the request
+// Handle the request — catch RouteNotFoundException and redirect to login
+// as a safety net for Vercel's inconsistent route-loading environment.
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-$response = $kernel->handle(
-    $request = Illuminate\Http\Request::capture()
-)->send();
-$kernel->terminate($request, $response);
+try {
+    $response = $kernel->handle(
+        $request = Illuminate\Http\Request::capture()
+    )->send();
+    $kernel->terminate($request, $response);
+} catch (\Symfony\Component\Routing\Exception\RouteNotFoundException $e) {
+    if ($e->getMessage() === "Route [filament.tenant.auth.login] not defined.") {
+        header('Location: /member/login');
+        http_response_code(302);
+        exit;
+    }
+    throw $e;
+}
