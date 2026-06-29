@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Api\Tenants\Reports\PurchasingReportController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\CashierReportController;
 use App\Http\Controllers\ProductReportController;
 use App\Http\Controllers\SellingReportController;
@@ -70,11 +69,3 @@ Route::middleware([
 Route::get('/api/tenant-test', function() { return response()->json(['ok' => true]); });
 Route::get('/public-api/pricing', [\App\Http\Controllers\Api\PlanController::class, 'index']);
 
-// Google OAuth — registered here (no domain constraint) instead of web.php
-// to ensure availability on Vercel where APP_URL may not match request domain.
-Route::middleware('web')->group(function () {
-    Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])
-        ->name('google.redirect');
-    Route::get('/auth/google/callback', [GoogleController::class, 'callback'])
-        ->name('google.callback');
-});
