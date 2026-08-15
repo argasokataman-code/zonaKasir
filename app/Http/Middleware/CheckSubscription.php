@@ -11,6 +11,11 @@ class CheckSubscription
 {
     public function handle(Request $request, Closure $next): Response
     {
+        // On-prem standalone: no subscription gate, kasir always works
+        if (config('onprem.mode')) {
+            return $next($request);
+        }
+
         $tenantId = auth()->user()?->tenant_id;
 
         if (! $tenantId) {

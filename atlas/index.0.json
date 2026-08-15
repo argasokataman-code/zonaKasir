@@ -1,0 +1,5100 @@
+{
+  "shard": 0,
+  "nodes": [
+    {
+      "id": "FEAT-001",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".agents",
+      "conn": []
+    },
+    {
+      "id": "FEAT-002",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".agents/skills",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-003",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".deploy",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-001",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".deploy/deploy-key",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-002",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".deploy/deploy-key.pub",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-004",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".github",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-005",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".github/workflows",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-003",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".github/FUNDING.yml",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-006",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".github/pull_request_template.md",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-007",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".opencode",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-008",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".opencode/mcp",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-009",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".opencode/plans",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-010",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".opencode/rules",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-004",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".opencode/.gitignore",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-005",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".opencode/package.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-011",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".phpunit.cache",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-006",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".phpunit.cache/test-results",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-012",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".vercel",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-007",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".vercel/README.txt",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-008",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".vercel/repo.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-013",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "api",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-009",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "api/index.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-014",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-015",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Console",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-016",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Constants",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-017",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Enums",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-018",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Events",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-019",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Exceptions",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-020",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Features",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-021",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Filament",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-022",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Filesystem",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-023",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Filters",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-024",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Forms",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-025",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Http",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-026",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Imports",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-027",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Jobs",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-028",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Listeners",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-029",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Livewire",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-030",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Models",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-031",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Notifications",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-032",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Observers",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-033",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Policies",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-034",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Providers",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-035",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Rules",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-036",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Services",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-037",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Traits",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-038",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/View",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-010",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/About.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-011",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Domain.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-012",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/helpers.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-013",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Tenant.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-014",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/TenantUser.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-039",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "bootstrap",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-040",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "bootstrap/cache",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-015",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "bootstrap/app.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-041",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-016",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/app.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-017",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/auth.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-018",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/broadcasting.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-019",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/cache.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-020",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/cors.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-021",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/database.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-022",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/filament.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-023",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/filesystems.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-024",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/flip.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-025",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/hashing.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-026",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/laravelpwa.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-027",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/livewire.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-028",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:32",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/logging.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-029",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/mail.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-030",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/midtrans.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-031",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/pennant.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-032",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/permission.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-033",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/plans.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-034",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/query-builder.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-035",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/queue.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-036",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/sanctum.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-037",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/services.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-038",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/session.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-039",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/setting.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-040",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/turnstile.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-041",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/updater.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-042",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/upload.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-043",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/validation.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-044",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/view.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-042",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-043",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/factories",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-044",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/migrations",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-045",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/seeders",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-045",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/.gitignore",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-046",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/lakasir_toko_testing",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-047",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/lakasir_tokotest",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-048",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/testing.sqlite",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-046",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docker",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-047",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docker/nginx",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-048",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docker/supervisor",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-049",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docker/entrypoint.sh",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-049",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-050",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/architecture",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-051",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/guides",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-052",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/planning",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-053",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/reports",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-054",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/API_RESPONSE_STANDARD.md — API Response Format Standard",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-055",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/deploy-vercel.md — Deploy to Vercel",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-056",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/E2E_TESTING_REPORT.md — Comprehensive E2E Testing Report",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-057",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/README.md — zonaKasir Documentation",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-058",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/REBRANDING_PLAN.md — Rebranding Plan: Lakasir → zonaKasir",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-059",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-060",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/src",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-050",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/.gitignore",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-051",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/index.html",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-052",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/package.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-061",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/README.md — Run and deploy your AI Studio app",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-053",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/tsconfig.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-054",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/vite.config.ts",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-062",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-063",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang/en",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-064",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang/es",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-065",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang/id",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-055",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang/en.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-056",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang/es.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-057",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang/id.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-066",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-067",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/assets",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-068",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/css",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-069",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/images",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-070",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/js",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-071",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/landing",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-058",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/.htaccess",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-059",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/favicon.ico",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-060",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/hot",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-061",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/index.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-062",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/robots.txt",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-063",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/serviceworker.js",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-072",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "reports",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-064",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "reports/junit.xml",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-073",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "resources",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-074",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "resources/css",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-075",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "resources/js",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-076",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "resources/views",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-077",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-065",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/api.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-066",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/channels.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-067",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/console.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-068",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/storage.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-069",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/tenant-api.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-070",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/tenant-web.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-071",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/tenant.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-072",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/web.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-073",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/webhooks.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-078",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "scripts",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-074",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "scripts/delete_item.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-075",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "scripts/insert_item.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-076",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "scripts/query_products.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-077",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "scripts/query_stock.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-078",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "scripts/sw-version.mjs",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-079",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "src",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-079",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "src/SkillGrabber.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-080",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "storage",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-081",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "storage/app",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-082",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "storage/debugbar",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-083",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "storage/framework",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-084",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "storage/logs",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-085",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-086",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/Browser",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-087",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/Feature",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-088",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/Mocks",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-089",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/Unit",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-080",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/CreatesApplication.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-081",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/DuskTestCase.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-082",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/Pest.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-083",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/RefreshDatabaseWithTenant.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-084",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/TestCase.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-090",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-091",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/anourvalar",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-092",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/archtechx",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-093",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/aymanalhattami",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-094",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/barryvdh",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-095",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/beste",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-096",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/bin",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-097",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/blade-ui-kit",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-098",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/brianium",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-099",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/brick",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-100",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/carbonphp",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-101",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/codezero",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-102",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/composer",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-103",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/cuyz",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-104",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/danharrin",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-105",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/dflydev",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-106",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/doctrine",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-107",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/dompdf",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-108",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/dragon-code",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-109",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/dragonmantank",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-110",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/egulias",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-111",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/ezyang",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-112",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/fakerphp",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-113",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/fidry",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-114",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/fig",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-115",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/filament",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-116",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/filp",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-117",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/firebase",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-118",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/fruitcake",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-119",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/google",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-120",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/graham-campbell",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-121",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/grpc",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-122",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/guzzlehttp",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-123",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/hamcrest",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-124",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/jean85",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-125",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/kirschbaum-development",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-126",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/kreait",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-127",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/lakasir",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-128",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/laracraft-tech",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-129",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/laradumps",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-130",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/laravel",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-131",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/laravel-lang",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-132",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/laravel-notification-channels",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-133",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/lcobucci",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-134",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/league",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-135",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/livewire",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-136",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/maatwebsite",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-137",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/maennchen",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-138",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/markbaker",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-139",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/masterminds",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-140",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/midtrans",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-141",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/mockery",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-142",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/monolog",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-143",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/mtdowling",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-144",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/myclabs",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-145",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/nesbot",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-146",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/nette",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-147",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/nikic",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-148",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/nunomaduro",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-149",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/openspout",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-150",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/paragonie",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-151",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/pestphp",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-152",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phar-io",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-153",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phenx",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-154",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/php-debugbar",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-155",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/php-webdriver",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-156",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phpdocumentor",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-157",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phpoffice",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-158",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phpoption",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-159",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phpseclib",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-160",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phpstan",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-161",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phpunit",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-162",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/picqer",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-163",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/predis",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-164",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/psr",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-165",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/psy",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-166",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/ralouphie",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-167",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/ramsey",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-168",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/rize",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-169",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/ryangjchandler",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-170",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/sabberworm",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-171",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/sebastian",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-172",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/sheenazien8",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-173",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/silviolleite",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-174",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/spatie",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-175",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/symfony",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-176",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/ta-tikoma",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-177",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/tapp",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-178",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/theseer",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-179",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/tijsverkoyen",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-180",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/vlucas",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-181",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/voku",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-182",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/webmozart",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-085",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/autoload.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-086",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/pest-plugins.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-087",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "_ide_helper_models.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-088",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".bladeformatterrc.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-089",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".dockerignore",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-090",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".editorconfig",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-091",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".gitattributes",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-092",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".gitignore",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-093",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".lando.yml",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-094",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".styleci.yml",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-095",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".vercelignore",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-183",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "AGENTS.md — AGENTS.md — Quick Reference",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-096",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "artisan",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-097",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "boost.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-098",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "composer.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-099",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "composer.lock",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-100",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "deploy-config.example.sh",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-101",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docker-compose.yml",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-102",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "Dockerfile",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-184",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "FINAL_TEST_RESULTS.md — 🎉 Final Test Results & Project Status",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-103",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "Flip for Business - API.postman_collection.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-104",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "laradumps.yaml",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-105",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "LICENSE",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-106",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "opencode.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-107",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "package.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-108",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "phpunit.dusk.xml",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-109",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "phpunit.xml",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-110",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "phpunit.xml.bak",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-111",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "postcss.config.js",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-185",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "README.md — 1. Clone",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-112",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "recommendations.toml",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-113",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "reset_opencode_mac.sh",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-114",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "skills-lock.json",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-115",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-15",
+      "time": "22:47:33",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tailwind.config.js",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates"
+        }
+      ]
+    }
+  ]
+}
