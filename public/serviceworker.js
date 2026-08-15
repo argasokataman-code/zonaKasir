@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'f29f8608'; // bumped: fix PWA offline blank modal popup
+const CACHE_VERSION = '601593fa'; // bumped: fix PWA offline blank modal popup
 const STATIC_CACHE = `zonakasir-static-${CACHE_VERSION}`;
 const PAGES_CACHE = `zonakasir-pages-${CACHE_VERSION}`;
 const API_CACHE = `zonakasir-api-${CACHE_VERSION}`;

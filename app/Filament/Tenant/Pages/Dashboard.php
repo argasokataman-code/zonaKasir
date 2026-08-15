@@ -5,6 +5,7 @@ namespace App\Filament\Tenant\Pages;
 use App\Filament\Tenant\Resources\SellingResource\Widgets\SellingOverview;
 use App\Filament\Tenant\Widgets\BalanceWidget;
 use App\Filament\Tenant\Widgets\InventoryStats;
+use App\Filament\Tenant\Widgets\LicenseWarning;
 use App\Filament\Tenant\Widgets\LowStockProducts;
 use App\Filament\Tenant\Widgets\PaymentMethodChart;
 use App\Filament\Tenant\Widgets\SalesChart;
@@ -23,6 +24,7 @@ class Dashboard extends BaseDashboard
     protected function getHeaderWidgets(): array
     {
         return [
+            LicenseWarning::class,
             SellingOverview::class,
             TransactionStats::class,
             BalanceWidget::class,

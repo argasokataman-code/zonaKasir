@@ -14,6 +14,11 @@ class PlanFeatureMiddleware
 
     public function handle(Request $request, Closure $next, string $feature): mixed
     {
+        // On-prem standalone: all plans unlocked, kasir always works
+        if (config('onprem.mode')) {
+            return $next($request);
+        }
+
         $tenantId = auth()->user()->tenant_id;
 
         if (! $tenantId) {

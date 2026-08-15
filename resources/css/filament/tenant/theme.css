@@ -1,5 +1,5 @@
 @import '/vendor/filament/filament/resources/css/theme.css';
-@config '../../../../tailwind.config.js';
+@config './tailwind.config.js';
 
 /* Sidebar: fix scrolling on mobile + PWA */
 .fi-sidebar {

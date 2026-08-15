@@ -28,3 +28,7 @@ Route::get('/test', function ()
     ]);
 });
 
+// On-prem heartbeat (vendor-side public endpoint, no tenant auth)
+Route::post('/v1/onprem/heartbeat', \App\Http\Controllers\Api\OnpremHeartbeatController::class)
+    ->name('onprem.heartbeat');
+

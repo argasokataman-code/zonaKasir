@@ -8,6 +8,7 @@ use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Get;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,6 +36,7 @@ class Profile extends Model
         'locale',
         'photo',
         'timezone',
+        'dark_mode',
     ];
 
     public function getActivitylogOptions(): LogOptions
@@ -100,6 +102,13 @@ class Profile extends Model
                 })
                 ->imageEditorMode(2)
                 ->translateLabel(),
+            Toggle::make('dark_mode')
+                ->label(__('Dark Mode'))
+                ->helperText(__('Toggle dark/light mode for your account'))
+                ->onColor('primary')
+                ->offColor('gray')
+                ->live()
+                ->afterStateUpdated(fn ($state, $livewire) => $livewire->dispatch('dark-mode-toggle', dark: (bool) $state)),
             TextInput::make('password')
                 ->label(__('filament-panels::pages/auth/edit-profile.form.password.label'))
                 ->password()

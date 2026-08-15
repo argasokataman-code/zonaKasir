@@ -50,3 +50,5 @@ version.txt
 reports/
 test-reports-pgsql/
 docs/planning/reseller-bundle.md
+.vercel
+.env*
