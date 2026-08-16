@@ -635,6 +635,276 @@
           "raw": "DEC-002:relates"
         }
       ]
+    },
+    {
+      "id": "TASK-015",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:04:55",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/database/migrations/tenant/2026_08_16_000001_add_selling_status_and_payments.p",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-016",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:05:35",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Observers/SellingObserver.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-017",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:05:43",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/database/migrations/tenant/2026_08_16_000001_add_selling_status_and_payments.p",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-018",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:05:57",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/Selling.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-019",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:06:04",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/SellingPayment.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-020",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:06:54",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/Tenants/SellingService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-021",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:07:30",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/PaymentHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-022",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:08:14",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/Tenants/MidtransGatewayService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-023",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:09:27",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M1FoundationSellingTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-024",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:10:27",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M1FoundationSellingTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-025",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:12:33",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/database/migrations/tenant/2026_08_16_000001_add_selling_status_and_payments.p",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-026",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:13:51",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/database/migrations/tenant/2026_08_16_000001_add_selling_status_and_payments.p",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-027",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:14:06",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Listeners/CreateReceivableIfCredit.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-028",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:16:46",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M1FoundationSellingTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-029",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:17:31",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M1FoundationSellingTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
     }
   ]
 }

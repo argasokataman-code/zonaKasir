@@ -403,6 +403,7 @@ class MidtransGatewayService
         // Update selling.fee (existing column)
         $payment->selling->update([
             'is_paid' => true,
+            'status' => 'paid',
             'fee' => $payment->selling->fee + $fees['fee_midtrans'] + $fees['fee_platform'],
         ]);
 

@@ -8,11 +8,13 @@ use App\Models\Tenants\PaymentMethod;
 use App\Models\Tenants\PriceUnit;
 use App\Models\Tenants\Product;
 use App\Models\Tenants\Selling;
+use App\Models\Tenants\SellingPayment;
 use App\Models\Tenants\Setting;
 use App\Services\Tenants\Traits\HasNumber;
 use App\Services\VoucherService;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SellingService
 {
@@ -22,6 +24,32 @@ class SellingService
     {
         try {
             DB::beginTransaction();
+
+            // Idempotency (RC-4): satu cart_uuid = satu selling. Retry/klik ganda
+            // ketemu selling yang sama → return yang sudah ada.
+            if (! empty($data['cart_uuid'])) {
+                $existing = Selling::query()
+                    ->where('cart_uuid', $data['cart_uuid'])
+                    ->lockForUpdate()
+                    ->first();
+                if ($existing) {
+                    DB::commit();
+
+                    return $existing;
+                }
+            }
+
+            // Lock stok (RC-2): kunci baris produk SEBELUM validasi — 2 kasir yang
+            // nabrak produk sama akan terserialisasi, yang kedua lihat stok baru.
+            $productIds = collect($data['products'])->pluck('product_id')->filter()->unique()->values()->sort()->all();
+            $lockedProducts = Product::query()
+                ->whereIn('id', $productIds)
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            $this->validateStockInsideLock($data['products'], $lockedProducts);
+
             /** @var Selling $selling */
             $selling = Selling::create($data);
 
@@ -32,12 +60,70 @@ class SellingService
                 ->whereIn('id', $selling->sellingDetails->pluck('product_id'))->get();
             RecalculateEvent::dispatch($products, $data);
 
+            // Status bill + auto-create payment row (multi-payment, Phase C + M1)
+            $this->applySellingStatusAndPayment($selling, $data);
+
             DB::commit();
 
             return $selling;
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
+        }
+    }
+
+    private function validateStockInsideLock(array $products, $lockedProducts): void
+    {
+        foreach ($products as $item) {
+            $product = $lockedProducts->get($item['product_id']);
+            if (! $product || $product->is_non_stock) {
+                continue;
+            }
+
+            $requestedQty = (float) ($item['qty'] ?? 0);
+
+            if (! empty($item['price_unit_id'])) {
+                $priceUnit = PriceUnit::query()->find($item['price_unit_id']);
+                $requestedQty *= (float) ($priceUnit->stock ?? 1);
+            }
+
+            $available = $product->stockLatestCalculateIn()?->sum('stock') ?? 0;
+            if ($requestedQty > $available) {
+                throw new \RuntimeException("Insufficient stock for product {$product->id}: requested {$requestedQty}, available {$available}");
+            }
+        }
+    }
+
+    private function applySellingStatusAndPayment(Selling $selling, array $data): void
+    {
+        $paid = (float) ($data['payed_money'] ?? 0);
+        $total = (float) $selling->total_price;
+        $isCredit = ! empty($data['payment_method_id']) &&
+            PaymentMethod::query()->find($data['payment_method_id'])?->is_credit;
+
+        $selling->status = ($paid >= $total && ! $isCredit) ? 'paid' : 'open';
+        if ($isCredit) {
+            $selling->status = 'paid'; // piutang: selling final, receivable terpisah
+        }
+        $selling->save();
+
+        // Simpan payment row (multi-payment) — idempotent per cart_uuid
+        if (! empty($data['cart_uuid'])) {
+            $key = $data['cart_uuid'] . '-1';
+            SellingPayment::query()->firstOrCreate(
+                [
+                    'tenant_id' => $selling->tenant_id,
+                    'idempotency_key' => $key,
+                ],
+                [
+                    'selling_id' => $selling->id,
+                    'payment_method_id' => $data['payment_method_id'] ?? null,
+                    'amount' => $paid,
+                    'is_cash' => true,
+                    'status' => $isCredit ? 'success' : ($paid >= $total ? 'success' : 'pending'),
+                    'payment_date' => now(),
+                ]
+            );
         }
     }
 

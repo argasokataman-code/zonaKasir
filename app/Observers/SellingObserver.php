@@ -24,10 +24,16 @@ class SellingObserver extends AbstractObserver implements DataAwareRule
         if (! $selling->date) {
             $selling->date = now()->format('Y-m-d H:i:s');
         }
-        // Efficiently get last selling count for code generation
-        $lastCount = Selling::count();
-        $selling->code = 'SELL'.Str::of($lastCount + 1)->padLeft(4, 0)->value();
-        // $selling->money_changes = $selling->payed_money - $selling->total_price;
+        // ponytail: lockForUpdate on max(code) — 2 transaksi bersamaan gak bisa
+        // dapat kode sama (lock row-level serialisasi di dalam transaction M1-C).
+        // Unique index code (tenant_id, code) tetap jadi defense terakhir.
+        $lastCode = Selling::query()
+            ->where('code', 'like', 'SELL%')
+            ->orderByDesc('code')
+            ->lockForUpdate()
+            ->value('code');
+        $lastNumber = $lastCode ? (int) substr($lastCode, 4) : 0;
+        $selling->code = 'SELL'.Str::of($lastNumber + 1)->padLeft(4, 0)->value();
         if (Setting::get('cash_drawer_enabled', false)) {
             $selling->cash_drawer_id = CashDrawer::lastOpened()->select('id')->first()->id;
         }

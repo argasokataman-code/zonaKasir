@@ -11,11 +11,18 @@ use App\Services\Tenants\SellingService;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
 trait PaymentHandler
 {
+    /**
+     * Idempotency key: persist antar retry/klik ganda (RC-4).
+     * Dibuat sekali per cart, di-reset saat cart dikosongkan.
+     */
+    public ?string $cartUuid = null;
+
     public function setPaymentMethodId(int $paymentMethodId): void
     {
         $this->cartDetail['payment_method_id'] = $paymentMethodId;
@@ -45,6 +52,7 @@ trait PaymentHandler
 
         $request = array_merge($this->cartDetail, [
             'discount_price' => floatval(str_replace(',', '', $this->cartDetail['discount_price'])),
+            'cart_uuid' => $this->cartUuid ??= (string) Str::uuid(),
             'products' => $this->cartItems->map(function (CartItem $cartItem) {
                 return [
                     'product_id' => $cartItem->product_id,
@@ -154,6 +162,8 @@ trait PaymentHandler
 
         CartItem::query()->cashier()->delete();
 
+        $this->cartUuid = null;
+
         Notification::make()
             ->title(__('Transaction created'))
             ->success()
@@ -193,6 +203,8 @@ trait PaymentHandler
         CartItem::query()
             ->cashier()
             ->delete();
+
+        $this->cartUuid = null;
 
         Notification::make()
             ->title(__('Transaction created'))

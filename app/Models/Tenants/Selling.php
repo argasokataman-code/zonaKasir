@@ -62,6 +62,21 @@ class Selling extends Model
         return $builder->where('is_paid', false);
     }
 
+    public function scopeOpen(Builder $builder): Builder
+    {
+        return $builder->whereIn('status', ['open', 'partially_paid']);
+    }
+
+    public function scopePaid(Builder $builder): Builder
+    {
+        return $builder->where('status', 'paid');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(SellingPayment::class);
+    }
+
     public function grandTotalPrice(): Attribute
     {
         return Attribute::make(get: fn () => $this->total_price - $this->tax_price - $this->total_discount_per_item - $this->discount_price);

@@ -13,7 +13,7 @@ class CreateReceivableIfCredit
 
     public function handle(SellingCreated $event): void
     {
-        if ($event->selling->paymentMethod->is_credit) {
+        if ($event->selling->paymentMethod?->is_credit) {
             $this->receivableService->create($event->selling, $event->data);
         }
     }
