@@ -132,8 +132,11 @@ $router->post('/livewire/update', [\Livewire\Mechanisms\HandleRequests\HandleReq
 // Vercel cold starts — route('filament.tenant.pages.dashboard') then fails).
 $app->booted(function () use ($router) {
     $routes = $router->getRoutes();
+    $hasBefore = $routes->hasNamedRoute('filament.tenant.pages.dashboard');
     $routes->refreshNameLookups();
+    $hasAfter = $routes->hasNamedRoute('filament.tenant.pages.dashboard');
     app('url')->setRoutes($routes);
+    header('X-Dbg-Booted: before=' . var_export($hasBefore, true) . ' after=' . var_export($hasAfter, true) . ' count=' . count($routes->getRoutes()));
 });
 
 $webhookPaths = [
