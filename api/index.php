@@ -127,6 +127,19 @@ $router->post('/livewire/update', [\Livewire\Mechanisms\HandleRequests\HandleReq
     ->middleware('web')
     ->name('default.livewire.update');
 
+// TEMP debug: route collection state at boot (remove after fixing dashboard)
+$router->get('/__dbg', function () {
+    $rc = app('router')->getRoutes();
+    $has = $rc->hasNamedRoute('filament.tenant.pages.dashboard');
+    $names = array_slice(array_keys($rc->getRoutesByName()), 0, 12);
+
+    return response()->json([
+        'dashboard_in_router' => $has,
+        'count' => count($rc->getRoutes()),
+        'names_sample' => $names,
+    ]);
+})->name('__dbg');
+
 // Force the UrlGenerator to use the current RouteCollection so subsequent
 // calls to route('filament.tenant.auth.login') from middleware find the route.
 $app->make('url')->setRoutes($router->getRoutes());
