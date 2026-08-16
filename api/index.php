@@ -116,6 +116,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $response = $controller->callback();
         // Save session data — for cookie driver this queues cookies on CookieJar
         $session->save();
+        // For non-cookie drivers (e.g. database on Vercel serverless) the session
+        // cookie is NOT queued automatically. Set it explicitly so the browser
+        // sends the session ID on the next request (/member), otherwise the
+        // login is lost.
+        if (config('session.driver') !== 'cookie') {
+            $cookieName = config('session.cookie', 'laravel_session');
+            $response->headers->setCookie(cookie(
+                $cookieName,
+                $session->getId(),
+                config('session.lifetime', 120),
+                config('session.path', '/'),
+                config('session.domain'),
+                config('session.secure', false),
+                config('session.http_only', true),
+                config('session.same_site', 'lax'),
+            ));
+        }
         // Get all queued cookies (cookie driver writes data cookie here) and add
         // to response. Without this, queued cookies from CookieSessionHandler::write()
         // are lost because AddQueuedCookiesToResponse middleware is not in the pipeline.
