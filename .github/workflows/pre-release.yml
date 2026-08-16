@@ -105,6 +105,18 @@ jobs:
           zip -r ../zonakasir-${VERSION}.zip ./*
         shell: bash
 
+      - name: 🔏 Sign update ZIP
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          # ONPREM_PRIVATE_KEY comes from GitHub Actions secret (vendor side).
+          # App verifies this signature before extracting, so unsigned updates are rejected.
+          echo "${{ secrets.ONPREM_PRIVATE_KEY }}" > /tmp/onprem-priv.pem
+          ONPREM_PRIVATE_KEY="$(cat /tmp/onprem-priv.pem)" php artisan onprem:sign-update \
+            --zip=zonakasir-${VERSION}.zip \
+            --out=zonakasir-${VERSION}.zip.sig
+          rm -f /tmp/onprem-priv.pem
+        shell: bash
+
       - name: 🚀 Create GitHub Pre-release with ZIP
         uses: softprops/action-gh-release@v2
         with:
@@ -112,6 +124,8 @@ jobs:
           tag_name: ${{ github.ref_name }}
           body: ${{ steps.generate_notes.outputs.result }}
           prerelease: true
-          files: zonakasir-${{ github.ref_name }}.zip
+          files: |
+            zonakasir-${{ github.ref_name }}.zip
+            zonakasir-${{ github.ref_name }}.zip.sig
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

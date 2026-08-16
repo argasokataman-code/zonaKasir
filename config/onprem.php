@@ -27,7 +27,9 @@ return [
     */
     'license' => [
         'key' => env('ONPREM_LICENSE_KEY'),
-        'public_key' => env('ONPREM_PUBLIC_KEY'),
+        'public_key' => str_starts_with((string) env('ONPREM_PUBLIC_KEY'), 'base64:')
+            ? base64_decode(substr((string) env('ONPREM_PUBLIC_KEY'), 7))
+            : env('ONPREM_PUBLIC_KEY'),
         'private_key' => env('ONPREM_PRIVATE_KEY'),
     ],
 

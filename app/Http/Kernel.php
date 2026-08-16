@@ -84,5 +84,6 @@ class Kernel extends HttpKernel
         'method_and_permission' => \App\Http\Middleware\ResourcePerMethodMiddleware::class,
         'withdrawal.ratelimit' => \App\Http\Middleware\WithdrawalRateLimit::class,
         'plan.feature' => \App\Http\Middleware\PlanFeatureMiddleware::class,
+        'prevent.onprem.register' => \App\Http\Middleware\PreventOnPremRegister::class,
     ];
 }

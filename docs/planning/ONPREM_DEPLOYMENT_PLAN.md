@@ -91,8 +91,9 @@ php artisan schedule:work   # opsional, hanya task lain
 ## 6. Fitur yang Gak Aktif di On-Prem (dokumentasi ke client)
 
 - Panel admin landlord `/admin` (Tenant/Subscription/Invoice/Coupon/Withdrawal resource)
-- Register self-serve + trial 7 hari + Google auto-provision
-- Payment gateway Midtrans (renewal) & Flip (payout/withdrawal)
+- Register self-serve + trial 7 hari + Google auto-provision — route & tombol di-hide saat `ONPREM_MODE=true` (`prevent.onprem.register` middleware)
+- Google login dimatikan total di on-prem (login email/password saja, `TenantLogin.php`)
+- Payment gateway Midtrans (renewal) & Flip (payout/withdrawal) — nav + API di-hide
 - Coupon trial-extension
 - Update dari GitHub `app:update` — tetap jalan kalau repo publik (opsional)
 

@@ -25,6 +25,10 @@ class TenantLogin extends Login
 
         $data = $this->form->getState();
 
+        // Livewire update request resolves current panel to the default (admin)
+        // in multi-panel apps — pin the tenant panel so auth uses the right guard.
+        Filament::setCurrentPanel(Filament::getPanel('tenant'));
+
         if (! Filament::auth()->attempt($this->getCredentialsFromFormData($data), $data['remember'] ?? false)) {
             $this->throwFailureValidationException();
         }
@@ -84,10 +88,13 @@ class TenantLogin extends Login
 
     public function form(\Filament\Forms\Form $form): \Filament\Forms\Form
     {
-        return $form->schema([
-            ...parent::form($form)->getComponents(),
-            $this->getGoogleLoginButton(),
-        ]);
+        $components = parent::form($form)->getComponents();
+
+        if (! config('onprem.mode')) {
+            $components[] = $this->getGoogleLoginButton();
+        }
+
+        return $form->schema($components);
     }
 
     protected function getGoogleLoginButton(): Component

@@ -969,6 +969,895 @@
           "raw": "REQ-001:implements"
         }
       ]
+    },
+    {
+      "id": "TASK-156",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "08:53:20",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/partials/body-start.blade.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-157",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "08:53:22",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/routes/web.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-158",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "08:53:33",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Http/Middleware/PreventOnPremRegister.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-159",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "08:53:34",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Http/Kernel.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-160",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "08:53:46",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-161",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "08:53:58",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-162",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "08:54:09",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/routes/tenant-api.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-163",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "08:54:15",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/routes/api.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-164",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "08:54:26",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/OnpremModeGuardTest.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-165",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "08:55:05",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/planning/ONPREM_DEPLOYMENT_PLAN.md",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "DEC-006",
+      "type": "decision",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "08:55:10",
+      "tags": [
+        "onprem",
+        "google",
+        "login"
+      ],
+      "summary": "On-prem: Google login dimatikan total (Opsi B). Login email/password saja, user dikelola manual via onprem:bootstrap",
+      "conn": [
+        {
+          "id": "DEC-003",
+          "type": "relates",
+          "raw": "DEC-003:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-166",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "08:55:10",
+      "tags": [
+        "onprem",
+        "guard",
+        "saas"
+      ],
+      "summary": "Guard onprem: middleware prevent.onprem.register (web+api+google), hide nav subscription/withdrawal, expired-overlay skip, billing/withdrawa",
+      "conn": [
+        {
+          "id": "DEC-006",
+          "type": "implements",
+          "raw": "DEC-006:implements"
+        }
+      ]
+    },
+    {
+      "id": "TASK-167",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "10:55:54",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-168",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "10:56:21",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-169",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "10:58:43",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-170",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "11:09:42",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/config/onprem.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-171",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "11:15:14",
+      "tags": [
+        "onprem",
+        "deploy",
+        "license"
+      ],
+      "summary": "Onprem lokal testing OK: mode aktif, license valid (localhost s/d 2027-08-16), login fix via setCurrentPanel tenant",
+      "conn": [
+        {
+          "id": "REQ-001",
+          "type": "relates",
+          "raw": "REQ-001:relates"
+        },
+        {
+          "id": "TASK-166",
+          "type": "relates",
+          "raw": "TASK-166:relates"
+        },
+        {
+          "id": "DEC-003",
+          "type": "relates",
+          "raw": "DEC-003:relates"
+        }
+      ]
+    },
+    {
+      "id": "DEC-007",
+      "type": "decision",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "11:15:41",
+      "tags": [
+        "onprem",
+        "license",
+        "trust",
+        "weakness"
+      ],
+      "summary": "Onprem trust+update: license warning-only (kasir tak pernah diblokir), update diverifikasi signature RSA — unsigned/tampered ditolak",
+      "conn": [
+        {
+          "id": "DEC-004",
+          "type": "led_to",
+          "raw": "DEC-004:led_to"
+        },
+        {
+          "id": "REQ-001",
+          "type": "relates",
+          "raw": "REQ-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-172",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "11:17:33",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/scripts.blade.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-173",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "11:18:15",
+      "tags": [
+        "onprem",
+        "pos",
+        "midtrans"
+      ],
+      "summary": "Onprem stabil: snap.js di-skip kalau MIDTRANS_CLIENT_KEY kosong (cashier scripts.blade.php), hilang error CSP+data-client-key",
+      "conn": [
+        {
+          "id": "TASK-171",
+          "type": "relates",
+          "raw": "TASK-171:relates"
+        },
+        {
+          "id": "REQ-001",
+          "type": "relates",
+          "raw": "REQ-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUS-002",
+      "type": "business",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "11:19:47",
+      "tags": [
+        "onprem",
+        "payment",
+        "qris"
+      ],
+      "summary": "Onprem = kasir lokal manual, tanpa QRIS/midtrans: pembayaran cash+piutang saja, snap.js di-skip",
+      "conn": [
+        {
+          "id": "DEC-003",
+          "type": "relates",
+          "raw": "DEC-003:relates"
+        },
+        {
+          "id": "DEC-007",
+          "type": "relates",
+          "raw": "DEC-007:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-174",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "11:29:24",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /opt/homebrew/etc/nginx/servers/zonakasir.conf",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-175",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "11:33:24",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /opt/homebrew/etc/nginx/servers/zonakasir.conf",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-176",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "11:38:28",
+      "tags": [
+        "onprem",
+        "perf",
+        "livewire"
+      ],
+      "summary": "Fix LCP onprem: LicenseWarning blade tanpa root div -> Livewire crash 500. Bungkus @if dgn div root. nginx+fpm 8081, TTFB 0.5s load 0.62s",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-177",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "11:40:03",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /opt/homebrew/etc/nginx/servers/zonakasir.conf",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-178",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "11:40:22",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /opt/homebrew/etc/nginx/nginx.conf",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-179",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "12:02:02",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-180",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "12:13:12",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-181",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "12:13:16",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/UpdateChecker.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-006",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-16",
+      "time": "12:13:50",
+      "tags": [
+        "onprem",
+        "performance",
+        "updatechecker"
+      ],
+      "summary": "UpdateChecker curl GitHub timeout 5s tiap render via version-indicator; fix: sidebar no-fetch, versi lokal",
+      "conn": [
+        {
+          "id": "TASK-176",
+          "type": "fixes",
+          "raw": "TASK-176:fixes"
+        }
+      ]
+    },
+    {
+      "id": "TASK-182",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "12:15:30",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-183",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "12:15:36",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/version-indicator.blade.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-184",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "13:24:31",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/database/migrations/tenant/2026_08_16_063000_fix_settings_unique_constraint.ph",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-185",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "13:29:33",
+      "tags": [
+        "auto"
+      ],
+      "summary": "Onprem hardening: sign-verify update zip, zip-slip guard, timeout, env template, workflow sign, fix unique constraint 8 tabel",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-186",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "13:40:21",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Console/Commands/SignUpdate.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-187",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "13:40:29",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/AppUpdateService.php",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-188",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "13:41:33",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/.env.production.example",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-189",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "13:43:32",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/.gitignore",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-190",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "13:48:07",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/.github/workflows/pre-release.yml",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUS-001",
+      "type": "business",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "13:56:18",
+      "tags": [
+        "biz",
+        "model",
+        "saas",
+        "onprem"
+      ],
+      "summary": "Model bisnis dual-track: SaaS langganan (plan/subscription/midtrans) + on-prem lisensi per domain, dua jalur jualan aktif",
+      "conn": [
+        {
+          "id": "DEC-003",
+          "type": "led_to",
+          "raw": "DEC-003:led_to"
+        }
+      ]
+    },
+    {
+      "id": "REQ-002",
+      "type": "requirement",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "13:57:26",
+      "tags": [
+        "biz",
+        "workflow",
+        "memory"
+      ],
+      "summary": "Tiap sesi kerja signifikan: catat juga fakta bisnis/model jualan ke node business, jangan cuma task/decision teknis",
+      "conn": [
+        {
+          "id": "BUS-001",
+          "type": "relates",
+          "raw": "BUS-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-191",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "14:02:04",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/onprem/BROCHURE.md",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-192",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "14:02:19",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/onprem/RUNBOOK.md",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "DOC-001",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "14:02:22",
+      "tags": [
+        "onprem",
+        "docs",
+        "sales"
+      ],
+      "summary": "Brosur jualan onprem (BROCHURE.md) + runbook internal (RUNBOOK.md) di docs/onprem/",
+      "conn": [
+        {
+          "id": "BUS-001",
+          "type": "relates",
+          "raw": "BUS-001:relates"
+        },
+        {
+          "id": "REQ-001",
+          "type": "relates",
+          "raw": "REQ-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUS-003",
+      "type": "business",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "14:03:31",
+      "tags": [
+        "biz",
+        "pricing",
+        "onprem"
+      ],
+      "summary": "Harga onprem BELUM diputuskan (template Rp ___ di brosur/runbook). Putuskan saat butuh, lalu isi BROCHURE+RUNBOOK",
+      "conn": [
+        {
+          "id": "DOC-001",
+          "type": "relates",
+          "raw": "DOC-001:relates"
+        },
+        {
+          "id": "BUS-001",
+          "type": "relates",
+          "raw": "BUS-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-193",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "14:08:01",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/.gitignore",
+      "conn": [
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
     }
   ]
 }
