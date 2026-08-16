@@ -77,7 +77,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && preg_match('#^/api/auth/login#', $r
 $path = parse_url($requestUri, PHP_URL_PATH);
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if ($path === '/auth/google/redirect') {
-        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $scheme = (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] !== 'http')
+            ? $_SERVER['HTTP_X_FORWARDED_PROTO']
+            : ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http');
         $redirectUri = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/auth/google/callback';
         $redirectUrl = \Laravel\Socialite\Facades\Socialite::driver('google')
             ->scopes(['openid', 'profile', 'email'])
@@ -98,7 +100,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // for the token exchange (must match the redirect_uri sent to Google).
         // Without this, GOOGLE_REDIRECT env var (pointing to old staging URL)
         // causes "redirect_uri_mismatch" error from Google.
-        $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+        $scheme = (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] !== 'http')
+            ? $_SERVER['HTTP_X_FORWARDED_PROTO']
+            : ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http');
         $redirectUri = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/auth/google/callback';
         config(['services.google.redirect' => $redirectUri]);
         header('X-Debug-Callback-Redirect-Uri: ' . $redirectUri);

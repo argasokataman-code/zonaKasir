@@ -30,7 +30,9 @@ Route::get('/auth/register', RegisterTenantForm::class)
     ->name('auth.register');
 
 Route::get('/auth/google/redirect', function () {
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $scheme = (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] !== 'http')
+        ? $_SERVER['HTTP_X_FORWARDED_PROTO']
+        : ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http');
     $redirectUri = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/auth/google/callback';
 
     return \Laravel\Socialite\Facades\Socialite::driver('google')
@@ -42,7 +44,9 @@ Route::get('/auth/google/redirect', function () {
 })->name('auth.google.redirect');
 
 Route::get('/auth/google/callback', function () {
-    $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $scheme = (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] !== 'http')
+        ? $_SERVER['HTTP_X_FORWARDED_PROTO']
+        : ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http');
     $redirectUri = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/auth/google/callback';
     config(['services.google.redirect' => $redirectUri]);
 
