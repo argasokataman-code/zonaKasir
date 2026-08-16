@@ -130,14 +130,9 @@ $router->post('/livewire/update', [\Livewire\Mechanisms\HandleRequests\HandleReq
 // Refresh route name lookups AFTER all routes are registered (Filament registers
 // pages with fluent ->name() after addRoute, which leaves the nameList stale on
 // Vercel cold starts — route('filament.tenant.pages.dashboard') then fails).
-$app->booted(function () use ($router) {
-    $routes = $router->getRoutes();
-    $hasBefore = $routes->hasNamedRoute('filament.tenant.pages.dashboard');
-    $routes->refreshNameLookups();
-    $hasAfter = $routes->hasNamedRoute('filament.tenant.pages.dashboard');
-    app('url')->setRoutes($routes);
-    header('X-Dbg-Booted: before=' . var_export($hasBefore, true) . ' after=' . var_export($hasAfter, true) . ' count=' . count($routes->getRoutes()));
-});
+// Done via global middleware (runs before panel SetUpPanel middleware).
+$app->make(Illuminate\Contracts\Http\Kernel::class)
+    ->prependMiddleware(\App\Http\Middleware\RefreshRouteLookups::class);
 
 $webhookPaths = [
     '/api/webhooks/midtrans' => function () use ($app) {
