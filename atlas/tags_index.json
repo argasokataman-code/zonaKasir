@@ -1,0 +1,374 @@
+{
+  "vercel": [
+    {
+      "id": "BUG-001",
+      "shard": 0
+    },
+    {
+      "id": "BUG-002",
+      "shard": 0
+    },
+    {
+      "id": "TASK-001",
+      "shard": 0
+    },
+    {
+      "id": "DEC-001",
+      "shard": 0
+    },
+    {
+      "id": "BUG-003",
+      "shard": 0
+    },
+    {
+      "id": "NEG-001",
+      "shard": 0
+    },
+    {
+      "id": "TASK-002",
+      "shard": 0
+    }
+  ],
+  "auth": [
+    {
+      "id": "BUG-001",
+      "shard": 0
+    },
+    {
+      "id": "TASK-001",
+      "shard": 0
+    }
+  ],
+  "session": [
+    {
+      "id": "BUG-001",
+      "shard": 0
+    },
+    {
+      "id": "NEG-001",
+      "shard": 0
+    }
+  ],
+  "routes": [
+    {
+      "id": "BUG-002",
+      "shard": 0
+    }
+  ],
+  "filament": [
+    {
+      "id": "BUG-002",
+      "shard": 0
+    }
+  ],
+  "deploy": [
+    {
+      "id": "TASK-001",
+      "shard": 0
+    },
+    {
+      "id": "DEC-001",
+      "shard": 0
+    }
+  ],
+  "arch": [
+    {
+      "id": "DEC-001",
+      "shard": 0
+    }
+  ],
+  "oauth": [
+    {
+      "id": "BUG-003",
+      "shard": 0
+    }
+  ],
+  "redirect": [
+    {
+      "id": "BUG-003",
+      "shard": 0
+    }
+  ],
+  "rebrand": [
+    {
+      "id": "TASK-002",
+      "shard": 0
+    }
+  ],
+  "tenant": [
+    {
+      "id": "TASK-003",
+      "shard": 0
+    }
+  ],
+  "supabase": [
+    {
+      "id": "TASK-003",
+      "shard": 0
+    }
+  ],
+  "vps": [
+    {
+      "id": "TASK-004",
+      "shard": 0
+    }
+  ],
+  "onprem": [
+    {
+      "id": "TASK-004",
+      "shard": 0
+    },
+    {
+      "id": "DEC-004",
+      "shard": 0
+    },
+    {
+      "id": "REQ-002",
+      "shard": 0
+    },
+    {
+      "id": "BUS-004",
+      "shard": 0
+    },
+    {
+      "id": "TASK-013",
+      "shard": 0
+    }
+  ],
+  "auto": [
+    {
+      "id": "TASK-005",
+      "shard": 0
+    },
+    {
+      "id": "TASK-006",
+      "shard": 0
+    },
+    {
+      "id": "TASK-008",
+      "shard": 0
+    },
+    {
+      "id": "TASK-009",
+      "shard": 0
+    },
+    {
+      "id": "TASK-011",
+      "shard": 0
+    },
+    {
+      "id": "TASK-012",
+      "shard": 0
+    },
+    {
+      "id": "TASK-014",
+      "shard": 0
+    }
+  ],
+  "niche": [
+    {
+      "id": "DEC-002",
+      "shard": 0
+    }
+  ],
+  "fnb": [
+    {
+      "id": "DEC-002",
+      "shard": 0
+    },
+    {
+      "id": "REQ-001",
+      "shard": 0
+    },
+    {
+      "id": "FEAT-001",
+      "shard": 0
+    },
+    {
+      "id": "TASK-007",
+      "shard": 0
+    },
+    {
+      "id": "FEAT-002",
+      "shard": 0
+    },
+    {
+      "id": "TASK-010",
+      "shard": 0
+    }
+  ],
+  "kafe": [
+    {
+      "id": "DEC-002",
+      "shard": 0
+    },
+    {
+      "id": "BUS-002",
+      "shard": 0
+    },
+    {
+      "id": "DEC-004",
+      "shard": 0
+    },
+    {
+      "id": "REQ-002",
+      "shard": 0
+    },
+    {
+      "id": "TASK-013",
+      "shard": 0
+    }
+  ],
+  "pos": [
+    {
+      "id": "DEC-002",
+      "shard": 0
+    },
+    {
+      "id": "DEC-003",
+      "shard": 0
+    },
+    {
+      "id": "BUS-001",
+      "shard": 0
+    }
+  ],
+  "foundation": [
+    {
+      "id": "REQ-001",
+      "shard": 0
+    }
+  ],
+  "roadmap": [
+    {
+      "id": "FEAT-001",
+      "shard": 0
+    }
+  ],
+  "docs": [
+    {
+      "id": "DOC-001",
+      "shard": 0
+    }
+  ],
+  "prd": [
+    {
+      "id": "DOC-001",
+      "shard": 0
+    },
+    {
+      "id": "TASK-007",
+      "shard": 0
+    },
+    {
+      "id": "TASK-010",
+      "shard": 0
+    },
+    {
+      "id": "TASK-013",
+      "shard": 0
+    }
+  ],
+  "code": [
+    {
+      "id": "NEG-002",
+      "shard": 0
+    }
+  ],
+  "race": [
+    {
+      "id": "NEG-002",
+      "shard": 0
+    }
+  ],
+  "edge": [
+    {
+      "id": "TASK-007",
+      "shard": 0
+    }
+  ],
+  "marketing": [
+    {
+      "id": "FEAT-002",
+      "shard": 0
+    },
+    {
+      "id": "DEC-003",
+      "shard": 0
+    },
+    {
+      "id": "TASK-010",
+      "shard": 0
+    }
+  ],
+  "social": [
+    {
+      "id": "FEAT-002",
+      "shard": 0
+    }
+  ],
+  "biz": [
+    {
+      "id": "BUS-001",
+      "shard": 0
+    },
+    {
+      "id": "BUS-002",
+      "shard": 0
+    },
+    {
+      "id": "BUS-003",
+      "shard": 0
+    },
+    {
+      "id": "BUS-004",
+      "shard": 0
+    }
+  ],
+  "model": [
+    {
+      "id": "BUS-001",
+      "shard": 0
+    }
+  ],
+  "segment": [
+    {
+      "id": "BUS-002",
+      "shard": 0
+    }
+  ],
+  "pricing": [
+    {
+      "id": "BUS-003",
+      "shard": 0
+    },
+    {
+      "id": "BUS-004",
+      "shard": 0
+    }
+  ],
+  "offline": [
+    {
+      "id": "DEC-004",
+      "shard": 0
+    }
+  ],
+  "packaging": [
+    {
+      "id": "REQ-002",
+      "shard": 0
+    }
+  ],
+  "milestone": [
+    {
+      "id": "REQ-003",
+      "shard": 0
+    }
+  ],
+  "plan": [
+    {
+      "id": "REQ-003",
+      "shard": 0
+    }
+  ]
+}

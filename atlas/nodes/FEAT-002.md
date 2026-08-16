@@ -1,0 +1,1 @@
+Marketing otomatis dari data POS (diferensiasi utama, Phase H): struk digital shareable, best-seller auto-post, grafik jam sepi/ramai, auto-caption, QR menu+Menu Hits, kartu member. Non-goal: auto-upload IG/TikTok.

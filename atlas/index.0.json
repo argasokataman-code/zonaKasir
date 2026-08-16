@@ -1,0 +1,640 @@
+{
+  "shard": 0,
+  "nodes": [
+    {
+      "id": "BUG-001",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-16",
+      "time": "20:16:50",
+      "tags": [
+        "vercel",
+        "auth",
+        "session"
+      ],
+      "summary": "Google login prod gagal: session gak persist pasca callback. Bypass manual di api/index.php bikin cookie gak konsisten. Fix: daftarkan googl",
+      "conn": []
+    },
+    {
+      "id": "BUG-002",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-16",
+      "time": "20:16:50",
+      "tags": [
+        "vercel",
+        "routes",
+        "filament"
+      ],
+      "summary": "Dashboard /member 500 RouteNotFoundException. Filament pages register route lalu ->name() fluent, nameList stale di Vercel cold start. Fix: ",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-001",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "20:16:50",
+      "tags": [
+        "vercel",
+        "auth",
+        "deploy"
+      ],
+      "summary": "Google login flow prod beres: scheme X-Forwarded-Proto, session database driver, cookie via web middleware. Verifikasi browser: masuk /membe",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "fixes",
+          "raw": "BUG-001:fixes"
+        },
+        {
+          "id": "BUG-002",
+          "type": "fixes",
+          "raw": "BUG-002:fixes"
+        }
+      ]
+    },
+    {
+      "id": "DEC-001",
+      "type": "decision",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "20:16:57",
+      "tags": [
+        "vercel",
+        "deploy",
+        "arch"
+      ],
+      "summary": "Prod SaaS deploy dari branch 'vercel' (bukan main). api/index.php jadi Vercel entry: bypass route manual via $router (Route Facade gagal di ",
+      "conn": [
+        {
+          "id": "BUG-002",
+          "type": "relates",
+          "raw": "BUG-002:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-003",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-16",
+      "time": "20:16:57",
+      "tags": [
+        "vercel",
+        "oauth",
+        "redirect"
+      ],
+      "summary": "Google redirect_uri mismatch: Vercel gak isi $_SERVER['HTTPS'], redirect jadi http://. Fix: pakai HTTP_X_FORWARDED_PROTO utk scheme redirect",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "caused",
+          "raw": "BUG-001:caused"
+        }
+      ]
+    },
+    {
+      "id": "NEG-001",
+      "type": "negative",
+      "status": "archived",
+      "date": "2026-08-16",
+      "time": "20:16:57",
+      "tags": [
+        "vercel",
+        "session"
+      ],
+      "summary": "Manual session handling di bypass callback gagal: start() session sendiri + save() dobel bikin cookie kacau. Jangan bypass session; serahkan",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "caused",
+          "raw": "BUG-001:caused"
+        }
+      ]
+    },
+    {
+      "id": "TASK-002",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "20:17:18",
+      "tags": [
+        "rebrand",
+        "vercel"
+      ],
+      "summary": "Rebrand lakasir->zonaKasir selesai di main (42ad6c34), branch vercel masih pre-rebrand (6/15 divergen). Perlu sync rebrand ke vercel nanti.",
+      "conn": [
+        {
+          "id": "DEC-001",
+          "type": "relates",
+          "raw": "DEC-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-003",
+      "type": "task",
+      "status": "open",
+      "date": "2026-08-16",
+      "time": "20:17:18",
+      "tags": [
+        "tenant",
+        "supabase"
+      ],
+      "summary": "Tenant manual 'zonapie petshop' (bayar 1 tahun) belum dibuat: MCP Supabase read-only. Butuh service role key / SQL editor dashboard.",
+      "conn": [
+        {
+          "id": "DEC-001",
+          "type": "relates",
+          "raw": "DEC-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-004",
+      "type": "task",
+      "status": "open",
+      "date": "2026-08-16",
+      "time": "20:17:18",
+      "tags": [
+        "vps",
+        "onprem"
+      ],
+      "summary": "Deploy on-prem zonaKasir utk puree-POS di VPS vmi2921534 pending: butuh keputusan domain. Brochure+RUNBOOK udah ada di docs/onprem.",
+      "conn": [
+        {
+          "id": "DEC-001",
+          "type": "relates",
+          "raw": "DEC-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-005",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "21:36:55",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/planning/CAFE_FNB_PRD.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "DEC-002",
+      "type": "decision",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "21:37:02",
+      "tags": [
+        "niche",
+        "fnb",
+        "kafe",
+        "pos"
+      ],
+      "summary": "Niche zonaKasir: kafe/resto F&B Bali (10-30 meja, banyak kursi, gak ribet). Bedanya dari kompetitor: simple+onprem+QRIS terintegrasi. PRD de",
+      "conn": [
+        {
+          "id": "DEC-001",
+          "type": "relates",
+          "raw": "DEC-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "REQ-001",
+      "type": "requirement",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "21:37:02",
+      "tags": [
+        "fnb",
+        "foundation"
+      ],
+      "summary": "4 fondasi wajib sebelum jual ke kafe: multi-payment (selling_payments), stock lock (FOR UPDATE), idempotency (uuid), table status derived+re",
+      "conn": [
+        {
+          "id": "DEC-002",
+          "type": "implements",
+          "raw": "DEC-002:implements"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-001",
+      "type": "feature",
+      "status": "open",
+      "date": "2026-08-16",
+      "time": "21:37:02",
+      "tags": [
+        "fnb",
+        "roadmap"
+      ],
+      "summary": "Roadmap kafe: P1 open bill+multi-payment+stock lock+idempotency, P2 split bill+KDS+X/Z report, P3 multi-bahasa struk+onprem. Scope gak terma",
+      "conn": [
+        {
+          "id": "REQ-001",
+          "type": "depends",
+          "raw": "REQ-001:depends"
+        }
+      ]
+    },
+    {
+      "id": "DOC-001",
+      "type": "requirement",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "21:37:02",
+      "tags": [
+        "docs",
+        "prd"
+      ],
+      "summary": "PRD kafe F&B lengkap dibuat: persona, user stories, flow E2E, FR detail, NFR, 30+ skenario negatif/race case, desain DB+locking+idempotency+",
+      "conn": [
+        {
+          "id": "DEC-002",
+          "type": "implements",
+          "raw": "DEC-002:implements"
+        }
+      ]
+    },
+    {
+      "id": "TASK-006",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "21:39:05",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/planning/CAFE_FNB_PRD.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-007",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "21:40:20",
+      "tags": [
+        "fnb",
+        "prd",
+        "edge"
+      ],
+      "summary": "PRD kafe FNB di-update: 79 skenario negatif/edge case di section 6, format Dampak+Mitigasi konsisten. 49 edge case baru.",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "NEG-002",
+      "type": "negative",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "21:40:51",
+      "tags": [
+        "code",
+        "race"
+      ],
+      "summary": "SellingObserver generate kode SELL pakai Selling::count()+1 = race condition: 2 transaksi bersamaan bisa dapat kode duplikat. Wajib ganti ke",
+      "conn": [
+        {
+          "id": "REQ-001",
+          "type": "relates",
+          "raw": "REQ-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-008",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "21:45:49",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/planning/CAFE_FNB_PRD.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-009",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "21:46:02",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/planning/CAFE_FNB_PRD.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-010",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "21:47:02",
+      "tags": [
+        "fnb",
+        "prd",
+        "marketing"
+      ],
+      "summary": "PRD kafe di-update: section 4.8 Marketing otomatis (6 fitur), US-09..12, roadmap Phase H (H1-H5), risiko, referensi.",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-002",
+      "type": "feature",
+      "status": "open",
+      "date": "2026-08-16",
+      "time": "21:47:23",
+      "tags": [
+        "fnb",
+        "marketing",
+        "social"
+      ],
+      "summary": "Marketing otomatis dari data POS (diferensiasi utama, Phase H): struk digital shareable, best-seller auto-post, grafik jam sepi/ramai, auto-",
+      "conn": [
+        {
+          "id": "DEC-002",
+          "type": "implements",
+          "raw": "DEC-002:implements"
+        }
+      ]
+    },
+    {
+      "id": "DEC-003",
+      "type": "decision",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "21:47:23",
+      "tags": [
+        "marketing",
+        "pos"
+      ],
+      "summary": "Posisi jual zonaKasir utk kafe: 'bukan cuma kasir, tapi yang bikin kafe naik' — ubah data penjualan jadi konten sosmed otomatis. Kompetitor ",
+      "conn": [
+        {
+          "id": "FEAT-002",
+          "type": "relates",
+          "raw": "FEAT-002:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUS-001",
+      "type": "business",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "21:48:31",
+      "tags": [
+        "biz",
+        "model",
+        "pos"
+      ],
+      "summary": "zonaKasir = POS SaaS+onprem. Niche baru: kafe/resto F&B Bali. Posisi jual: bukan cuma kasir, tapi yang bikin kafe naik (data penjualan jadi ",
+      "conn": [
+        {
+          "id": "DEC-002",
+          "type": "relates",
+          "raw": "DEC-002:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUS-002",
+      "type": "business",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "21:48:31",
+      "tags": [
+        "biz",
+        "segment",
+        "kafe"
+      ],
+      "summary": "Segmen target: kafe kecil-menengah Bali, 10-30 meja, banyak kursi, gak ribet. Kompetitor: Moka/Pawoon/Kaching (mahal, operasional-only), ESB",
+      "conn": [
+        {
+          "id": "BUS-001",
+          "type": "relates",
+          "raw": "BUS-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUS-003",
+      "type": "business",
+      "status": "open",
+      "date": "2026-08-16",
+      "time": "21:48:31",
+      "tags": [
+        "biz",
+        "pricing"
+      ],
+      "summary": "Pricing kafe: usulan onprem Lite 1.5-2jt / Pro 3-4jt / managed 250-500rb/bln. SaaS kafe masih open. Belum final - butuh keputusan user.",
+      "conn": [
+        {
+          "id": "BUS-001",
+          "type": "relates",
+          "raw": "BUS-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-011",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "21:57:23",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/planning/CAFE_FNB_PRD.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-012",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "21:58:08",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/planning/CAFE_FNB_PRD.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-013",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "21:59:04",
+      "tags": [
+        "prd",
+        "onprem",
+        "kafe"
+      ],
+      "summary": "PRD kafe: section 4.9 On-Prem (offline core, marketing butuh internet, managed +charge, paket Lite/Pro, pricing) + AC-7 + NFR-11 + Phase J.",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "DEC-004",
+      "type": "decision",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "21:59:32",
+      "tags": [
+        "onprem",
+        "kafe",
+        "offline"
+      ],
+      "summary": "Onprem kafe: kasir/meja/split/struk/laporan jalan OFFLINE penuh (server di kafe). Fitur marketing (struk digital shareable dll) BUTUH intern",
+      "conn": [
+        {
+          "id": "BUS-001",
+          "type": "relates",
+          "raw": "BUS-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "REQ-002",
+      "type": "requirement",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "21:59:32",
+      "tags": [
+        "onprem",
+        "kafe",
+        "packaging"
+      ],
+      "summary": "Packaging onprem kafe: Kafe Lite (3 user, open bill+table+struk, update 1thn) vs Kafe Pro (10 user, +split bill+KDS+X/Z, update 3thn). Prici",
+      "conn": [
+        {
+          "id": "DEC-004",
+          "type": "implements",
+          "raw": "DEC-004:implements"
+        }
+      ]
+    },
+    {
+      "id": "BUS-004",
+      "type": "business",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "21:59:32",
+      "tags": [
+        "biz",
+        "onprem",
+        "pricing"
+      ],
+      "summary": "Onprem kafe pricing (usulan): Lite 1.5-2jt sekali (efektif 83rb/bln), Pro 3-4jt (97rb/bln), managed 250-500rb/bln. Di bawah Simplus 149rb/bl",
+      "conn": [
+        {
+          "id": "BUS-001",
+          "type": "relates",
+          "raw": "BUS-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-014",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-16",
+      "time": "22:01:22",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/planning/CAFE_FNB_PRD.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "REQ-003",
+      "type": "requirement",
+      "status": "active",
+      "date": "2026-08-16",
+      "time": "22:01:55",
+      "tags": [
+        "milestone",
+        "plan"
+      ],
+      "summary": "Milestone kafe (section 10.1 PRD): M1 fondasi aman 1-1.5mg (gate wajib), M2 multi-payment+table, M3 split+X/Z, M4 siap jual pilot+KDS, M5 di",
+      "conn": [
+        {
+          "id": "DEC-002",
+          "type": "relates",
+          "raw": "DEC-002:relates"
+        }
+      ]
+    }
+  ]
+}
