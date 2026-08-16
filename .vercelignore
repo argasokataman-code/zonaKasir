@@ -3,6 +3,8 @@ vendor
 storage
 bootstrap/cache/config.php
 bootstrap/cache/blade-icons.php
+bootstrap/cache/packages.php
+bootstrap/cache/services.php
 tests
 docs
 .agents
