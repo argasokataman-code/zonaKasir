@@ -126,7 +126,13 @@ class Cashier extends Page implements HasForms
             ->get()
             ->pluck('name', 'id');
 
-        $this->tableOption = Table::select('id', 'number')->get();
+        $this->tableOption = Table::select('id', 'number', 'capacity', 'zone', 'sort_order')
+            ->orderBy('sort_order')
+            ->orderBy('number')
+            ->get()
+            ->each(function (Table $table) {
+                $table->setAttribute('is_open', (bool) $table->activeSelling());
+            });
 
         $this->storeCartForm->fill(array_merge($this->cartDetail, [
             'payment_method_id' => 1,

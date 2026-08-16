@@ -92,6 +92,18 @@ class Selling extends Model
         return $this->hasOne(MidtransPayment::class);
     }
 
+    public function cancelledBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'cancelled_by');
+    }
+
+    public function totalPaid(): float
+    {
+        return (float) $this->payments()
+            ->where('status', 'success')
+            ->sum('amount');
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults();

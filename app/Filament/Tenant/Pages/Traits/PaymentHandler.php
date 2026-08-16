@@ -62,6 +62,7 @@ trait PaymentHandler
                     'price_unit_id' => $cartItem->price_unit_id,
                 ];
             })->toArray(),
+            'allow_partial' => ! empty($this->cartDetail['allow_partial']),
         ]);
 
         $pMethod = PaymentMethod::select('id', 'name', 'is_credit', 'payment_type')->find($request['payment_method_id']);
@@ -180,7 +181,9 @@ trait PaymentHandler
             'member_id' => Rule::requiredIf(fn () => $pMethod->is_credit),
             'due_date' => Rule::requiredIf(fn () => $pMethod->is_credit),
             'payed_money' => [
-                ! $pMethod->is_credit ? 'gte:total_price' : null,
+                // Open bill / DP (F&B): bayar sebagian tanpa gte total. Overpay
+                // tetap dilarang (FR-4.3). Non-credit tanpa flag partial → wajib lunas.
+                ($pMethod->is_credit || ! empty($request['allow_partial'])) ? 'gte:0' : 'gte:total_price',
                 Rule::requiredIf(fn () => ! $pMethod->is_credit),
                 ! $pMethod->is_credit ? 'lte:999999999' : null,
             ],
@@ -198,6 +201,13 @@ trait PaymentHandler
             return;
         }
         $data = array_merge($request, $sellingService->mapProductRequest($request));
+
+        // Multi-payment (FR-4.1): kalau FE kirim daftar payment, pass langsung.
+        // Kalau cuma 1 metode → normalizePayments bikin row tunggal (backward compat).
+        if (empty($data['payments']) || ! is_array($data['payments'])) {
+            unset($data['payments']);
+        }
+
         $selling = $sellingService->create($data);
 
         CartItem::query()

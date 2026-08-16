@@ -176,6 +176,15 @@
                   <x-heroicon-o-check class="h-5 w-5" />
                   {{ __('Exact amount') }}
                 </button>
+                {{-- Partial / DP toggle (open bill F&B) — bayar sebagian, sisanya menyusul --}}
+                <button type="button"
+                  x-show="!paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.is_credit"
+                  class="flex min-h-[48px] w-full items-center justify-center gap-x-2 rounded-xl bg-gray-100 p-3 text-sm font-semibold text-gray-700 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-200 active:scale-95 dark:bg-gray-800 dark:text-gray-300 dark:ring-gray-700 dark:hover:bg-gray-700"
+                  :class="cartDetail.allow_partial ? 'ring-2 ring-primary-500 bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300' : ''"
+                  x-on:click="cartDetail.allow_partial = !cartDetail.allow_partial; $wire.set('cartDetail.allow_partial', cartDetail.allow_partial);">
+                  <x-heroicon-o-wallet class="h-5 w-5" />
+                  <span x-text="cartDetail.allow_partial ? '{{ __('Partial active') }}' : '{{ __('Partial / DP') }}'"></span>
+                </button>
                 {{-- Pay / Confirm Piutang --}}
                 <button wire:loading.attr="disabled" wire:target="proceedThePayment" type="submit"
                   class="flex min-h-[48px] w-full items-center justify-center gap-x-2 rounded-xl bg-primary-600 p-3 text-base font-bold text-white shadow-lg shadow-primary-600/30 transition-all hover:brightness-110 active:scale-95 disabled:opacity-50">
@@ -269,19 +278,24 @@
 
   @include('partials.receipt-preview')
   <x-filament::modal id="modal-selected-table" width="xl" :close-by-clicking-away="false" :close-by-escaping="false">
-    <div class="grid grid-cols-4 gap-4">
+    <x-slot name="heading">
+      <p>{{ __('Choose the table') }}</p>
+    </x-slot>
+    <div class="grid grid-cols-3 gap-3 md:grid-cols-4">
       @foreach ($tableOption as $table)
         <div x-on:click="$wire.cartDetail['table_id'] = {{ $table->id }};"
-          class="flex cursor-pointer justify-center rounded-md border border-primary-500 px-4 py-2 text-sm hover:scale-105 dark:text-white"
-          :class="$wire.cartDetail['table_id'] == {{ $table->id }} ? 'bg-primary-600 text-white' : 'dark:bg-gray-900 '">
-          {{ $table->number }}
+          class="flex flex-col items-center justify-center rounded-xl border-2 px-4 py-3 text-sm font-semibold transition-all hover:scale-105 dark:text-white"
+          :class="$wire.cartDetail['table_id'] == {{ $table->id }} ? 'border-primary-600 bg-primary-600 text-white' : ({{ $table->is_open ? 'true' : 'false' }} ? 'border-danger-400 bg-danger-50 text-danger-700 dark:bg-danger-900/30 dark:text-danger-300' : 'border-primary-500 dark:bg-gray-900')">
+          <span x-text="{{ $table->number }}">{{ $table->number }}</span>
+          @if($table->zone || $table->capacity)
+            <span class="text-[10px] font-normal opacity-75">
+              {{ $table->zone }}{{ $table->zone && $table->capacity ? ' · ' : '' }}{{ $table->capacity ? $table->capacity.' pax' : '' }}
+            </span>
+          @endif
         </div>
       @endforeach
     </div>
     <x-slot name="footer">
-      <x-slot name="heading">
-        <p id="titleEditDetail">{{ __('Choose the table') }}</p>
-      </x-slot>
       <div class="grid grid-cols-2 gap-x-2">
         <x-filament::button id="saveSelectedTable"
           x-on:click="$dispatch('close-modal', {id: 'modal-selected-table'}); $wire.storeCart()">

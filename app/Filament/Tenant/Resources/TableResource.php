@@ -6,6 +6,8 @@ use App\Filament\Tenant\Resources\TableResource\Pages;
 use App\Models\Tenants\Table as TableModel;
 use App\Traits\HasTranslatableResource;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -26,6 +28,23 @@ class TableResource extends Resource
             ->schema([
                 TextInput::make('number')
                     ->required()
+                    ->unique(ignoreRecord: true, modifyRuleUsing: fn ($rule) => $rule->whereNull('deleted_at'))
+                    ->translateLabel(),
+                TextInput::make('capacity')
+                    ->numeric()
+                    ->minValue(0)
+                    ->translateLabel(),
+                ToggleButtons::make('zone')
+                    ->options([
+                        'indoor' => __('Indoor'),
+                        'outdoor' => __('Outdoor'),
+                        'vip' => __('VIP'),
+                    ])
+                    ->default('indoor')
+                    ->translateLabel(),
+                TextInput::make('sort_order')
+                    ->numeric()
+                    ->default(0)
                     ->translateLabel(),
             ]);
     }
@@ -36,9 +55,23 @@ class TableResource extends Resource
             ->columns([
                 TextColumn::make('number')
                     ->translateLabel(),
+                TextColumn::make('zone')
+                    ->translateLabel(),
+                TextColumn::make('capacity')
+                    ->translateLabel(),
+                TextColumn::make('sort_order')
+                    ->translateLabel(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->using(function (TableModel $record) {
+                        // FR-2.6: meja dgn bill aktif tidak bisa dihapus
+                        if ($record->activeSelling()) {
+                            throw new \RuntimeException('Cannot delete a table with an active bill');
+                        }
+                        $record->delete();
+                    }),
             ]);
     }
 

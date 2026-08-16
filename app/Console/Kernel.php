@@ -19,6 +19,7 @@ class Kernel extends ConsoleKernel
         $schedule->command(\App\Console\Commands\PaymentsGenerateSettlements::class)->dailyAt('03:00');
         $schedule->command(\App\Console\Commands\PaymentsRetryFailedWebhooks::class)->everyTenMinutes();
         $schedule->command(\App\Console\Commands\PaymentsCancelExpired::class)->dailyAt('08:00');
+        $schedule->command(\App\Console\Commands\CancelStaleOpenBills::class)->everyFiveMinutes();
     }
 
     protected function commands()

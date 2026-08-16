@@ -52,6 +52,8 @@ class SellingService
 
             /** @var Selling $selling */
             $selling = Selling::create($data);
+            $selling->status = 'open'; // payment(s) menentukannya via addPayment
+            $selling->save();
 
             SellingCreated::dispatch($selling, $data);
 
@@ -62,6 +64,7 @@ class SellingService
 
             // Status bill + auto-create payment row (multi-payment, Phase C + M1)
             $this->applySellingStatusAndPayment($selling, $data);
+            $selling->refresh();
 
             DB::commit();
 
@@ -96,35 +99,236 @@ class SellingService
 
     private function applySellingStatusAndPayment(Selling $selling, array $data): void
     {
-        $paid = (float) ($data['payed_money'] ?? 0);
-        $total = (float) $selling->total_price;
-        $isCredit = ! empty($data['payment_method_id']) &&
-            PaymentMethod::query()->find($data['payment_method_id'])?->is_credit;
+        $payments = $this->normalizePayments($selling, $data);
 
-        $selling->status = ($paid >= $total && ! $isCredit) ? 'paid' : 'open';
-        if ($isCredit) {
-            $selling->status = 'paid'; // piutang: selling final, receivable terpisah
+        foreach ($payments as $i => $payment) {
+            $payment['idempotency_key'] = $payment['idempotency_key']
+                ?? (! empty($data['cart_uuid']) ? $data['cart_uuid'].'-'.($i + 1) : null);
+            $this->addPayment($selling, $payment, $data['cart_uuid'] ?? null);
         }
-        $selling->save();
+    }
 
-        // Simpan payment row (multi-payment) — idempotent per cart_uuid
-        if (! empty($data['cart_uuid'])) {
-            $key = $data['cart_uuid'] . '-1';
+    /**
+     * Normalisasi input pembayaran ke daftar payment.
+     * Multi-payment: $data['payments'] = [[payment_method_id, amount], ...]
+     * Legacy: satu payment dari payed_money + payment_method_id (backward compat).
+     */
+    private function normalizePayments(Selling $selling, array $data): array
+    {
+        if (! empty($data['payments']) && is_array($data['payments'])) {
+            $payments = collect($data['payments'])
+                ->values()
+                ->map(fn ($p) => [
+                    'payment_method_id' => $p['payment_method_id'],
+                    'amount' => (float) ($p['amount'] ?? 0),
+                    'status' => $p['status'] ?? 'success',
+                    'is_cash' => $p['is_cash'] ?? null,
+                    'midtrans_ref' => $p['midtrans_ref'] ?? null,
+                    'payment_date' => $p['payment_date'] ?? now(),
+                ])
+                ->toArray();
+
+            return $payments;
+        }
+
+        $paid = (float) ($data['payed_money'] ?? 0);
+        $paymentMethodId = $data['payment_method_id'] ?? null;
+        if ($paid <= 0 && ! $paymentMethodId) {
+            return [];
+        }
+
+        $pMethod = $paymentMethodId ? PaymentMethod::find($paymentMethodId) : null;
+        $total = (float) ($data['total_price'] ?? 0);
+
+        // Legacy single-payment: payed_money = uang diserahkan (boleh > total;
+        // kembalian di-handle money_changes). Amount dicatat = min(payed, total).
+        $amount = min($paid, $total);
+
+        return [[
+            'payment_method_id' => $paymentMethodId,
+            'amount' => $amount,
+            'status' => ($pMethod?->is_credit || $amount >= $total) ? 'success' : 'pending',
+            'is_cash' => $pMethod?->is_cash ?? true,
+            'midtrans_ref' => null,
+            'payment_date' => now(),
+        ]];
+    }
+
+    /**
+     * Tambah pembayaran ke bill (FR-4.1, FR-4.3).
+     * Lock selling → cek overpay → insert row idempotent → recompute status.
+     */
+    public function addPayment(Selling $selling, array $payment, ?string $cartUuid = null): void
+    {
+        DB::beginTransaction();
+        try {
+            /** @var Selling $selling */
+            $selling = Selling::query()->whereKey($selling->id)->lockForUpdate()->first();
+
+            if (! $selling || in_array($selling->status, ['cancelled', 'paid'])) {
+                throw new \RuntimeException('Bill cannot accept payment in its current status');
+            }
+
+            $total = (float) $selling->total_price;
+            $paidSoFar = (float) $selling->totalPaid();
+            $amount = (float) ($payment['amount'] ?? 0);
+
+            // FR-4.3: over-payment dilarang (toleransi pembulatan < Rp 1)
+            if ($paidSoFar + $amount > $total + 1) {
+                throw new \RuntimeException(
+                    "Overpayment rejected: paid so far {$paidSoFar} + {$amount} > total {$total}"
+                );
+            }
+
+            $pMethod = $payment['payment_method_id'] ?? null
+                ? PaymentMethod::find($payment['payment_method_id'])
+                : null;
+
+            // Key stabil per (cart, method, amount) → retry idempotent; not shifting count
+            $key = $payment['idempotency_key']
+                ?? ($cartUuid
+                    ? $cartUuid.'-'.substr(md5(($payment['payment_method_id'] ?? 'none').'|'.(int) ($amount * 100)), 0, 10)
+                    : (string) Str::uuid());
             SellingPayment::query()->firstOrCreate(
-                [
-                    'tenant_id' => $selling->tenant_id,
-                    'idempotency_key' => $key,
-                ],
+                ['tenant_id' => $selling->tenant_id, 'idempotency_key' => $key],
                 [
                     'selling_id' => $selling->id,
-                    'payment_method_id' => $data['payment_method_id'] ?? null,
-                    'amount' => $paid,
-                    'is_cash' => true,
-                    'status' => $isCredit ? 'success' : ($paid >= $total ? 'success' : 'pending'),
-                    'payment_date' => now(),
+                    'payment_method_id' => $payment['payment_method_id'] ?? null,
+                    'amount' => $amount,
+                    'is_cash' => $payment['is_cash'] ?? ($pMethod?->is_cash ?? true),
+                    'status' => $payment['status'] ?? 'success',
+                    'midtrans_ref' => $payment['midtrans_ref'] ?? null,
+                    'payment_date' => $payment['payment_date'] ?? now(),
                 ]
             );
+
+            $this->recomputeStatus($selling, $pMethod);
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
+    }
+
+    /**
+     * FR-2.4: pindah bill antar meja (transaksional).
+     */
+    public function moveTable(int $sellingId, int $toTableId): Selling
+    {
+        return DB::transaction(function () use ($sellingId, $toTableId) {
+            /** @var Selling $selling */
+            $selling = Selling::query()->whereKey($sellingId)->lockForUpdate()->first();
+            if (! $selling) {
+                throw new \RuntimeException('Selling not found');
+            }
+
+            // Lock target table: cek-then-write race 2 move konkurren ke meja sama
+            $target = \App\Models\Tenants\Table::query()->whereKey($toTableId)->lockForUpdate()->first();
+            if (! $target) {
+                throw new \RuntimeException('Target table not found');
+            }
+            // Meja target sudah terisi bill aktif lain → tolak (FR-2.4)
+            if ($target->activeSelling() && $target->activeSelling()->id !== $selling->id) {
+                throw new \RuntimeException('Target table already has an active bill');
+            }
+
+            $selling->table_id = $toTableId;
+            $selling->save();
+
+            return $selling;
+        });
+    }
+
+    /**
+     * FR-2.5: gabung bill B ke bill A (acara/batch besar). Item B pindah ke A,
+     * total A dihitung ulang, B di-cancel. Tidak menghitung ulang stok (item sudah ter-reduce).
+     */
+    public function mergeBill(int $sourceSellingId, int $targetSellingId): Selling
+    {
+        return DB::transaction(function () use ($sourceSellingId, $targetSellingId) {
+            // Lock ascending id — hindari deadlock 2 merge arah berlawanan
+            $ids = collect([$sourceSellingId, $targetSellingId])->sort()->values();
+            $lockedRows = Selling::query()
+                ->whereIn('id', $ids)
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+            $target = $lockedRows->get($targetSellingId);
+            $source = $lockedRows->get($sourceSellingId);
+            if (! $target || ! $source) {
+                throw new \RuntimeException('Selling not found');
+            }
+            if (in_array($target->status, ['cancelled', 'paid']) || in_array($source->status, ['cancelled', 'paid'])) {
+                throw new \RuntimeException('Cannot merge a settled or cancelled bill');
+            }
+
+            $target->sellingDetails()
+                ->getModel()->newQuery()
+                ->where('selling_id', $source->id)
+                ->update(['selling_id' => $target->id]);
+
+            // Payment source ikut pindah ke target (jangan jadi yatim di bill cancelled)
+            $target->payments()
+                ->getModel()->newQuery()
+                ->where('selling_id', $source->id)
+                ->update(['selling_id' => $target->id]);
+
+            $source->update([
+                'status' => 'cancelled',
+                'is_paid' => false,
+                'cancelled_at' => now(),
+                'cancel_reason' => 'merged into selling '.$target->code,
+            ]);
+
+            $this->recalcTotals($target);
+            $this->recomputeStatus($target);
+            $target->refresh();
+
+            return $target;
+        });
+    }
+
+    private function recalcTotals(Selling $selling): void
+    {
+        $details = $selling->sellingDetails()->get();
+        $selling->update([
+            'total_price' => (float) $details->sum('price'),
+            'total_qty' => (float) $details->sum('qty'),
+        ]);
+    }
+    private function recomputeStatus(Selling $selling, ?PaymentMethod $pMethod = null): void
+    {
+        $total = (float) $selling->total_price;
+        $paid = (float) $selling->totalPaid();
+
+        // Piutang: ada payment credit (produk/layanan diambil, bayar belakangan).
+        // Selling final, receivable terpisah (CreateReceivableIfCredit).
+        $hasCredit = $pMethod?->is_credit
+            || $selling->payments()
+                ->where('status', 'success')
+                ->whereHas('paymentMethod', fn ($q) => $q->where('is_credit', true))
+                ->exists();
+
+        if ($hasCredit) {
+            $selling->status = 'paid';
+            $selling->is_paid = true;
+            $selling->save();
+
+            return;
+        }
+
+        if ($paid >= $total) {
+            $selling->status = 'paid';
+            $selling->is_paid = true;
+        } elseif ($paid > 0) {
+            $selling->status = 'partially_paid';
+            $selling->is_paid = false;
+        } else {
+            $selling->status = 'open';
+            $selling->is_paid = false;
+        }
+        $selling->save();
     }
 
     public function mapProductRequest(array $data): array
