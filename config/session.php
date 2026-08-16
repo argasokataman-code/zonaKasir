@@ -18,7 +18,10 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'file'),
+    // Default to database sessions on Vercel serverless: /tmp is ephemeral
+    // per lambda instance, so file sessions silently lose login between
+    // instances (Google OAuth callback → /member redirect = back to login).
+    'driver' => env('SESSION_DRIVER', getenv('VERCEL') ? 'database' : 'file'),
 
     /*
     |--------------------------------------------------------------------------
