@@ -127,26 +127,6 @@ $router->post('/livewire/update', [\Livewire\Mechanisms\HandleRequests\HandleReq
     ->middleware('web')
     ->name('default.livewire.update');
 
-// TEMP debug: route collection state at boot (remove after fixing dashboard)
-$router->get('/__dbg', function () {
-    $rc = app('router')->getRoutes();
-    $rc->refreshNameLookups();
-    $has = $rc->hasNamedRoute('filament.tenant.pages.dashboard');
-    $names = array_slice(array_keys($rc->getRoutesByName()), 0, 12);
-
-    return response()->json([
-        'dashboard_in_router' => $has,
-        'count' => count($rc->getRoutes()),
-        'names_sample' => $names,
-        'page_routes' => array_filter(array_keys($rc->getRoutesByName()), fn ($n) => str_starts_with($n, 'filament.tenant.pages.')),
-        'member_matching' => collect($rc->getRoutes())->filter(fn ($r) => $r->uri() === 'member')->map(fn ($r) => $r->getName())->values()->all(),
-    ]);
-})->name('__dbg');
-
-// Force the UrlGenerator to use the current RouteCollection so subsequent
-// calls to route('filament.tenant.auth.login') from middleware find the route.
-$app->make('url')->setRoutes($router->getRoutes());
-
 // Refresh route name lookups AFTER all routes are registered (Filament registers
 // pages with fluent ->name() after addRoute, which leaves the nameList stale on
 // Vercel cold starts — route('filament.tenant.pages.dashboard') then fails).
