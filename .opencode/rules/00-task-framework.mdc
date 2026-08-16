@@ -364,7 +364,7 @@ docs/                    ← Project docs (by domain)
   ├── guides/            ← Quick fixes, server access
   ├── reports/           ← Audit & verification reports
   ├── planning/          ← Feature plans & roadmap
-  ├── *.md              ← Root docs: API_RESPONSE_STANDARD, REBRANDING_PLAN, E2E_TESTING_REPORT
+  ├── *.md              ← Root docs: API_RESPONSE_STANDARD, E2E_TESTING_REPORT
 
 .opencode/               ← Agent instructions (opencode)
   ├── rules/             ← Modular .mdc rule files
@@ -419,7 +419,7 @@ docs/                    ← Project docs (by domain)
 
 ---
 
-## 📚 Quick Reference — Lakasir Project Structure
+## 📚 Quick Reference — zonaKasir Project Structure
 
 **Key files untuk reference (baca langsung, jangan grep kalau bisa):**
 
@@ -439,7 +439,7 @@ docs/                    ← Project docs (by domain)
 | DB cfg | `config/database.php` | — |
 | Env | `.env.example` | — |
 | Helpers | `app/helpers.php` | `hasFeatureAndPermission()`, `can()`, `price_format()` |
-| Audit log  | `docs/reports/` | 6 audit files |
+| Audit log  | `docs/` | docs + onprem runbook |
 | Agent rules | `.opencode/rules/` | 3 modular .mdc files |
 | MCP fetch | `opencode.json` → `mcp.markfetch` | `npx -y markfetch` — fetch real endpoint |
 

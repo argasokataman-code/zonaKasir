@@ -29,7 +29,7 @@
     <env name="DB_PORT" value="5432"/>
     <env name="DB_USERNAME_TESTING" value="zonakasir"/>
     <env name="DB_PASSWORD_TESTING" value="secret"/>
-    <env name="DB_DATABASE_TESTING" value="lakasir_test"/>
+    <env name="DB_DATABASE_TESTING" value="zonakasir_test"/>
     <env name="APP_CENTRAL_DOMAIN" value="localhost"/>
     <env name="MAIL_MAILER" value="array"/>
     <env name="QUEUE_CONNECTION" value="sync"/>

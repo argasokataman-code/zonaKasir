@@ -16,8 +16,8 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_DB: lakasir
-          POSTGRES_USER: lakasir
+          POSTGRES_DB: zonakasir
+          POSTGRES_USER: zonakasir
           POSTGRES_PASSWORD: secret
         options: >-
           --health-cmd="pg_isready"
@@ -43,8 +43,8 @@ jobs:
           echo "DB_CONNECTION=pgsql" >> .env
           echo "DB_HOST=127.0.0.1" >> .env
           echo "DB_PORT=5432" >> .env
-          echo "DB_DATABASE=lakasir" >> .env
-          echo "DB_USERNAME=lakasir" >> .env
+          echo "DB_DATABASE=zonakasir" >> .env
+          echo "DB_USERNAME=zonakasir" >> .env
           echo "DB_PASSWORD=secret" >> .env
           echo "APP_KEY=base64:$(php -r 'echo base64_encode(random_bytes(32));')" >> .env
 

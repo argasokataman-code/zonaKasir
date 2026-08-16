@@ -1,10 +1,10 @@
-name: lakasir
+name: zonakasir
 recipe: laravel
 proxxy:
   web:
-    - lakasir.lndo.site
+    - zonakasir.lndo.site
   web2:
-    - admin.lakasir.lndo.site
+    - admin.zonakasir.lndo.site
 services:
   appserver:
     xdebug: false

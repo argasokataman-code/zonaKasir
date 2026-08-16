@@ -19,7 +19,7 @@ beforeEach(function () {
     }
 
     if ($driver === 'mysql') {
-        DB::statement('DROP DATABASE IF EXISTS lakasir_tokotest');
+        DB::statement('DROP DATABASE IF EXISTS zonakasir_tokotest');
     }
 
     \App\Models\Plan::create([
@@ -107,6 +107,6 @@ afterAll(function () {
     }
 
     if ($driver === 'mysql') {
-        DB::statement('DROP DATABASE IF EXISTS lakasir_tokotest');
+        DB::statement('DROP DATABASE IF EXISTS zonakasir_tokotest');
     }
 });

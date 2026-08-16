@@ -1,4 +1,4 @@
-# Lakasir - Quick Fixes to Production Readiness
+# zonaKasir - Quick Fixes to Production Readiness
 ## Priority Action List (Estimated: 5-7 Days)
 
 ---
@@ -283,7 +283,7 @@ If stuck on any fix:
 
 ## 📖 Related Documentation
 
-- Full audit findings: [Audit Report](../reports/AUDIT.md)
+- On-prem deployment & sales: [On-Prem Runbook](../onprem/RUNBOOK.md)
 - Code style guide: [AGENTS.md](../../AGENTS.md)
 - Development rules: [.cursor/00-universal-agent-rules.mdc](.cursor/00-universal-agent-rules.mdc)
 

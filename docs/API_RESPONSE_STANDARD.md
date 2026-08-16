@@ -2,7 +2,7 @@
 
 ## Overview
 
-All API responses in the Lakasir POS system follow a standardized JSON format to ensure consistency and predictability for API consumers.
+All API responses in the zonaKasir POS system follow a standardized JSON format to ensure consistency and predictability for API consumers.
 
 ## Response Format
 

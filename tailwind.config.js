@@ -21,10 +21,6 @@ export default {
         sans: ["Figtree", ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        lakasir: {
-          primary: "#FF6600",
-          secondary: "#1f2937",
-        },
         zonakasir: {
           primary: "#FF6600",
           secondary: "#1f2937",

@@ -258,7 +258,7 @@ docker compose exec app npm run dev
 
 | File | main | vercel |
 |------|------|--------|
-| `docs/planning/MYSQL_TO_POSTGRESQL_MIGRATION.md` | — | Ada (dokumentasi migrasi) |
+| `docs/planning/ONPREM_DEPLOYMENT_PLAN.md` | — | Ada (deploy on-prem) |
 
 ---
 

@@ -117,5 +117,4 @@ php artisan schedule:work   # opsional, hanya task lain
 
 ## 9. Keputusan Terkait
 
-- `docs/planning/SINGLE_DB_ARCHITECTURE.md` — fondasi single-DB yang bikin on-prem gampang
-- Sistem sudah SaaS total single-DB; on-prem = fitur opsional, bukan rewrite
+- Sistem sudah SaaS total single-DB (`app/Tenant.php`); on-prem = fitur opsional, bukan rewrite

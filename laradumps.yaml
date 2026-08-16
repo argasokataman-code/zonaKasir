@@ -3,7 +3,7 @@ app:
   secondary_host: host.docker.internal
   port: 9191
   workdir: /var/www/html/
-  project_path: /Users/sheenazien8/Documents/Code/laksir_project/lakasir/
+  project_path: /Users/vanviakingali/Documents/Project/zonaKasir/
   wsl_config: wsl+Ubuntu/
 config:
   sleep: 0

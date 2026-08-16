@@ -489,7 +489,7 @@ window.moneyFormat = function(number, currency = null) {
  * @returns {string} The formatted number string.
  */
 window.numberFormat = function(number) {
-  const activeLocale = window.lakasirLocale || 'en';
+  const activeLocale = window.zonakasirLocale || 'en';
   const formatter = new Intl.NumberFormat(activeLocale);
 
   return formatter.format(number);

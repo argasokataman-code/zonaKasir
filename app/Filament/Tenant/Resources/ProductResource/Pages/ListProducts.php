@@ -39,7 +39,7 @@ class ListProducts extends ListRecords
                         $fullPath = Storage::disk($uploadDisk)->path($filePath);
                         Excel::import(new ImportsProductImport, $fullPath);
                     } else {
-                        $tmpPath = tempnam(sys_get_temp_dir(), 'lakasir_import_');
+                        $tmpPath = tempnam(sys_get_temp_dir(), 'zonakasir_import_');
                         try {
                             file_put_contents($tmpPath, Storage::disk($uploadDisk)->get($filePath));
                             Excel::import(new ImportsProductImport, $tmpPath);

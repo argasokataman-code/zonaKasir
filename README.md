@@ -100,7 +100,7 @@
 - **PDF**: `barryvdh/laravel-dompdf`
 - **Social Login**: `laravel/socialite` ^5.27
 - **Audit**: `spatie/laravel-activitylog`
-- **Helpers**: `lakasir/has-crud-action`
+- **Helpers**: `zonakasir/has-crud-action`
 
 ### Testing Stack
 - Pest PHP ^2.35 with plugins: Faker, Livewire, Browser (Dusk)
@@ -251,7 +251,7 @@ See [docs/README.md](docs/README.md) for full contribution guidelines.
 
 This project is licensed under the **GNU General Public License v3.0**.
 
-**zonaKasir** is a rebranded & modified fork of [lakasir/lakasir](https://github.com/lakasir/lakasir), originally created by **Wahyu Hidayat** and contributors.  
+**zonaKasir** is a rebranded & modified fork of [zonakasir/zonakasir](https://github.com/zonakasir/zonakasir), originally created by **Wahyu Hidayat** and contributors.  
 We thank the original authors for their open-source work.
 
 See the [LICENSE](LICENSE) file for the full license text.
