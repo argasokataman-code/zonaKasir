@@ -9,6 +9,7 @@ use App\Models\Tenants\PriceUnit;
 use App\Models\Tenants\Product;
 use App\Models\Tenants\Selling;
 use App\Models\Tenants\SellingPayment;
+use App\Models\Tenants\SellingSplitGroup;
 use App\Models\Tenants\Setting;
 use App\Services\Tenants\Traits\HasNumber;
 use App\Services\VoucherService;
@@ -133,11 +134,14 @@ class SellingService
 
         $paid = (float) ($data['payed_money'] ?? 0);
         $paymentMethodId = $data['payment_method_id'] ?? null;
-        if ($paid <= 0 && ! $paymentMethodId) {
+
+        $pMethod = $paymentMethodId ? PaymentMethod::find($paymentMethodId) : null;
+
+        // Bill open tanpa DP (F&B): bayar 0 → jangan bikin payment row (FR-1.3)
+        if ($paid <= 0 && ! $pMethod?->is_credit) {
             return [];
         }
 
-        $pMethod = $paymentMethodId ? PaymentMethod::find($paymentMethodId) : null;
         $total = (float) ($data['total_price'] ?? 0);
 
         // Legacy single-payment: payed_money = uang diserahkan (boleh > total;
@@ -158,7 +162,7 @@ class SellingService
      * Tambah pembayaran ke bill (FR-4.1, FR-4.3).
      * Lock selling → cek overpay → insert row idempotent → recompute status.
      */
-    public function addPayment(Selling $selling, array $payment, ?string $cartUuid = null): void
+    public function addPayment(Selling $selling, array $payment, ?string $cartUuid = null, ?int $splitGroupId = null): void
     {
         DB::beginTransaction();
         try {
@@ -171,10 +175,35 @@ class SellingService
 
             $total = (float) $selling->total_price;
             $paidSoFar = (float) $selling->totalPaid();
+
+            // Split bill (FR-3.2): payment dibayarkan terhadap SATU bagian.
+            // Overpay dicek per bagian (group) + tetap tak boleh > total bill.
+            $group = null;
+            $groupRemaining = null;
+            if ($splitGroupId) {
+                $group = SellingSplitGroup::query()->whereKey($splitGroupId)->lockForUpdate()->first();
+                if (! $group || $group->selling_id !== $selling->id) {
+                    throw new \RuntimeException('Split group not found for this bill');
+                }
+                if ($group->status === 'paid') {
+                    throw new \RuntimeException('Split group already paid');
+                }
+                $groupRemaining = (float) $group->total - (float) $group->paid_total;
+            } elseif ($selling->hasSplit()) {
+                // Bill split: payment WAJIB dialokasikan ke sebuah group (FR-3.2)
+                throw new \RuntimeException('Split bill: allocate payment to a split group');
+            }
+
             $amount = (float) ($payment['amount'] ?? 0);
 
             // FR-4.3: over-payment dilarang (toleransi pembulatan < Rp 1)
-            if ($paidSoFar + $amount > $total + 1) {
+            if ($splitGroupId) {
+                if ($amount > $groupRemaining + 1) {
+                    throw new \RuntimeException(
+                        "Overpayment rejected: split group remaining {$groupRemaining} < amount {$amount}"
+                    );
+                }
+            } elseif ($paidSoFar + $amount > $total + 1) {
                 throw new \RuntimeException(
                     "Overpayment rejected: paid so far {$paidSoFar} + {$amount} > total {$total}"
                 );
@@ -187,12 +216,13 @@ class SellingService
             // Key stabil per (cart, method, amount) → retry idempotent; not shifting count
             $key = $payment['idempotency_key']
                 ?? ($cartUuid
-                    ? $cartUuid.'-'.substr(md5(($payment['payment_method_id'] ?? 'none').'|'.(int) ($amount * 100)), 0, 10)
+                    ? $cartUuid.'-'.substr(md5(($splitGroupId ? 'g'.$splitGroupId.'|' : '').($payment['payment_method_id'] ?? 'none').'|'.(int) ($amount * 100)), 0, 10)
                     : (string) Str::uuid());
             SellingPayment::query()->firstOrCreate(
                 ['tenant_id' => $selling->tenant_id, 'idempotency_key' => $key],
                 [
                     'selling_id' => $selling->id,
+                    'split_group_id' => $splitGroupId,
                     'payment_method_id' => $payment['payment_method_id'] ?? null,
                     'amount' => $amount,
                     'is_cash' => $payment['is_cash'] ?? ($pMethod?->is_cash ?? true),
@@ -202,7 +232,16 @@ class SellingService
                 ]
             );
 
-            $this->recomputeStatus($selling, $pMethod);
+            if ($group) {
+                $group->refresh();
+                $group->paid_total = (float) $group->payments()
+                    ->where('status', 'success')
+                    ->sum('amount');
+                $group->status = $group->paid_total >= (float) $group->total ? 'paid' : $group->status;
+                $group->save();
+            }
+
+            $this->recomputeStatus($selling, $pMethod, $group);
 
             DB::commit();
         } catch (Exception $e) {
@@ -297,7 +336,7 @@ class SellingService
             'total_qty' => (float) $details->sum('qty'),
         ]);
     }
-    private function recomputeStatus(Selling $selling, ?PaymentMethod $pMethod = null): void
+    private function recomputeStatus(Selling $selling, ?PaymentMethod $pMethod = null, ?SellingSplitGroup $group = null): void
     {
         $total = (float) $selling->total_price;
         $paid = (float) $selling->totalPaid();
@@ -313,6 +352,16 @@ class SellingService
         if ($hasCredit) {
             $selling->status = 'paid';
             $selling->is_paid = true;
+            $selling->save();
+
+            return;
+        }
+
+        // Split bill (FR-3.6): bill lunas saat SEMUA bagian lunas
+        if ($selling->hasSplit()) {
+            $allPaid = $selling->splitGroups()->where('status', '!=', 'paid')->count() === 0;
+            $selling->status = $allPaid ? 'paid' : 'partially_paid';
+            $selling->is_paid = $allPaid;
             $selling->save();
 
             return;

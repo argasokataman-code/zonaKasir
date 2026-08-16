@@ -1,0 +1,1 @@
+M2 selesai (5eafeb5): addPayment multi-payment cash+QRIS, overpay reject, partially_paid; table capacity/zone/denah, moveTable, mergeBill, delete guard; idle cancel-stale 12h reverse stock. 30 test pass.

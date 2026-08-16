@@ -26,4 +26,9 @@ class SellingPayment extends Model
     {
         return $this->belongsTo(PaymentMethod::class);
     }
+
+    public function splitGroup()
+    {
+        return $this->belongsTo(SellingSplitGroup::class, 'split_group_id');
+    }
 }

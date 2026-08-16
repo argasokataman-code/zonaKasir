@@ -146,6 +146,7 @@ Route::middleware([
                     Route::post('/close', [CashDrawerController::class, 'close'])
                         ->middleware('throttle:10,1')
                         ->can('close cash drawer');
+                    Route::get('/report', [CashDrawerController::class, 'report']);
                 });
             });
 

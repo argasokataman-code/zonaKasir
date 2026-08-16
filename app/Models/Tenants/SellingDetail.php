@@ -27,6 +27,11 @@ class SellingDetail extends Model
         return $this->belongsTo(Product::class);
     }
 
+    public function splitGroup()
+    {
+        return $this->belongsTo(SellingSplitGroup::class, 'split_group_id');
+    }
+
     public function pricePerUnit(): Attribute
     {
         return Attribute::make(

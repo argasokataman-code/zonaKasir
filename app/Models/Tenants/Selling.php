@@ -77,6 +77,16 @@ class Selling extends Model
         return $this->hasMany(SellingPayment::class);
     }
 
+    public function splitGroups()
+    {
+        return $this->hasMany(SellingSplitGroup::class);
+    }
+
+    public function hasSplit(): bool
+    {
+        return $this->splitGroups()->exists();
+    }
+
     public function grandTotalPrice(): Attribute
     {
         return Attribute::make(get: fn () => $this->total_price - $this->tax_price - $this->total_discount_per_item - $this->discount_price);
