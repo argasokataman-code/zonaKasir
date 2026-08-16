@@ -137,6 +137,8 @@ $router->get('/__dbg', function () {
         'dashboard_in_router' => $has,
         'count' => count($rc->getRoutes()),
         'names_sample' => $names,
+        'page_routes' => array_filter(array_keys($rc->getRoutesByName()), fn ($n) => str_starts_with($n, 'filament.tenant.pages.')),
+        'member_matching' => collect($rc->getRoutes())->filter(fn ($r) => $r->uri() === 'member')->map(fn ($r) => $r->getName())->values()->all(),
     ]);
 })->name('__dbg');
 
