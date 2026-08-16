@@ -25,6 +25,10 @@ class TenantLogin extends Login
 
         $data = $this->form->getState();
 
+        // Livewire update request resolves current panel to the default (admin)
+        // in multi-panel apps — pin the tenant panel so auth uses the right guard.
+        Filament::setCurrentPanel(Filament::getPanel('tenant'));
+
         if (! Filament::auth()->attempt($this->getCredentialsFromFormData($data), $data['remember'] ?? false)) {
             $this->throwFailureValidationException();
         }

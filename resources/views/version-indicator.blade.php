@@ -1,11 +1,13 @@
 @php
-  try {
-    $updateChecker = app(\App\Services\UpdateChecker::class);
-    $currentVersion = $updateChecker->getCurrentVersion();
-    $isUpdateAvailable = $updateChecker->isUpdateAvailable();
-  } catch (\Throwable) {
-    $currentVersion = 'Development';
-    $isUpdateAvailable = false;
+  if (!isset($isUpdateAvailable)) {
+    try {
+      $updateChecker = app(\App\Services\UpdateChecker::class);
+      $currentVersion = $updateChecker->getCurrentVersion();
+      $isUpdateAvailable = $updateChecker->isUpdateAvailable();
+    } catch (\Throwable) {
+      $currentVersion = 'Development';
+      $isUpdateAvailable = false;
+    }
   }
 @endphp
 

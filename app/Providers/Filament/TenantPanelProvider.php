@@ -151,7 +151,10 @@ class TenantPanelProvider extends PanelProvider
 
         FilamentView::registerRenderHook(
             PanelsRenderHook::GLOBAL_SEARCH_AFTER,
-            fn () => view('version-indicator')
+            fn () => view('version-indicator', [
+                'currentVersion' => app(\App\Services\UpdateChecker::class)->getCurrentVersion(),
+                'isUpdateAvailable' => false,
+            ])
         );
 
         FilamentView::registerRenderHook(

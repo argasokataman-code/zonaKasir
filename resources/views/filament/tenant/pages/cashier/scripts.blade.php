@@ -23,11 +23,13 @@
   }
   let selling = null;
 
+  @if (config('midtrans.client_key'))
   var snapScript = document.createElement('script');
   snapScript.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
   snapScript.setAttribute('data-client-key', @js(config('midtrans.client_key') ?? ''));
   snapScript.async = false;
   document.head.appendChild(snapScript);
+  @endif
 
   $wire.on('midtrans-payment', (event) => {
     var data = Array.isArray(event) ? event[0] : (event.detail || event);

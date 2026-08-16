@@ -71,6 +71,7 @@ class AppUpdateService
         $options = [
             'http' => [
                 'header' => "User-Agent: zonaKasirAutoUpdater\r\n",
+                'timeout' => 600,
             ],
         ];
 
@@ -106,11 +107,13 @@ class AppUpdateService
 
         $log('✅ Download completed.');
 
+        $this->verifyUpdateSignature($zipPath, $latest, $log);
+
         $zip = new ZipArchive;
         if ($zip->open($zipPath) === true) {
             $log('☕ Extracting downloaded files...');
             $extractPath = storage_path('app/update/zonakasir/');
-            $zip->extractTo($extractPath);
+            $this->extractZipSafely($zip, $extractPath);
             $zip->close();
         } else {
             throw new Exception('❌ Failed to extract zip.');
@@ -144,6 +147,74 @@ class AppUpdateService
 
         $log("✅ Update to v$latestVersion completed.");
         Cache::forget('update:progress');
+    }
+
+    /**
+     * Verify the downloaded ZIP against a vendor-signed .sig asset.
+     * On-prem must refuse unsigned/tampered updates.
+     */
+    protected function verifyUpdateSignature(string $zipPath, array $latest, callable $log): void
+    {
+        $publicKey = $this->onpremPublicKey();
+
+        if (! $publicKey) {
+            throw new Exception('❌ Update blocked: ONPREM_PUBLIC_KEY not configured.');
+        }
+
+        $sigAsset = collect($latest['assets'] ?? [])
+            ->first(fn (array $a) => str_ends_with($a['name'], '.sig'));
+
+        if (! $sigAsset) {
+            throw new Exception('❌ Update blocked: no .sig asset on release. Vendor must run `php artisan onprem:sign-update`.');
+        }
+
+        $log('🔏 Verifying update signature...');
+        $sig = file_get_contents($sigAsset['browser_download_url']);
+        $signature = base64_decode($sig, true);
+
+        if ($signature === false) {
+            throw new Exception('❌ Update blocked: corrupt signature file.');
+        }
+
+        $hash = hash_file('sha256', $zipPath);
+        $ok = openssl_verify($hash, $signature, $publicKey, OPENSSL_ALGO_SHA256);
+
+        if ($ok !== 1) {
+            throw new Exception('❌ Update blocked: signature verification failed. Update ZIP is not from the vendor.');
+        }
+
+        $log('✅ Signature valid (SHA256: '.$hash.').');
+    }
+
+    protected function onpremPublicKey(): ?string
+    {
+        $key = config('onprem.license.public_key');
+
+        return $key ?: null;
+    }
+
+    /**
+     * Extract ZIP entries with zip-slip protection (reject path traversal).
+     */
+    protected function extractZipSafely(ZipArchive $zip, string $extractPath): void
+    {
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $entry = $zip->statIndex($i);
+            $name = str_replace('\\', '/', (string) ($entry['name'] ?? ''));
+
+            if (str_contains($name, '..') || str_starts_with($name, '/')) {
+                throw new Exception('❌ Update blocked: malicious path in update ZIP ('.$name.').');
+            }
+        }
+
+        // Only clean the temp update dir. restoreApp() extracts to base_path()
+        // and must never delete it.
+        if (str_starts_with($extractPath, storage_path('app/update'))) {
+            File::deleteDirectory($extractPath);
+            File::ensureDirectoryExists($extractPath);
+        }
+
+        $zip->extractTo($extractPath);
     }
 
     protected function copyFolder($from, $to, $exclude, $log)
@@ -231,7 +302,7 @@ class AppUpdateService
             throw new Exception('Could not open backup zip file.');
         }
 
-        $zip->extractTo(base_path());
+        $this->extractZipSafely($zip, base_path());
         $zip->close();
 
         foreach ($this->artisanAfterRestore as $key => $command) {
