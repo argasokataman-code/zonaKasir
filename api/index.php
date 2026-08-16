@@ -70,73 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && preg_match('#^/api/auth/login#', $r
 // Vercel PHP runtime + Laravel domain constraints can cause 404 on POST routes.
 // This ensures webhooks from payment gateways are always reachable.
 
-// Google OAuth — bypass Laravel routing (tenant-web.php routes silently 404
-// on Vercel/PHP 8.5 regardless of middleware-group position).
-// NOTE: redirect URL pake host saat ini (bukan GOOGLE_REDIRECT env) biar
-// gak perlu config env var terpisah tiap deployment.
-$path = parse_url($requestUri, PHP_URL_PATH);
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if ($path === '/auth/google/redirect') {
-        $scheme = (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] !== 'http')
-            ? $_SERVER['HTTP_X_FORWARDED_PROTO']
-            : ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http');
-        $redirectUri = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/auth/google/callback';
-        $redirectUrl = \Laravel\Socialite\Facades\Socialite::driver('google')
-            ->scopes(['openid', 'profile', 'email'])
-            ->with(['prompt' => 'select_account'])
-            ->redirectUrl($redirectUri)
-            ->stateless()
-            ->redirect()
-            ->getTargetUrl();
-        header('X-Debug-Redirect-Uri: ' . $redirectUri);
-        header('Location: ' . $redirectUrl);
-        http_response_code(302);
-        exit;
-    }
-    if ($path === '/auth/google/callback') {
-        $request = \Illuminate\Http\Request::capture();
-        $app->instance('request', $request);
-        // Override redirect URL to match current host — Socialite uses this
-        // for the token exchange (must match the redirect_uri sent to Google).
-        // Without this, GOOGLE_REDIRECT env var (pointing to old staging URL)
-        // causes "redirect_uri_mismatch" error from Google.
-        $scheme = (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] !== 'http')
-            ? $_SERVER['HTTP_X_FORWARDED_PROTO']
-            : ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http');
-        $redirectUri = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/auth/google/callback';
-        config(['services.google.redirect' => $redirectUri]);
-        header('X-Debug-Callback-Redirect-Uri: ' . $redirectUri);
-        // Start session so Auth::login() + session() helper work
-        $session = $app->make(\Illuminate\Session\SessionManager::class)->driver();
-        $session->start();
-        $app->instance('session.store', $session);
-        $request->setLaravelSession($session);
-        // Run the callback controller
-        $controller = $app->make(\App\Http\Controllers\Auth\GoogleController::class);
-        $response = $controller->callback();
-        // Save session data — the session store queues its own encrypted
-        // session cookie on save (config session cookie name). Do NOT set the
-        // cookie manually here: a manual plaintext cookie would DUPLICATE
-        // zonakasir_session and the browser would send the wrong (plaintext)
-        // value on /member, losing the login. The queued cookie below is the
-        // correct encrypted one.
-        $session->save();
-        // Get all queued cookies (session + other middleware) and attach to the
-        // response. AddQueuedCookiesToResponse middleware is not in the bypass
-        // pipeline, so without this the cookies are dropped.
-        foreach ($app->make(\Illuminate\Contracts\Cookie\QueueingFactory::class)->getQueuedCookies() as $queuedCookie) {
-            if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
-                $response->headers->setCookie($queuedCookie);
-            }
-        }
-        if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
-            $response->send();
-        } else {
-            response($response)->send();
-        }
-        exit;
-    }
-}
+// Google OAuth routes are registered with $router below (NOT bypassed here) so
+// the web session middleware handles the session cookie consistently — manual
+// session handling in a bypass loses the login (browser never gets the cookie).
 
 // Safety net: all routes below use $router directly (not Route Facade) because
 // the Route Facade silently fails on Vercel/PHP 8.5 during service provider boot
@@ -144,6 +80,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 // The closure+require fix also fails — the Facade's internal resolution produces
 // a different Router state than direct $app->make('router') during early bootstrap.
 $router = $app->make('router');
+
+// Google OAuth — registered via $router with web middleware so the session
+// middleware sets the session cookie correctly. redirect URI uses current
+// host (x-forwarded-proto) instead of GOOGLE_REDIRECT env.
+$router->get('/auth/google/redirect', function () {
+    $scheme = (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] !== 'http')
+        ? $_SERVER['HTTP_X_FORWARDED_PROTO']
+        : ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http');
+    $redirectUri = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/auth/google/callback';
+
+    return \Laravel\Socialite\Facades\Socialite::driver('google')
+        ->scopes(['openid', 'profile', 'email'])
+        ->with(['prompt' => 'select_account'])
+        ->redirectUrl($redirectUri)
+        ->stateless()
+        ->redirect();
+})->name('auth.google.redirect')->middleware('web');
+
+$router->get('/auth/google/callback', function () {
+    $scheme = (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] !== 'http')
+        ? $_SERVER['HTTP_X_FORWARDED_PROTO']
+        : ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http');
+    $redirectUri = $scheme . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost') . '/auth/google/callback';
+    config(['services.google.redirect' => $redirectUri]);
+
+    $controller = app(\App\Http\Controllers\Auth\GoogleController::class);
+
+    return $controller->callback();
+})->name('auth.google.callback')->middleware('web');
 
 // Login page (GET)
 $router->get('/member/login', \App\Filament\Tenant\Pages\TenantLogin::class)
