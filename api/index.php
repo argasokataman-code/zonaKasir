@@ -114,28 +114,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // Run the callback controller
         $controller = $app->make(\App\Http\Controllers\Auth\GoogleController::class);
         $response = $controller->callback();
-        // Save session data — for cookie driver this queues cookies on CookieJar
+        // Save session data — the session store queues its own encrypted
+        // session cookie on save (config session cookie name). Do NOT set the
+        // cookie manually here: a manual plaintext cookie would DUPLICATE
+        // zonakasir_session and the browser would send the wrong (plaintext)
+        // value on /member, losing the login. The queued cookie below is the
+        // correct encrypted one.
         $session->save();
-        // For non-cookie drivers (e.g. database on Vercel serverless) the session
-        // cookie is NOT queued automatically. Set it explicitly so the browser
-        // sends the session ID on the next request (/member), otherwise the
-        // login is lost.
-        if (config('session.driver') !== 'cookie') {
-            $cookieName = config('session.cookie', 'laravel_session');
-            $response->headers->setCookie(cookie(
-                $cookieName,
-                $session->getId(),
-                config('session.lifetime', 120),
-                config('session.path', '/'),
-                config('session.domain'),
-                config('session.secure', false),
-                config('session.http_only', true),
-                config('session.same_site', 'lax'),
-            ));
-        }
-        // Get all queued cookies (cookie driver writes data cookie here) and add
-        // to response. Without this, queued cookies from CookieSessionHandler::write()
-        // are lost because AddQueuedCookiesToResponse middleware is not in the pipeline.
+        // Get all queued cookies (session + other middleware) and attach to the
+        // response. AddQueuedCookiesToResponse middleware is not in the bypass
+        // pipeline, so without this the cookies are dropped.
         foreach ($app->make(\Illuminate\Contracts\Cookie\QueueingFactory::class)->getQueuedCookies() as $queuedCookie) {
             if ($response instanceof \Symfony\Component\HttpFoundation\Response) {
                 $response->headers->setCookie($queuedCookie);
