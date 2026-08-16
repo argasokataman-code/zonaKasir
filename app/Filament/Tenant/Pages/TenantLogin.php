@@ -84,10 +84,13 @@ class TenantLogin extends Login
 
     public function form(\Filament\Forms\Form $form): \Filament\Forms\Form
     {
-        return $form->schema([
-            ...parent::form($form)->getComponents(),
-            $this->getGoogleLoginButton(),
-        ]);
+        $components = parent::form($form)->getComponents();
+
+        if (! config('onprem.mode')) {
+            $components[] = $this->getGoogleLoginButton();
+        }
+
+        return $form->schema($components);
     }
 
     protected function getGoogleLoginButton(): Component

@@ -249,13 +249,13 @@ class TenantPanelProvider extends PanelProvider
                     ]
                 ),
             ]),
-            NavigationGroup::make(__('General'))->label('')->collapsible(false)->items([
+            NavigationGroup::make(__('General'))->label('')->collapsible(false)->items(array_filter([
                 $this->generateNavigationItem(VoucherResource::class, Voucher::class),
                 $this->generateNavigationItem(SettlementResource::class),
-                $this->generateNavigationItem(WithdrawalResource::class),
-                $this->generateNavigationItem(WithdrawalPage::class),
-                $this->generateNavigationItem(ManageSubscription::class),
-            ]),
+                config('onprem.mode') ? null : $this->generateNavigationItem(WithdrawalResource::class),
+                config('onprem.mode') ? null : $this->generateNavigationItem(WithdrawalPage::class),
+                config('onprem.mode') ? null : $this->generateNavigationItem(ManageSubscription::class),
+            ])),
             NavigationGroup::make(__('Setting'))->collapsible(false)->items([
                 $this->generateNavigationItem(GeneralSetting::class),
                 $this->generateNavigationItem(Printer::class),

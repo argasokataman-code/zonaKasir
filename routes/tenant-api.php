@@ -132,12 +132,14 @@ Route::middleware([
                     ->can('create selling');
                 Route::get('/selling/{selling}', [SellingController::class, 'show'])->can('read selling');
 
-                Route::get('/withdrawal', [WithdrawalController::class, 'index'])->can('read withdrawal');
-                Route::post('/withdrawal', [WithdrawalController::class, 'store'])
-                    ->middleware('throttle:30,1', 'withdrawal.ratelimit')
-                    ->can('create withdrawal');
-                Route::post('/withdrawal/{withdrawal}/approve', [WithdrawalController::class, 'approve'])->can('update withdrawal');
-                Route::post('/withdrawal/{withdrawal}/reject', [WithdrawalController::class, 'reject'])->can('update withdrawal');
+                if (! config('onprem.mode')) {
+                    Route::get('/withdrawal', [WithdrawalController::class, 'index'])->can('read withdrawal');
+                    Route::post('/withdrawal', [WithdrawalController::class, 'store'])
+                        ->middleware('throttle:30,1', 'withdrawal.ratelimit')
+                        ->can('create withdrawal');
+                    Route::post('/withdrawal/{withdrawal}/approve', [WithdrawalController::class, 'approve'])->can('update withdrawal');
+                    Route::post('/withdrawal/{withdrawal}/reject', [WithdrawalController::class, 'reject'])->can('update withdrawal');
+                }
                 Route::group(['prefix' => 'cash-drawer'], function () {
                     Route::get('/', [CashDrawerController::class, 'show']);
                     Route::post('/', [CashDrawerController::class, 'store'])
@@ -204,13 +206,15 @@ Route::middleware([
                 Route::post('/redeem', [\App\Http\Controllers\Api\Tenants\CouponController::class, 'redeem']);
             });
 
-            Route::group(['prefix' => 'billing'], function () {
-                Route::get('/invoices', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'index']);
-                Route::post('/invoices', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'create']);
-                Route::get('/invoices/{id}', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'show']);
-                Route::post('/invoices/{id}/pay', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'pay']);
-                Route::get('/features', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'features']);
-            });
+            if (! config('onprem.mode')) {
+                Route::group(['prefix' => 'billing'], function () {
+                    Route::get('/invoices', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'index']);
+                    Route::post('/invoices', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'create']);
+                    Route::get('/invoices/{id}', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'show']);
+                    Route::post('/invoices/{id}/pay', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'pay']);
+                    Route::get('/features', [\App\Http\Controllers\Api\Tenants\InvoiceController::class, 'features']);
+                });
+            }
 
             Route::group(['prefix' => 'sync'], function () {
                 Route::get('/data', [\App\Http\Controllers\Api\Tenants\SyncController::class, 'data']);

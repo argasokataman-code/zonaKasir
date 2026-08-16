@@ -27,7 +27,8 @@ Route::get('/serviceworker.js', function () {
 });
 
 Route::get('/auth/register', RegisterTenantForm::class)
-    ->name('auth.register');
+    ->name('auth.register')
+    ->middleware('prevent.onprem.register');
 
 Route::get('/auth/google/redirect', function () {
     $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
@@ -39,7 +40,7 @@ Route::get('/auth/google/redirect', function () {
         ->redirectUrl($redirectUri)
         ->stateless()
         ->redirect();
-})->name('auth.google.redirect');
+})->name('auth.google.redirect')->middleware('prevent.onprem.register');
 
 Route::get('/auth/google/callback', function () {
     $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
@@ -49,7 +50,7 @@ Route::get('/auth/google/callback', function () {
     $controller = app(\App\Http\Controllers\Auth\GoogleController::class);
 
     return $controller->callback();
-})->name('auth.google.callback');
+})->name('auth.google.callback')->middleware('prevent.onprem.register');
 
 Route::middleware(['web', 'auth:admin'])->group(function () {
     Route::get('/admin/tenants/export/csv', [\App\Http\Controllers\TenantExportController::class, 'csv'])
