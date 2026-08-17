@@ -1,0 +1,1 @@
+M5 batch1: FEAT-8.1 struk shareable (/s/token+QR+ViewSelling action), 8.2+8.4 bestseller+caption (MarketingContent page), 8.5 menu digital (/menu/token+QR ListTables+badge Favorit). dep simple-qrcode. 11 test baru, M1-M5 hijau. 8.3 grafik jam + 8.6 kartu member deferred.

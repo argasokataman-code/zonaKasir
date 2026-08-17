@@ -15,6 +15,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Get;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -30,6 +31,20 @@ class About extends Model
     use LogsActivity;
 
     protected $guarded = ['id'];
+
+    protected static function booted(): void
+    {
+        static::creating(function ($about) {
+            if (! $about->menu_token) {
+                $about->menu_token = Str::random(32);
+            }
+        });
+    }
+
+    public function menuUrl(?int $tableNumber = null): string
+    {
+        return url('/menu/'.$this->menu_token.($tableNumber ? '?table='.$tableNumber : ''));
+    }
 
     public function getActivitylogOptions(): LogOptions
     {

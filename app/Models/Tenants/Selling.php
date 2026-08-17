@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
 
@@ -26,6 +27,15 @@ class Selling extends Model
     protected $appends = [
         'grand_total_price',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(function ($selling) {
+            if (! $selling->share_token) {
+                $selling->share_token = Str::random(32);
+            }
+        });
+    }
 
     public function sellingDetails()
     {
@@ -112,6 +122,11 @@ class Selling extends Model
         return (float) $this->payments()
             ->where('status', 'success')
             ->sum('amount');
+    }
+
+    public function shareUrl(): string
+    {
+        return url("/s/{$this->share_token}");
     }
 
     public function getActivitylogOptions(): LogOptions

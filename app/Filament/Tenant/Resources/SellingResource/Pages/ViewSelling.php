@@ -40,6 +40,15 @@ class ViewSelling extends ViewRecord
                 ])
                 ->color(Color::Teal)
                 ->visible(can('can print selling') && feature(PrintSellingA5::class)),
+            Action::make(__('Share struk'))
+                ->icon('heroicon-s-share')
+                ->color(Color::Sky)
+                ->modalHeading(__('Share struk digital'))
+                ->modalSubmitAction(false)
+                ->modalContent(view('filament.components.share-struk', [
+                    'record' => $this->getRecord(),
+                ]))
+                ->visible(can('read selling')),
             Action::make(__('Print receipt'))
                 ->icon('heroicon-s-printer')
                 ->extraAttributes([

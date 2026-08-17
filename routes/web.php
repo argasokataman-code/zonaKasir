@@ -20,6 +20,12 @@ Route::view('/terms', 'terms-of-service');
 Route::view('/offline', 'offline');
 Route::view('/network-error', 'network-error');
 
+Route::get('/s/{token}', [\App\Http\Controllers\StrukShareController::class, 'show'])
+    ->name('struk.share');
+
+Route::get('/menu/{token}', [\App\Http\Controllers\MenuController::class, 'show'])
+    ->name('menu.digital');
+
 Route::get('/serviceworker.js', function () {
     return response(file_get_contents(public_path('serviceworker.js')), 200, [
         'Content-Type' => 'application/javascript',

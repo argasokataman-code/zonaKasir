@@ -2490,6 +2490,486 @@
           "raw": "BUG-001:relates"
         }
       ]
+    },
+    {
+      "id": "TASK-117",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:24:05",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/database/migrations/tenant/2026_08_17_000007_add_share_token_to_sellings.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-118",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:24:11",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/Selling.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-119",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:24:56",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Http/Controllers/StrukShareController.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-120",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:25:00",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Http/Controllers/StrukShareController.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-121",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:25:26",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/routes/web.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-122",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:26:09",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/struk-digital.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-123",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:26:36",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/components/share-struk.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-124",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:26:40",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/SellingResource/Pages/ViewSelling.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-125",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:26:52",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M5StrukShareTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-126",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:28:26",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M5StrukShareTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-127",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:28:48",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/Tenants/MarketingContentService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-128",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:29:00",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-129",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:29:04",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/MarketingContent.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-130",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:29:22",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/marketing-content.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-131",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:29:34",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M5MarketingContentTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-132",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:30:19",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/database/migrations/tenant/2026_08_17_000008_add_menu_token_to_abouts.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-133",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:30:26",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/About.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-134",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:30:35",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/Tenants/MenuDigitalService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-135",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:30:39",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Http/Controllers/MenuController.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-136",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:30:43",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/routes/web.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-137",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:30:51",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/menu-digital.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-138",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:31:07",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/components/qr-menu.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-139",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:31:13",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/TableResource/Pages/ListTables.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-140",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:31:26",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M5MenuDigitalTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-141",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:32:06",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M5MenuDigitalTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-142",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:33:06",
+      "tags": [
+        "m5",
+        "marketing",
+        "kafe"
+      ],
+      "summary": "M5 batch1: FEAT-8.1 struk shareable (/s/token+QR+ViewSelling action), 8.2+8.4 bestseller+caption (MarketingContent page), 8.5 menu digital (",
+      "conn": [
+        {
+          "id": "TASK-115",
+          "type": "relates",
+          "raw": "TASK-115:relates"
+        },
+        {
+          "id": "FEAT-002",
+          "type": "implements",
+          "raw": "FEAT-002:implements"
+        },
+        {
+          "id": "REQ-003",
+          "type": "relates",
+          "raw": "REQ-003:relates"
+        }
+      ]
     }
   ]
 }
