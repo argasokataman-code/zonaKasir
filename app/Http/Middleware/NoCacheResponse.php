@@ -12,10 +12,10 @@ class NoCacheResponse
     {
         $response = $next($request);
 
-        // Prevent browser + SW from caching authenticated pages.
-        // Ensures fresh content after logout/account switch.
-        $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-        $response->headers->set('Pragma', 'no-cache');
+        // Allow short browser cache (bfcache works, back/forward instant).
+        // must-revalidate ensures fresh content after max-age.
+        $response->headers->set('Cache-Control', 'private, max-age=60, must-revalidate');
+        $response->headers->set('Pragma', 'cache');
         $response->headers->set('Expires', '0');
 
         return $response;

@@ -95,8 +95,8 @@ class TenantPanelProvider extends PanelProvider
 
         try {
             if (function_exists('tenancy') && tenancy()->initialized) {
-                if (\Illuminate\Support\Facades\Schema::hasTable('abouts')) {
-                    $about = \App\Models\Tenants\About::select('id', 'shop_name', 'primary_color', 'logo')->first();
+                    if ($this->aboutsTableExists()) {
+                        $about = \App\Models\Tenants\About::cache();
                     if ($about) {
                         $panel->brandName($about->shop_name ?? 'Your Brand');
 
@@ -176,7 +176,7 @@ class TenantPanelProvider extends PanelProvider
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->sidebarFullyCollapsibleOnDesktop()
             ->databaseNotifications()
-            ->lazyLoadedDatabaseNotifications(false)
+            ->lazyLoadedDatabaseNotifications()
             ->id('tenant')
             ->viteTheme('resources/css/filament/tenant/theme.css')
             ->colors(['primary' => Color::hex('#FF6600')])
@@ -343,8 +343,8 @@ class TenantPanelProvider extends PanelProvider
         try {
             // Try tenant-aware first (works during request)
             if (function_exists('tenancy') && tenancy()->initialized) {
-                if (\Illuminate\Support\Facades\Schema::hasTable('abouts')) {
-                    $about = About::select('id', 'business_type')->first();
+                if ($this->aboutsTableExists()) {
+                    $about = About::cache();
                     $raw = $about?->business_type;
                 }
             }
@@ -373,6 +373,11 @@ class TenantPanelProvider extends PanelProvider
         } catch (\Throwable) {
             return null;
         }
+    }
+
+    private function aboutsTableExists(): bool
+    {
+        return once(fn () => \Illuminate\Support\Facades\Schema::hasTable('abouts'));
     }
 
     private function isHiddenByNiche(string $navKey): bool

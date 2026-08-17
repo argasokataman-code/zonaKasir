@@ -17,7 +17,7 @@ class TenantIsolationMiddleware
             session(['tenant_id' => $user->tenant_id]);
 
             // Always refresh business type from DB (not cached in session)
-            $about = \App\Models\Tenants\About::select('id', 'business_type')->first();
+            $about = \App\Models\Tenants\About::cache();
             session(['tenant_business_type' => $about?->business_type]);
         }
 

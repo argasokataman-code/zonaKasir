@@ -8,7 +8,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 
 class BalanceWidget extends BaseWidget
 {
-    protected static ?string $pollingInterval = '60s';
+    protected static ?string $pollingInterval = '120s';
 
     protected function getColumns(): int
     {

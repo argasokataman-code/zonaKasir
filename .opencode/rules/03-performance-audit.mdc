@@ -1,0 +1,132 @@
+# Performance Audit Reference — zonaKasir
+
+**Created:** 2026-08-17
+**Purpose:** Reference for future performance audits. Check this file before investigating LCP/slow pages.
+
+---
+
+## Dashboard Query Map (~15 queries after optimization)
+
+| Component | Queries | Notes |
+|-----------|---------|-------|
+| SellingOverview | 5 | 2× revenue agg, 1× today count, 1× discount sum, 1× detail sum |
+| TransactionStats | 3 | today agg, yesterday count, member count |
+| BalanceWidget | 1 | LedgerEntry SUM CASE |
+| SalesChart | 1 | grouped 7-day |
+| PaymentMethodChart | 1 | join payment_methods |
+| InventoryStats | 4 | 3× Product count + 1× expired |
+| TodaysBestSellingProduct | 2 | groupBy + eager product |
+| LowStockProducts | 3 | pre-query + eager + whereIn |
+| **Shared infra** | 6 | About::cache(), Profile::Timezone(), Schema::hasTable (cached via `once()`), Pennant (array store), Spatie permissions (cached after first) |
+
+---
+
+## Optimizations Applied
+
+### Query Reduction
+| Optimization | Impact |
+|-------------|--------|
+| `About::cache()` via `once()` | 4 queries → 1 per request |
+| `Profile::Timezone()` via `once()` | 3 queries → 1 per request |
+| `Schema::hasTable('abouts')` via `once()` | 2 queries → 1 per request |
+| `PENNANT_STORE=array` | ~9 DB queries → in-memory |
+| `version-indicator` skip HTTP in on-prem | -1 HTTP call (5s timeout) |
+
+### Infrastructure
+| Optimization | Impact |
+|-------------|--------|
+| Composite index `sellings(tenant_id, is_paid, created_at)` | Seq scan → index scan |
+| Composite index `sellings(tenant_id, date)` | Better date range queries |
+| `wire:key` remove `time()` | Alpine re-init every render → stable DOM |
+| `lazyLoadedDatabaseNotifications()` | Sync → async notification load |
+| `NoCacheResponse` → `private, max-age=60` | bfcache works, back/forward instant |
+| Polling intervals 30→120s | Fewer re-renders |
+
+### On-Prem Specific
+| Optimization | Impact |
+|-------------|--------|
+| `TrialBanner` early return on-prem | -1 query |
+| `body-start` subscription skip on-prem | -3 queries |
+| `version-indicator` skip HTTP on-prem | -1 HTTP block |
+
+---
+
+## Common Bottlenecks to Check
+
+### Per-Request Query Hotspots
+1. **About model** — queried in middleware, panel config, getBusinessType, body-start. Always use `About::cache()`.
+2. **Profile timezone** — used by 3+ widgets. Always use `Profile::Timezone()`.
+3. **Schema::hasTable** — fires DB query. Cache with `once()`.
+4. **Pennant feature()** — default store = database. Set `PENNANT_STORE=array` in .env.
+5. **Spatie permissions** — column introspection fires 2+ queries on fresh request. Cached after first load.
+6. **Update checker** — HTTP call to GitHub API. Skip in on-prem mode.
+
+### Livewire Widget Anti-Patterns
+1. `wire:key="{{ $widget }}-{{ time() }}"` — forces Alpine re-init every render. Remove `time()`.
+2. Aggressive polling (30s) — increases server load. Use 120s+ for non-critical widgets.
+3. `lazyLoadedDatabaseNotifications(false)` — sync load. Change to `true` or remove.
+
+### Middleware Anti-Patterns
+1. `NoCacheResponse` with `no-store` — kills bfcache. Use `private, max-age=60, must-revalidate`.
+2. `TenantIsolationMiddleware` querying About every request — use `About::cache()`.
+
+### DB Index Gaps
+| Table | Missing Index | Used By |
+|-------|--------------|---------|
+| `sellings` | `(tenant_id, is_paid, created_at)` | Dashboard widgets |
+| `sellings` | `(tenant_id, date)` | TodaysBestSellingProduct |
+| `selling_details` | `(tenant_id, selling_id)` | LowStockProducts eager |
+| `subscriptions` | `(tenant_id, status)` | body-start subscription check |
+
+---
+
+## Testing Performance
+
+### Enable Query Log (Dev Only)
+```php
+// In .env
+ENABLE_QUERY_LOG=true
+
+// Check in tinker
+\DB::listen(function ($query) { dump($query->sql . ' [' . $query->time . 'ms]'); });
+```
+
+### Count Queries Per Page
+```bash
+php artisan tinker --execute="
+\$queries = [];
+\DB::listen(function (\$q) use (&\$queries) { \$queries[] = \$q->sql . ' [' . \$q->time . 'ms]'; });
+// Navigate to the page in browser
+dump(count(\$queries) . ' queries');
+dump(\$queries);
+"
+```
+
+### EXPLAIN a Query
+```bash
+php artisan tinker --execute="
+echo \App\Models\Tenants\Selling::isPaid()
+    ->whereBetween('created_at', [now()->subDays(7), now()])
+    ->toRawSql();
+"
+# Then: DB::select('EXPLAIN <raw_sql>');
+```
+
+---
+
+## Key Files
+
+| File | Role |
+|------|------|
+| `app/Providers/Filament/TenantPanelProvider.php` | Panel config, navigation, middleware stack |
+| `app/Http/Middleware/TenantIsolationMiddleware.php` | Tenant context, About query |
+| `app/Http/Middleware/NoCacheResponse.php` | Browser cache headers |
+| `app/Http/Middleware/LocalizationMiddleware.php` | Profile locale query |
+| `app/Models/Tenants/About.php` | `cache()` static method via `once()` |
+| `app/Models/Tenants/Profile.php` | `Timezone()` static method via `once()` |
+| `app/Filament/Tenant/Pages/Dashboard.php` | Widget registration |
+| `resources/views/filament/tenant/pages/dashboard.blade.php` | Widget rendering, wire:key |
+| `resources/views/partials/body-start.blade.php` | Expired overlay, wallpaper |
+| `resources/views/version-indicator.blade.php` | Update checker HTTP call |
+| `config/pennant.php` | Feature flag store |
+| `.env` | `CACHE_DRIVER`, `PENNANT_STORE`, `ONPREM_MODE` |

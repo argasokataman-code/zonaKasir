@@ -17,7 +17,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             @foreach ($this->getVisibleWidgets() as $widget)
                 @if (class_basename($widget) !== 'QuickActions')
-                    <div class="widget-card" wire:key="{{ $widget }}-{{ time() }}">
+                    <div class="widget-card" wire:key="{{ $widget }}">
                         <div wire:loading.class="opacity-50">
                             @livewire($widget)
                         </div>

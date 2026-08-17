@@ -15,7 +15,7 @@ class TrialBanner extends Widget
     public function mount(): void
     {
         $user = auth()->user();
-        if (! $user) {
+        if (! $user || config('app.on_premise')) {
             return;
         }
 

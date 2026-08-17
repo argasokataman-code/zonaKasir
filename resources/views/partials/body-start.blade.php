@@ -37,7 +37,7 @@
   app()->instance('_expiry_status', ['isExpired' => $_isExpired, 'plans' => []]);
 
   if (!request()->is('admin*') && !$_isExpired) {
-    $_about = \App\Models\Tenants\About::first();
+    $_about = \App\Models\Tenants\About::cache();
     if ($_about?->photo) {
       try {
         $_uploadDisk = config('filesystems.upload_disk');

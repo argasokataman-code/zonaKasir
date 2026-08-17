@@ -41,6 +41,11 @@ class About extends Model
         });
     }
 
+    public static function cache(): ?static
+    {
+        return once(fn () => static::first());
+    }
+
     public function menuUrl(?int $tableNumber = null): string
     {
         return url('/menu/'.$this->menu_token.($tableNumber ? '?table='.$tableNumber : ''));

@@ -1,8 +1,13 @@
 @php
   try {
-    $updateChecker = app(\App\Services\UpdateChecker::class);
-    $currentVersion = $updateChecker->getCurrentVersion();
-    $isUpdateAvailable = $updateChecker->isUpdateAvailable();
+    if (config('app.on_premise')) {
+      $currentVersion = app(\App\Services\UpdateChecker::class)->getCurrentVersion();
+      $isUpdateAvailable = false;
+    } else {
+      $updateChecker = app(\App\Services\UpdateChecker::class);
+      $currentVersion = $updateChecker->getCurrentVersion();
+      $isUpdateAvailable = $updateChecker->isUpdateAvailable();
+    }
   } catch (\Throwable) {
     $currentVersion = 'Development';
     $isUpdateAvailable = false;

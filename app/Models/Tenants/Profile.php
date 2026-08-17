@@ -30,6 +30,11 @@ class Profile extends Model
         HasUploadFileField;
     use LogsActivity;
 
+    public static function Timezone(): string
+    {
+        return once(fn () => static::select('timezone')->first()->timezone ?? 'UTC');
+    }
+
     protected $fillable = [
         'phone',
         'address',

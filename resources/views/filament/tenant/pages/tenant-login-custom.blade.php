@@ -109,15 +109,20 @@
         }
 
         .login-form-card .fi-fo-field-wrp { margin-bottom: 1.125rem; }
-        .login-form-card .fi-fo-field-wrp label { color: #9ca3af !important; font-size: 0.8125rem; font-weight: 500; margin-bottom: 0.375rem; display: block; }
+        .login-form-card .fi-fo-field-wrp label { color: #d1d5db !important; font-size: 0.8125rem; font-weight: 500; margin-bottom: 0.375rem; display: block; }
+        .login-form-card .fi-input-wrp {
+            padding: 0.5rem 0.75rem !important; background: rgba(255,255,255,0.05) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important; border-radius: 0.5rem !important;
+            transition: all 0.2s;
+        }
+        .login-form-card .fi-input-wrp:focus-within { border-color: #f97316 !important; box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1) !important; background: rgba(255,255,255,0.07) !important; }
         .login-form-card input[type="email"],
         .login-form-card input[type="password"],
         .login-form-card input[type="text"] {
-            width: 100%; padding: 0.6875rem 0.875rem; background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem;
-            color: white; font-size: 0.875rem; transition: all 0.2s; outline: none;
+            width: 100%; padding: 0 !important; background: transparent !important;
+            border: none !important; color: white; font-size: 0.875rem; outline: none;
+            height: auto !important; line-height: 1.5;
         }
-        .login-form-card input:focus { border-color: #f97316; box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1); background: rgba(255,255,255,0.07); }
         .login-form-card input::placeholder { color: #4b5563; }
         .login-form-card .fi-fo-field-wrp-error-message { color: #f87171; font-size: 0.8125rem; margin-top: 0.25rem; }
         .login-form-card .fi-fo-checkbox-input-label { color: #9ca3af !important; font-size: 0.875rem; }
@@ -149,20 +154,14 @@
 
             <div style="margin-top: 1rem">
                 <button type="button" wire:click="authenticate"
-                    style="width: 100%; padding: 0.6875rem 1.5rem; background: linear-gradient(135deg, #f97316, #dc2626); color: white; font-weight: 600; font-size: 0.875rem; border-radius: 0.5rem; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25); transition: all 0.2s"
+                    style="width: 100%; min-width: 160px; padding: 0.6875rem 1.5rem; background: linear-gradient(135deg, #f97316, #dc2626); color: white; font-weight: 600; font-size: 0.875rem; border-radius: 0.5rem; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25); transition: all 0.2s; overflow: hidden"
                     onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 16px rgba(249, 115, 22, 0.35)'"
                     onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(249, 115, 22, 0.25)'"
                     wire:loading.attr="disabled"
                     wire:loading.style="opacity:0.7;cursor:not-allowed;transform:none"
                 >
                     <span wire:loading.remove>Masuk</span>
-                    <span wire:loading class="flex items-center justify-center gap-2">
-                        <svg style="width:1rem;height:1rem;animation:spin 1s linear infinite" fill="none" viewBox="0 0 24 24">
-                            <circle style="opacity:0.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path style="opacity:0.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                        </svg>
-                        Memproses...
-                    </span>
+                    <span wire:loading><span style="display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;white-space:nowrap"><svg style="width:1rem;height:1rem;animation:spin 1s linear infinite;flex-shrink:0" fill="none" viewBox="0 0 24 24"><circle style="opacity:0.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path style="opacity:0.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg> Memproses...</span></span>
                 </button>
             </div>
 
