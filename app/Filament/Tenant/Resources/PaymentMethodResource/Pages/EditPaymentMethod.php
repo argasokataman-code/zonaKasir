@@ -13,4 +13,13 @@ class EditPaymentMethod extends EditRecord
     {
         return '/member/payment-methods';
     }
+
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if ($data['payment_type'] !== 'qris') {
+            $data['icon'] = null;
+        }
+
+        return $data;
+    }
 }

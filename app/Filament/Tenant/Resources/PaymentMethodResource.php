@@ -5,10 +5,13 @@ namespace App\Filament\Tenant\Resources;
 use App\Filament\Tenant\Resources\PaymentMethodResource\Pages;
 use App\Models\Tenants\PaymentMethod;
 use App\Traits\HasTranslatableResource;
+use Filament\Forms;
+use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -19,6 +22,34 @@ class PaymentMethodResource extends Resource
     protected static ?string $model = PaymentMethod::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+
+    public static function form(Form $form): Form
+    {
+        return $form->schema([
+            Forms\Components\TextInput::make('name')
+                ->translateLabel()
+                ->required()
+                ->maxLength(255),
+            Forms\Components\Select::make('payment_type')
+                ->translateLabel()
+                ->options([
+                    'cash' => __('Cash'),
+                    'qris' => 'QRIS',
+                    'credit' => __('Credit'),
+                ])
+                ->required()
+                ->native(false),
+            Forms\Components\FileUpload::make('icon')
+                ->label(__('QRIS Image'))
+                ->disk(config('filesystems.upload_disk'))
+                ->directory('payment-methods')
+                ->image()
+                ->imageEditor()
+                ->maxSize(config('upload.livewire_max_size'))
+                ->visible(fn (Form $form): bool => $form->get('payment_type') === 'qris')
+                ->columnSpanFull(),
+        ]);
+    }
 
     public static function table(Table $table): Table
     {
@@ -37,11 +68,18 @@ class PaymentMethodResource extends Resource
                         default => 'gray',
                     })
                     ->translateLabel(),
+                ImageColumn::make('icon')
+                    ->label(__('QRIS Image'))
+                    ->disk(config('filesystems.upload_disk'))
+                    ->circular()
+                    ->size(40)
+                    ->visible(fn (PaymentMethod $record): bool => $record->payment_type === 'qris'),
                 IconColumn::make('is_active')
                     ->label(__('Active'))
                     ->boolean(),
             ])
             ->actions([
+                Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('toggle_active')
                     ->translateLabel()
                     ->icon(fn (PaymentMethod $record): string => $record->is_active ? 'heroicon-o-eye-slash' : 'heroicon-o-eye')
@@ -66,6 +104,7 @@ class PaymentMethodResource extends Resource
     {
         return [
             'index' => Pages\ListPaymentMethods::route('/'),
+            'edit' => Pages\EditPaymentMethod::route('/{record}/edit'),
         ];
     }
 }
