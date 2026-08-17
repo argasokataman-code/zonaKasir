@@ -19,7 +19,7 @@
       <div class="my-2 grid gap-4 md:grid-cols-2">
         <div x-data="detail">
           <div class="rounded-lg">
-            <div class="mb-4 grid grid-cols-2 gap-2 md:grid-cols-4">
+             <div class="mb-4 grid grid-cols-2 gap-2 md:grid-cols-4">
               <template x-for="paymentMethod in paymentMethods">
                 <div
                   x-on:click="selectPayment(paymentMethod)"
@@ -27,9 +27,7 @@
                   :class="cartDetail['payment_method_id'] == paymentMethod.id ? 'bg-primary-600 text-white' :
                       'dark:bg-gray-900 bg-gray-300 '"
                 >
-                  <template x-if="paymentMethod.payment_type === 'qris' && paymentMethod.icon">
-                    <img :src="paymentMethod.icon" class="h-10 w-10 object-contain mb-1 rounded" alt="QRIS">
-                  </template>
+                  <img x-show="paymentMethod.payment_type === 'qris' && paymentMethod.icon" :src="paymentMethod.icon || ''" class="h-10 w-10 object-contain mb-1 rounded" alt="QRIS" x-cloak>
                   <span x-text="paymentMethod.name"></span>
                 </div>
               </template>
