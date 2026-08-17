@@ -32,17 +32,17 @@
               <x-table-row>
                 <x-table-cell>{{ $stock['product_name'] }}</x-table-cell>
                 <x-table-cell class="whitespace-nowrap">{{ $stock['product_unit'] }}</x-table-cell>
-                <x-table-cell class="number whitespace-nowrap">{{ $stock['init_stock'] }}</x-table-cell>
-                <x-table-cell class="number whitespace-nowrap">{{ $stock['initial_price'] }}</x-table-cell>
-                <x-table-cell class="number whitespace-nowrap">{{ $stock['total_initial_price'] }}</x-table-cell>
-                <x-table-cell class="number whitespace-nowrap">{{ $stock['selling_price'] }}</x-table-cell>
-                <x-table-cell class="number whitespace-nowrap">{{ $stock['total_selling_price'] }}</x-table-cell>
+                <x-table-cell :number="true" class="whitespace-nowrap">{{ $stock['init_stock'] }}</x-table-cell>
+                <x-table-cell :number="true" class="whitespace-nowrap">{{ $stock['initial_price'] }}</x-table-cell>
+                <x-table-cell :number="true" class="whitespace-nowrap">{{ $stock['total_initial_price'] }}</x-table-cell>
+                <x-table-cell :number="true" class="whitespace-nowrap">{{ $stock['selling_price'] }}</x-table-cell>
+                <x-table-cell :number="true" class="whitespace-nowrap">{{ $stock['total_selling_price'] }}</x-table-cell>
               </x-table-row>
             @endforeach
             <x-table-row class="border-t border-gray-200 dark:border-gray-600">
               <x-table-cell colspan="4"><b>{{ __('Subtotal') }}</b></x-table-cell>
-              <x-table-cell colspan="2" class="number whitespace-nowrap"><b>{{ $report['subtotal_total_initial_price'] }}</b></x-table-cell>
-              <x-table-cell class="number whitespace-nowrap"><b>{{ $report['subtotal_total_selling_price'] }}</b></x-table-cell>
+              <x-table-cell colspan="2" :number="true" class="whitespace-nowrap"><b>{{ $report['subtotal_total_initial_price'] }}</b></x-table-cell>
+              <x-table-cell :number="true" class="whitespace-nowrap"><b>{{ $report['subtotal_total_selling_price'] }}</b></x-table-cell>
             </x-table-row>
           </tbody>
         </x-table>
@@ -58,11 +58,11 @@
         </x-table-row>
         <x-table-row>
           <x-table-header-cell class="whitespace-nowrap">{{ __('Cost') }}</x-table-header-cell>
-          <x-table-header-cell class="number whitespace-nowrap text-right"><b>{{ $footer['grand_total_initial_price'] }}</b></x-table-header-cell>
+          <x-table-header-cell :number="true" class="whitespace-nowrap text-right"><b>{{ $footer['grand_total_initial_price'] }}</b></x-table-header-cell>
         </x-table-row>
         <x-table-row>
           <x-table-header-cell class="whitespace-nowrap">{{ __('Selling price') }}</x-table-header-cell>
-          <x-table-header-cell class="number whitespace-nowrap text-right"><b>{{ $footer['grand_total_selling_price'] }}</b></x-table-header-cell>
+          <x-table-header-cell :number="true" class="whitespace-nowrap text-right"><b>{{ $footer['grand_total_selling_price'] }}</b></x-table-header-cell>
         </x-table-row>
       </x-table-header>
     </x-table>

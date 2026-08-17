@@ -28,28 +28,28 @@
             @foreach($report['transaction']['items'] as $item)
               <x-table-row>
                 <x-table-cell>{{ $item['product'] }}</x-table-cell>
-                <x-table-cell class="number whitespace-nowrap">{{ $item['product_price'] }} x {{ $item['quantity'] }}</x-table-cell>
-                <x-table-cell class="number whitespace-nowrap">{{ $item['product_cost'] }} x {{ $item['quantity'] }}</x-table-cell>
-                <x-table-cell class="number whitespace-nowrap">({{ $item['discount_price'] }})</x-table-cell>
-                <x-table-cell class="number whitespace-nowrap">{{ $item['price'] }}</x-table-cell>
-                <x-table-cell class="number whitespace-nowrap">{{ $item['cost'] }}</x-table-cell>
-                <x-table-cell class="number whitespace-nowrap">{{ $item['total_after_discount'] }}</x-table-cell>
+                <x-table-cell :number="true" class="whitespace-nowrap">{{ $item['product_price'] }} x {{ $item['quantity'] }}</x-table-cell>
+                <x-table-cell :number="true" class="whitespace-nowrap">{{ $item['product_cost'] }} x {{ $item['quantity'] }}</x-table-cell>
+                <x-table-cell :number="true" class="whitespace-nowrap">({{ $item['discount_price'] }})</x-table-cell>
+                <x-table-cell :number="true" class="whitespace-nowrap">{{ $item['price'] }}</x-table-cell>
+                <x-table-cell :number="true" class="whitespace-nowrap">{{ $item['cost'] }}</x-table-cell>
+                <x-table-cell :number="true" class="whitespace-nowrap">{{ $item['total_after_discount'] }}</x-table-cell>
               </x-table-row>
             @endforeach
             <x-table-row>
               <x-table-cell colspan="3"><b>{{ __('Sub Total') }}</b></x-table-cell>
-              <x-table-cell class="number whitespace-nowrap"><b>({{ $report['total']['discount'] }})</b></x-table-cell>
-              <x-table-cell class="number whitespace-nowrap"><b>{{ $report['total']['gross_selling'] }}</b></x-table-cell>
-              <x-table-cell class="number whitespace-nowrap"><b>{{ $report['total']['cost'] }}</b></x-table-cell>
-              <x-table-cell class="number whitespace-nowrap"><b>{{ $report['total']['net_selling'] }}</b></x-table-cell>
+              <x-table-cell :number="true" class="whitespace-nowrap"><b>({{ $report['total']['discount'] }})</b></x-table-cell>
+              <x-table-cell :number="true" class="whitespace-nowrap"><b>{{ $report['total']['gross_selling'] }}</b></x-table-cell>
+              <x-table-cell :number="true" class="whitespace-nowrap"><b>{{ $report['total']['cost'] }}</b></x-table-cell>
+              <x-table-cell :number="true" class="whitespace-nowrap"><b>{{ $report['total']['net_selling'] }}</b></x-table-cell>
             </x-table-row>
             <x-table-row>
               <x-table-cell colspan="6"><b>{{ __('Discount Penjualan') }}</b></x-table-cell>
-              <x-table-cell class="number whitespace-nowrap"><b>({{ $report['total']['discount_selling'] }})</b></x-table-cell>
+              <x-table-cell :number="true" class="whitespace-nowrap"><b>({{ $report['total']['discount_selling'] }})</b></x-table-cell>
             </x-table-row>
             <x-table-row>
               <x-table-cell colspan="6"><b>Total</b></x-table-cell>
-              <x-table-cell class="number whitespace-nowrap"><b>{{ $report['total']['grand_total'] }}</b></x-table-cell>
+              <x-table-cell :number="true" class="whitespace-nowrap"><b>{{ $report['total']['grand_total'] }}</b></x-table-cell>
             </x-table-row>
           </tbody>
         </x-table>
@@ -76,14 +76,14 @@
       </x-table-header>
       <tbody>
         <x-table-row>
-          <x-table-cell class="number whitespace-nowrap"><b>{{ $footer['total_cost'] }}</b></x-table-cell>
-          <x-table-cell class="number whitespace-nowrap"><b>{{ $footer['total_gross'] }}</b></x-table-cell>
-          <x-table-cell class="number whitespace-nowrap"><b>{{ $footer['total_discount'] }}</b></x-table-cell>
-          <x-table-cell class="number whitespace-nowrap"><b>{{ $footer['total_discount_per_item'] }}</b></x-table-cell>
-          <x-table-cell class="number whitespace-nowrap"><b>{{ $footer['total_net'] }}</b></x-table-cell>
-          <x-table-cell class="number whitespace-nowrap"><b>{{ $footer['total_gross_profit'] }}</b></x-table-cell>
-          <x-table-cell class="number whitespace-nowrap"><b>{{ $footer['total_net_profit_before_discount_selling'] }}</b></x-table-cell>
-          <x-table-cell class="number whitespace-nowrap"><b>{{ $footer['total_net_profit_after_discount_selling'] }}</b></x-table-cell>
+          <x-table-cell :number="true" class="whitespace-nowrap"><b>{{ $footer['total_cost'] }}</b></x-table-cell>
+          <x-table-cell :number="true" class="whitespace-nowrap"><b>{{ $footer['total_gross'] }}</b></x-table-cell>
+          <x-table-cell :number="true" class="whitespace-nowrap"><b>{{ $footer['total_discount'] }}</b></x-table-cell>
+          <x-table-cell :number="true" class="whitespace-nowrap"><b>{{ $footer['total_discount_per_item'] }}</b></x-table-cell>
+          <x-table-cell :number="true" class="whitespace-nowrap"><b>{{ $footer['total_net'] }}</b></x-table-cell>
+          <x-table-cell :number="true" class="whitespace-nowrap"><b>{{ $footer['total_gross_profit'] }}</b></x-table-cell>
+          <x-table-cell :number="true" class="whitespace-nowrap"><b>{{ $footer['total_net_profit_before_discount_selling'] }}</b></x-table-cell>
+          <x-table-cell :number="true" class="whitespace-nowrap"><b>{{ $footer['total_net_profit_after_discount_selling'] }}</b></x-table-cell>
         </x-table-row>
       </tbody>
     </x-table>
