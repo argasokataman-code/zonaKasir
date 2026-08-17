@@ -52,7 +52,7 @@ class ApiResponseService
             $response['pagination'] = $this->pagination;
         }
 
-        if ($this->code != 200) {
+        if ($this->code >= 400) {
             $response['success'] = false;
         }
 
