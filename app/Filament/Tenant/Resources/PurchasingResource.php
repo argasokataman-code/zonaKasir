@@ -11,7 +11,7 @@ use App\Models\Tenants\Supplier;
 use App\Services\Tenants\PurchasingService;
 use App\Traits\HasTranslatableResource;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
+use App\Filament\Forms\Components\WebPFileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -72,7 +72,7 @@ class PurchasingResource extends Resource
                     ->closeOnDateSelection()
                     ->native(false)
                     ->required(),
-                FileUpload::make('image')
+                WebPFileUpload::make('image')
                     ->disk(config('filesystems.upload_disk'))
                     ->placeholder(__('Tarik dan lepas file di sini atau klik untuk mencari file'))
                     ->translateLabel()

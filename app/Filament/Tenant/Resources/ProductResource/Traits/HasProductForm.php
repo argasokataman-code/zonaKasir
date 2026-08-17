@@ -16,7 +16,7 @@ use Filament\Actions\StaticAction;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
+use App\Filament\Forms\Components\WebPFileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -28,7 +28,7 @@ trait HasProductForm
 {
     public function generateFileUploadFormComponent(): FileUpload
     {
-        return FileUpload::make('hero_images')
+        return WebPFileUpload::make('hero_images')
             ->disk(config('filesystems.upload_disk'))
             ->placeholder(__('Tarik dan lepas file di sini atau klik untuk mencari file'))
             ->image()

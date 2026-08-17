@@ -3,7 +3,7 @@
 namespace App\Filament\Tenant\Resources\StockOpnameResource\Traits;
 
 use App\Models\Tenants\Product;
-use Filament\Forms\Components\FileUpload;
+use App\Filament\Forms\Components\WebPFileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Get;
@@ -86,7 +86,7 @@ trait HasStockOpnameItemForm
                 ->translateLabel()
                 ->readOnly()
                 ->numeric(),
-            FileUpload::make('attachment')
+            WebPFileUpload::make('attachment')
                 ->disk(config('filesystems.upload_disk'))
                 ->placeholder(__('Tarik dan lepas file di sini atau klik untuk mencari file'))
                 ->translateLabel()

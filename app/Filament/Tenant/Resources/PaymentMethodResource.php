@@ -5,7 +5,7 @@ namespace App\Filament\Tenant\Resources;
 use App\Filament\Tenant\Resources\PaymentMethodResource\Pages;
 use App\Models\Tenants\PaymentMethod;
 use App\Traits\HasTranslatableResource;
-use Filament\Forms\Components\FileUpload;
+use App\Filament\Forms\Components\WebPFileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -42,7 +42,7 @@ class PaymentMethodResource extends Resource
                 ])
                 ->required()
                 ->native(false),
-            FileUpload::make('icon')
+            WebPFileUpload::make('icon')
                 ->label(__('QRIS Image'))
                 ->disk(config('filesystems.upload_disk'))
                 ->directory('payment-methods')
