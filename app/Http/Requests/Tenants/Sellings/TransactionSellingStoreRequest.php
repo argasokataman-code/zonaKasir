@@ -65,7 +65,10 @@ class TransactionSellingStoreRequest extends FormRequest
         }
 
         $this->replace($data);
-        $this->merge($this->sellingService->mapProductRequest($this->all()));
+
+        if (isset($this->all()['products'])) {
+            $this->merge($this->sellingService->mapProductRequest($this->all()));
+        }
     }
 
     public function rules(): array
