@@ -168,6 +168,7 @@
     </div>
     @endif
 
+    @if(!config('app.on_premise'))
     <div class="mb-6 flex flex-col items-center">
         <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">{{ __('Available Plans') }}</h2>
         <div class="flex flex-col gap-4 pb-2 sm:flex-row sm:flex-nowrap sm:overflow-x-auto sm:scrollbar-thin sm:justify-center sm:gap-6">
@@ -379,11 +380,13 @@
                         </div>
                     </div>
                 </div>
-                @endforeach
-            </div>
+            @endforeach
         </div>
     </div>
+    @endif
+    </div>
 
+    @if(!config('app.on_premise'))
     @php $invoices = app(\App\Filament\Tenant\Pages\ManageSubscription::class)->getInvoices(); @endphp
     @if(count($invoices) > 0)
     <div class="bg-white border border-[#E5E5E1] rounded-[6px] p-6 shadow-sm">
@@ -421,6 +424,7 @@
             </table>
         </div>
     </div>
+    @endif
     @endif
     </div>
 
