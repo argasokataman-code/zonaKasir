@@ -94,6 +94,10 @@ php artisan livewire:publish --assets
 ### Livewire + Alpine Entangle
 - **`$wire.entangle()`**: Data wrapped dalam Livewire internal format `[[[{data},{s:"arr"}]]]`. Kalau x-for iterate object, pakai `Object.values()` dulu.
 
+### Livewire Snapshot
+- **Large public Collections**: Livewire v3 serializes ALL public properties ke snapshot. Collection dengan 100+ items → snapshot truncated → DOM cuma render sedikit. Fix: pass data via `getViewData()` bukan public property.
+- **TenantContext**: Kalau jalankan query via tinker/artisan tanpa `TenantContext::set()`, `HasTenant` scope filter by null → data gak muncul. Wajib set context dulu.
+
 ### File Upload / Storage
 - **Icon/Image URL**: Public disk → file di `storage/app/public/`, accessible via `{app_url}/storage/{path}`. JANGAN `{app_url}/{path}`.
 - **Accessors**: Kalau DB simpan relative path, accessor harus prepend `/storage/`.
