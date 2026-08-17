@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Traits\HasTenant;
 class Barcode extends Model
 {
-    use HasTenant;
     use HasFactory, HasTenant;
 
     protected $guarded = ['id'];

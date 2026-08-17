@@ -31,6 +31,37 @@ class Setting extends Model
         });
     }
 
+    public static function getMultiple(array $keys): array
+    {
+        $tenantId = TenantContext::get();
+        if (! $tenantId) {
+            return array_fill_keys($keys, null);
+        }
+
+        $cached = [];
+        $missing = [];
+        foreach ($keys as $key) {
+            $cacheKey = 'setting_'.$tenantId.'_'.$key;
+            $val = Cache::get($cacheKey);
+            if ($val !== null) {
+                $cached[$key] = $val;
+            } else {
+                $missing[] = $key;
+            }
+        }
+
+        if ($missing) {
+            $rows = self::whereIn('key', $missing)->pluck('value', 'key')->toArray();
+            foreach ($missing as $key) {
+                $value = $rows[$key] ?? null;
+                Cache::put('setting_'.$tenantId.'_'.$key, $value, now()->addMinutes(3 * 60));
+                $cached[$key] = $value;
+            }
+        }
+
+        return $cached;
+    }
+
     public static function set($key, $value)
     {
         $tenantId = TenantContext::get();

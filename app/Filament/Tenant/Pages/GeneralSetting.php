@@ -297,7 +297,8 @@ class GeneralSetting extends Page implements HasActions, HasForms
             ->success()
             ->send();
 
-        $this->mount();
+        // Refresh navigation if business type changed (niche-based nav)
+        $this->redirect(route('filament.tenant.pages.general-setting'));
     }
 
     public function saveFeature(): void

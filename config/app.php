@@ -8,6 +8,8 @@ return [
 
     'dark_mode' => env('DARK_MODE', false),
 
+    'on_premise' => env('ONPREM_MODE', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

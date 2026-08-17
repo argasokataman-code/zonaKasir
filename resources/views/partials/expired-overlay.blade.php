@@ -2,7 +2,7 @@
   $user = auth()->user();
   $isExpired = false;
 
-  if ($user && $user->tenant_id) {
+  if ($user && $user->tenant_id && ! config('app.on_premise')) {
       // Check for expired / past_due subscription
       $blockedSub = \App\Models\Subscription::where('tenant_id', $user->tenant_id)
           ->whereIn('status', ['expired', 'past_due'])

@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasTenant;
 class Cart extends Model
 {
-    use HasTenant;
     use HasFactory, HasTenant;
 
     protected $guarded = ['id'];

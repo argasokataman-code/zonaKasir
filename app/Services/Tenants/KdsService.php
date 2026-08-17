@@ -13,12 +13,10 @@ class KdsService
     {
         return Selling::query()
             ->open()
-            ->whereHas('sellingDetails', fn ($q) => $q->whereNull('kitchen_status'))
+            ->whereHas('sellingDetails', fn ($q) => $q->whereIn('kitchen_status', [null, 'in_progress']))
             ->with([
                 'table:id,number',
-                'sellingDetails' => fn ($q) => $q
-                    ->whereNull('kitchen_status')
-                    ->with('product:id,name'),
+                'sellingDetails' => fn ($q) => $q->with('product:id,name'),
             ])
             ->orderBy('created_at')
             ->get()
@@ -28,11 +26,15 @@ class KdsService
                     'code' => $selling->code,
                     'table' => $selling->table?->number,
                     'created_at' => $selling->created_at,
-                    'items' => $selling->sellingDetails->map(fn ($d) => [
-                        'id' => $d->id,
-                        'product' => $d->product?->name,
-                        'qty' => $d->qty,
-                    ]),
+                    'items' => $selling->sellingDetails
+                        ->filter(fn ($d) => in_array($d->kitchen_status, [null, 'in_progress']))
+                        ->values()
+                        ->map(fn ($d) => [
+                            'id' => $d->id,
+                            'product' => $d->product?->name,
+                            'qty' => $d->qty,
+                            'kitchen_status' => $d->kitchen_status,
+                        ]),
                 ];
             })
             ->values();

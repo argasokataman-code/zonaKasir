@@ -18,16 +18,12 @@ class LocalizationMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         try {
-            if (! Schema::hasTable('users')) {
-                return $next($request);
-            }
-            $locale = 'en';
             $user = auth()->user();
             if ($user) {
                 $locale = $user->profile->locale ?? 'en';
+                config(['app.locale' => $locale]);
+                app()->setLocale($locale);
             }
-            config(['app.locale' => $locale]);
-            app()->setLocale($locale);
         } catch (Exception $e) {
             // DB not available — skip locale detection
         }

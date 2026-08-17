@@ -13,7 +13,7 @@ class LogSqlQueries
      */
     public function handle(Request $request, Closure $next)
     {
-        $enabled = env('ENABLE_QUERY_LOG', app()->environment('local'));
+        $enabled = env('ENABLE_QUERY_LOG', false);
 
         if ($enabled) {
             DB::listen(function ($query) {

@@ -3,7 +3,7 @@
   $isTrial = false;
   $daysRemaining = null;
 
-  if ($user) {
+  if ($user && ! config('app.on_premise')) {
     $subscription = \App\Models\Subscription::where('tenant_id', $user->tenant_id)
       ->where('status', 'trialing')
       ->latest()

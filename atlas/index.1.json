@@ -3325,6 +3325,1993 @@
           "raw": "FEAT-001:relates"
         }
       ]
+    },
+    {
+      "id": "TASK-283",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "11:11:57",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/.agent-browser/config.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-284",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "11:28:44",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-285",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "11:53:02",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-286",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "11:56:13",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-287",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "11:58:58",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Responses/TenantLoginResponse.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-288",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "11:59:39",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-289",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:00:49",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-290",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:10:30",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/config/app.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-291",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:10:36",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/partials/trial-banner-sidebar.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-292",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:10:49",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/partials/expired-overlay.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-293",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:11:05",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/partials/body-start.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-294",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:11:06",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/partials/expired-layout-kill.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-295",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:32:46",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-296",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:33:26",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-297",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:34:20",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-298",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:34:41",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-299",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:35:01",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-300",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:35:25",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-301",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:36:10",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-302",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:41:17",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-303",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:47:18",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-304",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:48:11",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-305",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:48:29",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-306",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:49:43",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-307",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:50:20",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-308",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:51:00",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-309",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:52:20",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-310",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:53:20",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-311",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "12:56:44",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-004",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "13:01:14",
+      "tags": [
+        "auth",
+        "tenant",
+        "login",
+        "filament",
+        "guard"
+      ],
+      "summary": "TenantLogin used Filament::auth() which resolves to admin panel on Livewire POST (/livewire/update). Fix: Auth::guard('web') explicit.",
+      "conn": [
+        {
+          "id": "FEAT-195",
+          "type": "relates",
+          "raw": "FEAT-195:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-005",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "13:01:14",
+      "tags": [
+        "auth",
+        "redirect",
+        "onprem",
+        "trial"
+      ],
+      "summary": "TenantLoginResponse redirected to admin panel URL. Fix: custom TenantLoginResponse redirecting to route('filament.tenant.pages.dashboard').",
+      "conn": [
+        {
+          "id": "BUG-004",
+          "type": "fixes",
+          "raw": "BUG-004:fixes"
+        }
+      ]
+    },
+    {
+      "id": "BUG-006",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "13:01:14",
+      "tags": [
+        "onprem",
+        "trial",
+        "expired",
+        "overlay"
+      ],
+      "summary": "Trial/expired overlay and banner showed on onprem mode (ONPREM_MODE=true). Fix: skip all subscription checks when config('app.on_premise').",
+      "conn": [
+        {
+          "id": "DEC-003",
+          "type": "relates",
+          "raw": "DEC-003:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-007",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "13:01:14",
+      "tags": [
+        "split-bill",
+        "selling-service",
+        "payed_money",
+        "total_price"
+      ],
+      "summary": "SplitBillHandler: SellingService::create() fails with NOT NULL on payed_money+total_price. Need to read internal service before fixing.",
+      "conn": [
+        {
+          "id": "FEAT-195",
+          "type": "blocks",
+          "raw": "FEAT-195:blocks"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-196",
+      "type": "feature",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "13:01:14",
+      "tags": [
+        "split-bill",
+        "ui",
+        "modal",
+        "cashier"
+      ],
+      "summary": "Split bill UI: button in payment modal, group selector (1-6), auto-assign items, arrow buttons to move between groups, summary.",
+      "conn": [
+        {
+          "id": "FEAT-195",
+          "type": "implements",
+          "raw": "FEAT-195:implements"
+        }
+      ]
+    },
+    {
+      "id": "TASK-312",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "13:01:14",
+      "tags": [
+        "ui",
+        "test",
+        "onprem",
+        "local"
+      ],
+      "summary": "Local UI test session: login flow, dashboard, cashier, split bill modal rendering. Found 5 bugs, fixed 4.",
+      "conn": [
+        {
+          "id": "BUG-004",
+          "type": "fixes",
+          "raw": "BUG-004:fixes"
+        },
+        {
+          "id": "BUG-005",
+          "type": "fixes",
+          "raw": "BUG-005:fixes"
+        },
+        {
+          "id": "BUG-006",
+          "type": "fixes",
+          "raw": "BUG-006:fixes"
+        },
+        {
+          "id": "BUG-007",
+          "type": "relates",
+          "raw": "BUG-007:relates"
+        }
+      ]
+    },
+    {
+      "id": "PERF-001",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "13:23:16",
+      "tags": [
+        "performance",
+        "local",
+        "middleware",
+        "log"
+      ],
+      "summary": "LogSqlQueries writes every query to file via file_put_contents on every request. 30+ disk writes per page load. Kill local perf.",
+      "conn": [
+        {
+          "id": "TASK-312",
+          "type": "relates",
+          "raw": "TASK-312:relates"
+        }
+      ]
+    },
+    {
+      "id": "PERF-002",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "13:23:16",
+      "tags": [
+        "performance",
+        "local",
+        "middleware",
+        "schema"
+      ],
+      "summary": "LocalizationMiddleware runs Schema::hasTable('users') on every request. 1 wasted query per request.",
+      "conn": [
+        {
+          "id": "TASK-312",
+          "type": "relates",
+          "raw": "TASK-312:relates"
+        }
+      ]
+    },
+    {
+      "id": "PERF-003",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "13:23:17",
+      "tags": [
+        "performance",
+        "local",
+        "model",
+        "has-tenant"
+      ],
+      "summary": "HasTenant trait used twice in CartItem, Cart, Barcode, SellingDetail. Double boot = double WHERE clause.",
+      "conn": [
+        {
+          "id": "TASK-312",
+          "type": "relates",
+          "raw": "TASK-312:relates"
+        }
+      ]
+    },
+    {
+      "id": "PERF-004",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "13:23:17",
+      "tags": [
+        "performance",
+        "local",
+        "cache"
+      ],
+      "summary": "CACHE_DRIVER=file and QUEUE_CONNECTION=sync. File cache = disk I/O per hit. Sync queue = blocking.",
+      "conn": [
+        {
+          "id": "TASK-312",
+          "type": "relates",
+          "raw": "TASK-312:relates"
+        }
+      ]
+    },
+    {
+      "id": "PERF-005",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "13:23:17",
+      "tags": [
+        "performance",
+        "cashier",
+        "n+1",
+        "queries"
+      ],
+      "summary": "Cashier mount() runs 30+ queries. Table::activeSelling() N+1 = +20 queries for 20 tables.",
+      "conn": [
+        {
+          "id": "TASK-312",
+          "type": "relates",
+          "raw": "TASK-312:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-313",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "13:23:40",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Http/Middleware/LogSqlQueries.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-314",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "13:24:03",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Http/Middleware/LocalizationMiddleware.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-315",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "13:24:49",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/CartItem.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-316",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "13:24:51",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/Cart.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-317",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "13:24:53",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/Barcode.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-318",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "13:24:54",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/SellingDetail.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-319",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "13:39:31",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/.env",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-320",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "13:41:00",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-321",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:00:37",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/Setting.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-322",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:00:58",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-323",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:01:54",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/CartForm.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-324",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:03:03",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "PERF-006",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:05:38",
+      "tags": [
+        "performance",
+        "cashier",
+        "optimization"
+      ],
+      "summary": "Cashier mount() optimized: 19→14 queries, 81ms. Setting::getMultiple, removed duplicate categories, removed CartForm extra query.",
+      "conn": [
+        {
+          "id": "PERF-005",
+          "type": "fixes",
+          "raw": "PERF-005:fixes"
+        }
+      ]
+    },
+    {
+      "id": "TASK-325",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:08:33",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-008",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "14:10:53",
+      "tags": [
+        "split-bill",
+        "selling-service"
+      ],
+      "summary": "SplitBillHandler missing mapProductRequest() call. SellingService::create() failed NOT NULL on total_price+total_cost+total_qty. Fix: call m",
+      "conn": [
+        {
+          "id": "BUG-007",
+          "type": "fixes",
+          "raw": "BUG-007:fixes"
+        },
+        {
+          "id": "FEAT-195",
+          "type": "fixes",
+          "raw": "FEAT-195:fixes"
+        }
+      ]
+    },
+    {
+      "id": "TASK-326",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:22:36",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-327",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:24:53",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-328",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:26:04",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-329",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:28:51",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-009",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "14:30:00",
+      "tags": [
+        "split-bill",
+        "cart-item",
+        "detail-id"
+      ],
+      "summary": "SplitBillHandler used cart_item.id as detail_id but SplitService expects selling_detail.id. Fix: map cart items to selling details after cre",
+      "conn": [
+        {
+          "id": "BUG-008",
+          "type": "fixes",
+          "raw": "BUG-008:fixes"
+        }
+      ]
+    },
+    {
+      "id": "TASK-330",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:32:49",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-331",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:36:47",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-332",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:37:02",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-333",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:38:16",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-334",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:38:25",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-335",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:39:49",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-336",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:40:01",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-337",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:41:22",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-338",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:41:32",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-339",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:43:06",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-340",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:46:10",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-341",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:46:24",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-342",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:47:32",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-343",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:47:43",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-344",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:49:49",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/SplitBillHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-345",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:49:59",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-346",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:50:08",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-347",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:51:49",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-348",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:52:02",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-349",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:54:28",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-350",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "14:57:46",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-010",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "14:59:06",
+      "tags": [
+        "split-bill",
+        "alpine",
+        "livewire",
+        "data"
+      ],
+      "summary": "Split bill modal showed 0 items. Alpine x-data initialized at page render (empty cart), Livewire morph doesn't re-init Alpine. Fix: hidden s",
+      "conn": [
+        {
+          "id": "BUG-009",
+          "type": "relates",
+          "raw": "BUG-009:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-351",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:23:30",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/config/niches.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-352",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:24:19",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-353",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:25:25",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-354",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:29:40",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-355",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:30:20",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-356",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:31:28",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-357",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:33:23",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-358",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:34:37",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-359",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:35:26",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-360",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:36:21",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-361",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:37:39",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-362",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:39:02",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-363",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:41:43",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-364",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:42:36",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-365",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:43:33",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-366",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:44:09",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-367",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:45:51",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-368",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:46:14",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Http/Middleware/TenantIsolationMiddleware.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-369",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:47:12",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Responses/TenantLoginResponse.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-370",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:48:13",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-197",
+      "type": "feature",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:51:44",
+      "tags": [
+        "niche",
+        "navigation",
+        "sidebar",
+        "business-type"
+      ],
+      "summary": "Niche-based navigation: F&B shows KDS+Tables, Retail shows Marketing Content, config-driven hiding via config/niches.php + session cache.",
+      "conn": [
+        {
+          "id": "FEAT-195",
+          "type": "relates",
+          "raw": "FEAT-195:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-371",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "15:55:41",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/niche-navigation.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUS-005",
+      "type": "business",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "15:55:48",
+      "tags": [
+        "biz",
+        "niche",
+        "navigation"
+      ],
+      "summary": "zonaKasir supports 6 niches: F&B (cafe/restaurant/warung), Retail, Wholesale, Fashion, Pharmacy, Other. Each niche has different nav visibil",
+      "conn": [
+        {
+          "id": "FEAT-197",
+          "type": "relates",
+          "raw": "FEAT-197:relates"
+        },
+        {
+          "id": "BUS-001",
+          "type": "led_to",
+          "raw": "BUS-001:led_to"
+        }
+      ]
+    },
+    {
+      "id": "DEC-005",
+      "type": "decision",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "15:56:01",
+      "tags": [
+        "biz",
+        "architecture",
+        "niche",
+        "config"
+      ],
+      "summary": "Niche navigation: config-driven (config/niches.php), session-cached business_type, null-return for hidden items. Session cache needed becaus",
+      "conn": [
+        {
+          "id": "FEAT-197",
+          "type": "implements",
+          "raw": "FEAT-197:implements"
+        },
+        {
+          "id": "BUS-005",
+          "type": "relates",
+          "raw": "BUS-005:relates"
+        }
+      ]
     }
   ]
 }

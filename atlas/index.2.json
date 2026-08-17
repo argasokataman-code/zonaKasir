@@ -1,0 +1,338 @@
+{
+  "shard": 2,
+  "nodes": [
+    {
+      "id": "TASK-372",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "16:12:14",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/KDS_FLOW_ANALYSIS.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-011",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "16:12:21",
+      "tags": [
+        "kds",
+        "ux",
+        "role"
+      ],
+      "summary": "KDS UX fixed: Pending/Cooking badges, Cook→Cooking→Done flow, item hides after Done. Roles created.",
+      "conn": [
+        {
+          "id": "FEAT-197",
+          "type": "relates",
+          "raw": "FEAT-197:relates"
+        },
+        {
+          "id": "BUS-005",
+          "type": "relates",
+          "raw": "BUS-005:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-373",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "16:15:07",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/Tenants/KdsService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-374",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "16:15:55",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/kitchen-display.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-375",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "16:32:41",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/Tenants/KdsService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-198",
+      "type": "feature",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "16:35:58",
+      "tags": [
+        "kds",
+        "ux",
+        "role"
+      ],
+      "summary": "KDS UX: Pending/Cooking badges, no more hidden items. Role separation: cashier/kitchen users created with Spatie permissions.",
+      "conn": [
+        {
+          "id": "BUG-011",
+          "type": "fixes",
+          "raw": "BUG-011:fixes"
+        }
+      ]
+    },
+    {
+      "id": "TASK-376",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "16:37:04",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/.config/opencode/AGENTS.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-012",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-17",
+      "time": "16:45:18",
+      "tags": [],
+      "summary": "Kitchen user sidebar showed too many items. Fixed: only update selling + access web app perms.",
+      "conn": [
+        {
+          "id": "BUG-011",
+          "type": "fixes",
+          "raw": "BUG-011:fixes"
+        }
+      ]
+    },
+    {
+      "id": "TASK-377",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "16:50:00",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Responses/TenantLoginResponse.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-378",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "16:51:46",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/subscription.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-379",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "16:52:24",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/subscription.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-380",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "16:55:35",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/subscription.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-381",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "16:56:13",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/subscription.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-382",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "16:58:20",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/subscription.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-383",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "17:00:22",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/subscription.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-199",
+      "type": "feature",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "17:01:22",
+      "tags": [
+        "onprem",
+        "license",
+        "subscription"
+      ],
+      "summary": "On-prem license card on subscription page: shows license info, domain, features. SaaS plans still visible below.",
+      "conn": [
+        {
+          "id": "FEAT-197",
+          "type": "relates",
+          "raw": "FEAT-197:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-384",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "17:02:12",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Http/Middleware/TenantIsolationMiddleware.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-385",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "17:10:05",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/GeneralSetting.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    }
+  ]
+}

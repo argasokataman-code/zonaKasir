@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Models\Traits\HasTenant;
 class CartItem extends Model
 {
-    use HasTenant;
     use HasFactory, HasTenant;
 
     protected $fillable = [

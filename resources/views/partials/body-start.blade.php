@@ -4,7 +4,7 @@
   $_wallpaper = null;
   $_user = auth()->user();
 
-  if ($_user && $_user->tenant_id) {
+  if ($_user && $_user->tenant_id && ! config('app.on_premise')) {
     $blockedSub = \App\Models\Subscription::where('tenant_id', $_user->tenant_id)
       ->whereIn('status', ['expired', 'past_due'])
       ->latest()

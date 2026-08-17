@@ -10,6 +10,64 @@
         </a>
     </div>
 
+    {{-- On-Premise License Info --}}
+    @if(config('app.on_premise'))
+    @php
+        $licenseKey = env('ONPREM_LICENSE_KEY');
+        $licenseData = null;
+        if ($licenseKey) {
+            $parts = explode('.', $licenseKey);
+            if (count($parts) >= 2) {
+                $decoded = @base64_decode($parts[0]);
+                if ($decoded) {
+                    $licenseData = @json_decode($decoded, true);
+                }
+            }
+        }
+    @endphp
+    <div class="mb-6">
+        <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 text-center">{{ __('License') }}</h2>
+        <div class="bg-white rounded-[6px] shadow-md flex flex-col relative border-2 border-gray-900 w-full sm:w-[280px] sm:min-w-[280px] mx-auto">
+            <div class="absolute top-0 left-0 bg-gray-900 text-white text-[8px] font-mono font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-bl-[4px] rounded-tr-[5px]">
+                {{ __('On-Premise') }}
+            </div>
+            <div class="p-5 pt-10 flex flex-col h-full">
+                <div>
+                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">{{ __('Self-Hosted') }}</span>
+                    <h3 class="font-sans font-bold text-base text-gray-900">{{ $licenseData['customer'] ?? 'Licensed' }}</h3>
+                </div>
+                <div class="py-3 my-3 border-y border-gray-100">
+                    <span class="font-mono text-xl font-black text-gray-900">{{ __('Active') }}</span>
+                    <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">{{ __('Lifetime') }}</span>
+                </div>
+                <div class="text-[10px] text-gray-400 font-semibold mb-2">
+                    <div>{{ __('Domain') }}: {{ $licenseData['domain'] ?? 'localhost' }}</div>
+                    @if($licenseData['issued_at'] ?? null)
+                        <div>{{ __('Issued') }}: {{ $licenseData['issued_at'] }}</div>
+                    @endif
+                    @if($licenseData['expires_at'] ?? null)
+                        <div>{{ __('Expires') }}: {{ $licenseData['expires_at'] }}</div>
+                    @endif
+                </div>
+                <div class="text-[10px] text-gray-400 font-semibold mb-2 border-t border-gray-100 pt-2">
+                    <div class="flex items-center gap-2 py-0.5">
+                        <svg class="w-3 h-3 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        <span class="text-gray-600">{{ __('Core POS') }}</span>
+                    </div>
+                    <div class="flex items-center gap-2 py-0.5">
+                        <svg class="w-3 h-3 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        <span class="text-gray-600">{{ __('Offline Mode') }}</span>
+                    </div>
+                    <div class="flex items-center gap-2 py-0.5">
+                        <svg class="w-3 h-3 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        <span class="text-gray-600">{{ __('Local Network') }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     @php
         $current = app(\App\Filament\Tenant\Pages\ManageSubscription::class)->getCurrentPlan();
         $plans = app(\App\Filament\Tenant\Pages\ManageSubscription::class)->getAvailablePlans();

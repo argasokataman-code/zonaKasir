@@ -37,6 +37,14 @@
     {
       "id": "TASK-001",
       "shard": 0
+    },
+    {
+      "id": "BUG-004",
+      "shard": 1
+    },
+    {
+      "id": "BUG-005",
+      "shard": 1
     }
   ],
   "session": [
@@ -59,6 +67,10 @@
     {
       "id": "BUG-002",
       "shard": 0
+    },
+    {
+      "id": "BUG-004",
+      "shard": 1
     }
   ],
   "deploy": [
@@ -87,6 +99,10 @@
     {
       "id": "BUG-003",
       "shard": 0
+    },
+    {
+      "id": "BUG-005",
+      "shard": 1
     }
   ],
   "rebrand": [
@@ -99,6 +115,10 @@
     {
       "id": "TASK-003",
       "shard": 0
+    },
+    {
+      "id": "BUG-004",
+      "shard": 1
     }
   ],
   "supabase": [
@@ -137,6 +157,22 @@
     {
       "id": "TASK-282",
       "shard": 1
+    },
+    {
+      "id": "BUG-005",
+      "shard": 1
+    },
+    {
+      "id": "BUG-006",
+      "shard": 1
+    },
+    {
+      "id": "TASK-312",
+      "shard": 1
+    },
+    {
+      "id": "FEAT-199",
+      "shard": 2
     }
   ],
   "auto": [
@@ -739,12 +775,432 @@
     {
       "id": "TASK-281",
       "shard": 1
+    },
+    {
+      "id": "TASK-283",
+      "shard": 1
+    },
+    {
+      "id": "TASK-284",
+      "shard": 1
+    },
+    {
+      "id": "TASK-285",
+      "shard": 1
+    },
+    {
+      "id": "TASK-286",
+      "shard": 1
+    },
+    {
+      "id": "TASK-287",
+      "shard": 1
+    },
+    {
+      "id": "TASK-288",
+      "shard": 1
+    },
+    {
+      "id": "TASK-289",
+      "shard": 1
+    },
+    {
+      "id": "TASK-290",
+      "shard": 1
+    },
+    {
+      "id": "TASK-291",
+      "shard": 1
+    },
+    {
+      "id": "TASK-292",
+      "shard": 1
+    },
+    {
+      "id": "TASK-293",
+      "shard": 1
+    },
+    {
+      "id": "TASK-294",
+      "shard": 1
+    },
+    {
+      "id": "TASK-295",
+      "shard": 1
+    },
+    {
+      "id": "TASK-296",
+      "shard": 1
+    },
+    {
+      "id": "TASK-297",
+      "shard": 1
+    },
+    {
+      "id": "TASK-298",
+      "shard": 1
+    },
+    {
+      "id": "TASK-299",
+      "shard": 1
+    },
+    {
+      "id": "TASK-300",
+      "shard": 1
+    },
+    {
+      "id": "TASK-301",
+      "shard": 1
+    },
+    {
+      "id": "TASK-302",
+      "shard": 1
+    },
+    {
+      "id": "TASK-303",
+      "shard": 1
+    },
+    {
+      "id": "TASK-304",
+      "shard": 1
+    },
+    {
+      "id": "TASK-305",
+      "shard": 1
+    },
+    {
+      "id": "TASK-306",
+      "shard": 1
+    },
+    {
+      "id": "TASK-307",
+      "shard": 1
+    },
+    {
+      "id": "TASK-308",
+      "shard": 1
+    },
+    {
+      "id": "TASK-309",
+      "shard": 1
+    },
+    {
+      "id": "TASK-310",
+      "shard": 1
+    },
+    {
+      "id": "TASK-311",
+      "shard": 1
+    },
+    {
+      "id": "TASK-313",
+      "shard": 1
+    },
+    {
+      "id": "TASK-314",
+      "shard": 1
+    },
+    {
+      "id": "TASK-315",
+      "shard": 1
+    },
+    {
+      "id": "TASK-316",
+      "shard": 1
+    },
+    {
+      "id": "TASK-317",
+      "shard": 1
+    },
+    {
+      "id": "TASK-318",
+      "shard": 1
+    },
+    {
+      "id": "TASK-319",
+      "shard": 1
+    },
+    {
+      "id": "TASK-320",
+      "shard": 1
+    },
+    {
+      "id": "TASK-321",
+      "shard": 1
+    },
+    {
+      "id": "TASK-322",
+      "shard": 1
+    },
+    {
+      "id": "TASK-323",
+      "shard": 1
+    },
+    {
+      "id": "TASK-324",
+      "shard": 1
+    },
+    {
+      "id": "TASK-325",
+      "shard": 1
+    },
+    {
+      "id": "TASK-326",
+      "shard": 1
+    },
+    {
+      "id": "TASK-327",
+      "shard": 1
+    },
+    {
+      "id": "TASK-328",
+      "shard": 1
+    },
+    {
+      "id": "TASK-329",
+      "shard": 1
+    },
+    {
+      "id": "TASK-330",
+      "shard": 1
+    },
+    {
+      "id": "TASK-331",
+      "shard": 1
+    },
+    {
+      "id": "TASK-332",
+      "shard": 1
+    },
+    {
+      "id": "TASK-333",
+      "shard": 1
+    },
+    {
+      "id": "TASK-334",
+      "shard": 1
+    },
+    {
+      "id": "TASK-335",
+      "shard": 1
+    },
+    {
+      "id": "TASK-336",
+      "shard": 1
+    },
+    {
+      "id": "TASK-337",
+      "shard": 1
+    },
+    {
+      "id": "TASK-338",
+      "shard": 1
+    },
+    {
+      "id": "TASK-339",
+      "shard": 1
+    },
+    {
+      "id": "TASK-340",
+      "shard": 1
+    },
+    {
+      "id": "TASK-341",
+      "shard": 1
+    },
+    {
+      "id": "TASK-342",
+      "shard": 1
+    },
+    {
+      "id": "TASK-343",
+      "shard": 1
+    },
+    {
+      "id": "TASK-344",
+      "shard": 1
+    },
+    {
+      "id": "TASK-345",
+      "shard": 1
+    },
+    {
+      "id": "TASK-346",
+      "shard": 1
+    },
+    {
+      "id": "TASK-347",
+      "shard": 1
+    },
+    {
+      "id": "TASK-348",
+      "shard": 1
+    },
+    {
+      "id": "TASK-349",
+      "shard": 1
+    },
+    {
+      "id": "TASK-350",
+      "shard": 1
+    },
+    {
+      "id": "TASK-351",
+      "shard": 1
+    },
+    {
+      "id": "TASK-352",
+      "shard": 1
+    },
+    {
+      "id": "TASK-353",
+      "shard": 1
+    },
+    {
+      "id": "TASK-354",
+      "shard": 1
+    },
+    {
+      "id": "TASK-355",
+      "shard": 1
+    },
+    {
+      "id": "TASK-356",
+      "shard": 1
+    },
+    {
+      "id": "TASK-357",
+      "shard": 1
+    },
+    {
+      "id": "TASK-358",
+      "shard": 1
+    },
+    {
+      "id": "TASK-359",
+      "shard": 1
+    },
+    {
+      "id": "TASK-360",
+      "shard": 1
+    },
+    {
+      "id": "TASK-361",
+      "shard": 1
+    },
+    {
+      "id": "TASK-362",
+      "shard": 1
+    },
+    {
+      "id": "TASK-363",
+      "shard": 1
+    },
+    {
+      "id": "TASK-364",
+      "shard": 1
+    },
+    {
+      "id": "TASK-365",
+      "shard": 1
+    },
+    {
+      "id": "TASK-366",
+      "shard": 1
+    },
+    {
+      "id": "TASK-367",
+      "shard": 1
+    },
+    {
+      "id": "TASK-368",
+      "shard": 1
+    },
+    {
+      "id": "TASK-369",
+      "shard": 1
+    },
+    {
+      "id": "TASK-370",
+      "shard": 1
+    },
+    {
+      "id": "TASK-371",
+      "shard": 1
+    },
+    {
+      "id": "TASK-372",
+      "shard": 2
+    },
+    {
+      "id": "TASK-373",
+      "shard": 2
+    },
+    {
+      "id": "TASK-374",
+      "shard": 2
+    },
+    {
+      "id": "TASK-375",
+      "shard": 2
+    },
+    {
+      "id": "TASK-376",
+      "shard": 2
+    },
+    {
+      "id": "TASK-377",
+      "shard": 2
+    },
+    {
+      "id": "TASK-378",
+      "shard": 2
+    },
+    {
+      "id": "TASK-379",
+      "shard": 2
+    },
+    {
+      "id": "TASK-380",
+      "shard": 2
+    },
+    {
+      "id": "TASK-381",
+      "shard": 2
+    },
+    {
+      "id": "TASK-382",
+      "shard": 2
+    },
+    {
+      "id": "TASK-383",
+      "shard": 2
+    },
+    {
+      "id": "TASK-384",
+      "shard": 2
+    },
+    {
+      "id": "TASK-385",
+      "shard": 2
     }
   ],
   "niche": [
     {
       "id": "DEC-002",
       "shard": 0
+    },
+    {
+      "id": "FEAT-197",
+      "shard": 1
+    },
+    {
+      "id": "BUS-005",
+      "shard": 1
+    },
+    {
+      "id": "DEC-005",
+      "shard": 1
     }
   ],
   "fnb": [
@@ -923,12 +1379,24 @@
     {
       "id": "BUS-004",
       "shard": 0
+    },
+    {
+      "id": "BUS-005",
+      "shard": 1
+    },
+    {
+      "id": "DEC-005",
+      "shard": 1
     }
   ],
   "model": [
     {
       "id": "BUS-001",
       "shard": 0
+    },
+    {
+      "id": "PERF-003",
+      "shard": 1
     }
   ],
   "segment": [
@@ -1017,6 +1485,14 @@
     {
       "id": "TASK-115",
       "shard": 0
+    },
+    {
+      "id": "BUG-011",
+      "shard": 2
+    },
+    {
+      "id": "FEAT-198",
+      "shard": 2
     }
   ],
   "m4": [
@@ -2291,6 +2767,316 @@
     {
       "id": "TASK-282",
       "shard": 1
+    }
+  ],
+  "login": [
+    {
+      "id": "BUG-004",
+      "shard": 1
+    }
+  ],
+  "guard": [
+    {
+      "id": "BUG-004",
+      "shard": 1
+    }
+  ],
+  "trial": [
+    {
+      "id": "BUG-005",
+      "shard": 1
+    },
+    {
+      "id": "BUG-006",
+      "shard": 1
+    }
+  ],
+  "expired": [
+    {
+      "id": "BUG-006",
+      "shard": 1
+    }
+  ],
+  "overlay": [
+    {
+      "id": "BUG-006",
+      "shard": 1
+    }
+  ],
+  "split-bill": [
+    {
+      "id": "BUG-007",
+      "shard": 1
+    },
+    {
+      "id": "FEAT-196",
+      "shard": 1
+    },
+    {
+      "id": "BUG-008",
+      "shard": 1
+    },
+    {
+      "id": "BUG-009",
+      "shard": 1
+    },
+    {
+      "id": "BUG-010",
+      "shard": 1
+    }
+  ],
+  "selling-service": [
+    {
+      "id": "BUG-007",
+      "shard": 1
+    },
+    {
+      "id": "BUG-008",
+      "shard": 1
+    }
+  ],
+  "payed_money": [
+    {
+      "id": "BUG-007",
+      "shard": 1
+    }
+  ],
+  "total_price": [
+    {
+      "id": "BUG-007",
+      "shard": 1
+    }
+  ],
+  "ui": [
+    {
+      "id": "FEAT-196",
+      "shard": 1
+    },
+    {
+      "id": "TASK-312",
+      "shard": 1
+    }
+  ],
+  "modal": [
+    {
+      "id": "FEAT-196",
+      "shard": 1
+    }
+  ],
+  "cashier": [
+    {
+      "id": "FEAT-196",
+      "shard": 1
+    },
+    {
+      "id": "PERF-005",
+      "shard": 1
+    },
+    {
+      "id": "PERF-006",
+      "shard": 1
+    }
+  ],
+  "test": [
+    {
+      "id": "TASK-312",
+      "shard": 1
+    }
+  ],
+  "local": [
+    {
+      "id": "TASK-312",
+      "shard": 1
+    },
+    {
+      "id": "PERF-001",
+      "shard": 1
+    },
+    {
+      "id": "PERF-002",
+      "shard": 1
+    },
+    {
+      "id": "PERF-003",
+      "shard": 1
+    },
+    {
+      "id": "PERF-004",
+      "shard": 1
+    }
+  ],
+  "performance": [
+    {
+      "id": "PERF-001",
+      "shard": 1
+    },
+    {
+      "id": "PERF-002",
+      "shard": 1
+    },
+    {
+      "id": "PERF-003",
+      "shard": 1
+    },
+    {
+      "id": "PERF-004",
+      "shard": 1
+    },
+    {
+      "id": "PERF-005",
+      "shard": 1
+    },
+    {
+      "id": "PERF-006",
+      "shard": 1
+    }
+  ],
+  "middleware": [
+    {
+      "id": "PERF-001",
+      "shard": 1
+    },
+    {
+      "id": "PERF-002",
+      "shard": 1
+    }
+  ],
+  "log": [
+    {
+      "id": "PERF-001",
+      "shard": 1
+    }
+  ],
+  "schema": [
+    {
+      "id": "PERF-002",
+      "shard": 1
+    }
+  ],
+  "has-tenant": [
+    {
+      "id": "PERF-003",
+      "shard": 1
+    }
+  ],
+  "cache": [
+    {
+      "id": "PERF-004",
+      "shard": 1
+    }
+  ],
+  "n+1": [
+    {
+      "id": "PERF-005",
+      "shard": 1
+    }
+  ],
+  "queries": [
+    {
+      "id": "PERF-005",
+      "shard": 1
+    }
+  ],
+  "optimization": [
+    {
+      "id": "PERF-006",
+      "shard": 1
+    }
+  ],
+  "cart-item": [
+    {
+      "id": "BUG-009",
+      "shard": 1
+    }
+  ],
+  "detail-id": [
+    {
+      "id": "BUG-009",
+      "shard": 1
+    }
+  ],
+  "alpine": [
+    {
+      "id": "BUG-010",
+      "shard": 1
+    }
+  ],
+  "livewire": [
+    {
+      "id": "BUG-010",
+      "shard": 1
+    }
+  ],
+  "data": [
+    {
+      "id": "BUG-010",
+      "shard": 1
+    }
+  ],
+  "navigation": [
+    {
+      "id": "FEAT-197",
+      "shard": 1
+    },
+    {
+      "id": "BUS-005",
+      "shard": 1
+    }
+  ],
+  "sidebar": [
+    {
+      "id": "FEAT-197",
+      "shard": 1
+    }
+  ],
+  "business-type": [
+    {
+      "id": "FEAT-197",
+      "shard": 1
+    }
+  ],
+  "architecture": [
+    {
+      "id": "DEC-005",
+      "shard": 1
+    }
+  ],
+  "config": [
+    {
+      "id": "DEC-005",
+      "shard": 1
+    }
+  ],
+  "ux": [
+    {
+      "id": "BUG-011",
+      "shard": 2
+    },
+    {
+      "id": "FEAT-198",
+      "shard": 2
+    }
+  ],
+  "role": [
+    {
+      "id": "BUG-011",
+      "shard": 2
+    },
+    {
+      "id": "FEAT-198",
+      "shard": 2
+    }
+  ],
+  "license": [
+    {
+      "id": "FEAT-199",
+      "shard": 2
+    }
+  ],
+  "subscription": [
+    {
+      "id": "FEAT-199",
+      "shard": 2
     }
   ]
 }

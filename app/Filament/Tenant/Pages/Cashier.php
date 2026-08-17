@@ -8,6 +8,7 @@ use App\Filament\Tenant\Pages\Traits\MemberHandler;
 use App\Filament\Tenant\Pages\Traits\PaymentHandler;
 use App\Filament\Tenant\Pages\Traits\PriceCalculation;
 use App\Filament\Tenant\Pages\Traits\TableProduct;
+use App\Filament\Tenant\Pages\Traits\SplitBillHandler;
 use App\Filament\Tenant\Pages\Traits\VoucherHandler;
 use App\Filament\Tenant\Resources\Traits\RefreshThePage;
 use App\Models\Tenants\About;
@@ -28,7 +29,7 @@ use Illuminate\Support\Collection as CollectionSupport;
 class Cashier extends Page implements HasForms
 {
     use CartInteraction, HasTranslatableResource, RefreshThePage, TableProduct;
-    use PriceCalculation, VoucherHandler, MemberHandler, PaymentHandler, CartForm;
+    use PriceCalculation, VoucherHandler, MemberHandler, PaymentHandler, CartForm, SplitBillHandler;
 
     public static ?string $label = 'POS';
 
@@ -90,13 +91,12 @@ class Cashier extends Page implements HasForms
     {
         $this->about = About::select('id', 'shop_name', 'shop_location', 'business_type')->first() ?? null;
 
-        $this->tax = (float) Setting::get('default_tax', 0);
-
-        $this->currency = Setting::get('currency', 'IDR');
+        $settings = Setting::getMultiple(['default_tax', 'currency', 'minimum_stock_nofication']);
+        $this->tax = (float) ($settings['default_tax'] ?? 0);
+        $this->currency = $settings['currency'] ?? 'IDR';
+        $this->minimumStockNotification = (float) ($settings['minimum_stock_nofication'] ?? 10);
 
         $this->locale = Profile::select('locale')->first()?->locale ?? 'en';
-
-        $this->minimumStockNotification = (float) Setting::get('minimum_stock_nofication', 10);
 
         $this->cartItems = CartItem::query()
             ->select('id', 'product_id', 'qty', 'price', 'discount_price', 'price_unit_id', 'created_at')
@@ -126,12 +126,19 @@ class Cashier extends Page implements HasForms
             ->get()
             ->pluck('name', 'id');
 
+        $openSellingIds = \App\Models\Tenants\Selling::query()
+            ->select('table_id')
+            ->whereIn('status', ['open', 'partially_paid'])
+            ->whereNotNull('table_id')
+            ->distinct()
+            ->pluck('table_id');
+
         $this->tableOption = Table::select('id', 'number', 'capacity', 'zone', 'sort_order')
             ->orderBy('sort_order')
             ->orderBy('number')
             ->get()
-            ->each(function (Table $table) {
-                $table->setAttribute('is_open', (bool) $table->activeSelling());
+            ->each(function (Table $table) use ($openSellingIds) {
+                $table->setAttribute('is_open', $openSellingIds->contains($table->id));
             });
 
         $this->storeCartForm->fill(array_merge($this->cartDetail, [
@@ -224,7 +231,6 @@ class Cashier extends Page implements HasForms
             ->with([
                 'stocks' => fn ($q) => $q->select('product_id', 'stock', 'type', 'initial_price', 'selling_price', 'date', 'created_at')
                     ->where('is_ready', 1)->where('type', 'in'),
-                'category:id,name',
             ])
             ->get();
     }

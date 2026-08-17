@@ -207,24 +207,55 @@ class TenantPanelProvider extends PanelProvider
 
     private function buildNavigation(NavigationBuilder $navigationBuilder): NavigationBuilder
     {
+        $nicheHidden = $this->getNicheHiddenKeys();
+
+        $items = array_values(array_filter(
+            $this->getNavigationItems(),
+            fn ($item) => $item !== null
+        ));
+
+        $groups = array_map(function ($group) {
+            if (! $group instanceof NavigationGroup) {
+                return $group;
+            }
+            $filteredItems = array_values(array_filter(
+                $group->getItems(),
+                fn ($item) => $item !== null
+            ));
+
+            return $group->items($filteredItems);
+        }, $this->getNavigationGroups());
+
         return $navigationBuilder
-            ->items(array_filter($this->getNavigationItems(), fn ($item) => $item != null))
-            ->groups($this->getNavigationGroups());
+            ->items($items)
+            ->groups($groups);
+    }
+
+    private function getNicheHiddenKeys(): array
+    {
+        $bt = $this->getBusinessType();
+        if (! $bt) {
+            return [];
+        }
+
+        return config("niches.nav.{$bt}.hidden", []);
     }
 
     private function getNavigationItems(): array
     {
-        return [
+        $items = [
             ...Pages\Dashboard::getNavigationItems(),
             $this->generateNavigationItem(Cashier::class),
-            $this->generateNavigationItem(KitchenDisplay::class),
-            $this->generateNavigationItem(MarketingContent::class),
+            $this->generateNavigationItem(KitchenDisplay::class, nicheKey: 'kitchen_display'),
+            $this->generateNavigationItem(MarketingContent::class, nicheKey: 'marketing_content'),
             $this->generateNavigationItem(SellingResource::class),
             $this->generateNavigationItem(SupplierResource::class, Supplier::class),
             $this->generateNavigationItem(MemberResource::class, Member::class),
             $this->generateNavigationItem(PaymentMethodResource::class, PaymentMethod::class),
             $this->generateNavigationItem(ReceivableResource::class, Receivable::class),
         ];
+
+        return array_filter($items, fn ($item) => $item !== null);
     }
 
     private function getNavigationGroups(): array
@@ -235,7 +266,7 @@ class TenantPanelProvider extends PanelProvider
                 $this->generateNavigationItem(StockOpnameResource::class, StockOpname::class),
                 $this->generateNavigationItem(ProductResource::class),
                 $this->generateNavigationItem(CategoryResource::class),
-                $this->generateNavigationItem(TableResource::class)->hidden($this->isNonFnbBusiness()),
+                $this->generateNavigationItem(TableResource::class, nicheKey: 'table'),
             ]),
             NavigationGroup::make(__('User'))->items([
                 $this->generateNavigationItem(UserResource::class, User::class),
@@ -287,24 +318,80 @@ class TenantPanelProvider extends PanelProvider
         ];
     }
 
+    private ?string $businessType = null;
+
     private function isNonFnbBusiness(): bool
     {
+        return ! $this->isBusinessType('fnb');
+    }
+
+    private function isBusinessType(string ...$types): bool
+    {
+        $bt = $this->getBusinessType();
+
+        return $bt && in_array($bt, $types, true);
+    }
+
+    private function getBusinessType(): ?string
+    {
+        if ($this->businessType !== null) {
+            return $this->businessType;
+        }
+
         try {
-            if (! function_exists('tenancy') || ! tenancy()->initialized) {
-                return false;
+            // Try tenant-aware first (works during request)
+            if (function_exists('tenancy') && tenancy()->initialized) {
+                if (\Illuminate\Support\Facades\Schema::hasTable('abouts')) {
+                    $about = About::select('id', 'business_type')->first();
+                    $raw = $about?->business_type;
+                }
             }
 
-            $about = About::select('id', 'business_type')->first();
+            // Fallback: read from session (set by middleware)
+            if (! isset($raw)) {
+                $raw = session('tenant_business_type');
+            }
 
-            return $about && $about->business_type !== 'fnb';
+            if (! isset($raw)) {
+                return null;
+            }
+
+            // Map legacy values to config keys
+            $aliases = [
+                'cafe' => 'fnb',
+                'restaurant' => 'fnb',
+                'warung' => 'fnb',
+                'toko' => 'retail',
+                'klinik' => 'pharmacy',
+            ];
+
+            $this->businessType = $aliases[$raw] ?? $raw;
+
+            return $this->businessType;
         } catch (\Throwable) {
-            return false;
+            return null;
         }
     }
 
-    private function generateNavigationItem(string $resource, ?string $feature = null, ?array $activeWhen = []): NavigationItem
+    private function isHiddenByNiche(string $navKey): bool
+    {
+        $bt = $this->getBusinessType();
+        if (! $bt) {
+            return false;
+        }
+
+        $nicheConfig = config("niches.nav.{$bt}.hidden", []);
+
+        return in_array($navKey, $nicheConfig, true);
+    }
+
+    private function generateNavigationItem(string $resource, ?string $feature = null, ?array $activeWhen = [], ?string $nicheKey = null): ?NavigationItem
     {
         $canAccess = $feature ? feature($feature) && $resource::canAccess() : $resource::canAccess();
+
+        if ($nicheKey && $this->isHiddenByNiche($nicheKey)) {
+            return null;
+        }
 
         $active = false;
         if ((new $resource) instanceof Page) {

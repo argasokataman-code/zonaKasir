@@ -5,11 +5,13 @@ namespace App\Filament\Tenant\Pages;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\Component;
 use Filament\Forms\Components\View;
-use Filament\Http\Responses\Auth\LoginResponse;
+use Filament\Http\Responses\Auth\Contracts\LoginResponse;
 use Filament\Pages\Auth\Login;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\HtmlString;
 use Illuminate\Validation\ValidationException;
+use App\Filament\Tenant\Pages\Responses\TenantLoginResponse;
 
 class TenantLogin extends Login
 {
@@ -25,15 +27,17 @@ class TenantLogin extends Login
 
         $data = $this->form->getState();
 
-        if (! Filament::auth()->attempt($this->getCredentialsFromFormData($data), $data['remember'] ?? false)) {
+        $auth = Auth::guard('web');
+
+        if (! $auth->attempt($this->getCredentialsFromFormData($data), $data['remember'] ?? false)) {
             $this->throwFailureValidationException();
         }
 
         /** @var \App\Models\Tenants\User|null $user */
-        $user = Filament::auth()->user();
+        $user = $auth->user();
 
         if (! $user || ! $user->can('access web app')) {
-            Filament::auth()->logout();
+            $auth->logout();
 
             throw ValidationException::withMessages([
                 'data.email' => 'You do not have permission to access the web app',
@@ -42,13 +46,11 @@ class TenantLogin extends Login
             return null;
         }
 
-        if ($user) {
-            \Illuminate\Support\Facades\Log::info('Tenant login success', [
-                'user_id' => $user->id,
-                'email' => $user->email,
-                'tenant_id' => $user->tenant_id,
-            ]);
-        }
+        \Illuminate\Support\Facades\Log::info('Tenant login success', [
+            'user_id' => $user->id,
+            'email' => $user->email,
+            'tenant_id' => $user->tenant_id,
+        ]);
 
         $user->profile()->updateOrCreate(
             [
@@ -65,13 +67,17 @@ class TenantLogin extends Login
         // Auth::attempt() already stored auth in the current session.
         session()->save();
 
-        return app(LoginResponse::class);
+        // Filament::auth() resolves to the admin panel on Livewire POST
+        // (URL is /livewire/update, not /member/*), so redirect explicitly.
+        $this->redirect(route('filament.tenant.pages.dashboard'), navigate: false);
+
+        return app(TenantLoginResponse::class);
     }
 
     public function mount(): void
     {
-        if (Filament::auth()->check()) {
-            $this->redirect(Filament::getUrl());
+        if (Auth::guard('web')->check()) {
+            $this->redirect(route('filament.tenant.pages.dashboard'), navigate: false);
         }
 
         if (app()->environment('demo')) {

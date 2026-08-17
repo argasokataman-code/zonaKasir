@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasTenant;
 class SellingDetail extends Model
 {
-    use HasTenant;
     use HasFactory, HasTenant;
 
     protected $guarded = ['id'];

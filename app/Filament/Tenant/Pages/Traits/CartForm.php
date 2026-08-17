@@ -62,7 +62,7 @@ trait CartForm
                     ->mask(RawJs::make('$money($input)'))
                     ->stripCharacters(',')
                     ->numeric()
-                    ->prefix(Setting::get('currency', 'IDR'))
+                    ->prefix($this->currency ?? 'IDR')
                     ->extraAttributes([
                         'id' => 'discountInput',
                         'class' => 'hidden',
