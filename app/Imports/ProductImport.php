@@ -44,6 +44,12 @@ class ProductImport implements SkipsEmptyRows, ToModel, WithHeadingRow
             ['name' => $row['category'] ?? 'Uncategorized', 'tenant_id' => $tenantId],
         );
 
+        // Skip if product with same SKU already exists for this tenant
+        $sku = $row['sku'] ?? null;
+        if ($sku && Product::where('sku', $sku)->where('tenant_id', $tenantId)->exists()) {
+            return null;
+        }
+
         if (!empty($row['barcode'])) {
             ProductObserver::setTempBarcodesData([
                 ['code' => $row['barcode'], 'type' => 'primary', 'is_active' => true]
@@ -64,12 +70,15 @@ class ProductImport implements SkipsEmptyRows, ToModel, WithHeadingRow
         ]);
 
         if (!empty($row['barcode'])) {
-            $product->barcodes()->create([
-                'code' => $row['barcode'],
-                'type' => 'primary',
-                'description' => 'Imported barcode',
-                'is_active' => true,
-            ]);
+            $existingBarcode = \App\Models\Tenants\Barcode::where('code', $row['barcode'])->first();
+            if (!$existingBarcode) {
+                $product->barcodes()->create([
+                    'code' => $row['barcode'],
+                    'type' => 'primary',
+                    'description' => 'Imported barcode',
+                    'is_active' => true,
+                ]);
+            }
         }
 
         if (isset($row['other_price']) && $row['other_price'] != null && $row['other_price'] != '') {
