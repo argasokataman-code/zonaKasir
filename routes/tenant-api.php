@@ -16,9 +16,10 @@ use App\Http\Controllers\Api\Tenants\Reports\PurchasingReportController;
 use App\Http\Controllers\Api\Tenants\Reports\ProductReportController as ApiProductReportController;
 use App\Http\Controllers\Api\Tenants\Reports\SellingReportController as ApiSellingReportController;
 use App\Http\Controllers\Api\Tenants\Settings\SecureInitialPriceController;
-use App\Http\Controllers\Api\Tenants\Transaction\CashDrawerController;
-use App\Http\Controllers\Api\Tenants\Transaction\DashboardController;
 use App\Http\Controllers\Api\Tenants\Reports\BalanceController;
+use App\Http\Controllers\Api\Tenants\Transaction\KdsController;
+use App\Http\Controllers\Api\Tenants\Transaction\DashboardController;
+use App\Http\Controllers\Api\Tenants\Transaction\CashDrawerController;
 use App\Http\Controllers\Api\Tenants\Reports\ReconciliationController;
 use App\Http\Controllers\Api\Tenants\Reports\SettlementController;
 use App\Http\Controllers\Api\Tenants\Transaction\SellingController;
@@ -147,6 +148,13 @@ Route::middleware([
                         ->middleware('throttle:10,1')
                         ->can('close cash drawer');
                     Route::get('/report', [CashDrawerController::class, 'report']);
+                });
+
+                Route::group(['prefix' => 'kds'], function () {
+                    Route::get('/orders', [KdsController::class, 'orders'])->can('read selling');
+                    Route::post('/detail/{sellingDetail}/status', [KdsController::class, 'updateStatus'])
+                        ->middleware('throttle:30,1')
+                        ->can('update selling');
                 });
             });
 

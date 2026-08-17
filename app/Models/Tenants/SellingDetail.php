@@ -17,6 +17,10 @@ class SellingDetail extends Model
 
     protected $guarded = ['id'];
 
+    public const KITCHEN_QUEUE = null;
+    public const KITCHEN_IN_PROGRESS = 'in_progress';
+    public const KITCHEN_DONE = 'done';
+
     public function selling()
     {
         return $this->belongsTo(Selling::class);

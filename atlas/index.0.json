@@ -1530,9 +1530,11 @@
       "date": "2026-08-16",
       "time": "23:08:29",
       "tags": [
-        "auto"
+        "m3",
+        "split",
+        "shift"
       ],
-      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/database/migrations/tenant/2026_08_16_000003_add_selling_split_groups.php",
+      "summary": "M3: split bill multi group + qty pecahan + diskon prorata; shift X/Z close report; 43 pass",
       "conn": [
         {
           "id": "BUG-001",
@@ -2109,6 +2111,378 @@
         "auto"
       ],
       "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/Tenants/SplitService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-097",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "00:15:34",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/database/migrations/tenant/2026_08_17_000006_add_kitchen_status_to_selling_det",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-098",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "00:16:08",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/SellingDetail.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-099",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "00:16:20",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/Tenants/KdsService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-100",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "00:16:58",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/routes/tenant-api.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-101",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "00:17:05",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/routes/tenant-api.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-102",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "00:17:15",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Http/Controllers/Api/Tenants/Transaction/KdsController.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-103",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "00:20:21",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/Tenants/KdsService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-104",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "00:25:00",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/.config/opencode/opencode.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-105",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "00:25:57",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/KitchenDisplay.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-106",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "00:26:23",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/Tenants/KdsService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-107",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "00:27:56",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/kitchen-display.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-108",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "00:28:49",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-109",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:03:31",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/Tenants/KdsService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-110",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:04:07",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/Tenants/KdsService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-111",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:04:16",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/routes/tenant-api.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-112",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:04:25",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/KitchenDisplay.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-113",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:04:36",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M4KdsTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-114",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:11:47",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/AGENTS.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-115",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:14:04",
+      "tags": [
+        "kds",
+        "m4",
+        "pilot"
+      ],
+      "summary": "M4 KDS: KdsService orders fix scopeOpen+whereHas, updateStatus lockForUpdate, page auth update selling, M4KdsTest 9 pass. M1-M4 41 test hija",
+      "conn": [
+        {
+          "id": "TASK-063",
+          "type": "relates",
+          "raw": "TASK-063:relates"
+        },
+        {
+          "id": "REQ-003",
+          "type": "relates",
+          "raw": "REQ-003:relates"
+        },
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-116",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:15:59",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/.gitignore",
       "conn": [
         {
           "id": "BUG-001",

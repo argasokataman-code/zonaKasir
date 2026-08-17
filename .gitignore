@@ -8,6 +8,7 @@
 /public/js/
 /public/css/
 /public/app/
+/public/vendor/
 /nginx/*.log
 /packages
 public/build/manifest.json

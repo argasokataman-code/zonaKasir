@@ -15,7 +15,7 @@ use App\Features\Voucher;
 use App\Filament\Tenant\Pages\CartItem;
 use App\Filament\Tenant\Pages\Cashier;
 use App\Filament\Tenant\Pages\CashierReport;
-use App\Filament\Tenant\Pages\GeneralSetting;
+use App\Filament\Tenant\Pages\KitchenDisplay;use App\Filament\Tenant\Pages\GeneralSetting;
 use App\Filament\Tenant\Pages\Printer;
 use App\Filament\Tenant\Pages\ProductReport;
 use App\Filament\Tenant\Pages\PurchasingReport;
@@ -215,6 +215,7 @@ class TenantPanelProvider extends PanelProvider
         return [
             ...Pages\Dashboard::getNavigationItems(),
             $this->generateNavigationItem(Cashier::class),
+            $this->generateNavigationItem(KitchenDisplay::class),
             $this->generateNavigationItem(SellingResource::class),
             $this->generateNavigationItem(SupplierResource::class, Supplier::class),
             $this->generateNavigationItem(MemberResource::class, Member::class),

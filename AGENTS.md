@@ -45,7 +45,7 @@ Sebelum mengerjakan task apapun, WAJIB:
 ### Commands
 ```bash
 # Tests
-php artisan test                                    # Run all
+php artisan test                                    # Run all (JANGAN local — full suite di GitHub CI, test.yml, PostgreSQL)
 php artisan test --filter=TestName                  # Filter by name
 php artisan test tests/Feature/Path/To/Test.php     # Single file
 vendor/bin/pest --filter="test name here"           # Pest directly
