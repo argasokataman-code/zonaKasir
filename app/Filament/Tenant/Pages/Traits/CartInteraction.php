@@ -20,7 +20,7 @@ trait CartInteraction
         // Re-query affected item to keep $this->cartItems in sync
         // (still needed for Livewire form bindings and full refresh).
         $updated = CartItem::where('product_id', $product->getKey())
-            ->with(['product:id,name,sku', 'priceUnit:id,selling_price'])
+            ->with(['product:id,name,sku,selling_price,is_non_stock,hero_images,priceUnits:id,product_id,selling_price', 'priceUnit:id,selling_price'])
             ->cashier()->first();
         $this->cartItems = $this->cartItems->reject(fn ($i) => (int) $i->product_id === $product->getKey());
         if ($updated) $this->cartItems->push($updated);
@@ -110,13 +110,13 @@ trait CartInteraction
             ->cashier()
             ->first();
         if (! $cartItem) {
-            $this->refreshCart();
+            $this->softRefresh($product);
             return;
         }
         $qty = $cartItem->qty - 1;
         if ($qty == 0) {
             $cartItem->delete();
-            $this->refreshCart();
+            $this->softRefresh($product);
             return;
         }
         $price = $product->selling_price * ($qty);
@@ -125,7 +125,7 @@ trait CartInteraction
             'price' => $price,
         ]);
         $cartItem->save();
-        $this->refreshCart();
+        $this->softRefresh($product);
     }
 
     #[Renderless]
@@ -149,7 +149,7 @@ trait CartInteraction
     {
         if ((int) $value == 0) {
             $cartItem->delete();
-            $this->refreshCart();
+            $this->softRefresh($cartItem->product);
 
             return;
         }
@@ -159,7 +159,7 @@ trait CartInteraction
                 ->title(__('Stock is out'))
                 ->danger()
                 ->send();
-            $this->refreshCart();
+            $this->softRefresh($cartItem->product);
 
             return;
         }
@@ -169,7 +169,7 @@ trait CartInteraction
             'price' => $price,
         ]);
         $cartItem->save();
-        $this->refreshCart();
+        $this->softRefresh($cartItem->product);
     }
 
     public function clearCart()
