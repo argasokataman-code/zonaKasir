@@ -21,13 +21,13 @@ use App\Filament\Tenant\Pages\MarketingContent;
 use App\Filament\Tenant\Pages\Printer;
 use App\Filament\Tenant\Pages\ProductReport;
 use App\Filament\Tenant\Pages\PurchasingReport;
-use App\Filament\Tenant\Pages\Report;
 use App\Filament\Tenant\Pages\SellingReport;
 use App\Filament\Tenant\Pages\ManageSubscription;
 use App\Filament\Tenant\Pages\WithdrawalPage;
 use App\Filament\Tenant\Pages\TenantLogin;
 use App\Filament\Tenant\Resources\CategoryResource;
 use App\Filament\Tenant\Resources\BrandResource;
+use App\Filament\Tenant\Pages\BrandReport;
 use App\Filament\Tenant\Resources\MemberResource;
 use App\Filament\Tenant\Resources\PaymentMethodResource;
 use App\Filament\Tenant\Resources\PermissionResource;
@@ -276,15 +276,12 @@ class TenantPanelProvider extends PanelProvider
                 $this->generateNavigationItem(PermissionResource::class, Permission::class),
             ]),
             NavigationGroup::make(__('Report'))->label('')->collapsible(false)->items([
-                $this->generateNavigationItem(
-                    resource: Report::class,
-                    activeWhen: [
-                        SellingReport::class,
-                        ProductReport::class,
-                        CashierReport::class,
-                        PurchasingReport::class,
-                    ]
-                ),
+                $this->generateNavigationItem(SellingReport::class),
+                $this->generateNavigationItem(ProductReport::class),
+                $this->generateNavigationItem(CashierReport::class),
+                $this->generateNavigationItem(PurchasingReport::class),
+                $this->generateNavigationItem(CategoryReport::class),
+                $this->generateNavigationItem(BrandReport::class),
             ]),
             NavigationGroup::make(__('General'))->label('')->collapsible(false)->items([
                 $this->generateNavigationItem(VoucherResource::class, Voucher::class),

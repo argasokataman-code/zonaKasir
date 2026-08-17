@@ -2,7 +2,6 @@
 
 namespace App\Filament\Tenant\Pages;
 
-use App\Filament\Tenant\Pages\Traits\HasReportPageSidebar;
 use App\Services\Tenants\PurchasingReportService;
 use App\Traits\HasTranslatableResource;
 use Filament\Actions\Action;
@@ -15,7 +14,7 @@ use Livewire\Attributes\Url;
 
 class PurchasingReport extends Page
 {
-    use HasReportPageSidebar, HasTranslatableResource, InteractsWithFormActions, InteractsWithForms;
+    use HasTranslatableResource, InteractsWithFormActions, InteractsWithForms;
 
     protected static ?string $title = '';
 
