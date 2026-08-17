@@ -5,8 +5,11 @@ namespace App\Filament\Tenant\Resources;
 use App\Filament\Tenant\Resources\PaymentMethodResource\Pages;
 use App\Models\Tenants\PaymentMethod;
 use App\Traits\HasTranslatableResource;
-use Filament\Forms;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -26,11 +29,11 @@ class PaymentMethodResource extends Resource
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\TextInput::make('name')
+            TextInput::make('name')
                 ->translateLabel()
                 ->required()
                 ->maxLength(255),
-            Forms\Components\Select::make('payment_type')
+            Select::make('payment_type')
                 ->translateLabel()
                 ->options([
                     'cash' => __('Cash'),
@@ -39,7 +42,7 @@ class PaymentMethodResource extends Resource
                 ])
                 ->required()
                 ->native(false),
-            Forms\Components\FileUpload::make('icon')
+            FileUpload::make('icon')
                 ->label(__('QRIS Image'))
                 ->disk(config('filesystems.upload_disk'))
                 ->directory('payment-methods')
@@ -47,7 +50,7 @@ class PaymentMethodResource extends Resource
                 ->imageEditor()
                 ->maxSize(config('upload.livewire_max_size'))
                 ->helperText(__('Recommended: 300x300px square, PNG/JPG. Image will be displayed to customers for scanning.'))
-                ->visible(fn (Form $form): bool => $form->get('payment_type') === 'qris')
+                ->visible(fn (Get $get): bool => $get('payment_type') === 'qris')
                 ->columnSpanFull(),
         ]);
     }
@@ -74,7 +77,7 @@ class PaymentMethodResource extends Resource
                     ->disk(config('filesystems.upload_disk'))
                     ->circular()
                     ->size(40)
-                    ->visible(fn (PaymentMethod $record): bool => $record->payment_type === 'qris'),
+                    ->visible(fn (?PaymentMethod $record): bool => $record?->payment_type === 'qris'),
                 IconColumn::make('is_active')
                     ->label(__('Active'))
                     ->boolean(),

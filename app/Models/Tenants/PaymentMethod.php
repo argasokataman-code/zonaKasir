@@ -77,7 +77,7 @@ class PaymentMethod extends Model
 
     public function isStaticQris(): bool
     {
-        return $this->payment_type === 'qris' && filled($this->icon);
+        return $this->payment_type === 'qris' && (config('app.on_premise') || filled($this->icon));
     }
 
     public function midtransType(): ?string
