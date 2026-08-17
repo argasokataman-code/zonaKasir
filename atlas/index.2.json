@@ -1351,6 +1351,98 @@
           "raw": "BUG-001:relates"
         }
       ]
+    },
+    {
+      "id": "FEAT-205",
+      "type": "feature",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:56:28",
+      "tags": [
+        "login",
+        "ux",
+        "design"
+      ],
+      "summary": "Redesigned login page: split layout (form left + feature carousel right), 4 slides auto-advance, responsive",
+      "conn": [
+        {
+          "id": "FEAT-197",
+          "type": "implements",
+          "raw": "FEAT-197:implements"
+        }
+      ]
+    },
+    {
+      "id": "TASK-437",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:59:12",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/tenant-login-custom.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-438",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "19:02:12",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/tenant-login-custom.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-439",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "19:04:13",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/tenant-login-custom.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-440",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "19:11:11",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/tenant-login-custom.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
     }
   ]
 }
