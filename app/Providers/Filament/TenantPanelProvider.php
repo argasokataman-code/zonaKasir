@@ -276,7 +276,7 @@ class TenantPanelProvider extends PanelProvider
                 $this->generateNavigationItem(RoleResource::class, Role::class),
                 $this->generateNavigationItem(PermissionResource::class, Permission::class),
             ]),
-            NavigationGroup::make(__('Report'))->label('')->collapsible(false)->items([
+            NavigationGroup::make(__('Report'))->items([
                 $this->generateNavigationItem(SellingReport::class),
                 $this->generateNavigationItem(ProductReport::class),
                 $this->generateNavigationItem(CashierReport::class),
@@ -284,7 +284,7 @@ class TenantPanelProvider extends PanelProvider
                 $this->generateNavigationItem(CategoryReport::class),
                 $this->generateNavigationItem(BrandReport::class),
             ]),
-            NavigationGroup::make(__('General'))->label('')->collapsible(false)->items([
+            NavigationGroup::make(__('General'))->collapsible(false)->items([
                 $this->generateNavigationItem(VoucherResource::class, Voucher::class),
                 $this->generateNavigationItem(SettlementResource::class, hideOnPremise: true),
                 $this->generateNavigationItem(WithdrawalResource::class, hideOnPremise: true),
