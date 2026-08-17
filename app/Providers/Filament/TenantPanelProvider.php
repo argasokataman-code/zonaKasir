@@ -103,7 +103,7 @@ class TenantPanelProvider extends PanelProvider
                         if ($about->logo) {
                             $panel->brandLogo(asset('storage/' . $about->logo));
                         } else {
-                            $panel->brandLogo(asset('assets/logo/logo.svg'));
+                            $panel->brandLogo(asset('assets/logo/zonaqasir-text-icon.png'));
                         }
 
                         if ($about->primary_color) {

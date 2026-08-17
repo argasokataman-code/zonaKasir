@@ -5,7 +5,7 @@
     {{-- Brand Side --}}
     <div class="lg:col-span-2 text-center lg:text-left lg:pr-6">
       <div class="inline-flex items-center justify-center w-12 h-12 lg:w-16 lg:h-16 rounded-2xl shadow-md mb-3 lg:mb-5">
-        <img src="/assets/logo/logo.svg" alt="zonaKasir" class="w-full h-full object-contain">
+        <img src="/assets/logo/zonaqasir-icon.png" alt="ZonaQasir" class="w-full h-full object-contain">
       </div>
       <h1 class="text-xl lg:text-3xl font-bold text-[#1A1A1A] tracking-tight leading-tight">Daftar ZonaKasir</h1>
       <p class="text-xs lg:text-sm text-[#666666] mt-1 lg:mt-2 leading-relaxed max-w-sm font-medium lg:mx-0 mx-auto">
