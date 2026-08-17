@@ -125,11 +125,13 @@
               @php
                 $qrisMethod = collect($this->paymentMethods ?? [])->firstWhere('payment_type', 'qris');
               @endphp
-              @if($qrisMethod && $qrisMethod['icon'] ?? null)
+              @if($qrisMethod && ($qrisMethod['icon'] ?? null))
                 <img src="{{ $qrisMethod['icon'] }}" alt="QRIS" class="h-[220px] w-[220px] object-contain rounded-lg border border-gray-200 dark:border-gray-600" />
               @else
-                <div class="flex h-[220px] w-[220px] items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700">
-                  <p class="text-center text-xs text-gray-400">{{ __('QRIS image not configured') }}</p>
+                <div class="flex h-[220px] w-[220px] flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-amber-400 bg-amber-50 dark:border-amber-600 dark:bg-amber-900/20">
+                  <x-heroicon-o-exclamation-triangle class="h-10 w-10 text-amber-500" />
+                  <p class="text-center text-sm font-medium text-amber-700 dark:text-amber-400">{{ __('QRIS image not uploaded') }}</p>
+                  <a href="{{ url('/member/payment-methods') }}" target="_blank" class="text-xs font-semibold text-primary-600 hover:underline">{{ __('Upload QRIS here') }}</a>
                 </div>
               @endif
               <p class="text-lg font-bold text-gray-900 dark:text-white">{{ __('Total') }}: {{ number_format($total_price, 0, ',', '.') }}</p>

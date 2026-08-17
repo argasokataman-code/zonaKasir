@@ -331,7 +331,17 @@
         this.cartDetail['payment_method_id'] = method.id;
         $wire.setPaymentMethodId(method.id);
 
-        var midtransTypes = ['debit_card', 'gopay', 'shopeepay', 'qris', 'bank_transfer', 'indomaret', 'alfamart', 'kredivo', 'akulaku'];
+        if (method.payment_type === 'qris' && !method.icon) {
+          $wire.dispatch('notify', {
+            title: '@lang('QRIS image not uploaded')',
+            body: '@lang('Please upload QRIS image in Payment Methods first.')',
+            icon: 'heroicon-o-exclamation-triangle',
+            color: 'warning',
+          });
+          return;
+        }
+
+        var midtransTypes = ['debit_card', 'gopay', 'shopeepay', 'bank_transfer', 'indomaret', 'alfamart', 'kredivo', 'akulaku'];
         if (midtransTypes.includes(method.payment_type)) {
           setTimeout(() => { $wire.proceedThePayment(); }, 100);
         }
