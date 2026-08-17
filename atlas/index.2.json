@@ -1099,6 +1099,258 @@
           "raw": "BUG-001:relates"
         }
       ]
+    },
+    {
+      "id": "TASK-423",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:36:34",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-424",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:37:24",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/tenant-login-custom.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-425",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:38:08",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/tenant-login-custom.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-426",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:39:01",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/tenant-login-custom.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-427",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:40:54",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/tenant-login-custom.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-428",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:42:40",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/tenant-login-custom.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-429",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:44:19",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/tenant-login-custom.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-430",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:45:50",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/tenant-login-custom.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-431",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:46:16",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-432",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:46:56",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/tenant-login-custom.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-433",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:49:12",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-434",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:50:43",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-435",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:51:03",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/TenantLogin.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-436",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:54:19",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/tenant-login-custom.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
     }
   ]
 }

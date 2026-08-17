@@ -15,6 +15,17 @@ use App\Filament\Tenant\Pages\Responses\TenantLoginResponse;
 
 class TenantLogin extends Login
 {
+    protected static string $view = 'filament.tenant.pages.tenant-login-custom';
+
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return view($this->getView(), $this->getViewData())
+            ->layout('filament-panels::components.layout.base', [
+                'livewire' => $this,
+                'maxContentWidth' => null,
+            ]);
+    }
+
     public function authenticate(): ?LoginResponse
     {
         try {
@@ -92,12 +103,11 @@ class TenantLogin extends Login
     {
         return $form->schema([
             ...parent::form($form)->getComponents(),
-            $this->getGoogleLoginButton(),
         ]);
     }
 
-    protected function getGoogleLoginButton(): Component
+    protected function getFormActions(): array
     {
-        return View::make('filament.tenant.pages.google-login-button');
+        return [];
     }
 }
