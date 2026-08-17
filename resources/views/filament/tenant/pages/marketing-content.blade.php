@@ -1,4 +1,9 @@
 <x-filament-panels::page>
+    <div class="rounded-xl bg-amber-50 border border-amber-200 px-4 py-3 text-sm text-amber-700 flex items-center gap-2">
+        <x-heroicon-s-wifi class="h-5 w-5 shrink-0" />
+        <span>{{ __('Fitur ini memerlukan koneksi internet. Posting manual ke media sosial — zonaKasir tidak auto-upload.') }}</span>
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <x-filament::section icon="heroicon-m-fire" title="Menu terlaris hari ini">
             <div class="space-y-3">

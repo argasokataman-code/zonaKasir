@@ -38,7 +38,8 @@
         </select>
     </div>
 
-    <p class="text-[11px] text-gray-400">
+    <p class="text-[11px] text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-1.5 text-center">
+        <x-heroicon-s-wifi class="inline h-3 w-3 mr-1" />
         @lang('Butuh internet utk dibuka customer')
     </p>
 </div>

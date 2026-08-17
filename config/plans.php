@@ -51,5 +51,13 @@ return [
         'custom_print' => 'Custom Print',
         'payment_shortcut' => 'Payment Shortcut',
         'total_revenue' => 'Total Revenue in Table',
+
+        // ── Cafe Features (FR-9.6: Lite vs Pro gating) ──
+        'cafe_open_bill' => 'Open Bill (Lite)',
+        'cafe_table' => 'Table Management (Lite)',
+        'cafe_struk' => 'Struk / Receipt (Lite)',
+        'cafe_split_bill' => 'Split Bill (Pro)',
+        'cafe_kds' => 'Kitchen Display System (Pro)',
+        'cafe_shift_xz' => 'Shift & X/Z Report (Pro)',
     ],
 ];

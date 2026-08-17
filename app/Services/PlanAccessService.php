@@ -66,4 +66,24 @@ class PlanAccessService
     {
         return $this->getPlan($tenant)?->features ?? [];
     }
+
+    /**
+     * FR-9.6: Check if tenant can access a cafe feature.
+     * Lite = open_bill + table + struk only.
+     * Pro = all cafe features (split_bill, kds, shift_xz).
+     */
+    public function canAccessCafeFeature(string $tenant, string $feature): bool
+    {
+        $features = $this->getCurrentPlanFeatures($tenant);
+
+        // Pro features require explicit feature key
+        $proFeatures = ['cafe_split_bill', 'cafe_kds', 'cafe_shift_xz'];
+
+        if (in_array($feature, $proFeatures, true)) {
+            return in_array($feature, $features, true);
+        }
+
+        // Lite features (open_bill, table, struk) = available to all cafe plans
+        return true;
+    }
 }
