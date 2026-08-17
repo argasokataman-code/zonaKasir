@@ -21,7 +21,7 @@
         <button class="flex h-7 w-7 items-center justify-center rounded-lg bg-gray-100 text-gray-600 text-sm font-bold dark:bg-gray-700"
           x-on:click="$wire.reduceCart({{ $item->product_id }});" wire:loading.attr="disabled">−</button>
         <button class="flex h-7 w-7 items-center justify-center rounded-lg bg-red-100 text-red-600 text-sm relative"
-          wire:click.stop="deleteCart({{ $item->product_id }})"
+          x-on:click="if(confirm('{{ __("Delete") }} {{ $item->product?->name ?? __("item") }}?')) $wire.deleteCart({{ $item->product_id }})"
           wire:loading.class="opacity-50"
           wire:target="deleteCart({{ $item->product_id }})"
           type="button">
