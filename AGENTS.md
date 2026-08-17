@@ -80,3 +80,25 @@ php artisan livewire:publish --assets
 - `ssh -p 2223 jogn3455@jogjatourdrive.com`
 - Auto-deploy on push to `main`
 - `gh workflow run ssh-command.yml --ref main -f command="..."`
+
+## ⚠️ KNOWN FIX PATTERNS (jangan ulangi bug yang sama)
+
+### Filament Form
+- **`visible()` closure**: JANGAN pakai `Form $form` param → container error `HasForms not instantiable`. Pakai `Get $get`: `->visible(fn (Get $get): bool => $get('payment_type') === 'qris')`
+- **Import**: Jangan `use Filament\Forms;` + `use Filament\Forms\Form;` bareng → conflict. Pakai individual imports: `use Filament\Forms\Components\TextInput;`
+- **`ImageColumn::visible()`**: `$record` bisa null → pakai nullable: `fn (?PaymentMethod $record): bool => $record?->payment_type === 'qris'`
+
+### Blade + Alpine
+- **`<template x-if>` dalam `<template x-for>`**: Blade render duplicate HTML. Pakai `x-show` + `x-cloak` sebagai pengganti.
+
+### Livewire + Alpine Entangle
+- **`$wire.entangle()`**: Data wrapped dalam Livewire internal format `[[[{data},{s:"arr"}]]]`. Kalau x-for iterate object, pakai `Object.values()` dulu.
+
+### File Upload / Storage
+- **Icon/Image URL**: Public disk → file di `storage/app/public/`, accessible via `{app_url}/storage/{path}`. JANGAN `{app_url}/{path}`.
+- **Accessors**: Kalau DB simpan relative path, accessor harus prepend `/storage/`.
+
+### On-Premise
+- **QRIS**: `isStaticQris()` = `payment_type === 'qris' && (config('app.on_premise') || filled($this->icon))`
+- **Snap.js**: Skip load kalau `config('app.on_premise')` atau no `midtrans.client_key`
+- **Navigation**: `hideOnPremise: true` untuk Settlement, Withdrawal, WithdrawalPage
