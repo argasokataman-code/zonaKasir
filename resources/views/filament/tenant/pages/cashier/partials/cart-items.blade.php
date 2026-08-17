@@ -4,6 +4,11 @@
     <div class="flex justify-between items-center">
       <div class="min-w-0 flex-1">
         <p class="font-semibold text-sm truncate"> {{ $item->product?->name ?? __('Deleted product') }}</p>
+        @php
+          $priceUnit = $item->priceUnit?->selling_price;
+          $unitPrice = $priceUnit ?? ($item->qty > 0 ? $item->price / $item->qty : $item->price);
+        @endphp
+        <p class="text-xs text-gray-500 dark:text-gray-400">{{ $item->qty }} × {{ price_format($unitPrice) }}</p>
         <p class="text-xs text-primary-600 font-semibold">{{ $item->price_format_money }}</p>
       </div>
       <div class="flex items-center gap-1 shrink-0 ml-2">
