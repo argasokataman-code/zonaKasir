@@ -10,63 +10,218 @@
         </a>
     </div>
 
-    {{-- On-Premise License Info --}}
+    {{-- On-Premise Dashboard --}}
     @if(config('app.on_premise'))
     @php
-        $licenseKey = env('ONPREM_LICENSE_KEY');
-        $licenseData = null;
-        if ($licenseKey) {
-            $parts = explode('.', $licenseKey);
-            if (count($parts) >= 2) {
-                $decoded = @base64_decode($parts[0]);
-                if ($decoded) {
-                    $licenseData = @json_decode($decoded, true);
-                }
-            }
-        }
+        $subscription = app(\App\Filament\Tenant\Pages\ManageSubscription::class);
+        $license = $subscription->getOnpremLicense();
+        $server = $subscription->getServerHealth();
+        $service = $subscription->getServiceStatus();
+        $support = $subscription->getSupportInfo();
     @endphp
+
+    {{-- License Card --}}
     <div class="mb-6">
         <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 text-center">{{ __('License') }}</h2>
-        <div class="bg-white rounded-[6px] shadow-md flex flex-col relative border-2 border-gray-900 w-full sm:w-[280px] sm:min-w-[280px] mx-auto">
+        <div class="bg-white rounded-[6px] shadow-md flex flex-col relative border-2 border-gray-900 w-full sm:w-[320px] sm:min-w-[320px] mx-auto">
             <div class="absolute top-0 left-0 bg-gray-900 text-white text-[8px] font-mono font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-bl-[4px] rounded-tr-[5px]">
                 {{ __('On-Premise') }}
             </div>
             <div class="p-5 pt-10 flex flex-col h-full">
                 <div>
-                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">{{ __('Self-Hosted') }}</span>
-                    <h3 class="font-sans font-bold text-base text-gray-900">{{ $licenseData['customer'] ?? 'Licensed' }}</h3>
+                    <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">
+                        {{ ($license['type'] ?? 'managed') === 'pro' ? __('Full Access') : __('Managed') }}
+                    </span>
+                    <h3 class="font-sans font-bold text-base text-gray-900">{{ $license['customer'] ?? 'Licensed' }}</h3>
                 </div>
                 <div class="py-3 my-3 border-y border-gray-100">
-                    <span class="font-mono text-xl font-black text-gray-900">{{ __('Active') }}</span>
-                    <span class="text-[9px] text-gray-500 font-bold block uppercase tracking-wider mt-0.5">{{ __('Lifetime') }}</span>
+                    <div class="flex items-center gap-2">
+                        @if(($license['status'] ?? '') === 'active')
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                {{ __('Active') }}
+                            </span>
+                        @else
+                            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800">
+                                <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                                {{ __('Invalid') }}
+                            </span>
+                        @endif
+                        <span class="text-[9px] text-gray-500 font-bold uppercase tracking-wider">{{ __('Lifetime') }}</span>
+                    </div>
                 </div>
-                <div class="text-[10px] text-gray-400 font-semibold mb-2">
-                    <div>{{ __('Domain') }}: {{ $licenseData['domain'] ?? 'localhost' }}</div>
-                    @if($licenseData['issued_at'] ?? null)
-                        <div>{{ __('Issued') }}: {{ $licenseData['issued_at'] }}</div>
+                <div class="text-[10px] text-gray-400 font-semibold mb-2 space-y-1">
+                    <div class="flex justify-between">
+                        <span>{{ __('Domain') }}</span>
+                        <span class="text-gray-600">{{ $license['domain'] ?? 'localhost' }}</span>
+                    </div>
+                    @if($license['issued_at'] ?? null)
+                    <div class="flex justify-between">
+                        <span>{{ __('Issued') }}</span>
+                        <span class="text-gray-600">{{ $license['issued_at'] }}</span>
+                    </div>
                     @endif
-                    @if($licenseData['expires_at'] ?? null)
-                        <div>{{ __('Expires') }}: {{ $licenseData['expires_at'] }}</div>
+                    @if($license['expires_at'] ?? null)
+                    <div class="flex justify-between">
+                        <span>{{ __('Expires') }}</span>
+                        <span class="text-gray-600">{{ $license['expires_at'] }}</span>
+                    </div>
                     @endif
                 </div>
-                <div class="text-[10px] text-gray-400 font-semibold mb-2 border-t border-gray-100 pt-2">
+                <div class="text-[10px] text-gray-400 font-semibold border-t border-gray-100 pt-2">
+                    @foreach($license['features'] ?? [] as $feature)
                     <div class="flex items-center gap-2 py-0.5">
                         <svg class="w-3 h-3 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <span class="text-gray-600">{{ __('Core POS') }}</span>
+                        <span class="text-gray-600">{{ $feature }}</span>
                     </div>
-                    <div class="flex items-center gap-2 py-0.5">
-                        <svg class="w-3 h-3 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <span class="text-gray-600">{{ __('Offline Mode') }}</span>
-                    </div>
-                    <div class="flex items-center gap-2 py-0.5">
-                        <svg class="w-3 h-3 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                        <span class="text-gray-600">{{ __('Local Network') }}</span>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
     </div>
-    @endif
+
+    {{-- Server Health + Service Status Grid --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        {{-- Server Health --}}
+        <div class="bg-white rounded-[6px] shadow-sm border border-[#E5E5E1] p-5" wire:poll.30s>
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">{{ __('Server Health') }}</h3>
+
+            {{-- Disk Usage --}}
+            <div class="mb-3">
+                <div class="flex justify-between text-[10px] font-semibold mb-1">
+                    <span class="text-gray-500">{{ __('Disk') }}</span>
+                    <span class="{{ $server['disk_percent'] > 80 ? 'text-red-600' : 'text-gray-600' }}">{{ $server['disk_used'] }}GB / {{ $server['disk_total'] }}GB ({{ $server['disk_percent'] }}%)</span>
+                </div>
+                <div class="w-full bg-gray-100 rounded-full h-1.5">
+                    <div class="{{ $server['disk_percent'] > 80 ? 'bg-red-500' : ($server['disk_percent'] > 60 ? 'bg-yellow-500' : 'bg-emerald-500') }} h-1.5 rounded-full transition-all" style="width: {{ $server['disk_percent'] }}%"></div>
+                </div>
+            </div>
+
+            {{-- Memory Usage --}}
+            <div class="mb-3">
+                <div class="flex justify-between text-[10px] font-semibold mb-1">
+                    <span class="text-gray-500">{{ __('Memory') }}</span>
+                    <span class="{{ $server['memory_percent'] > 80 ? 'text-red-600' : 'text-gray-600' }}">{{ $server['memory_used'] }}MB / {{ $server['memory_limit'] }}MB ({{ $server['memory_percent'] }}%)</span>
+                </div>
+                <div class="w-full bg-gray-100 rounded-full h-1.5">
+                    <div class="{{ $server['memory_percent'] > 80 ? 'bg-red-500' : ($server['memory_percent'] > 60 ? 'bg-yellow-500' : 'bg-emerald-500') }} h-1.5 rounded-full transition-all" style="width: {{ $server['memory_percent'] }}%"></div>
+                </div>
+            </div>
+
+            {{-- Load Average --}}
+            <div class="flex justify-between text-[10px] font-semibold mb-2">
+                <span class="text-gray-500">{{ __('Load Average') }}</span>
+                <span class="text-gray-600">{{ number_format($server['load_avg']['1min'], 1) }} / {{ number_format($server['load_avg']['5min'], 1) }} / {{ number_format($server['load_avg']['15min'], 1) }}</span>
+            </div>
+
+            {{-- Uptime + PHP --}}
+            <div class="flex justify-between text-[10px] font-semibold mb-2">
+                <span class="text-gray-500">{{ __('Uptime') }}</span>
+                <span class="text-gray-600">{{ $server['uptime_hours'] ? number_format($server['uptime_hours'], 0) . 'h' : '-' }}</span>
+            </div>
+            <div class="flex justify-between text-[10px] font-semibold mb-2">
+                <span class="text-gray-500">{{ __('PHP') }}</span>
+                <span class="text-gray-600">{{ $server['php_version'] }}</span>
+            </div>
+
+            {{-- Database --}}
+            <div class="flex justify-between text-[10px] font-semibold">
+                <span class="text-gray-500">{{ __('Database') }}</span>
+                @if($server['database'] === 'connected')
+                    <span class="inline-flex items-center gap-1 text-emerald-600">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                        {{ __('Connected') }}
+                    </span>
+                @else
+                    <span class="inline-flex items-center gap-1 text-red-600">
+                        <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                        {{ __('Error') }}
+                    </span>
+                @endif
+            </div>
+        </div>
+
+        {{-- Service Status --}}
+        <div class="bg-white rounded-[6px] shadow-sm border border-[#E5E5E1] p-5">
+            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">{{ __('Service Status') }}</h3>
+
+            <div class="space-y-3">
+                <div class="flex justify-between text-[10px] font-semibold">
+                    <span class="text-gray-500">{{ __('App Version') }}</span>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-700">v{{ $service['app_version'] }}</span>
+                </div>
+
+                <div class="border-t border-gray-100 pt-3">
+                    <div class="flex justify-between text-[10px] font-semibold mb-1">
+                        <span class="text-gray-500">{{ __('Last Update') }}</span>
+                        <span class="text-gray-600">{{ $service['last_update'] ?? '-' }}</span>
+                    </div>
+                    @if($service['last_update_at'] ?? null)
+                    <div class="text-right text-[9px] text-gray-400">{{ $service['last_update_at'] }}</div>
+                    @endif
+                </div>
+
+                <div class="border-t border-gray-100 pt-3">
+                    <div class="flex justify-between text-[10px] font-semibold mb-1">
+                        <span class="text-gray-500">{{ __('Last Backup') }}</span>
+                        @if($service['last_backup'] ?? null)
+                            <span class="text-gray-600">{{ $service['last_backup'] }}</span>
+                        @else
+                            <span class="text-yellow-600">{{ __('Never') }}</span>
+                        @endif
+                    </div>
+                    @if($service['last_backup_at'] ?? null)
+                    <div class="text-right text-[9px] text-gray-400">{{ $service['last_backup_at'] }}</div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Support Info --}}
+    <div class="bg-white rounded-[6px] shadow-sm border border-[#E5E5E1] p-5 mb-6">
+        <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">{{ __('Support') }}</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div>
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">{{ __('Email') }}</span>
+                <a href="mailto:{{ $support['email'] }}" class="text-xs font-semibold text-gray-900 hover:text-gray-600">{{ $support['email'] }}</a>
+            </div>
+            <div>
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">{{ __('Phone') }}</span>
+                <span class="text-xs font-semibold text-gray-900">{{ $support['phone'] }}</span>
+            </div>
+            <div>
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">{{ __('SLA') }}</span>
+                <span class="text-xs font-semibold text-gray-900">{{ $support['sla'] }}</span>
+            </div>
+            <div>
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">{{ __('Docs') }}</span>
+                <a href="{{ $support['docs_url'] }}" target="_blank" class="text-xs font-semibold text-gray-900 hover:text-gray-600">{{ __('Documentation') }}</a>
+            </div>
+        </div>
+    </div>
+
+    {{-- Actions --}}
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <button
+            type="button"
+            wire:click="requestSupport"
+            class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-900 text-white text-[10px] font-bold uppercase tracking-widest rounded-[4px] hover:bg-gray-700 transition-colors cursor-pointer"
+        >
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/></svg>
+            {{ __('Request Support') }}
+        </button>
+        <a
+            href="{{ $support['docs_url'] }}"
+            target="_blank"
+            class="inline-flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-700 text-[10px] font-bold uppercase tracking-widest rounded-[4px] hover:bg-gray-50 transition-colors"
+        >
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"/></svg>
+            {{ __('Documentation') }}
+        </a>
+    </div>
+
+    @else
 
     @php
         $current = app(\App\Filament\Tenant\Pages\ManageSubscription::class)->getCurrentPlan();
@@ -428,6 +583,7 @@
             </table>
         </div>
     </div>
+    @endif
     @endif
     @endif
     </div>

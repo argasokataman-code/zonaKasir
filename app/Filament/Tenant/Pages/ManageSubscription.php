@@ -277,4 +277,128 @@ class ManageSubscription extends Page
             ->get()
             ->toArray();
     }
+
+    // ── On-Premise Methods ──
+
+    public function getOnpremLicense(): ?array
+    {
+        if (! config('app.on_premise')) {
+            return null;
+        }
+
+        $licenseKey = env('ONPREM_LICENSE_KEY');
+        if (! $licenseKey) {
+            return [
+                'status' => 'invalid',
+                'customer' => 'Unlicensed',
+                'domain' => request()->getHost(),
+                'type' => 'unknown',
+                'issued_at' => null,
+                'expires_at' => null,
+                'features' => [],
+            ];
+        }
+
+        $parts = explode('.', $licenseKey);
+        $decoded = @base64_decode($parts[0] ?? '');
+        $data = $decoded ? (@json_decode($decoded, true) ?? []) : [];
+
+        return [
+            'status' => 'active',
+            'customer' => $data['customer'] ?? 'Licensed',
+            'domain' => $data['domain'] ?? request()->getHost(),
+            'type' => $data['type'] ?? 'managed',
+            'issued_at' => $data['issued_at'] ?? null,
+            'expires_at' => $data['expires_at'] ?? null,
+            'features' => $data['features'] ?? ['Core POS', 'Offline Mode', 'Local Network'],
+        ];
+    }
+
+    public function getServerHealth(): array
+    {
+        $phpVersion = phpversion();
+        $diskTotal = disk_total_space('/');
+        $diskFree = disk_free_space('/');
+        $diskUsed = $diskTotal - $diskFree;
+        $diskPercent = $diskTotal > 0 ? round(($diskUsed / $diskTotal) * 100, 1) : 0;
+
+        $memoryTotal = @ini_get('memory_limit');
+        $memoryUsed = round(memory_get_usage(true) / 1024 / 1024, 1);
+        $memoryLimit = (int) str_replace(['M', 'G', 'K'], ['', '', ''], strtoupper($memoryTotal ?? '128M'));
+        $memoryPercent = $memoryLimit > 0 ? round(($memoryUsed / $memoryLimit) * 100, 1) : 0;
+
+        $loadAvg = sys_getloadavg();
+        $uptime = @file_get_contents('/proc/uptime');
+        $uptimeHours = $uptime ? round((float) explode(' ', $uptime)[0] / 3600, 1) : null;
+
+        $dbStatus = 'unknown';
+        try {
+            \Illuminate\Support\Facades\DB::connection()->getPdo();
+            $dbStatus = 'connected';
+        } catch (\Throwable $e) {
+            $dbStatus = 'error';
+        }
+
+        return [
+            'php_version' => $phpVersion,
+            'disk_total' => round($diskTotal / 1024 / 1024 / 1024, 2),
+            'disk_used' => round($diskUsed / 1024 / 1024 / 1024, 2),
+            'disk_percent' => $diskPercent,
+            'memory_used' => $memoryUsed,
+            'memory_limit' => $memoryLimit,
+            'memory_percent' => $memoryPercent,
+            'load_avg' => [
+                '1min' => $loadAvg[0] ?? 0,
+                '5min' => $loadAvg[1] ?? 0,
+                '15min' => $loadAvg[2] ?? 0,
+            ],
+            'uptime_hours' => $uptimeHours,
+            'database' => $dbStatus,
+        ];
+    }
+
+    public function getServiceStatus(): array
+    {
+        $appVersion = config('app.version', '1.0.0');
+        $lastUpdate = \App\Models\Tenants\About::select('updated_at')->first()?->updated_at;
+        $lastBackup = null;
+        $backupPath = storage_path('app/backups');
+        if (is_dir($backupPath)) {
+            $files = glob($backupPath.'/*.sql*');
+            if (! empty($files)) {
+                $latest = max(array_map('filemtime', $files));
+                $lastBackup = \Carbon\Carbon::createFromTimestamp($latest);
+            }
+        }
+
+        return [
+            'app_version' => $appVersion,
+            'last_update' => $lastUpdate?->diffForHumans(),
+            'last_update_at' => $lastUpdate?->format('d M Y H:i'),
+            'last_backup' => $lastBackup?->diffForHumans(),
+            'last_backup_at' => $lastBackup?->format('d M Y H:i'),
+        ];
+    }
+
+    public function getSupportInfo(): array
+    {
+        return [
+            'email' => config('app.support_email', 'support@zonakasir.com'),
+            'phone' => config('app.support_phone', '-'),
+            'sla' => config('app.support_sla', '24 hours'),
+            'docs_url' => config('app.docs_url', 'https://docs.zonakasir.com'),
+        ];
+    }
+
+    public function requestSupport(): void
+    {
+        $tenantId = auth()->user()->tenant_id;
+        $user = auth()->user();
+
+        Notification::make()
+            ->title(__('Support Request Sent'))
+            ->body(__('Our team will contact you within 24 hours.'))
+            ->success()
+            ->send();
+    }
 }
