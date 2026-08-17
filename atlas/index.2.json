@@ -2332,6 +2332,1035 @@
           "raw": "BUG-001:relates"
         }
       ]
+    },
+    {
+      "id": "TASK-489",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:26:13",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-490",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:32:10",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/PaymentMethodResource.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-491",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:32:21",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/PaymentMethodResource/Pages/EditPaymentMethod.ph",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-492",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:34:30",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-493",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:34:42",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-494",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:38:07",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/PaymentMethodResource.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-495",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:38:45",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-496",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:39:35",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-497",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:39:46",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-498",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:41:03",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/PaymentMethod.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-499",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:41:12",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/PaymentHandler.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-500",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:50:56",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/PaymentMethodResource.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-501",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:52:35",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/PaymentMethodResource.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-502",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:54:37",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/PaymentMethodResource.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-503",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:55:29",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/PaymentMethodResource.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-504",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "21:56:44",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/PaymentMethodResource.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-505",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:08:48",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/PaymentMethod.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-506",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:09:32",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/scripts.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-507",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:12:42",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/scripts.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-508",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:13:20",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-509",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:14:21",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/scripts.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-510",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:17:31",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/modals/all.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-511",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:21:13",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/PaymentMethod.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-512",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:29:26",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Models/Tenants/PaymentMethod.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "DEC-020",
+      "type": "decision",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "22:31:29",
+      "tags": [
+        "fix-pattern",
+        "filament",
+        "alpine",
+        "livewire"
+      ],
+      "summary": "Filament form: visible() pakai Get helper bukan Form param. Import: individual component imports, jangan namespace + class. template x-for+x",
+      "conn": [
+        {
+          "id": "BUG-002",
+          "type": "fixes",
+          "raw": "BUG-002:fixes"
+        },
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "DEC-021",
+      "type": "decision",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "22:31:43",
+      "tags": [
+        "performance",
+        "caching"
+      ],
+      "summary": "Cache once() pattern: Profile::Timezone(), About::cache(), aboutsTableExists(). Widget polling: 30s->120s. NoCacheResponse: private,max-age=",
+      "conn": [
+        {
+          "id": "DEC-020",
+          "type": "relates",
+          "raw": "DEC-020:relates"
+        }
+      ]
+    },
+    {
+      "id": "PERF-008",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:32:44",
+      "tags": [
+        "perf",
+        "caching",
+        "login"
+      ],
+      "summary": "Login form: label color fix, input sizing, button loading state, dashboard widget polling 120s, once() caching, bfcache enabled",
+      "conn": [
+        {
+          "id": "DEC-021",
+          "type": "relates",
+          "raw": "DEC-021:relates"
+        },
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "DEC-022",
+      "type": "decision",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "22:33:09",
+      "tags": [
+        "on-premise",
+        "navigation"
+      ],
+      "summary": "On-premise hide: Settlement, Withdrawal, WithdrawalPage (payment gateway). Keep: PaymentMethod (QRIS/cash), Receivable (piutang), Voucher (p",
+      "conn": [
+        {
+          "id": "DEC-020",
+          "type": "relates",
+          "raw": "DEC-020:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-513",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:34:08",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/AGENTS.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-514",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:44:31",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-515",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:45:21",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/SellingReport.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-516",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:45:30",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/ProductReport.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-517",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:45:33",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/CashierReport.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-518",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:45:36",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/PurchasingReport.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-519",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:45:38",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/CategoryReport.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-520",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:45:41",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/BrandReport.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-521",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:47:34",
+      "tags": [
+        "ui",
+        "report",
+        "refactor"
+      ],
+      "summary": "Report pages: flat sidebar inventory style. Hapus parent Report.php, HasReportPageSidebar, topbar tabs. 6 items langsung di sidebar group.",
+      "conn": [
+        {
+          "id": "DEC-020",
+          "type": "relates",
+          "raw": "DEC-020:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-522",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:48:55",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-523",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:51:02",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-524",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "22:59:41",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/components/table-cell.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-525",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:06:41",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/dashboard.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-526",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:07:33",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/dashboard.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-527",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:09:57",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/dashboard.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-528",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:10:18",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/dashboard.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-529",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:10:46",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Dashboard.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-530",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:16:43",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/WebPConverter.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-531",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:22:40",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/WebPConverter.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-532",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:23:28",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Forms/Components/WebPFileUpload.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-533",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:24:08",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/PaymentMethodResource.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-534",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:25:00",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/PurchasingResource.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-535",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:25:01",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/StockOpnameResource/Traits/HasStockOpnameItemFor",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-536",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:25:02",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/ProductResource/Traits/HasProductForm.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-206",
+      "type": "feature",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:27:50",
+      "tags": [
+        "performance",
+        "image",
+        "webp"
+      ],
+      "summary": "Auto WebP conversion: WebPFileUpload extends FileUpload, converts JPEG/PNG/GIF to WebP 85% quality on upload. 4 upload points: PaymentMethod",
+      "conn": [
+        {
+          "id": "DEC-021",
+          "type": "relates",
+          "raw": "DEC-021:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-537",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:37:37",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /tmp/test_products_100.csv",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-538",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:44:48",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Imports/ProductImport.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-539",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:45:20",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Resources/ProductResource/Pages/ListProducts.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
     }
   ]
 }

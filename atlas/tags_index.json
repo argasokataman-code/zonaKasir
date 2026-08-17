@@ -71,6 +71,10 @@
     {
       "id": "BUG-004",
       "shard": 1
+    },
+    {
+      "id": "DEC-020",
+      "shard": 2
     }
   ],
   "deploy": [
@@ -1598,6 +1602,206 @@
     },
     {
       "id": "TASK-488",
+      "shard": 2
+    },
+    {
+      "id": "TASK-489",
+      "shard": 2
+    },
+    {
+      "id": "TASK-490",
+      "shard": 2
+    },
+    {
+      "id": "TASK-491",
+      "shard": 2
+    },
+    {
+      "id": "TASK-492",
+      "shard": 2
+    },
+    {
+      "id": "TASK-493",
+      "shard": 2
+    },
+    {
+      "id": "TASK-494",
+      "shard": 2
+    },
+    {
+      "id": "TASK-495",
+      "shard": 2
+    },
+    {
+      "id": "TASK-496",
+      "shard": 2
+    },
+    {
+      "id": "TASK-497",
+      "shard": 2
+    },
+    {
+      "id": "TASK-498",
+      "shard": 2
+    },
+    {
+      "id": "TASK-499",
+      "shard": 2
+    },
+    {
+      "id": "TASK-500",
+      "shard": 2
+    },
+    {
+      "id": "TASK-501",
+      "shard": 2
+    },
+    {
+      "id": "TASK-502",
+      "shard": 2
+    },
+    {
+      "id": "TASK-503",
+      "shard": 2
+    },
+    {
+      "id": "TASK-504",
+      "shard": 2
+    },
+    {
+      "id": "TASK-505",
+      "shard": 2
+    },
+    {
+      "id": "TASK-506",
+      "shard": 2
+    },
+    {
+      "id": "TASK-507",
+      "shard": 2
+    },
+    {
+      "id": "TASK-508",
+      "shard": 2
+    },
+    {
+      "id": "TASK-509",
+      "shard": 2
+    },
+    {
+      "id": "TASK-510",
+      "shard": 2
+    },
+    {
+      "id": "TASK-511",
+      "shard": 2
+    },
+    {
+      "id": "TASK-512",
+      "shard": 2
+    },
+    {
+      "id": "TASK-513",
+      "shard": 2
+    },
+    {
+      "id": "TASK-514",
+      "shard": 2
+    },
+    {
+      "id": "TASK-515",
+      "shard": 2
+    },
+    {
+      "id": "TASK-516",
+      "shard": 2
+    },
+    {
+      "id": "TASK-517",
+      "shard": 2
+    },
+    {
+      "id": "TASK-518",
+      "shard": 2
+    },
+    {
+      "id": "TASK-519",
+      "shard": 2
+    },
+    {
+      "id": "TASK-520",
+      "shard": 2
+    },
+    {
+      "id": "TASK-522",
+      "shard": 2
+    },
+    {
+      "id": "TASK-523",
+      "shard": 2
+    },
+    {
+      "id": "TASK-524",
+      "shard": 2
+    },
+    {
+      "id": "TASK-525",
+      "shard": 2
+    },
+    {
+      "id": "TASK-526",
+      "shard": 2
+    },
+    {
+      "id": "TASK-527",
+      "shard": 2
+    },
+    {
+      "id": "TASK-528",
+      "shard": 2
+    },
+    {
+      "id": "TASK-529",
+      "shard": 2
+    },
+    {
+      "id": "TASK-530",
+      "shard": 2
+    },
+    {
+      "id": "TASK-531",
+      "shard": 2
+    },
+    {
+      "id": "TASK-532",
+      "shard": 2
+    },
+    {
+      "id": "TASK-533",
+      "shard": 2
+    },
+    {
+      "id": "TASK-534",
+      "shard": 2
+    },
+    {
+      "id": "TASK-535",
+      "shard": 2
+    },
+    {
+      "id": "TASK-536",
+      "shard": 2
+    },
+    {
+      "id": "TASK-537",
+      "shard": 2
+    },
+    {
+      "id": "TASK-538",
+      "shard": 2
+    },
+    {
+      "id": "TASK-539",
       "shard": 2
     }
   ],
@@ -3197,6 +3401,10 @@
     {
       "id": "FEAT-205",
       "shard": 2
+    },
+    {
+      "id": "PERF-008",
+      "shard": 2
     }
   ],
   "guard": [
@@ -3279,6 +3487,10 @@
     {
       "id": "TASK-312",
       "shard": 1
+    },
+    {
+      "id": "TASK-521",
+      "shard": 2
     }
   ],
   "modal": [
@@ -3353,6 +3565,14 @@
     {
       "id": "PERF-006",
       "shard": 1
+    },
+    {
+      "id": "DEC-021",
+      "shard": 2
+    },
+    {
+      "id": "FEAT-206",
+      "shard": 2
     }
   ],
   "middleware": [
@@ -3423,12 +3643,20 @@
     {
       "id": "BUG-010",
       "shard": 1
+    },
+    {
+      "id": "DEC-020",
+      "shard": 2
     }
   ],
   "livewire": [
     {
       "id": "BUG-010",
       "shard": 1
+    },
+    {
+      "id": "DEC-020",
+      "shard": 2
     }
   ],
   "data": [
@@ -3448,6 +3676,10 @@
     },
     {
       "id": "FEAT-204",
+      "shard": 2
+    },
+    {
+      "id": "DEC-022",
       "shard": 2
     }
   ],
@@ -3569,6 +3801,10 @@
     {
       "id": "FEAT-202",
       "shard": 2
+    },
+    {
+      "id": "TASK-521",
+      "shard": 2
     }
   ],
   "category": [
@@ -3587,11 +3823,55 @@
     {
       "id": "PERF-007",
       "shard": 2
+    },
+    {
+      "id": "PERF-008",
+      "shard": 2
     }
   ],
   "audit": [
     {
       "id": "PERF-007",
+      "shard": 2
+    }
+  ],
+  "fix-pattern": [
+    {
+      "id": "DEC-020",
+      "shard": 2
+    }
+  ],
+  "caching": [
+    {
+      "id": "DEC-021",
+      "shard": 2
+    },
+    {
+      "id": "PERF-008",
+      "shard": 2
+    }
+  ],
+  "on-premise": [
+    {
+      "id": "DEC-022",
+      "shard": 2
+    }
+  ],
+  "refactor": [
+    {
+      "id": "TASK-521",
+      "shard": 2
+    }
+  ],
+  "image": [
+    {
+      "id": "FEAT-206",
+      "shard": 2
+    }
+  ],
+  "webp": [
+    {
+      "id": "FEAT-206",
       "shard": 2
     }
   ]

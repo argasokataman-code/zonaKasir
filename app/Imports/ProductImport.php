@@ -6,6 +6,7 @@ use App\Models\Tenants\Category;
 use App\Models\Tenants\PriceUnit;
 use App\Models\Tenants\Product;
 use App\Observers\ProductObserver;
+use App\Services\TenantContext;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -37,9 +38,10 @@ class ProductImport implements SkipsEmptyRows, ToModel, WithHeadingRow
         $row['name'] = $name;
 
         // Ensure import category exists before product creation.
+        $tenantId = TenantContext::get();
         $category = Category::query()->firstOrCreate(
-            ['name' => $row['category'] ?? 'Uncategorized'],
-            ['name' => $row['category'] ?? 'Uncategorized'],
+            ['name' => $row['category'] ?? 'Uncategorized', 'tenant_id' => $tenantId],
+            ['name' => $row['category'] ?? 'Uncategorized', 'tenant_id' => $tenantId],
         );
 
         if (!empty($row['barcode'])) {
