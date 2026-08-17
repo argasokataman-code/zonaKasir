@@ -65,7 +65,7 @@ trait PaymentHandler
             'allow_partial' => ! empty($this->cartDetail['allow_partial']),
         ]);
 
-        $pMethod = PaymentMethod::select('id', 'name', 'is_credit', 'payment_type')->find($request['payment_method_id']);
+        $pMethod = PaymentMethod::select('id', 'name', 'is_credit', 'payment_type', 'icon')->find($request['payment_method_id']);
 
         Log::info('PaymentMethod check', [
             'payment_method_id' => $request['payment_method_id'] ?? null,
@@ -80,6 +80,14 @@ trait PaymentHandler
                 ->body(__('Please select a valid payment method.'))
                 ->warning()
                 ->send();
+
+            return;
+        }
+
+        if ($pMethod->isStaticQris()) {
+            $request['payed_money'] = $this->total_price;
+            $request['money_changes'] = 0;
+            $this->handleCashPayment($request, $pMethod, $sellingService);
 
             return;
         }

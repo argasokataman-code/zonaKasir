@@ -47,8 +47,8 @@
               $isCreditSelected = true;
             @endphp
             <div class="grid gap-3" :class="paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.is_credit ? 'md:grid-cols-[1fr_1fr]' : 'grid-cols-1'">
-            {{-- Calculator area --}}
-            <div>
+            {{-- Calculator area — hidden when QRIS selected --}}
+            <div x-show="paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.payment_type !== 'qris'" x-cloak>
             @error('payed_money')
               <span class="error text-danger-500">{{ $message }}</span>
             @enderror
@@ -117,6 +117,34 @@
               <x-filament::icon icon="heroicon-o-backspace" class="h-4 w-4" />
               <span>{{ __('Delete') }}</span>
             </button>
+            </div>
+            {{-- QRIS display — shown when QRIS selected --}}
+            <div x-show="paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.payment_type === 'qris'" x-cloak
+              class="flex flex-col items-center gap-4 rounded-xl border-2 border-amber-300 bg-white p-6 dark:border-amber-700 dark:bg-gray-800">
+              <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ $about['shop_name'] ?? config('app.name') }}</p>
+              @php
+                $qrisMethod = collect($this->paymentMethods ?? [])->firstWhere('payment_type', 'qris');
+              @endphp
+              @if($qrisMethod && $qrisMethod['icon'] ?? null)
+                <img src="{{ $qrisMethod['icon'] }}" alt="QRIS" class="h-[220px] w-[220px] object-contain rounded-lg border border-gray-200 dark:border-gray-600" />
+              @else
+                <div class="flex h-[220px] w-[220px] items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700">
+                  <p class="text-center text-xs text-gray-400">{{ __('QRIS image not configured') }}</p>
+                </div>
+              @endif
+              <p class="text-lg font-bold text-gray-900 dark:text-white">{{ __('Total') }}: {{ number_format($total_price, 0, ',', '.') }}</p>
+              <div class="flex w-full gap-2">
+                <button type="button" x-on:click="cartDetail['payment_method_id'] = null; $wire.set('cartDetail.payment_method_id', null);"
+                  class="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-gray-100 p-3 text-sm font-semibold text-gray-700 ring-1 ring-gray-200 transition-all hover:bg-gray-200 active:scale-95 dark:bg-gray-700 dark:text-gray-300 dark:ring-gray-600">
+                  <x-heroicon-o-arrow-left class="h-5 w-5" />
+                  {{ __('Back') }}
+                </button>
+                <button type="submit"
+                  class="flex min-h-[48px] flex-1 items-center justify-center gap-2 rounded-xl bg-green-600 p-3 text-base font-bold text-white shadow-lg shadow-green-600/30 transition-all hover:brightness-110 active:scale-95">
+                  <x-heroicon-o-check class="h-5 w-5" />
+                  {{ __('Payment Received') }}
+                </button>
+              </div>
             </div>
             {{-- Piutang form: sebelah calculator --}}
             <div x-show="paymentMethods.find(p => p.id == cartDetail.payment_method_id)?.is_credit"

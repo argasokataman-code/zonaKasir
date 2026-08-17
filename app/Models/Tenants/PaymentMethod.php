@@ -75,6 +75,11 @@ class PaymentMethod extends Model
         return in_array($this->payment_type, self::MIDTRANS_TYPES);
     }
 
+    public function isStaticQris(): bool
+    {
+        return $this->payment_type === 'qris' && filled($this->icon);
+    }
+
     public function midtransType(): ?string
     {
         return $this->isMidtrans() ? $this->payment_type : null;

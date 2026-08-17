@@ -46,6 +46,7 @@ class PaymentMethodResource extends Resource
                 ->image()
                 ->imageEditor()
                 ->maxSize(config('upload.livewire_max_size'))
+                ->helperText(__('Recommended: 300x300px square, PNG/JPG. Image will be displayed to customers for scanning.'))
                 ->visible(fn (Form $form): bool => $form->get('payment_type') === 'qris')
                 ->columnSpanFull(),
         ]);

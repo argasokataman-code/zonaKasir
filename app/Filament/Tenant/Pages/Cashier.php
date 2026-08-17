@@ -116,7 +116,7 @@ class Cashier extends Page implements HasForms
         $this->calculateTotalPrice();
 
         $this->paymentMethods = PaymentMethod::query()
-            ->select('id', 'name', 'is_credit', 'payment_type')
+            ->select('id', 'name', 'is_credit', 'payment_type', 'icon')
             ->where('is_active', true)
             ->get()
             ->toArray();
