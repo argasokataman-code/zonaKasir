@@ -20,7 +20,7 @@ trait CartInteraction
         // Re-query affected item to keep $this->cartItems in sync
         // (still needed for Livewire form bindings and full refresh).
         $updated = CartItem::where('product_id', $product->getKey())
-            ->with(['product:id,name,sku,selling_price,is_non_stock,hero_images,priceUnits:id,product_id,selling_price', 'priceUnit:id,selling_price'])
+            ->with(['product:id,name,sku,selling_price,is_non_stock,hero_images', 'product.priceUnits:id,product_id,selling_price', 'priceUnit:id,selling_price'])
             ->cashier()->first();
         $this->cartItems = $this->cartItems->reject(fn ($i) => (int) $i->product_id === $product->getKey());
         if ($updated) $this->cartItems->push($updated);

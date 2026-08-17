@@ -160,7 +160,8 @@ class Cashier extends Page implements HasForms
         $this->cartItems = CartItem::query()
             ->select('id', 'product_id', 'qty', 'price', 'discount_price', 'price_unit_id', 'created_at')
             ->with([
-                'product:id,name,sku,selling_price,is_non_stock,hero_images,priceUnits:id,product_id,selling_price',
+                'product:id,name,sku,selling_price,is_non_stock,hero_images',
+                'product.priceUnits:id,product_id,selling_price',
                 'priceUnit:id,selling_price',
             ])
             ->orderByDesc('created_at')
