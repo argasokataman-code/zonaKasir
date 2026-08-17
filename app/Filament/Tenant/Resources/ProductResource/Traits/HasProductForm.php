@@ -8,6 +8,7 @@ use App\Features\ProductInitialPrice;
 use App\Features\ProductSku;
 use App\Features\ProductStock;
 use App\Features\ProductType;
+use App\Models\Tenants\Brand;
 use App\Models\Tenants\Category;
 use App\Models\Tenants\Setting;
 use App\Rules\UniqueBarcode;
@@ -66,6 +67,27 @@ trait HasProductForm
                 $category->save();
 
                 return $category->getKey();
+            });
+    }
+
+    public function generateBrandFormComponent(): Select
+    {
+        return Select::make('brand_id')
+            ->translateLabel()
+            ->options(Brand::select('id', 'name')->pluck('name', 'id'))
+            ->native(false)
+            ->nullable()
+            ->createOptionForm([
+                TextInput::make('name')
+                    ->translateLabel()
+                    ->required(),
+            ])
+            ->createOptionUsing(function (array $data): int {
+                $brand = new Brand();
+                $brand->fill($data);
+                $brand->save();
+
+                return $brand->getKey();
             });
     }
 

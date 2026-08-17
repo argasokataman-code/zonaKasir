@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Models\Tenants;
+
+use App\Models\Traits\HasTenant;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
+
+class Brand extends Model
+{
+    use HasTenant;
+    use HasFactory, LogsActivity;
+
+    protected $guarded = ['id'];
+    protected static $recordEvents = ['created', 'updated', 'deleted'];
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'brand_id');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults();
+    }
+}

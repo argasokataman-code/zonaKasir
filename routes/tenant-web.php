@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Api\Tenants\Reports\PurchasingReportController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\BrandReportController;
 use App\Http\Controllers\CashierReportController;
+use App\Http\Controllers\CategoryReportController;
 use App\Http\Controllers\ProductReportController;
 use App\Http\Controllers\SellingReportController;
 use App\Livewire\ResetPassword;
@@ -29,6 +31,10 @@ Route::middleware([
         ->name('product-report.generate');
     Route::get('/member/cashier-report/generate', CashierReportController::class)
         ->name('cashier-report.generate');
+    Route::get('/member/category-report/generate', CategoryReportController::class)
+        ->name('category-report.generate');
+    Route::get('/member/brand-report/generate', BrandReportController::class)
+        ->name('brand-report.generate');
     Route::view('/member/sellings/{selling}/print', 'filament.tenant.pages.selling.print-receipt')
         ->name('selling.print');
     Route::get('/reset-password/{token}', ResetPassword::class)

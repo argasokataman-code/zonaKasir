@@ -42,7 +42,7 @@ class ProductResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['name', 'sku'];
+        return ['name', 'sku', 'brand.name'];
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array
@@ -62,13 +62,17 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->query(fn (): Builder => Product::query()->select('id', 'name', 'sku', 'selling_price', 'initial_price', 'stock', 'show', 'type', 'unit', 'is_non_stock', 'category_id', 'created_at')->with(['stocks:product_id,stock,type,is_ready,date,created_at', 'category:id,name'])->latest())
+            ->query(fn (): Builder => Product::query()->select('id', 'name', 'sku', 'selling_price', 'initial_price', 'stock', 'show', 'type', 'unit', 'is_non_stock', 'category_id', 'brand_id', 'created_at')->with(['stocks:product_id,stock,type,is_ready,date,created_at', 'category:id,name', 'brand:id,name'])->latest())
             ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('id')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('category.name')
+                    ->toggleable()
+                    ->translateLabel()
+                    ->searchable(),
+                TextColumn::make('brand.name')
                     ->toggleable()
                     ->translateLabel()
                     ->searchable(),
@@ -176,6 +180,7 @@ class ProductResource extends Resource
                 ->columnSpanFull(),
             $this->generateSkuFormComponent(),
             $this->generateCategoryFormComponent(),
+            $this->generateBrandFormComponent(),
             $this->generateStockFormComponent(),
             $this->generateUnitFormComponent(),
             $this->generateExpiredFormComponent(),

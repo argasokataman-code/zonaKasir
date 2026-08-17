@@ -2,7 +2,9 @@
 
 namespace App\Filament\Tenant\Pages\Traits;
 
+use App\Filament\Tenant\Pages\BrandReport;
 use App\Filament\Tenant\Pages\CashierReport;
+use App\Filament\Tenant\Pages\CategoryReport;
 use App\Filament\Tenant\Pages\ProductReport;
 use App\Filament\Tenant\Pages\PurchasingReport;
 use App\Filament\Tenant\Pages\SellingReport;
@@ -27,6 +29,8 @@ trait HasReportPageSidebar
                 static::generateNavigationItem(ProductReport::class),
                 static::generateNavigationItem(CashierReport::class),
                 static::generateNavigationItem(PurchasingReport::class),
+                static::generateNavigationItem(CategoryReport::class),
+                static::generateNavigationItem(BrandReport::class),
             ]);
     }
 
