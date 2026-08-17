@@ -28,6 +28,7 @@ use App\Filament\Tenant\Pages\TenantLogin;
 use App\Filament\Tenant\Resources\CategoryResource;
 use App\Filament\Tenant\Resources\BrandResource;
 use App\Filament\Tenant\Pages\BrandReport;
+use App\Filament\Tenant\Pages\CategoryReport;
 use App\Filament\Tenant\Resources\MemberResource;
 use App\Filament\Tenant\Resources\PaymentMethodResource;
 use App\Filament\Tenant\Resources\PermissionResource;
