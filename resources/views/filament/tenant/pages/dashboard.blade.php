@@ -4,34 +4,39 @@
             {{ $this->filtersForm }}
         @endif
 
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-            @foreach ($this->getVisibleWidgets() as $widget)
-                @if (class_basename($widget) === 'QuickActions')
-                    <div class="md:col-span-2 xl:col-span-4">
-                        @livewire($widget)
-                    </div>
-                @endif
-            @endforeach
+        {{-- Quick Actions --}}
+        @livewire(\App\Filament\Tenant\Widgets\QuickActions::class)
+
+        {{-- Revenue + Balance --}}
+        <div class="grid grid-cols-1 gap-4">
+            @livewire(\App\Filament\Tenant\Resources\SellingResource\Widgets\SellingOverview::class)
+            @livewire(\App\Filament\Tenant\Widgets\BalanceWidget::class)
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            @foreach ($this->getVisibleWidgets() as $widget)
-                @if (class_basename($widget) !== 'QuickActions')
-                    <div class="widget-card" wire:key="{{ $widget }}">
-                        <div wire:loading.class="opacity-50">
-                            @livewire($widget)
-                        </div>
-                    </div>
-                @endif
-            @endforeach
-        </div>
+        {{-- Transaction Stats --}}
+        @livewire(\App\Filament\Tenant\Widgets\TransactionStats::class)
 
-        <!-- Loading States -->
-        <div class="hidden" wire:loading.class.remove="hidden" wire:loading.class="fixed inset-0 bg-black bg-opacity-25 z-50 flex items-center justify-center">
-            <div class="bg-white rounded-lg p-8 shadow-xl">
-                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto"></div>
-                <p class="mt-4 text-gray-600">Loading dashboard data...</p>
+        {{-- Charts --}}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div class="lg:col-span-2">
+                @livewire(\App\Filament\Tenant\Widgets\SalesChart::class)
+            </div>
+            <div>
+                @livewire(\App\Filament\Tenant\Widgets\PaymentMethodChart::class)
             </div>
         </div>
+
+        {{-- Inventory + Best Selling --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div>
+                @livewire(\App\Filament\Tenant\Widgets\InventoryStats::class)
+            </div>
+            <div>
+                @livewire(\App\Filament\Tenant\Widgets\TodaysBestSellingProduct::class)
+            </div>
+        </div>
+
+        {{-- Low Stock --}}
+        @livewire(\App\Filament\Tenant\Widgets\LowStockProducts::class)
     </div>
 </x-filament-panels::page>

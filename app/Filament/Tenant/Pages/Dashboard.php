@@ -22,16 +22,15 @@ class Dashboard extends BaseDashboard
 
     protected function getHeaderWidgets(): array
     {
-        return [
-            SellingOverview::class,
-            TransactionStats::class,
-            BalanceWidget::class,
-        ];
+        return [];
     }
 
     public function getWidgets(): array
     {
         return [
+            SellingOverview::class,
+            TransactionStats::class,
+            BalanceWidget::class,
             SalesChart::class,
             PaymentMethodChart::class,
             InventoryStats::class,
