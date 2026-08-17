@@ -211,10 +211,10 @@ class Cashier extends Page implements HasForms
 
         if ($this->search) {
             $query->where(function ($q) {
-                $q->where('sku', 'like', "%{$this->search}%")
-                  ->orWhere('name', 'like', "%{$this->search}%")
+                $q->where('sku', 'ilike', "%{$this->search}%")
+                  ->orWhere('name', 'ilike', "%{$this->search}%")
                   ->orWhereHas('barcodes', function ($q) {
-                      $q->where('code', 'like', "%{$this->search}%")
+                      $q->where('code', 'ilike', "%{$this->search}%")
                         ->where('is_active', true);
                   });
             });
