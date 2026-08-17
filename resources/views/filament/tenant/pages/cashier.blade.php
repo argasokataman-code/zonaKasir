@@ -4,7 +4,7 @@
   use Illuminate\Support\Number;
   $formatPrice = fn ($val) => Number::currency($val, $currency, $locale ?? 'en');
 @endphp
-<div x-data="cashier" x-on:cart-data-updated.window="handleCartDataUpdated">
+<div x-data="cashier" x-on:cart-data-updated.window="handleCartDataUpdated" @confirm-delete-item.window="$wire.deleteCart($event.detail.id)">
 
   {{-- ═══ SYNC SPLASH SCREEN (PWA only) ═══ --}}
   <div x-show="showSyncSplash" x-cloak
@@ -280,6 +280,7 @@
     </div>
   </div>
   @include('filament.tenant.pages.cashier.modals.all')
+  <x-confirm-modal />
 </div>
 
 @include('filament.tenant.pages.cashier.scripts')
