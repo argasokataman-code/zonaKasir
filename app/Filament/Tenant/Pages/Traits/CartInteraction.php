@@ -18,12 +18,31 @@ trait CartInteraction
     private function softRefresh(Product $product): void
     {
         // Re-query affected item to keep $this->cartItems in sync
-        // (still needed for Livewire form bindings and full refresh).
         $updated = CartItem::where('product_id', $product->getKey())
             ->with(['product:id,name,sku,selling_price,is_non_stock,hero_images', 'product.priceUnits:id,product_id,selling_price', 'priceUnit:id,selling_price'])
             ->cashier()->first();
-        $this->cartItems = $this->cartItems->reject(fn ($i) => (int) $i->product_id === $product->getKey());
-        if ($updated) $this->cartItems->push($updated);
+
+        // Update in-place to preserve position (reject+push moves to end)
+        $found = false;
+        foreach ($this->cartItems as $item) {
+            if ((int) $item->product_id === $product->getKey()) {
+                if ($updated) {
+                    $item->qty = $updated->qty;
+                    $item->price = $updated->price;
+                    $item->discount_price = $updated->discount_price;
+                    $item->setRelation('priceUnit', $updated->priceUnit);
+                    $item->setRelation('product', $updated->product);
+                } else {
+                    $this->cartItems = $this->cartItems->reject(fn ($i) => (int) $i->product_id === $product->getKey());
+                }
+                $found = true;
+                break;
+            }
+        }
+        if (! $found && $updated) {
+            $this->cartItems->push($updated);
+        }
+
         $this->cartCount = $this->cartItems->count();
         $this->calculateTotalPrice();
 
