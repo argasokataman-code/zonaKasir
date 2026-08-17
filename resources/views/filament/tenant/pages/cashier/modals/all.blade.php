@@ -23,10 +23,14 @@
               <template x-for="paymentMethod in paymentMethods">
                 <div
                   x-on:click="selectPayment(paymentMethod)"
-                  class="flex cursor-pointer justify-center rounded-md border-none px-3 py-2 text-xs hover:scale-105 dark:text-white md:text-sm"
+                  class="flex flex-col items-center cursor-pointer justify-center rounded-md border-none px-3 py-2 text-xs hover:scale-105 dark:text-white md:text-sm"
                   :class="cartDetail['payment_method_id'] == paymentMethod.id ? 'bg-primary-600 text-white' :
                       'dark:bg-gray-900 bg-gray-300 '"
-                   x-text="paymentMethod.name">
+                >
+                  <template x-if="paymentMethod.payment_type === 'qris' && paymentMethod.icon">
+                    <img :src="paymentMethod.icon" class="h-10 w-10 object-contain mb-1 rounded" alt="QRIS">
+                  </template>
+                  <span x-text="paymentMethod.name"></span>
                 </div>
               </template>
               <template x-if="!paymentMethods.length">
