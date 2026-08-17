@@ -963,6 +963,142 @@
           "raw": "BUG-001:relates"
         }
       ]
+    },
+    {
+      "id": "FEAT-204",
+      "type": "feature",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:26:29",
+      "tags": [
+        "navigation",
+        "niche",
+        "realtime"
+      ],
+      "summary": "Business type change auto-refreshes navigation via redirect after save",
+      "conn": [
+        {
+          "id": "FEAT-197",
+          "type": "implements",
+          "raw": "FEAT-197:implements"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-203",
+      "type": "feature",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:26:40",
+      "tags": [
+        "onprem",
+        "subscription",
+        "dashboard"
+      ],
+      "summary": "On-prem subscription dashboard: license card, server health realtime, service status, support info",
+      "conn": [
+        {
+          "id": "FEAT-199",
+          "type": "implements",
+          "raw": "FEAT-199:implements"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-200",
+      "type": "feature",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:26:58",
+      "tags": [
+        "brand",
+        "retail",
+        "migration"
+      ],
+      "summary": "Brand management: Brand model, BrandResource CRUD, product form brand_id field, inline create",
+      "conn": [
+        {
+          "id": "FEAT-197",
+          "type": "implements",
+          "raw": "FEAT-197:implements"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-201",
+      "type": "feature",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:26:58",
+      "tags": [
+        "report",
+        "category",
+        "retail"
+      ],
+      "summary": "Sales per Category Report: CategoryReportService, page, PDF export, report sidebar",
+      "conn": [
+        {
+          "id": "FEAT-200",
+          "type": "implements",
+          "raw": "FEAT-200:implements"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-202",
+      "type": "feature",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:26:59",
+      "tags": [
+        "report",
+        "brand",
+        "retail"
+      ],
+      "summary": "Sales per Brand Report: BrandReportService, page, PDF export, report sidebar",
+      "conn": [
+        {
+          "id": "FEAT-200",
+          "type": "implements",
+          "raw": "FEAT-200:implements"
+        }
+      ]
+    },
+    {
+      "id": "TASK-421",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:30:43",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-422",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "18:31:03",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Providers/Filament/TenantPanelProvider.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
     }
   ]
 }

@@ -27,6 +27,7 @@ use App\Filament\Tenant\Pages\ManageSubscription;
 use App\Filament\Tenant\Pages\WithdrawalPage;
 use App\Filament\Tenant\Pages\TenantLogin;
 use App\Filament\Tenant\Resources\CategoryResource;
+use App\Filament\Tenant\Resources\BrandResource;
 use App\Filament\Tenant\Resources\MemberResource;
 use App\Filament\Tenant\Resources\PaymentMethodResource;
 use App\Filament\Tenant\Resources\PermissionResource;
@@ -266,6 +267,7 @@ class TenantPanelProvider extends PanelProvider
                 $this->generateNavigationItem(StockOpnameResource::class, StockOpname::class),
                 $this->generateNavigationItem(ProductResource::class),
                 $this->generateNavigationItem(CategoryResource::class),
+                $this->generateNavigationItem(BrandResource::class),
                 $this->generateNavigationItem(TableResource::class, nicheKey: 'table'),
             ]),
             NavigationGroup::make(__('User'))->items([
