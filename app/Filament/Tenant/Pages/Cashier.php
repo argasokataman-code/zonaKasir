@@ -65,8 +65,6 @@ class Cashier extends Page implements HasForms
 
     public ?Collection $tableOption;
 
-    public ?Collection $products;
-
     public ?Collection $categories;
 
     public ?string $search = null;
@@ -150,7 +148,6 @@ class Cashier extends Page implements HasForms
         $this->fillPaymentMethodLabel();
 
         $this->categories = Category::select('id', 'name')->get();
-        $this->loadProducts();
     }
 
     /**
@@ -194,7 +191,7 @@ class Cashier extends Page implements HasForms
         ]);
     }
 
-    public function loadProducts(): void
+    protected function getProductsQuery()
     {
         $query = Product::query()
             ->where(function ($query) {
@@ -226,23 +223,29 @@ class Cashier extends Page implements HasForms
             $query->where('category_id', $this->selectedCategory);
         }
 
-        $this->products = $query
+        return $query
             ->select('id', 'name', 'sku', 'selling_price', 'is_non_stock', 'category_id', 'hero_images')
             ->with([
                 'stocks' => fn ($q) => $q->select('product_id', 'stock', 'type', 'initial_price', 'selling_price', 'date', 'created_at')
                     ->where('is_ready', 1)->where('type', 'in'),
-            ])
-            ->get();
+            ]);
+    }
+
+    public function getViewData(): array
+    {
+        return [
+            'products' => $this->getProductsQuery()->get(),
+        ];
     }
 
     public function updatedSearch(): void
     {
-        $this->loadProducts();
+        // Products loaded via render() — triggers re-render automatically
     }
 
     public function updatedSelectedCategory(): void
     {
-        $this->loadProducts();
+        // Products loaded via render() — triggers re-render automatically
     }
 
     public function storeCart(): void

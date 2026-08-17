@@ -54,6 +54,7 @@ class ProductImport implements SkipsEmptyRows, ToModel, WithHeadingRow
         $product = Product::create([
             'name' => $row['name'],
             'category_id' => $category->id,
+            'tenant_id' => $tenantId,
             'unit' => $row['unit'] ?? null,
             'sku' => $row['sku'] ?? null,
             'stock' => (int) ($row['stock'] ?? 0),
