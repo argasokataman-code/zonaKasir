@@ -7,11 +7,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Filters\SearchFields;
 use App\Http\Requests\Tenants\Master\ProductRequest;
 use App\Http\Resources\ProductCollection;
+use App\Imports\ProductImport as ImportsProductImport;
 use App\Models\Tenants\Product;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -116,5 +119,36 @@ class ProductController extends Controller
         return $this->buildResponse()
             ->setMessage('Product deleted successfully')
             ->present();
+    }
+
+    public function import(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file' => 'required|file|mimes:csv,xlsx|max:' . config('upload.livewire_max_size'),
+        ]);
+
+        try {
+            $file = $request->file('file');
+            $extension = $file->getClientOriginalExtension();
+            $tmpPath = tempnam(sys_get_temp_dir(), 'product_import_') . '.' . $extension;
+            file_put_contents($tmpPath, file_get_contents($file));
+
+            $beforeCount = Product::count();
+            Excel::import(new ImportsProductImport, $tmpPath);
+            @unlink($tmpPath);
+
+            $importedCount = Product::count() - $beforeCount;
+
+            return $this->buildResponse()
+                ->setData(['imported' => $importedCount])
+                ->setMessage("Import completed. {$importedCount} products imported.")
+                ->present();
+        } catch (Exception $e) {
+            @unlink($tmpPath ?? '');
+            return $this->buildResponse()
+                ->setCode(500)
+                ->setMessage('Import failed: ' . $e->getMessage())
+                ->present();
+        }
     }
 }

@@ -93,6 +93,7 @@ Route::middleware([
                 Route::group(['prefix' => '/product'], function () {
                     Route::get('/', [ProductController::class, 'index'])->can('read product');
                     Route::post('/', [ProductController::class, 'store'])->can('create product');
+                    Route::post('/import', [ProductController::class, 'import'])->can('create product');
                     Route::get('/{product}', [ProductController::class, 'show'])->can('read product');
                     Route::put('/{product}', [ProductController::class, 'update'])->can('update product');
                     Route::delete('/{product}', [ProductController::class, 'destroy'])->can('delete product');
