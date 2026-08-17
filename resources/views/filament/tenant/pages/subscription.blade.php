@@ -117,9 +117,13 @@
         <h2 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4 text-center">{{ __('Current Plan') }}</h2>
         <div class="bg-white rounded-[6px] shadow-md flex flex-col relative border-2 border-gray-900 w-full sm:w-[280px] sm:min-w-[280px] mx-auto">
             <div class="absolute top-0 left-0 bg-gray-900 text-white text-[8px] font-mono font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-bl-[4px] rounded-tr-[5px]">
-                {{ __('Active') }}
-                @if($current['is_on_trial'])
-                    {{ __('Trial') }}
+                @if(config('app.on_premise'))
+                    {{ __('Licensed') }}
+                @else
+                    {{ __('Active') }}
+                    @if($current['is_on_trial'])
+                        {{ __('Trial') }}
+                    @endif
                 @endif
             </div>
             <div class="p-5 pt-10 flex flex-col h-full">
