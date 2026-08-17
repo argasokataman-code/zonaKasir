@@ -66,7 +66,7 @@ class PaymentMethod extends Model
     public function icon(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => config('app.url').'/'.$value,
+            get: fn ($value) => filled($value) ? config('app.url').'/storage/'.$value : null,
         );
     }
 
