@@ -288,9 +288,9 @@ class TenantPanelProvider extends PanelProvider
             ]),
             NavigationGroup::make(__('General'))->label('')->collapsible(false)->items([
                 $this->generateNavigationItem(VoucherResource::class, Voucher::class),
-                $this->generateNavigationItem(SettlementResource::class),
-                $this->generateNavigationItem(WithdrawalResource::class),
-                $this->generateNavigationItem(WithdrawalPage::class),
+                $this->generateNavigationItem(SettlementResource::class, hideOnPremise: true),
+                $this->generateNavigationItem(WithdrawalResource::class, hideOnPremise: true),
+                $this->generateNavigationItem(WithdrawalPage::class, hideOnPremise: true),
                 $this->generateNavigationItem(ManageSubscription::class),
             ]),
             NavigationGroup::make(__('Setting'))->collapsible(false)->items([
@@ -392,11 +392,15 @@ class TenantPanelProvider extends PanelProvider
         return in_array($navKey, $nicheConfig, true);
     }
 
-    private function generateNavigationItem(string $resource, ?string $feature = null, ?array $activeWhen = [], ?string $nicheKey = null): ?NavigationItem
+    private function generateNavigationItem(string $resource, ?string $feature = null, ?array $activeWhen = [], ?string $nicheKey = null, bool $hideOnPremise = false): ?NavigationItem
     {
         $canAccess = $feature ? feature($feature) && $resource::canAccess() : $resource::canAccess();
 
         if ($nicheKey && $this->isHiddenByNiche($nicheKey)) {
+            return null;
+        }
+
+        if ($hideOnPremise && config('app.on_premise')) {
             return null;
         }
 
