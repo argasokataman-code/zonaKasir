@@ -1,4 +1,5 @@
 window.__cashierOnline = () => ({
+  catFilter: @js($selectedCategory),
   cartQty: {{ Js::from(collect($cartItems)->pluck('qty', 'product_id')->toArray()) }},
   subTotal: {{ $sub_total }},
   totalPrice: {{ $total_price }},

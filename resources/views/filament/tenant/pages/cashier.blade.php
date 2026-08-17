@@ -59,22 +59,24 @@
 
       {{-- Categories --}}
       <div x-show="!isOffline" class="mb-4 flex gap-2 overflow-x-auto px-1">
-        <button wire:click="$set('selectedCategory', null)"
-          class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors {{ is_null($selectedCategory) ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300' }}">
+        <button @click="catFilter = null"
+          class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
+          :class="catFilter === null ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'">
           {{ __('All') }}
         </button>
         @foreach ($categories as $category)
-          <button wire:click="$set('selectedCategory', {{ $category->id }})"
-            class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors {{ $selectedCategory === $category->id ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300' }}">
+          <button @click="catFilter = {{ $category->id }}"
+            class="whitespace-nowrap rounded-lg px-3 py-1.5 text-sm font-medium transition-colors"
+            :class="catFilter === {{ $category->id }} ? 'bg-primary-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300'">
             {{ $category->name }}
           </button>
         @endforeach
       </div>
 
       {{-- Product Cards Grid --}}
-      <div wire:loading.class="opacity-60" wire:target="search,selectedCategory" x-show="!isOffline" class="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        @forelse ($products as $product)
-          <div wire:key="product-{{ $product->id }}" class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
+      <div wire:loading.class="opacity-60" wire:target="search" x-show="!isOffline" class="grid grid-cols-2 gap-2 sm:gap-3 sm:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        @foreach ($products as $product)
+          <div x-show="!catFilter || {{ $product->category_id }} == catFilter" wire:key="product-{{ $product->id }}" class="group relative flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
             {{-- Image --}}
             <div class="relative aspect-[4/3] overflow-hidden bg-gray-100 dark:bg-gray-700">
               @php $heroImage = $product->heroImage; @endphp
@@ -130,12 +132,13 @@
               </div>
             </div>
           </div>
-        @empty
+        @endforeach
+        @if ($products->isEmpty())
           <div class="col-span-full flex flex-col items-center justify-center py-16 text-gray-400">
             <x-heroicon-o-cube class="h-16 w-16" />
             <p class="mt-2 text-lg font-medium">{{ __('Product not found') }}</p>
           </div>
-        @endforelse
+        @endif
       </div>
 
       @include('filament.tenant.pages.cashier.pwa.ui')
