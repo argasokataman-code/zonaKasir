@@ -2970,6 +2970,2370 @@
           "raw": "REQ-003:relates"
         }
       ]
+    },
+    {
+      "id": "TASK-143",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "09:50:18",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/.config/opencode/opencode.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-003",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".agents",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-004",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".agents/skills",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-005",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".deploy",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-144",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".deploy/deploy-key",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-145",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".deploy/deploy-key.pub",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-006",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".github",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-007",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".github/workflows",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-146",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".github/FUNDING.yml",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-008",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".github/pull_request_template.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-009",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".opencode",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-010",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".opencode/mcp",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-011",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".opencode/plans",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-012",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".opencode/rules",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-147",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".opencode/.gitignore",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-148",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".opencode/package.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-013",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".phpunit.cache",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-149",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".phpunit.cache/test-results",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-014",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".vercel",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-015",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:19",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".vercel/builders",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-016",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".vercel/output",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-150",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".vercel/project.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-151",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".vercel/README.txt",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-152",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".vercel/repo.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-017",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "api",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-153",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "api/index.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-018",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-019",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Console",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-020",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Constants",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-021",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Enums",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-022",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Events",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-023",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Exceptions",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-024",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Features",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-025",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Filament",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-026",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Filesystem",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-027",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Filters",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-028",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Forms",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-029",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Http",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-030",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Imports",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-031",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Jobs",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-032",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Listeners",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-033",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Livewire",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-034",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Models",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-035",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Notifications",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-036",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Observers",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-037",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Policies",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-038",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Providers",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-039",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Rules",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-040",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Services",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-041",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Traits",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-042",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/View",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-154",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/About.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-155",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Domain.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-156",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/helpers.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-157",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/Tenant.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-158",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "app/TenantUser.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-043",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "bootstrap",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-044",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "bootstrap/cache",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-159",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "bootstrap/app.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-045",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-160",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/app.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-161",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/auth.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-162",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/broadcasting.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-163",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/cache.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-164",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/cors.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-165",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/database.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-166",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/filament.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-167",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/filesystems.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-168",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/flip.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-169",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/hashing.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-170",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/laravelpwa.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-171",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/livewire.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-172",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/logging.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-173",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/mail.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-174",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/midtrans.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-175",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/pennant.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-176",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/permission.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-177",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/plans.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-178",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/query-builder.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-179",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/queue.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-180",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/sanctum.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-181",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/services.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-182",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/session.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-183",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/setting.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-184",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/turnstile.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-185",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/updater.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-186",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/upload.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-187",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/validation.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-188",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "config/view.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-046",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-047",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/factories",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-048",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/migrations",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-049",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/seeders",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-189",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/.gitignore",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-190",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/lakasir_toko_testing",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-191",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/lakasir_tokotest",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-192",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "database/testing.sqlite",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-050",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docker",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-051",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docker/nginx",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-052",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docker/supervisor",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-193",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docker/entrypoint.sh",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-053",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-054",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/architecture",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-055",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/guides",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-056",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/planning",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-057",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/reports",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-058",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/API_RESPONSE_STANDARD.md — API Response Format Standard",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-059",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/deploy-vercel.md — Deploy to Vercel",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-060",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/E2E_TESTING_REPORT.md — Comprehensive E2E Testing Report",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-061",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/README.md — zonaKasir Documentation",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-062",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docs/REBRANDING_PLAN.md — Rebranding Plan: Lakasir → zonaKasir",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-063",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-064",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/src",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-194",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/.gitignore",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-195",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/index.html",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-196",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/package.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-065",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/README.md — Run and deploy your AI Studio app",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-197",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/tsconfig.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-198",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "landing/vite.config.ts",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-066",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-067",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang/en",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-068",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang/es",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-069",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang/id",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-199",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang/en.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-200",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang/es.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-201",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "lang/id.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-070",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-071",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/assets",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-072",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/css",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-073",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/images",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-074",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/js",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-075",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/landing",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-076",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/vendor",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-202",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/.htaccess",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-203",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/favicon.ico",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-204",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/index.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-205",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/robots.txt",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-206",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "public/serviceworker.js",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-077",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "reports",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
     }
   ]
 }

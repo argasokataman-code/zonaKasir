@@ -1,0 +1,3330 @@
+{
+  "shard": 1,
+  "nodes": [
+    {
+      "id": "TASK-207",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "reports/junit.xml",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-078",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "resources",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-079",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "resources/css",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-080",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "resources/js",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-081",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "resources/views",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-082",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-208",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/api.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-209",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/channels.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-210",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/console.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-211",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/storage.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-212",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/tenant-api.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-213",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/tenant-web.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-214",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/tenant.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-215",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/web.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-216",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "routes/webhooks.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-083",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "scripts",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-217",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "scripts/delete_item.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-218",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "scripts/insert_item.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-219",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "scripts/query_products.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-220",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "scripts/query_stock.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-221",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "scripts/sw-version.mjs",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-084",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "src",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-222",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "src/SkillGrabber.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-085",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "storage",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-086",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "storage/app",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-087",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "storage/debugbar",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-088",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "storage/framework",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-089",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "storage/logs",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-090",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-091",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/Browser",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-092",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/Feature",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-093",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/Mocks",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-094",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/Unit",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-223",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/CreatesApplication.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-224",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/DuskTestCase.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-225",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/Pest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-226",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/RefreshDatabaseWithTenant.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-227",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tests/TestCase.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-095",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tmp",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-096",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tmp/onprem-e2e",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-097",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-098",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/anourvalar",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-099",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/archtechx",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-100",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/aymanalhattami",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-101",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/bacon",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-102",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/barryvdh",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-103",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/beste",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-104",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/bin",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-105",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/blade-ui-kit",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-106",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/brianium",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-107",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/brick",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-108",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/carbonphp",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-109",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/codezero",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-110",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/composer",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-111",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/cuyz",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-112",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/danharrin",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-113",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/dasprid",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-114",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/dflydev",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-115",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/doctrine",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-116",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/dompdf",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-117",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/dragon-code",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-118",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/dragonmantank",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-119",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/egulias",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-120",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/ezyang",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-121",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/fakerphp",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-122",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/fidry",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-123",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/fig",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-124",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/filament",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-125",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/filp",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-126",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/firebase",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-127",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/fruitcake",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-128",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/google",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-129",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/graham-campbell",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-130",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/grpc",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-131",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/guzzlehttp",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-132",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/hamcrest",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-133",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/jean85",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-134",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/kirschbaum-development",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-135",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/kreait",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-136",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/lakasir",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-137",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/laracraft-tech",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-138",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/laradumps",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-139",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/laravel",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-140",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/laravel-lang",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-141",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/laravel-notification-channels",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-142",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/lcobucci",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-143",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/league",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-144",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/livewire",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-145",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/maatwebsite",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-146",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/maennchen",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-147",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/markbaker",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-148",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/masterminds",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-149",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/midtrans",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-150",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/mockery",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-151",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/monolog",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-152",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/mtdowling",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-153",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/myclabs",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-154",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/nesbot",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-155",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/nette",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-156",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/nikic",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-157",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/nunomaduro",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-158",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/openspout",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-159",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/paragonie",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-160",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/pestphp",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-161",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phar-io",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-162",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phenx",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-163",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/php-debugbar",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-164",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/php-webdriver",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-165",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phpdocumentor",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-166",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phpoffice",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-167",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phpoption",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-168",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phpseclib",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-169",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phpstan",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-170",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/phpunit",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-171",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/picqer",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-172",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/predis",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-173",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/psr",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-174",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/psy",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-175",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/ralouphie",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-176",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/ramsey",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-177",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/rize",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-178",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/ryangjchandler",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-179",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/sabberworm",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-180",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/sebastian",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-181",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/sheenazien8",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-182",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/silviolleite",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-183",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/simplesoftwareio",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-184",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/spatie",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-185",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/symfony",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-186",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/ta-tikoma",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-187",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/tapp",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-188",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/theseer",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-189",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/tijsverkoyen",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-190",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/vlucas",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-191",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/voku",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-192",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/webmozart",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-228",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/autoload.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-229",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vendor/pest-plugins.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-230",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "_ide_helper_models.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-231",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".bladeformatterrc.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-232",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".dockerignore",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-233",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".editorconfig",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-234",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".gitattributes",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-235",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".gitignore",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-236",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".lando.yml",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-237",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".styleci.yml",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-238",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": ".vercelignore",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-193",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "AGENTS.md — AGENTS.md — Quick Reference",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-239",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "artisan",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-240",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "boost.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-241",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "composer.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-242",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "composer.lock",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-243",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "deploy-config.example.sh",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-244",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "docker-compose.yml",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-245",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "Dockerfile",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-194",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "FINAL_TEST_RESULTS.md — 🎉 Final Test Results & Project Status",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-246",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "Flip for Business - API.postman_collection.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-247",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "laradumps.yaml",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-248",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "LICENSE",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-249",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "opencode.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-250",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "package.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-251",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "phpunit.dusk.xml",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-252",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "phpunit.xml",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-253",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "phpunit.xml.bak",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-254",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "postcss.config.js",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-195",
+      "type": "feature",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "README.md — 1. Clone",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-255",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "recommendations.toml",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-256",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "reset_opencode_mac.sh",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-257",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "skills-lock.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-258",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "tailwind.config.js",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-259",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "test.sh",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-260",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vercel.json",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-261",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "version.txt",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-262",
+      "type": "task",
+      "status": "active",
+      "date": "2026-08-17",
+      "time": "10:30:20",
+      "tags": [
+        "scan"
+      ],
+      "summary": "vite.config.js",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-263",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:32:07",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/config/backup.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-264",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:32:16",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Console/Commands/BackupDatabase.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-265",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:32:22",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Console/Kernel.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-266",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:32:36",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/marketing-content.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-267",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:32:40",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/components/qr-menu.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-268",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:32:46",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/components/share-struk.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-269",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:32:53",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/config/plans.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-270",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:32:58",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/PlanAccessService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-271",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:33:21",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/onprem/RUNBOOK.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-272",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:33:28",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/onprem/REMOTE_ASSIST.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-273",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:33:40",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/onprem/SALES_KIT.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-274",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:34:12",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M6OnpremTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-275",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:34:46",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Console/Commands/BackupDatabase.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-276",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:35:01",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M6OnpremTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-277",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:35:07",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Console/Commands/BackupDatabase.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-278",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:36:05",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Console/Commands/BackupDatabase.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-279",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:36:17",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M6OnpremTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-280",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:37:12",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M6OnpremTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-281",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:38:08",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/tests/Feature/Tenant/M6OnpremTest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-282",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "10:49:04",
+      "tags": [
+        "m6",
+        "onprem",
+        "kafe"
+      ],
+      "summary": "M6: backup otomatis pg_dump daily, Lite/Pro gating FR-9.6, internet badge FR-9.2, RUNBOOK REMOTE_ASSIST SALES_KIT docs. 6 tests 57 suite gre",
+      "conn": [
+        {
+          "id": "REQ-003",
+          "type": "relates",
+          "raw": "REQ-003:relates"
+        },
+        {
+          "id": "FEAT-001",
+          "type": "relates",
+          "raw": "FEAT-001:relates"
+        }
+      ]
+    }
+  ]
+}
