@@ -13,7 +13,7 @@ class KdsService
     {
         return Selling::query()
             ->open()
-            ->whereHas('sellingDetails', fn ($q) => $q->whereIn('kitchen_status', [null, 'in_progress']))
+            ->whereHas('sellingDetails', fn ($q) => $q->where(fn ($qq) => $qq->whereNull('kitchen_status')->orWhere('kitchen_status', 'in_progress')))
             ->with([
                 'table:id,number',
                 'sellingDetails' => fn ($q) => $q->with('product:id,name'),

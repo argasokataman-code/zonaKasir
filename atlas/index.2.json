@@ -3361,6 +3361,1219 @@
           "raw": "BUG-001:relates"
         }
       ]
+    },
+    {
+      "id": "TASK-540",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:48:25",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Http/Controllers/Api/Tenants/Master/ProductController.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-541",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:48:46",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/routes/tenant-api.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-542",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:49:59",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Http/Controllers/Api/Tenants/Master/ProductController.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-543",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:50:25",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /tmp/test_products_5.csv",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-544",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:55:58",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-545",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:56:06",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-546",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:57:34",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-547",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-17",
+      "time": "23:58:03",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-548",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:00:03",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Imports/ProductImport.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-549",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:01:48",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/docs/PRODUCT_IMPORT_SPEC.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "FEAT-207",
+      "type": "feature",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:02:04",
+      "tags": [
+        "import",
+        "csv",
+        "api",
+        "tenant"
+      ],
+      "summary": "Product import: CSV/Excel via Filament UI + POST /api/master/product/import. Template download, auto-category create, tenant_id scoping, bar",
+      "conn": [
+        {
+          "id": "FEAT-206",
+          "type": "relates",
+          "raw": "FEAT-206:relates"
+        },
+        {
+          "id": "DEC-020",
+          "type": "relates",
+          "raw": "DEC-020:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-013",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-18",
+      "time": "00:02:11",
+      "tags": [
+        "tenant",
+        "import",
+        "cashier"
+      ],
+      "summary": "Product/Category import missing tenant_id: HasTenant scope filters out records. Fix: explicit tenant_id in ProductImport + bulk update exist",
+      "conn": [
+        {
+          "id": "FEAT-207",
+          "type": "fixes",
+          "raw": "FEAT-207:fixes"
+        }
+      ]
+    },
+    {
+      "id": "BUG-014",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-18",
+      "time": "00:02:11",
+      "tags": [
+        "livewire",
+        "snapshot",
+        "cashier"
+      ],
+      "summary": "Cashier shows only 10 products: Livewire serializes public Collection to snapshot, truncates 110 items. Fix: products via getViewData() bypa",
+      "conn": [
+        {
+          "id": "FEAT-207",
+          "type": "fixes",
+          "raw": "FEAT-207:fixes"
+        }
+      ]
+    },
+    {
+      "id": "TASK-550",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:02:46",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/AGENTS.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-551",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:07:34",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Services/ApiResponseService.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-015",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-18",
+      "time": "00:08:15",
+      "tags": [
+        "api",
+        "response"
+      ],
+      "summary": "ApiResponseService: code != 200 made 201 Created return success:false. Fix: code >= 400",
+      "conn": [
+        {
+          "id": "FEAT-207",
+          "type": "relates",
+          "raw": "FEAT-207:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-552",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:09:35",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Http/Requests/Tenants/Sellings/TransactionSellingStoreRequest.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-553",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:11:03",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Imports/ProductImport.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-554",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:17:00",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/alpine/online.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-555",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:17:12",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-556",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:30:22",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/CartInteraction.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-557",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:30:39",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-558",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:33:38",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/AGENTS.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-559",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:33:52",
+      "tags": [
+        "performance",
+        "cashier",
+        "cart"
+      ],
+      "summary": "Cart performance: softRefresh over refreshCart, N+1 fix, Alpine client-side category filter",
+      "conn": [
+        {
+          "id": "BUG-015",
+          "type": "fixes",
+          "raw": "BUG-015:fixes"
+        },
+        {
+          "id": "FEAT-207",
+          "type": "relates",
+          "raw": "FEAT-207:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-560",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:34:10",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/CartInteraction.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-561",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:34:23",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-016",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-18",
+      "time": "00:35:06",
+      "tags": [
+        "eager-load",
+        "relationship"
+      ],
+      "summary": "softRefresh/refreshCart: priceUnits in product select caused 'column does not exist'. Must be nested eager load product.priceUnits",
+      "conn": [
+        {
+          "id": "TASK-559",
+          "type": "fixes",
+          "raw": "TASK-559:fixes"
+        }
+      ]
+    },
+    {
+      "id": "TASK-562",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:45:24",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/CartInteraction.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-563",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:46:13",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Traits/CartInteraction.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-564",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:48:06",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/partials/cart-items.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-565",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:52:54",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/app/Filament/Tenant/Pages/Cashier.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "BUG-017",
+      "type": "bug",
+      "status": "fixed",
+      "date": "2026-08-18",
+      "time": "00:53:53",
+      "tags": [
+        "search",
+        "postgresql"
+      ],
+      "summary": "Cashier search: PostgreSQL LIKE is case-sensitive. 'boxing' didn't match 'Boxing Gloves'. Fix: like → ilike",
+      "conn": [
+        {
+          "id": "TASK-559",
+          "type": "fixes",
+          "raw": "TASK-559:fixes"
+        }
+      ]
+    },
+    {
+      "id": "TASK-566",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:57:10",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/database/migrations/tenant/2026_08_17_175630_add_unique_sku_to_products_table.",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-567",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "00:59:34",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/partials/cart-items.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-568",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "01:01:08",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/partials/cart-items.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-569",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "01:08:12",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/components/confirm-modal.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-570",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "01:09:16",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-571",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "01:09:41",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/partials/cart-items.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-572",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "01:10:11",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/components/confirm-modal.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-573",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "01:10:23",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier/partials/cart-items.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-574",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "01:10:34",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/resources/views/filament/tenant/pages/cashier.blade.php",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-575",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-18",
+      "time": "01:14:58",
+      "tags": [
+        "auto"
+      ],
+      "summary": "auto: edited /Users/vanviakingali/Documents/Project/zonaKasir/AGENTS.md",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "relates",
+          "raw": "BUG-001:relates"
+        }
+      ]
+    },
+    {
+      "id": "DEC-023",
+      "type": "decision",
+      "status": "active",
+      "date": "2026-08-18",
+      "time": "01:15:14",
+      "tags": [
+        "ux",
+        "modal",
+        "standard"
+      ],
+      "summary": "All confirmation popups MUST use <x-confirm-modal /> component. No native browser confirm(). Pattern:  + Alpine event.",
+      "conn": [
+        {
+          "id": "TASK-559",
+          "type": "relates",
+          "raw": "TASK-559:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-576",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "21:05:46",
+      "tags": [
+        "atlas",
+        "enforcement",
+        "workflow"
+      ],
+      "summary": "Add Atlas preflight+afterflight enforcement rules to AGENTS.md and new .opencode/rules/03-atlas-enforcement.mdc",
+      "conn": [
+        {
+          "id": "TASK-575",
+          "type": "relates",
+          "raw": "TASK-575:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-577",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "21:32:16",
+      "tags": [
+        "investigation",
+        "roadmap",
+        "status"
+      ],
+      "summary": "Investigation: P1-P3 milestone M1-M6 semua done. Pending: FEAT-002 8.3 grafik jam, 8.6 kartu member, TASK-004 deploy onprem (butuh keputusan",
+      "conn": [
+        {
+          "id": "TASK-576",
+          "type": "led_to",
+          "raw": "TASK-576:led_to"
+        }
+      ]
+    },
+    {
+      "id": "TASK-578",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "21:40:16",
+      "tags": [
+        "investigation",
+        "marketing",
+        "m5"
+      ],
+      "summary": "Investigate FR-8.3+8.6: chart.js ada, ChartWidget pattern ada, no image-gen dep. Implement: PeakHours chart + member thanks cards di Marketi",
+      "conn": [
+        {
+          "id": "TASK-577",
+          "type": "led_to",
+          "raw": "TASK-577:led_to"
+        }
+      ]
+    },
+    {
+      "id": "TASK-579",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "21:42:25",
+      "tags": [
+        "marketing",
+        "m5",
+        "feat-8.3"
+      ],
+      "summary": "MarketingContentService: add peakHours() (FR-8.3 jam sepi/ramai 7 hari) + memberThanks() (FR-8.6 kartu member bulan ini)",
+      "conn": [
+        {
+          "id": "FEAT-002",
+          "type": "implements",
+          "raw": "FEAT-002:implements"
+        }
+      ]
+    },
+    {
+      "id": "TASK-580",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "21:43:05",
+      "tags": [
+        "marketing",
+        "m5",
+        "feat-8.3",
+        "feat-8.6"
+      ],
+      "summary": "MarketingContent page+blade: peakHours bar chart section + memberThanks cards section ditambahkan",
+      "conn": [
+        {
+          "id": "TASK-579",
+          "type": "led_to",
+          "raw": "TASK-579:led_to"
+        }
+      ]
+    },
+    {
+      "id": "TASK-581",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "21:43:50",
+      "tags": [
+        "test",
+        "m5",
+        "feat-8.3",
+        "feat-8.6"
+      ],
+      "summary": "Tests M5: PH-1 peakHours 24 jam+jam ramai, MT-1 memberThanks urut+pesan, MT-2 kosong",
+      "conn": [
+        {
+          "id": "TASK-580",
+          "type": "led_to",
+          "raw": "TASK-580:led_to"
+        }
+      ]
+    },
+    {
+      "id": "TASK-582",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "21:45:01",
+      "tags": [
+        "test",
+        "m5",
+        "feat-8.3",
+        "feat-8.6"
+      ],
+      "summary": "Re-add M5 describe block PH-1/MT-1/MT-2 tests (first edit lost), ready to run",
+      "conn": [
+        {
+          "id": "TASK-581",
+          "type": "led_to",
+          "raw": "TASK-581:led_to"
+        }
+      ]
+    },
+    {
+      "id": "TASK-583",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "21:46:28",
+      "tags": [
+        "marketing",
+        "m5",
+        "feat-8.3",
+        "feat-8.6"
+      ],
+      "summary": "Re-apply service methods (peakHours+memberThanks) yang hilang saat atlas block, sekarang persist",
+      "conn": [
+        {
+          "id": "TASK-579",
+          "type": "relates",
+          "raw": "TASK-579:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-584",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "21:52:55",
+      "tags": [
+        "test",
+        "regression",
+        "m4"
+      ],
+      "summary": "M4 KDS 3 test gagal: orders() count mismatch (KDS-1 partially_paid expect 1 got 0). Perlu verifikasi pre-existing via stash",
+      "conn": [
+        {
+          "id": "TASK-583",
+          "type": "relates",
+          "raw": "TASK-583:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-585",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "21:54:07",
+      "tags": [
+        "marketing",
+        "m5",
+        "feat-8.3",
+        "feat-8.6"
+      ],
+      "summary": "Re-apply blade sections (Jam sepi/ramai + kartu member) setelah hilang oleh atlas block. M4 KDS failure pre-existing bukan regresi",
+      "conn": [
+        {
+          "id": "TASK-584",
+          "type": "led_to",
+          "raw": "TASK-584:led_to"
+        }
+      ]
+    },
+    {
+      "id": "TASK-586",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "21:54:57",
+      "tags": [
+        "marketing",
+        "m5",
+        "feat-8.3",
+        "feat-8.6"
+      ],
+      "summary": "FEAT-8.3+8.6 complete: peakHours bar chart + memberThanks cards di MarketingContent. M5 6 test + M5 struk/menu 8 test pass. M4 KDS 3 fail pr",
+      "conn": [
+        {
+          "id": "FEAT-002",
+          "type": "implements",
+          "raw": "FEAT-002:implements"
+        },
+        {
+          "id": "TASK-585",
+          "type": "led_to",
+          "raw": "TASK-585:led_to"
+        }
+      ]
+    },
+    {
+      "id": "TASK-587",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "21:59:48",
+      "tags": [
+        "review",
+        "m5",
+        "feat-8.3",
+        "feat-8.6"
+      ],
+      "summary": "Manual review: SQL compatible PG/MySQL, busy logic safe all-zero, blade array_column safe empty, Livewire 24-item ok, tests pass. Bersih",
+      "conn": [
+        {
+          "id": "TASK-586",
+          "type": "led_to",
+          "raw": "TASK-586:led_to"
+        }
+      ]
+    },
+    {
+      "id": "TASK-588",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "22:36:52",
+      "tags": [
+        "kds",
+        "m4",
+        "bugfix"
+      ],
+      "summary": "KdsService orders(): fix whereIn NULL SQL bug -> whereNull+orWhere. PostgreSQL IN(NULL) tak match",
+      "conn": [
+        {
+          "id": "BUG-001",
+          "type": "fixes",
+          "raw": "BUG-001:fixes"
+        }
+      ]
+    },
+    {
+      "id": "TASK-589",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "22:37:47",
+      "tags": [
+        "kds",
+        "m4",
+        "test",
+        "feat-198"
+      ],
+      "summary": "M4KdsTest fix: helper kdsBill implement $status param (addPayment partial/paid), FR-5.1 test stale -> in_progress tetap muncul Cooking badge",
+      "conn": [
+        {
+          "id": "TASK-588",
+          "type": "led_to",
+          "raw": "TASK-588:led_to"
+        }
+      ]
+    },
+    {
+      "id": "TASK-590",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "22:38:49",
+      "tags": [
+        "kds",
+        "m4",
+        "bugfix"
+      ],
+      "summary": "Re-apply KdsService whereNull fix (edit sebelumnya hilang oleh atlas block). Verifikasi sekarang persist",
+      "conn": [
+        {
+          "id": "TASK-588",
+          "type": "relates",
+          "raw": "TASK-588:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-591",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "22:39:48",
+      "tags": [
+        "kds",
+        "m4",
+        "test",
+        "feat-198"
+      ],
+      "summary": "Re-apply M4 test stale fix (edit hilang atlas block). in_progress expect 1 + items 1, done expect 0",
+      "conn": [
+        {
+          "id": "TASK-589",
+          "type": "relates",
+          "raw": "TASK-589:relates"
+        }
+      ]
+    },
+    {
+      "id": "DEC-024",
+      "type": "decision",
+      "status": "active",
+      "date": "2026-08-19",
+      "time": "23:07:48",
+      "tags": [
+        "test",
+        "ci",
+        "enforcement",
+        "workflow"
+      ],
+      "summary": "Full suite/E2E JANGAN di local (OOM 128M). Wajib via GitHub CI: commit+push ke main/vercel/1.x auto-run test.yml. Local hanya test spesifik.",
+      "conn": [
+        {
+          "id": "TASK-584",
+          "type": "relates",
+          "raw": "TASK-584:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-592",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "23:15:05",
+      "tags": [
+        "enforcement",
+        "test",
+        "plugin"
+      ],
+      "summary": "Created .opencode/plugins/block-full-test-suite.ts — blocks php artisan test full suite locally via tool.execute.before hook",
+      "conn": [
+        {
+          "id": "DEC-024",
+          "type": "implements",
+          "raw": "DEC-024:implements"
+        }
+      ]
+    },
+    {
+      "id": "TASK-593",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "23:18:22",
+      "tags": [
+        "enforcement",
+        "test",
+        "plugin"
+      ],
+      "summary": "block-full-test-suite.ts: export default fix + patterns untuk blok php artisan test full suite lokal via tool.execute.before hook",
+      "conn": [
+        {
+          "id": "TASK-592",
+          "type": "led_to",
+          "raw": "TASK-592:led_to"
+        }
+      ]
+    },
+    {
+      "id": "TASK-594",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-19",
+      "time": "23:21:40",
+      "tags": [
+        "enforcement",
+        "test",
+        "plugin"
+      ],
+      "summary": "block-full-test-suite.ts final: export default + isFullSuite() blok php artisan test full suite local via hook tool.execute.before. AGENTS.m",
+      "conn": [
+        {
+          "id": "TASK-593",
+          "type": "led_to",
+          "raw": "TASK-593:led_to"
+        }
+      ]
     }
   ]
 }

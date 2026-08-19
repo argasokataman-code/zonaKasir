@@ -39,7 +39,21 @@ describe('M4 — Kitchen Display System (FR-5.1..5.5)', function () {
         ];
         $data = array_merge($data, $test->service->mapProductRequest($data));
 
-        return $test->service->create($data);
+        $selling = $test->service->create($data);
+
+        if ($status === 'partially_paid') {
+            $test->service->addPayment($selling, [
+                'payment_method_id' => $test->cash->id,
+                'amount' => 10000,
+            ]);
+        } elseif ($status === 'paid') {
+            $test->service->addPayment($selling, [
+                'payment_method_id' => $test->cash->id,
+                'amount' => 20000,
+            ]);
+        }
+
+        return $selling->refresh();
     }
 
     test('FR-5.1: order open muncul di daftar dapur', function () {
@@ -52,12 +66,13 @@ describe('M4 — Kitchen Display System (FR-5.1..5.5)', function () {
         expect($orders->first()['items'][0]['qty'])->toBe(2.0);
     });
 
-    test('FR-5.1: item yang sudah done/in_progress tidak muncul di queue', function () {
+    test('FR-5.1: item in_progress tetap muncul (Cooking), done tersembunyi', function () {
         $selling = kdsBill($this);
         $detail = $selling->sellingDetails()->first();
 
         $this->kds->updateStatus($detail, SellingDetail::KITCHEN_IN_PROGRESS);
-        expect($this->kds->orders())->toHaveCount(0);
+        expect($this->kds->orders())->toHaveCount(1);
+        expect($this->kds->orders()->first()['items'])->toHaveCount(1);
 
         $this->kds->updateStatus($detail, SellingDetail::KITCHEN_DONE);
         expect($this->kds->orders())->toHaveCount(0);

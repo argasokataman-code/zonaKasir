@@ -47,5 +47,42 @@
                 </p>
             </div>
         </x-filament::section>
+
+        <x-filament::section icon="heroicon-m-chart-bar" title="Jam sepi / jam ramai (7 hari terakhir)">
+            @php $max = max(array_column($peakHours, 'total')) ?: 1; @endphp
+            <div class="space-y-1.5">
+                @foreach ($peakHours as $h)
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 shrink-0 text-xs text-gray-500">{{ $h['label'] }}</span>
+                        <div class="flex-1 bg-gray-100 rounded-full overflow-hidden">
+                            <div
+                                class="h-3 rounded-full {{ $h['busy'] ? 'bg-green-500' : 'bg-gray-300' }}"
+                                style="width: {{ max(4, round(($h['total'] / $max) * 100)) }}%"
+                            ></div>
+                        </div>
+                        <span class="w-8 shrink-0 text-right text-xs font-semibold text-gray-600">{{ $h['total'] }}</span>
+                    </div>
+                @endforeach
+            </div>
+            <p class="mt-3 text-xs text-gray-400">
+                Hijau = jam ramai (di atas rata-rata), abu-abu = jam sepi. Share ke IG Story buat promosi jam sepi.
+            </p>
+        </x-filament::section>
+
+        <x-filament::section icon="heroicon-m-heart" title="Kartu terima kasih member">
+            <div class="space-y-3">
+                @forelse ($memberThanks as $row)
+                    <div class="rounded-xl border border-rose-100 bg-rose-50 p-4">
+                        <p class="text-sm font-semibold text-gray-800">{{ $row['name'] }}</p>
+                        <p class="mt-1 text-sm text-gray-600">"{{ $row['message'] }}"</p>
+                    </div>
+                @empty
+                    <p class="text-sm text-gray-500">Belum ada member berkunjung bulan ini.</p>
+                @endforelse
+            </div>
+            <p class="mt-3 text-xs text-gray-400">
+                Frekuensi kunjungan member bulan ini. Kasir bisa screenshot kartu ini buat kirim ke member via WhatsApp.
+            </p>
+        </x-filament::section>
     </div>
 </x-filament-panels::page>

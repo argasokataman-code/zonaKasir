@@ -4,6 +4,7 @@
 > - `00-task-framework.mdc` — 6-phase task execution framework
 > - `01-code-style.mdc` — Code style, naming, conventions, build/test commands
 > - `02-security.mdc` — Security, deploy, CI/CD, git conventions
+> - `03-atlas-enforcement.mdc` — Atlas graph memory: preflight + afterflight enforcement
 
 ## 🚨 HARD-STOP: KLASIFIK W A J I B di BARIS PERTAMA
 
@@ -49,6 +50,12 @@ php artisan test                                    # Run all (JANGAN local — 
 php artisan test --filter=TestName                  # Filter by name
 php artisan test tests/Feature/Path/To/Test.php     # Single file
 vendor/bin/pest --filter="test name here"           # Pest directly
+
+### 🚨 ATURAN FULL TEST SUITE (ENFORCE)
+- **JANGAN PERNAH jalankan full suite (`php artisan test` tanpa filter) di local** — local kena OOM 128M (memory limit), bukan regresi.
+- **Full E2E/regression HANYA via GitHub CI**: commit + push ke `main`/`vercel`/`1.x` → auto-run `test.yml` (PostgreSQL 15). Lihat hasil di Actions tab.
+- Kalau user minta "full test" / "full E2E" / "jalankan semua test" → **suruh user commit + push, bukan jalankan local**. Agent jangan offer jalanin full suite local.
+- Local: HANYA run test spesifik/filter/single file yang relate ke perubahan.
 
 # Build
 npm run dev              # Development (Vite)
@@ -106,3 +113,38 @@ php artisan livewire:publish --assets
 - **QRIS**: `isStaticQris()` = `payment_type === 'qris' && (config('app.on_premise') || filled($this->icon))`
 - **Snap.js**: Skip load kalau `config('app.on_premise')` atau no `midtrans.client_key`
 - **Navigation**: `hideOnPremise: true` untuk Settlement, Withdrawal, WithdrawalPage
+
+## 🚀 PERFORMANCE PATTERNS
+
+### Cashier Cart (CartInteraction trait)
+- **`softRefresh()` vs `refreshCart()`**: `softRefresh()` = 1 query + renders HTML + dispatches `cartHtml`. `refreshCart()` = re-queries ALL items + vouchers + form. Use `softRefresh()` for single-item changes.
+- **`reduceCart`/`updateCart`/`deleteCart`**: WAJIB pakai `softRefresh()` — jangan `refreshCart()`.
+- **N+1 eager load**: CartItem query WAJIB load `product.priceUnits:id,product_id,selling_price`. Tanpa ini, 100 items = 100 extra queries.
+- **`wire:key` includes qty**: `wire:key="cart-item-{{ $item->id }}-{{ $item->qty }}"` — qty change = DOM node replace (Livewire). Fine for single-item changes.
+
+### Cashier Product Grid
+- **Category filter**: Client-side Alpine `x-show`, zero server round-trip. JANGAN pakai `wire:click` untuk category buttons.
+- **`getViewData()`**: Products passed via `getViewData()` bypasses Livewire snapshot serialization. 110+ products all render in DOM (was truncated to 10 with public property).
+- **Search**: Server-side (needs barcode lookup via DB). Category: client-side (instant).
+
+### Livewire v3 Snapshot
+- **Large public Collections**: Livewire serializes ALL public properties ke snapshot. Collection 100+ items → snapshot truncated → DOM cuma render sedikit. Fix: pass via `getViewData()`.
+- **`#[Renderless]`**: Prevents full page re-render on cart actions. Alpine manages display via `cart-data-updated` event.
+
+### API Response
+- **`ApiResponseService`**: `code >= 400 → success: false`. 201/2xx = `success: true`.
+
+### PostgreSQL
+- **Search `LIKE` case-sensitive**: PostgreSQL `LIKE` = case-sensitive. "boxing" ≠ "Boxing". WAJIB pakai `ILIKE` untuk search: `->where('name', 'ilike', "%{$search}%")`.
+
+### Confirmation Modal (WAJIB)
+- **JANGAN pakai `window.confirm()`** — native browser popup gak seragam, jelek, gak bisa custom.
+- **WAJIB pakai `<x-confirm-modal />`** — component reusable di `resources/views/components/confirm-modal.blade.php`.
+- **Pola trigger**: `$dispatch('confirm-modal', { id: 'confirm', title: '...', message: '...', opts: { action: 'event-name', params: {...} } })`
+- **Pola handle**: `@confirm-event-name.window="$wire.method($event.detail.id)"` atau `$dispatch('next-action', $event.detail)`
+- **Customizable**: `confirmText` (button label), `confirmClass` (button color), default = red Delete.
+- **Contoh**: cart delete, clear cart, remove voucher — semua wajib lewat `<x-confirm-modal />`.
+
+### Cart Item Position
+- **JANGAN `reject()` + `push()`** — item pindah ke posisi akhir. WAJIB update in-place via loop: `$item->qty = $updated->qty` + `setRelation()`.
+- **Eager load**: `product.priceUnits:id,product_id,selling_price` WAJIB dipisah dari `product:...` (relationship, bukan column).

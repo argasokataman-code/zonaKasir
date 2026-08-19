@@ -20,6 +20,10 @@ class MarketingContent extends Page
 
     public string $caption = '';
 
+    public array $peakHours = [];
+
+    public array $memberThanks = [];
+
     public function mount(MarketingContentService $service)
     {
         $this->refresh($service);
@@ -34,5 +38,7 @@ class MarketingContent extends Page
     {
         $this->bestSellers = $service->bestSellers()->toArray();
         $this->caption = $service->caption();
+        $this->peakHours = $service->peakHours()->toArray();
+        $this->memberThanks = $service->memberThanks()->toArray();
     }
 }
