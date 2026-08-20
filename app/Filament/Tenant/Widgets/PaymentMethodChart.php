@@ -22,7 +22,7 @@ class PaymentMethodChart extends ChartWidget
 
     protected function getData(): array
     {
-        $timezone = Profile::Timezone();
+        $timezone = Profile::getTimezone();
         $startOfDay = now($timezone)->startOfDay()->setTimezone('UTC');
         $endOfDay = $startOfDay->copy()->addDay();
 

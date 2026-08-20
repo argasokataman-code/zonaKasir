@@ -4574,6 +4574,207 @@
           "raw": "TASK-593:led_to"
         }
       ]
+    },
+    {
+      "id": "TASK-595",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-20",
+      "time": "07:03:28",
+      "tags": [
+        "bugfix",
+        "profile",
+        "timezone",
+        "eloquent"
+      ],
+      "summary": "Rename Profile::Timezone() static -> getTimezone(). Collide column 'timezone' -> Eloquent treat as relation -> LogicException. Update 7 pema",
+      "conn": [
+        {
+          "id": "BUG-014",
+          "type": "fixes",
+          "raw": "BUG-014:fixes"
+        }
+      ]
+    },
+    {
+      "id": "TASK-596",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-20",
+      "time": "07:03:54",
+      "tags": [
+        "bugfix",
+        "profile",
+        "timezone"
+      ],
+      "summary": "Update pemanggil Profile::Timezone() -> getTimezone() di SellingOverview.php (4x)",
+      "conn": [
+        {
+          "id": "TASK-595",
+          "type": "relates",
+          "raw": "TASK-595:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-597",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-20",
+      "time": "07:04:12",
+      "tags": [
+        "bugfix",
+        "profile",
+        "timezone"
+      ],
+      "summary": "Sisa pemanggil Profile::Timezone() -> getTimezone(): PaymentMethodChart, SalesChart, TransactionStats",
+      "conn": [
+        {
+          "id": "TASK-595",
+          "type": "relates",
+          "raw": "TASK-595:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-598",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-20",
+      "time": "07:04:29",
+      "tags": [
+        "bugfix",
+        "profile",
+        "timezone"
+      ],
+      "summary": "PaymentMethodChart, SalesChart, TransactionStats: Profile::Timezone() -> getTimezone()",
+      "conn": [
+        {
+          "id": "TASK-595",
+          "type": "relates",
+          "raw": "TASK-595:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-599",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-20",
+      "time": "07:04:43",
+      "tags": [
+        "bugfix",
+        "profile",
+        "timezone"
+      ],
+      "summary": "SalesChart + TransactionStats final edit -> getTimezone() (blocked edits re-applied)",
+      "conn": [
+        {
+          "id": "TASK-598",
+          "type": "relates",
+          "raw": "TASK-598:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-600",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-20",
+      "time": "07:04:58",
+      "tags": [
+        "bugfix",
+        "profile",
+        "timezone"
+      ],
+      "summary": "Semua Profile::Timezone() -> getTimezone() selesai. No collide column timezone. Profile.php:33 getTimezone()",
+      "conn": [
+        {
+          "id": "TASK-595",
+          "type": "relates",
+          "raw": "TASK-595:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-601",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-20",
+      "time": "07:26:21",
+      "tags": [
+        "investigate",
+        "cashdrawer"
+      ],
+      "summary": "Investigate cluster: cash-drawer close 422 + SKU + M5 caption. Investigator report: DB::commit() di RefreshDatabaseWithTenant breaks TX",
+      "conn": [
+        {
+          "id": "BUG-013",
+          "type": "relates",
+          "raw": "BUG-013:relates"
+        }
+      ]
+    },
+    {
+      "id": "TASK-602",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-20",
+      "time": "07:28:42",
+      "tags": [
+        "bugfix",
+        "test",
+        "transaction",
+        "pgsql"
+      ],
+      "summary": "RefreshDatabaseWithTenant: pindah User/About/Subscription create SETELAH DB::commit+seed+begin ulang, biar rollback per test. Fix akumulasi ",
+      "conn": [
+        {
+          "id": "BUG-013",
+          "type": "fixes",
+          "raw": "BUG-013:fixes"
+        }
+      ]
+    },
+    {
+      "id": "TASK-603",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-20",
+      "time": "07:29:56",
+      "tags": [
+        "bugfix",
+        "test",
+        "cashdrawer"
+      ],
+      "summary": "TransactionE2ETest: closing_balance -> closing_amount (field mismatch dgn CashDrawerController:67 validasi closing_amount)",
+      "conn": [
+        {
+          "id": "BUG-013",
+          "type": "fixes",
+          "raw": "BUG-013:fixes"
+        }
+      ]
+    },
+    {
+      "id": "TASK-604",
+      "type": "task",
+      "status": "done",
+      "date": "2026-08-20",
+      "time": "07:38:16",
+      "tags": [
+        "bugfix",
+        "test",
+        "role"
+      ],
+      "summary": "RefreshDatabaseWithTenant: assignRole(admin) eksplisit setelah buat user. Seeder assign role ke User::first() yg skrg null (user dibuat sete",
+      "conn": [
+        {
+          "id": "TASK-602",
+          "type": "relates",
+          "raw": "TASK-602:relates"
+        }
+      ]
     }
   ]
 }

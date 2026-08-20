@@ -248,6 +248,7 @@ test('cashier cannot create the sellings transaction with normal selling method 
     Setting::set('selling_method', 'normal');
     /** @var Product $product */
     $product = $this->product->replicate();
+    $product->sku = null;
     $product->saveQuietly();
     // Set higher selling price than payed_money
     $product->updateQuietly(['selling_price' => 30000]);

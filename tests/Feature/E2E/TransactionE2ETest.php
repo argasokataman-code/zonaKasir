@@ -128,7 +128,7 @@ describe('Transaction & POS E2E Flow', function () {
             // Then close
             $response = $this->actingAs($user, 'sanctum')
                 ->postJson('/api/transaction/cash-drawer/close', [
-                    'closing_balance' => 150000,
+                    'closing_amount' => 150000,
                 ]);
             
             expect($response->status())->toBe(Response::HTTP_OK);

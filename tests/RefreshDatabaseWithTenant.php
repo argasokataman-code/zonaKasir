@@ -22,22 +22,6 @@ trait RefreshDatabaseWithTenant
 
         $tenantId = 'toko_testing';
 
-        $this->user = User::factory()->create([
-            'tenant_id' => $tenantId,
-            'email' => 'admin_' . uniqid() . '@tokotesting.com',
-            'is_owner' => true,
-        ]);
-
-        About::create([
-            'tenant_id' => $tenantId,
-            'shop_name' => 'Toko Testing',
-            'business_type' => 'retail',
-            'bank_name' => 'BCA',
-            'bank_account_name' => 'Toko Testing',
-            'bank_account_number' => '1234567890',
-            'bank_code' => '014',
-        ]);
-
         // Run seeders outside transaction to avoid PG "aborted transaction" issues
         // PG aborts entire transaction on any error; MySQL does not
         $driver = DB::connection()->getDriverName();
@@ -63,6 +47,23 @@ trait RefreshDatabaseWithTenant
             } catch (\Throwable $e) {
             }
         }
+
+        $this->user = User::factory()->create([
+            'tenant_id' => $tenantId,
+            'email' => 'admin_' . uniqid() . '@tokotesting.com',
+            'is_owner' => true,
+        ]);
+        $this->user->assignRole(\App\Constants\Role::admin);
+
+        About::create([
+            'tenant_id' => $tenantId,
+            'shop_name' => 'Toko Testing',
+            'business_type' => 'retail',
+            'bank_name' => 'BCA',
+            'bank_account_name' => 'Toko Testing',
+            'bank_account_number' => '1234567890',
+            'bank_code' => '014',
+        ]);
 
         Subscription::create([
             'tenant_id' => $tenantId,

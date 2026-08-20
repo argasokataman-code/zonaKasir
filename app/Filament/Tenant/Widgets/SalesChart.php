@@ -23,7 +23,7 @@ class SalesChart extends ChartWidget
 
     protected function getData(): array
     {
-        $timezone = Profile::Timezone();
+        $timezone = Profile::getTimezone();
         $startUtc = now($timezone)->subDays(6)->startOfDay()->setTimezone('UTC');
         $endUtc = now($timezone)->addDay()->startOfDay()->setTimezone('UTC');
 
